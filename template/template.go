@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/toolkits/file"
-	"k8s.io/kubernetes/pkg/util/json"
+	"encoding/json"
 )
 
 // Dependency is relationship bettwen two node
