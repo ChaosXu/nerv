@@ -1,0 +1,20 @@
+{
+  "name": "/Resource",
+  "operations": [
+    {
+      "name": "create"
+    },
+    {
+      "name": "delete"
+    },
+    {
+      "name": "config"
+    },
+    {
+      "name": "start"
+    },
+    {
+      "name": "stop"
+    }
+  ]
+}
