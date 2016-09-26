@@ -3,7 +3,7 @@ package template
 import (
 	"testing"
 
-	"github.com/chaosxu/nerv/template"
+	"github.com/chaosxu/nerv/lib/template"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -3,8 +3,8 @@ package model
 import (
 	"testing"
 	"log"
-	"github.com/chaosxu/nerv/model"
-	"github.com/chaosxu/nerv/template"
+	"github.com/chaosxu/nerv/lib/model"
+	"github.com/chaosxu/nerv/lib/template"
 	"github.com/stretchr/testify/assert"
 	"fmt"
 )
