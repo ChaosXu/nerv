@@ -16,6 +16,7 @@ type Class struct {
 
 // Operation is action of type
 type Operation struct {
+	gorm.Model
 	ClassID     int        `gorm:"index"` //Foreign key of the Class
 	Implementor string                    //Function implement the operation
 }
