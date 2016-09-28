@@ -1,10 +1,11 @@
-package template
+package model
 
 import (
 	"fmt"
+	"encoding/json"
 
 	"github.com/toolkits/file"
-	"encoding/json"
+	"github.com/jinzhu/gorm"
 )
 
 // Dependency is relationship bettwen two node
@@ -22,6 +23,7 @@ type NodeTemplate struct {
 
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
+	gorm.Model
 	Name    string          `json:"name"`
 	Version int32           `json:"version"`
 	Nodes   []*NodeTemplate `json:"nodes"`

@@ -1,18 +1,23 @@
 {
   "name": "/host/Host",
   "base": "/Resource",
-  "operations": {
-    "create": {
+  "operations": [
+    {
+      "name": "create",
       "type": "java",
       "implementor": "createHost"
     },
-    "delete": {
+    {
+      "name": "delete"
     },
-    "setup": {
+    {
+      "name": "setup"
     },
-    "start": {
+    {
+      "name": "start"
     },
-    "stop": {
+    {
+      "name": "stop"
     }
-  }
+  ]
 }

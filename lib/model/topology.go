@@ -2,8 +2,6 @@ package model
 
 import (
 	"fmt"
-
-	"github.com/chaosxu/nerv/template"
 )
 
 //Topology which has been deployed by the service template
@@ -12,7 +10,7 @@ type Topology struct {
 }
 
 //NewTopology create a topology from service template
-func NewTopology(t *template.ServiceTemplate) *Topology {
+func NewTopology(t *ServiceTemplate) *Topology {
 	topology := &Topology{map[string]*Node{}}
 
 	for _, tnode := range t.Nodes {
@@ -27,7 +25,7 @@ func NewTopology(t *template.ServiceTemplate) *Topology {
 	return topology
 }
 
-func traverse(tnode *template.NodeTemplate, topology *Topology) {
+func traverse(tnode *NodeTemplate, topology *Topology) {
 	deps := tnode.Dependencies
 	if deps != nil || len(deps) == 0 {
 		return

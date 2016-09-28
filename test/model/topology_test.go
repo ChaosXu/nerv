@@ -4,14 +4,13 @@ import (
 	"testing"
 	"log"
 	"github.com/chaosxu/nerv/lib/model"
-	"github.com/chaosxu/nerv/lib/template"
 	"github.com/stretchr/testify/assert"
 	"fmt"
 )
 
 func TestInstall(t *testing.T) {
 	model.InitClassRepository("./classes")
-	template, err := template.GetServiceTemplate("test_service_template.json")
+	template, err := model.GetServiceTemplate("test_service_template.json")
 	assert.Nil(t, err)
 	topology := model.NewTopology(template)
 	assert.NotNil(t, topology)
@@ -25,7 +24,7 @@ func TestInstall(t *testing.T) {
 
 func TestNewTopology(t *testing.T) {
 	model.InitClassRepository("./classes")
-	template, err := template.GetServiceTemplate("test_service_template.json")
+	template, err := model.GetServiceTemplate("test_service_template.json")
 	assert.Nil(t, err)
 
 	topology := model.NewTopology(template)

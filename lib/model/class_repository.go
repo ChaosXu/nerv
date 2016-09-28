@@ -8,10 +8,10 @@ import (
 	"github.com/toolkits/file"
 )
 
-//ClassRepository
+// ClassRepository load classes from file path
 type ClassRepository struct {
 	path    string
-	classes map[string]*NodeType
+	classes map[string]*Class
 }
 
 var classRep *ClassRepository
@@ -21,7 +21,7 @@ func InitClassRepository(path string) {
 	if path == "" {
 		panic("path must not be nil")
 	}
-	classRep = &ClassRepository{path, map[string]*NodeType{}}
+	classRep = &ClassRepository{path, map[string]*Class{}}
 
 	filepath.Walk(path, loadClassFiles)
 }
@@ -33,7 +33,7 @@ func loadClassFiles(path string, info os.FileInfo, err error) error {
 			return e
 		}
 
-		var class NodeType
+		var class Class
 		e = json.Unmarshal([]byte(content), &class)
 		if e != nil {
 			return e
@@ -51,6 +51,6 @@ func GetClassRepository() *ClassRepository {
 }
 
 //GetClass return type of the name or nil if isn't  exists.
-func (p *ClassRepository) Find(name string) *NodeType {
+func (p *ClassRepository) Find(name string) *Class {
 	return p.classes[name]
 }
