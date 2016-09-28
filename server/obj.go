@@ -2,18 +2,14 @@ package main
 
 import (
 	"net/http"
+	"fmt"
+	"strings"
 
 	"github.com/pressly/chi"
-	//"github.com/pressly/chi/render"
-	//"github.com/jinzhu/gorm"
-	//"github.com/open-falcon/common/db"
-	//"reflect"
 	"github.com/pressly/chi/render"
-	"fmt"
+	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/model"
 	"github.com/chaosxu/nerv/lib/middleware"
-	"strings"
-	"github.com/jinzhu/gorm"
 )
 
 type User struct {
@@ -32,13 +28,6 @@ func routeObj(r *chi.Mux) {
 	})
 }
 
-//func getRepository(next http.Handler) http.Handler {
-//	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-//		class := chi.URLParam(req, "class")
-//
-//	})
-//}
-
 func handlePanic(w http.ResponseWriter, req *http.Request) {
 	if r := recover(); r != nil {
 		fmt.Println(r)
@@ -48,15 +37,41 @@ func handlePanic(w http.ResponseWriter, req *http.Request) {
 }
 
 func list(w http.ResponseWriter, req *http.Request) {
-	//class := chi.URLParam(req, "class")
+	defer handlePanic(w, req)
 
-	//db,err :=gorm.Open("","")
-	//if err!=nil {
-	//	panic("failed to connect")
-	//}
-	//defer db.Close()
-	//
-	//db.Create()
+	class := middleware.CurrentParams(req).PathParam("class")
+
+	where := middleware.CurrentParams(req).QueryParam("where")
+	var args []string
+	if where != "" {
+		values := middleware.CurrentParams(req).QueryParam("values")
+		args = strings.Split(values, ",")
+		if values == "" {
+			render.Status(req, 400)
+			render.JSON(w, req, fmt.Sprintf("the values query param must be provided if the where query param is exists"))
+		}
+	}
+	md := model.Models[class]
+	if md == nil {
+		render.Status(req, 400)
+		render.JSON(w, req, fmt.Sprintf("class %s isn't exists", class))
+		return
+	}
+
+	db := DB
+	if where!=""{
+		db = DB.Where(where, args)
+	}
+
+	data :=md.NewSlice()
+	if db.Find(data).RecordNotFound() {
+		render.Status(req, 200)
+		render.JSON(w, req, data)
+		return
+	}
+
+	render.Status(req, 200)
+	render.JSON(w, req, data)
 }
 
 // get one obj. query params: assocations=a,b...

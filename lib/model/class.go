@@ -9,8 +9,8 @@ import (
 // Class is the metadata of the node
 type Class struct {
 	gorm.Model
-	Name       string       //The name of NodeType
-	Base       string       //Base type name
+	Name       string      //The name of NodeType
+	Base       string      //Base type name
 	Operations []Operation //Operation of type
 }
 
@@ -24,7 +24,6 @@ func (p *Class) Invoke(name string, node *Node) (NodeStatus, error) {
 	return NodeStatusRed, fmt.Errorf("TBD")
 }
 
-
 func init() {
 	Models["Class"] = classDesc()
 	Models["Operation"] = operationDesc()
@@ -36,6 +35,9 @@ func operationDesc() *ModelDescriptor {
 		New: func() interface{} {
 			return &Operation{}
 		},
+		NewSlice:func() interface{} {
+			return &[]Operation{}
+		},
 	}
 }
 
@@ -44,6 +46,9 @@ func classDesc() *ModelDescriptor {
 		Type: &Class{},
 		New: func() interface{} {
 			return &Class{}
+		},
+		NewSlice:func() interface{} {
+			return &[]Class{}
 		},
 	}
 }

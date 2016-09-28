@@ -2,8 +2,9 @@ package server
 
 import (
 	"testing"
-
+	//neturl "net/url"
 	"fmt"
+
 	"github.com/go-resty/resty"
 	"github.com/stretchr/testify/assert"
 	"github.com/toolkits/file"
@@ -21,6 +22,8 @@ func TestClassRest(t *testing.T) {
 func testCRUD(t *testing.T, class string, dataPath string) {
 	data := create(t, class, dataPath)
 
+	find(t, class)
+
 	v := reflect.ValueOf(data).Elem()
 	id := v.FieldByName("ID").Interface()
 	data = getAndPreLoad(t, class, id)
@@ -32,6 +35,29 @@ func testCRUD(t *testing.T, class string, dataPath string) {
 	remove(t, class, id)
 
 	getNil(t, class, id)
+}
+
+func find(t *testing.T, class string) {
+	md := model.Models[class]
+
+	url := fmt.Sprintf("http://localhost:3333/objs/%s?where=name=?&values=/host/Host", class)
+	fmt.Println(url)
+	res, err := resty.R().
+			SetHeader("Content-Type", "application/json").
+			Get(url)
+	if err != nil {
+		assert.Nil(t, err, err.Error())
+	}
+	assert.Equal(t, 200, res.StatusCode())
+	b := res.Body();
+	//fmt.Printf("body\n %s\n", string(b))
+
+	data := md.NewSlice()
+	err = json.Unmarshal(b, data)
+	assert.Nil(t, err)
+
+	fmt.Println("find")
+	fmt.Println(data)
 }
 
 func remove(t *testing.T, class string, id interface{}) {

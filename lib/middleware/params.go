@@ -5,6 +5,7 @@ import (
 	"golang.org/x/net/context"
 	"github.com/pressly/chi"
 	"strings"
+	"net/url"
 )
 
 const (
@@ -41,7 +42,11 @@ func (p *Params) QueryParam(key string) string {
 		if rq != "" {
 			for _, pair := range strings.Split(rq, "&") {
 				kv := strings.Split(pair, "=")
-				p.queryParams[kv[0]] = kv[1]
+				if uv, err := url.QueryUnescape(kv[1]); err != nil {
+					panic(err)
+				}else {
+					p.queryParams[kv[0]] = uv
+				}
 			}
 		}
 	}
