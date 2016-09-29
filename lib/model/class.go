@@ -18,6 +18,8 @@ type Class struct {
 type Operation struct {
 	gorm.Model
 	ClassID     int        `gorm:"index"` //Foreign key of the Class
+	Name        string                    //Operation name
+	Type        string                    //Operation type.eg.shell
 	Implementor string                    //Function implement the operation
 }
 

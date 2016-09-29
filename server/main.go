@@ -26,6 +26,7 @@ func main() {
 		panic(err)
 	}
 	db.DB = gdb
+	db.DB.LogMode(true)
 	for _, v := range model.Models {
 		db.DB.AutoMigrate(v.Type)
 	}

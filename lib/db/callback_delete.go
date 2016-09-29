@@ -2,9 +2,8 @@ package db
 
 import (
 	"fmt"
-	"runtime"
+
 	"github.com/jinzhu/gorm"
-	_ "reflect"
 	"github.com/chaosxu/nerv/lib/model"
 )
 
@@ -150,29 +149,4 @@ func afterDeleteAssociationsCallback(scope *gorm.Scope) {
 	//			}
 	//		}
 	//	}
-}
-
-func changeableField(scope *gorm.Scope, field *gorm.Field) bool {
-	if selectAttrs := scope.SelectAttrs(); len(selectAttrs) > 0 {
-		for _, attr := range selectAttrs {
-			if field.Name == attr || field.DBName == attr {
-				return true
-			}
-		}
-		return false
-	}
-
-	for _, attr := range scope.OmitAttrs() {
-		if field.Name == attr || field.DBName == attr {
-			return false
-		}
-	}
-
-	return true
-}
-
-func logCodeLine() {
-	if fn, file, line, ok := runtime.Caller(1); ok {
-		fmt.Printf("%s:%d:%s\n", file, line, runtime.FuncForPC(fn).Name())
-	}
 }
