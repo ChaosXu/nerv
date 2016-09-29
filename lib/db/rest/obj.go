@@ -1,4 +1,4 @@
-package main
+package rest
 
 import (
 	"net/http"
@@ -10,13 +10,14 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/model"
 	"github.com/chaosxu/nerv/lib/middleware"
+	"github.com/chaosxu/nerv/lib/db"
 )
 
 type User struct {
 	Name string
 }
 
-func routeObj(r *chi.Mux) {
+func RouteObj(r *chi.Mux) {
 	r.Route("/objs/:class", func(r chi.Router) {
 		r.Get("/", list)
 		r.Post("/", create)
@@ -58,13 +59,13 @@ func list(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	db := DB
-	if where!=""{
-		db = DB.Where(where, args)
+	d := db.DB
+	if where != "" {
+		d = db.DB.Where(where, args)
 	}
 
-	data :=md.NewSlice()
-	if db.Find(data).RecordNotFound() {
+	data := md.NewSlice()
+	if d.Find(data).RecordNotFound() {
 		render.Status(req, 200)
 		render.JSON(w, req, data)
 		return
@@ -90,15 +91,15 @@ func get(w http.ResponseWriter, req *http.Request) {
 	}
 
 	data := md.New()
-	var db *gorm.DB
+	var d *gorm.DB
 	if ass == "" {
-		db = DB
+		d = db.DB
 	} else {
 		for _, as := range strings.Split(ass, ",") {
-			db = DB.Preload(as)
+			d = db.DB.Preload(as)
 		}
 	}
-	if db.First(data, id).RecordNotFound() {
+	if d.First(data, id).RecordNotFound() {
 		render.Status(req, 200)
 		render.JSON(w, req, nil)
 		return
@@ -126,7 +127,7 @@ func create(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if err := DB.Create(data).Error; err != nil {
+	if err := db.DB.Create(data).Error; err != nil {
 		render.Status(req, 500)
 		render.JSON(w, req, err.Error())
 		return
@@ -150,13 +151,13 @@ func remove(w http.ResponseWriter, req *http.Request) {
 	}
 
 	data := md.New()
-	if err := DB.First(data, id).Error; err != nil {
+	if err := db.DB.First(data, id).Error; err != nil {
 		render.Status(req, 400)
 		render.JSON(w, req, err.Error())
 		return
 	}
 
-	if err := DB.Unscoped().Delete(data).Error; err != nil {
+	if err := db.DB.Unscoped().Delete(data).Error; err != nil {
 		render.Status(req, 500)
 		render.JSON(w, req, err.Error())
 		return
@@ -183,7 +184,7 @@ func update(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if err := DB.Save(data).Error; err != nil {
+	if err := db.DB.Save(data).Error; err != nil {
 		render.Status(req, 500)
 		render.JSON(w, req, err.Error())
 		return
