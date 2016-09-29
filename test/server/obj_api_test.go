@@ -38,6 +38,7 @@ func testCRUD(t *testing.T, class string, dataPath string) {
 }
 
 func find(t *testing.T, class string) {
+	logCodeLine()
 	md := model.Models[class]
 
 	url := fmt.Sprintf("http://localhost:3333/objs/%s?where=name=?&values=/host/Host", class)
@@ -61,6 +62,7 @@ func find(t *testing.T, class string) {
 }
 
 func remove(t *testing.T, class string, id interface{}) {
+	logCodeLine()
 	var (
 		err error
 		res *resty.Response
@@ -77,6 +79,7 @@ func remove(t *testing.T, class string, id interface{}) {
 }
 
 func update(t *testing.T, class string, data interface{}) interface{} {
+	logCodeLine()
 	var (
 		body []byte
 		err error
@@ -105,6 +108,7 @@ func update(t *testing.T, class string, data interface{}) interface{} {
 }
 
 func create(t *testing.T, class string, dataPath string) interface{} {
+	logCodeLine()
 	var (
 		body string
 		err error
@@ -131,6 +135,7 @@ func create(t *testing.T, class string, dataPath string) interface{} {
 }
 
 func getAndPreLoad(t *testing.T, class string, id interface{}) interface{} {
+	logCodeLine()
 	md := model.Models[class]
 	assList := associations(reflect.TypeOf(md.Type).Elem(), "", []string{})
 	ass := strings.Join(assList, ",")
@@ -162,6 +167,7 @@ func getAndPreLoad(t *testing.T, class string, id interface{}) interface{} {
 }
 
 func getNil(t *testing.T, class string, id interface{}) interface{} {
+	logCodeLine()
 	md := model.Models[class]
 	assList := associations(reflect.TypeOf(md.Type).Elem(), "", []string{})
 	ass := strings.Join(assList, ",")
