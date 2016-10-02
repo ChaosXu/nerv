@@ -13,7 +13,7 @@ func init() {
 	gorm.DefaultCallback.Delete().Replace("gorm:before_delete", beforeDeleteCallback)
 	gorm.DefaultCallback.Delete().After("gorm:before_delete").Replace("chaosxu:before_delete_associations", beforeDeleteAssociationsCallback)
 	gorm.DefaultCallback.Delete().Replace("gorm:delete", deleteCallback)
-	//gorm.DefaultCallback.Delete().After("gorm:delete").Replace("chaosxu:after_delete_associations", afterDeleteAssociationsCallback)
+	gorm.DefaultCallback.Delete().After("gorm:delete").Replace("chaosxu:after_delete_associations", afterDeleteAssociationsCallback)
 	gorm.DefaultCallback.Delete().Replace("gorm:after_delete", afterDeleteCallback)
 	gorm.DefaultCallback.Delete().Replace("gorm:commit_or_rollback_transaction", commitOrRollbackTransactionCallback)
 }
