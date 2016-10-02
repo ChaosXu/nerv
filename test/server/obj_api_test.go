@@ -25,7 +25,7 @@ func TestUpdateAddChild(t *testing.T) {
 	update(t, "Class", data)
 }
 
-func TestUpdateAddRemoveChild(t *testing.T) {
+func TestUpdateRemoveChild(t *testing.T) {
 	data := create(t, "Class", "classes/host/host.json").(*model.Class)
 	data.Operations = append(data.Operations, model.Operation{Name:"updateAddChile", Type:"go", Implementor:"test"})
 	data = update(t, "Class", data).(*model.Class)

@@ -5,7 +5,23 @@ import (
 	"strings"
 	"github.com/jinzhu/gorm"
 	"reflect"
+	"github.com/chaosxu/nerv/lib/model"
+	"sort"
 )
+
+type OrderIDs []uint64
+
+func (p OrderIDs) Len() int {
+	return len(p)
+}
+
+func (p OrderIDs) Swap(i, j int) {
+	p[i], p[j] = p[j], p[i]
+}
+
+func (p OrderIDs) Less(i, j int) bool {
+	return p[i] < p[j]
+}
 
 // Define callbacks for updating
 func init() {
@@ -139,17 +155,46 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 	if !shouldSaveAssociations(scope) {
 		return
 	}
+
 	for _, field := range scope.Fields() {
+		var olds reflect.Value
+		news := []uint64{}
+		hasOlds := false
 		if changeableField(scope, field) && !field.IsBlank && !field.IsIgnored {
+			if relationship := field.Relationship; relationship != nil && (relationship.Kind == "has_one" || relationship.Kind == "has_many") {
+				value := field.Field
+				switch value.Kind() {
+				case reflect.Slice:
+					foreignValue := scope.IndirectValue().FieldByName(relationship.AssociationForeignFieldNames[0]).Uint()
+					sql := fmt.Sprintf("%s = ?", relationship.ForeignDBNames[0])
+					class := field.Field.Type().Elem()
+					updated := model.Models[class.Name()].NewSlice()
+					if err := scope.NewDB().Select("id").Where(sql, foreignValue).Order("id asc").Find(updated).Error; err != nil {
+						scope.Err(err)
+					}
+
+					olds = reflect.ValueOf(updated).Elem()
+					hasOlds = true
+				default:
+				//TBD
+				}
+			}
+
 			if relationship := field.Relationship; relationship != nil &&
 					(relationship.Kind == "has_one" || relationship.Kind == "has_many" || relationship.Kind == "many_to_many") {
 				value := field.Field
-
 				switch value.Kind() {
 				case reflect.Slice:
 					for i := 0; i < value.Len(); i++ {
 						newDB := scope.NewDB()
 						elem := value.Index(i).Addr().Interface()
+
+						//fmt.Printf("%+v\n", value.Index(i).FieldByName("Model").FieldByName("ID").Uint())
+						id := value.Index(i).FieldByName("Model").FieldByName("ID").Uint()
+						if id != 0 {
+							news = append(news, id)
+						}
+
 						newScope := newDB.NewScope(elem)
 
 						if relationship.JoinTableHandler == nil && len(relationship.ForeignFieldNames) != 0 {
@@ -187,6 +232,43 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 						scope.Err(newScope.SetColumn(relationship.PolymorphicType, scope.TableName()))
 					}
 					scope.Err(scope.NewDB().Save(elem).Error)
+				}
+			}
+
+			//Delete all elements has been removed from the slice
+			if !hasOlds {
+				continue
+			}
+			sort.Sort(OrderIDs(news))
+			//fmt.Printf("%+v\n", olds)
+			//fmt.Printf("%+v\n", news)
+
+			var nid uint64
+			deleted := []uint64{}
+			for i, j := 0, 0; i < olds.Len(); {
+				oid := olds.Index(i).FieldByName("ID").Uint()
+				if j < len(news) {
+					nid = news[j]
+					if oid == nid {
+						i++
+						j++
+					} else {
+						//fmt.Printf("1 [%d]%+v [%d]%+v\n", i, oid, j, nid)
+						deleted = append(deleted, oid)
+						i++
+					}
+				} else {
+					//fmt.Printf("2 [%d]%+v [%d]%+v\n", i, oid, j, nid)
+					deleted = append(deleted, oid)
+					i++
+				}
+			}
+
+			for _, id := range deleted {
+				class := field.Field.Type().Elem()
+				dt := model.Models[class.Name()].Type
+				if err := scope.NewDB().Unscoped().Delete(dt, "id = ?", id).Error; err != nil {
+					scope.Err(err)
 				}
 			}
 		}
