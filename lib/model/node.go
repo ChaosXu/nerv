@@ -1,10 +1,9 @@
 package model
 
-
 type NodeStatus int
 
 const (
-	NodeStatusNew = iota //when new
+	NodeStatusNew NodeStatus = iota //when new
 	NodeStatusGreen        //all element ok
 	NodeStatusYellow    //some ok,some failed
 	NodeStatusRed        //all element failed
