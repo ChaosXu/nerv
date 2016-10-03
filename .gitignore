@@ -33,3 +33,5 @@ Session.vim
 
 # make-related metadata
 /.make/
+
+try/
