@@ -5,12 +5,12 @@ import (
 	"net/http"
 	"log"
 
+	chim "github.com/pressly/chi/middleware"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/pressly/chi"
 	"github.com/chaosxu/nerv/lib/middleware"
-	chim "github.com/pressly/chi/middleware"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/chaosxu/nerv/lib/db/rest"
+	"github.com/chaosxu/nerv/lib/rest"
 	"github.com/chaosxu/nerv/lib/db"
 	"github.com/chaosxu/nerv/lib/model"
 )
