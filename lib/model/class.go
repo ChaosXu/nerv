@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+	"github.com/chaosxu/nerv/lib/db"
 )
 
 // Class is the metadata of the node
@@ -28,12 +29,12 @@ func (p *Class) Invoke(name string, node *Node) (NodeStatus, error) {
 }
 
 func init() {
-	Models["Class"] = classDesc()
-	Models["Operation"] = operationDesc()
+	db.Models["Class"] = classDesc()
+	db.Models["Operation"] = operationDesc()
 }
 
-func operationDesc() *ModelDescriptor {
-	return &ModelDescriptor{
+func operationDesc() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
 		Type: &Operation{},
 		New: func() interface{} {
 			return &Operation{}
@@ -44,8 +45,8 @@ func operationDesc() *ModelDescriptor {
 	}
 }
 
-func classDesc() *ModelDescriptor {
-	return &ModelDescriptor{
+func classDesc() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
 		Type: &Class{},
 		New: func() interface{} {
 			return &Class{}

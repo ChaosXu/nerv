@@ -12,7 +12,6 @@ import (
 	"github.com/chaosxu/nerv/lib/middleware"
 	"github.com/chaosxu/nerv/lib/rest"
 	"github.com/chaosxu/nerv/lib/db"
-	"github.com/chaosxu/nerv/lib/model"
 )
 
 //var routes = flag.Bool("routes", false, "Generate router documentation")
@@ -27,7 +26,7 @@ func main() {
 	}
 	db.DB = gdb
 	db.DB.LogMode(true)
-	for _, v := range model.Models {
+	for _, v := range db.Models {
 		db.DB.AutoMigrate(v.Type)
 	}
 	defer db.DB.Close()

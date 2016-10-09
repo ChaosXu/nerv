@@ -1,4 +1,4 @@
-package model
+package db
 
 
 var Models = map[string]*ModelDescriptor{}

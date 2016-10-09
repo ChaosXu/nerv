@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
-	"github.com/chaosxu/nerv/lib/model"
 )
 
 // Define callbacks for deleting,support cascade deleting
@@ -86,7 +85,7 @@ func beforeDeleteAssociationsCallback(scope *gorm.Scope) {
 			//fmt.Println(sql)
 			class := field.Field.Type().Elem()
 			fmt.Println(class.Name())
-			if err := DB.Unscoped().Delete(model.Models[class.Name()].Type, sql, foreignValue).Error; err != nil {
+			if err := DB.Unscoped().Delete(Models[class.Name()].Type, sql, foreignValue).Error; err != nil {
 				scope.Err(err)
 			}
 		}

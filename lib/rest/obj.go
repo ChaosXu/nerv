@@ -8,9 +8,10 @@ import (
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/render"
 	"github.com/jinzhu/gorm"
-	"github.com/chaosxu/nerv/lib/model"
 	"github.com/chaosxu/nerv/lib/middleware"
 	"github.com/chaosxu/nerv/lib/db"
+	_ "github.com/chaosxu/nerv/lib/model"
+	"reflect"
 )
 
 type User struct {
@@ -25,6 +26,7 @@ func RouteObj(r *chi.Mux) {
 		r.Route("/:id", func(r chi.Router) {
 			r.Get("/", get)
 			r.Delete("/", remove)
+			r.Post("/:method", invoke)
 		})
 	})
 }
@@ -52,7 +54,7 @@ func list(w http.ResponseWriter, req *http.Request) {
 			render.JSON(w, req, fmt.Sprintf("the values query param must be provided if the where query param is exists"))
 		}
 	}
-	md := model.Models[class]
+	md := db.Models[class]
 	if md == nil {
 		render.Status(req, 400)
 		render.JSON(w, req, fmt.Sprintf("class %s isn't exists", class))
@@ -83,7 +85,7 @@ func get(w http.ResponseWriter, req *http.Request) {
 	id := middleware.CurrentParams(req).PathParam("id")
 	ass := middleware.CurrentParams(req).QueryParam("associations")
 
-	md := model.Models[class]
+	md := db.Models[class]
 	if md == nil {
 		render.Status(req, 400)
 		render.JSON(w, req, fmt.Sprintf("class %s isn't exists", class))
@@ -113,7 +115,7 @@ func create(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
-	md := model.Models[class]
+	md := db.Models[class]
 	if md == nil {
 		render.Status(req, 400)
 		render.JSON(w, req, fmt.Sprintf("class %s isn't exists", class))
@@ -143,7 +145,7 @@ func remove(w http.ResponseWriter, req *http.Request) {
 	class := middleware.CurrentParams(req).PathParam("class")
 	id := middleware.CurrentParams(req).PathParam("id")
 
-	md := model.Models[class]
+	md := db.Models[class]
 	if md == nil {
 		render.Status(req, 400)
 		render.JSON(w, req, fmt.Sprintf("class %s isn't exists", class))
@@ -170,7 +172,7 @@ func update(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
-	md := model.Models[class]
+	md := db.Models[class]
 	if md == nil {
 		render.Status(req, 400)
 		render.JSON(w, req, fmt.Sprintf("class %s isn't exists", class))
@@ -192,6 +194,56 @@ func update(w http.ResponseWriter, req *http.Request) {
 
 	render.Status(req, 200)
 	render.JSON(w, req, data)
+}
+
+func invoke(w http.ResponseWriter, req *http.Request) {
+	defer handlePanic(w, req)
+
+	class := middleware.CurrentParams(req).PathParam("class")
+	id := middleware.CurrentParams(req).PathParam("id")
+	methodName := middleware.CurrentParams(req).PathParam("method")
+
+	md := db.Models[class]
+	if md == nil {
+		render.Status(req, 404)
+		render.JSON(w, req, fmt.Sprintf("class %s isn't exists", class))
+		return
+	}
+
+	data := md.New()
+	if err := db.DB.First(data, id).Error; err != nil {
+		render.Status(req, 404)
+		render.JSON(w, req, err.Error())
+		return
+	}
+
+	t := reflect.TypeOf(data)
+	if m, b := t.MethodByName(methodName); b != true {
+		render.Status(req, 404)
+		render.JSON(w, req, fmt.Sprintf("%s/%s/%s isn't exists", class, id, methodName))
+		return
+
+	} else {
+		args := []interface{}{}
+		if err := render.Bind(req.Body, &args); err != nil {
+			render.Status(req, 400)
+			render.JSON(w, req, err.Error())
+			return
+		}
+
+		in := []reflect.Value{reflect.ValueOf(data)}
+		for _, arg := range args {
+			in = append(in, reflect.ValueOf(arg))
+		}
+		values := m.Func.Call(in)
+		ret := []interface{}{}
+		for _, value := range values {
+			ret = append(ret, value.Interface())
+		}
+		render.Status(req, 200)
+		render.JSON(w, req, ret)
+	}
+
 }
 
 

@@ -6,15 +6,15 @@ import (
 	"testing"
 	"encoding/json"
 	"github.com/stretchr/testify/assert"
-	"github.com/chaosxu/nerv/lib/model"
 	"reflect"
 	"github.com/toolkits/file"
 	"strings"
+	"github.com/chaosxu/nerv/lib/db"
 )
 
 func find(t *testing.T, class string) {
 	logCodeLine()
-	md := model.Models[class]
+	md := db.Models[class]
 
 	url := fmt.Sprintf("http://localhost:3333/objs/%s?where=name=?&values=/host/Host", class)
 	fmt.Println(url)
@@ -75,7 +75,7 @@ func update(t *testing.T, class string, data interface{}) interface{} {
 	assert.Equal(t, 200, res.StatusCode())
 	b := res.Body();
 	//fmt.Printf("body\n %s\n", string(b))
-	md := model.Models[class]
+	md := db.Models[class]
 	updated := md.New()
 	err = json.Unmarshal(b, updated)
 	assert.Nil(t, err)
@@ -99,10 +99,10 @@ func create(t *testing.T, class string, dataPath string) interface{} {
 	if err != nil {
 		assert.Nil(t, err, err.Error())
 	}
-	assert.Equal(t, 200, res.StatusCode())
+	assert.Equal(t, 200, res.StatusCode(), string(res.Body()))
 	b := res.Body();
 	//fmt.Printf("body\n %s\n", string(b))
-	md := model.Models[class]
+	md := db.Models[class]
 	data := md.New()
 	err = json.Unmarshal(b, data)
 	assert.Nil(t, err)
@@ -111,7 +111,7 @@ func create(t *testing.T, class string, dataPath string) interface{} {
 
 func getAndPreLoad(t *testing.T, class string, id interface{}) interface{} {
 	logCodeLine()
-	md := model.Models[class]
+	md := db.Models[class]
 	assList := associations(reflect.TypeOf(md.Type).Elem(), "", []string{})
 	ass := strings.Join(assList, ",")
 	var url string
@@ -141,9 +141,37 @@ func getAndPreLoad(t *testing.T, class string, id interface{}) interface{} {
 	return data
 }
 
+func invoke(t *testing.T, class string, id interface{}, method string, args ...interface{}) (interface{}, error) {
+	logCodeLine()
+	var (
+		body string
+		err error
+		res *resty.Response
+	)
+
+	if b, err := json.Marshal(args); err != nil {
+		assert.Nil(t, err, err.Error())
+	} else {
+		body = string(b)
+	}
+	assert.Nil(t, err)
+	res, err = resty.R().
+			SetHeader("Content-Type", "application/json").
+			SetBody(body).
+			Post(fmt.Sprintf("http://localhost:3333/objs/%s/%d/%s", class, id, method))
+
+	if err != nil {
+		assert.Nil(t, err, err.Error())
+	}
+	assert.Equal(t, 200, res.StatusCode(), string(res.Body()))
+	b := res.Body();
+	fmt.Printf("%+v\n", string(b))
+	return b, err
+}
+
 func getNil(t *testing.T, class string, id interface{}) interface{} {
 	logCodeLine()
-	md := model.Models[class]
+	md := db.Models[class]
 	assList := associations(reflect.TypeOf(md.Type).Elem(), "", []string{})
 	ass := strings.Join(assList, ",")
 	var url string
@@ -219,3 +247,4 @@ func associations(t reflect.Type, parent string, ass []string) []string {
 
 	return ass
 }
+

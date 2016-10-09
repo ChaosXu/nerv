@@ -52,15 +52,18 @@ func TestUpdateUpdateChild(t *testing.T) {
 }
 
 func TestInvoke(t *testing.T) {
-	template, err := model.GetServiceTemplate("test_service_template.json")
-	assert.Nil(t, err)
-	topology := model.NewTopology(template)
-	assert.NotNil(t,topology)
-
-	update(t, "Topology", topology)
-	//v := reflect.ValueOf(data).Elem()
-	//id := v.FieldByName("ID").Interface()
-	//invoke(t,"Class")
+	template := create(t, "ServiceTemplate", "templates/test_service_template.json")
+	//topology := model.NewTopology(template)
+	assert.NotNil(t, template)
+	//
+	//update(t, "Topology", topology)
+	v := reflect.ValueOf(template).Elem()
+	id := v.FieldByName("ID").Interface()
+	ret, err := invoke(t, "ServiceTemplate", id, "CreateTopology", "topology1")
+	if err != nil {
+		assert.Nil(t, err, err.Error())
+	}
+	assert.NotNil(t, ret)
 }
 
 func testCRUD(t *testing.T, class string, dataPath string) {

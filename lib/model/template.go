@@ -1,54 +1,83 @@
 package model
 
 import (
-	"fmt"
-	"encoding/json"
-
-	"github.com/toolkits/file"
 	"github.com/jinzhu/gorm"
+	"github.com/chaosxu/nerv/lib/db"
 )
+
+func init() {
+	db.Models["ServiceTemplate"] = templateDesc()
+	db.Models["NodeTemplate"] = nodeTemplateDesc()
+	db.Models["Dependency"] = dependencyDesc()
+}
+
+func templateDesc() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
+		Type: &ServiceTemplate{},
+		New: func() interface{} {
+			return &ServiceTemplate{}
+		},
+		NewSlice:func() interface{} {
+			return &[]ServiceTemplate{}
+		},
+	}
+}
+
+func nodeTemplateDesc() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
+		Type: &NodeTemplate{},
+		New: func() interface{} {
+			return &NodeTemplate{}
+		},
+		NewSlice:func() interface{} {
+			return &[]NodeTemplate{}
+		},
+	}
+}
+
+func dependencyDesc() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
+		Type: &Dependency{},
+		New: func() interface{} {
+			return &Dependency{}
+		},
+		NewSlice:func() interface{} {
+			return &[]Dependency{}
+		},
+	}
+}
 
 // Dependency is relationship bettwen two node
 type Dependency struct {
-	Type   string `json:"type"`   //The type of dependency: connect;contained
-	Target string `json:"target"` //The name of target node
+	gorm.Model
+	NodeTemplateID int       `gorm:"index"`  //Foreign key of the node template
+	Type           string    `json:"type"`   //The type of dependency: connect;contained
+	Target         string    `json:"target"` //The name of target node
 }
 
 // NodeTemplate is a prototype of service node.
 type NodeTemplate struct {
-	Name         string        `json:"name"`         //Node name
-	Type         string        `json:"type"`         //The name of NodeType
-	Dependencies []*Dependency `json:"dependencies"` //The dependencies of node
+	gorm.Model
+	ServiceTemplateID int           `gorm:"index"`       //Foreign key of the service template
+	Name              string        `json:"name"`        //Node name
+	Type              string        `json:"type"`        //The name of NodeType
+	Dependencies      []Dependency `json:"dependencies"` //The dependencies of node
 }
 
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
 	gorm.Model
-	Name    string          `json:"name"`
-	Version int32           `json:"version"`
-	Nodes   []*NodeTemplate `json:"nodes"`
+	Name    string           `json:"name"`
+	Version int32            `json:"version"`
+	Nodes   []NodeTemplate   `json:"nodes"`
 }
 
-// GetServiceTemplate read the json file of service template from path.
-func GetServiceTemplate(path string) (*ServiceTemplate, error) {
-	if path == "" {
-		return nil, fmt.Errorf("empty path")
-	}
-
-	if !file.IsExist(path) {
-		return nil, fmt.Errorf("file: %s isn't exists", path)
-	}
-
-	templateContent, err := file.ToTrimString(path)
-	if err != nil {
+// CreateTopology create a topology by the service template.
+func (p *ServiceTemplate) CreateTopology(name string) (*Topology, error) {
+	topology := newTopology(p, name)
+	if err := db.DB.Create(topology).Error; err != nil {
 		return nil, err
+	} else {
+		return topology, nil
 	}
-
-	var template ServiceTemplate
-	err = json.Unmarshal([]byte(templateContent), &template)
-	if err != nil {
-		return nil, err
-	}
-
-	return &template, nil
 }

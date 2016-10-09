@@ -5,7 +5,6 @@ import (
 	"strings"
 	"github.com/jinzhu/gorm"
 	"reflect"
-	"github.com/chaosxu/nerv/lib/model"
 	"sort"
 )
 
@@ -168,7 +167,7 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 					foreignValue := scope.IndirectValue().FieldByName(relationship.AssociationForeignFieldNames[0]).Uint()
 					sql := fmt.Sprintf("%s = ?", relationship.ForeignDBNames[0])
 					class := field.Field.Type().Elem()
-					updated := model.Models[class.Name()].NewSlice()
+					updated := Models[class.Name()].NewSlice()
 					if err := scope.NewDB().Select("id").Where(sql, foreignValue).Order("id asc").Find(updated).Error; err != nil {
 						scope.Err(err)
 					}
@@ -266,7 +265,7 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 
 			for _, id := range deleted {
 				class := field.Field.Type().Elem()
-				dt := model.Models[class.Name()].Type
+				dt := Models[class.Name()].Type
 				if err := scope.NewDB().Unscoped().Delete(dt, "id = ?", id).Error; err != nil {
 					scope.Err(err)
 				}
