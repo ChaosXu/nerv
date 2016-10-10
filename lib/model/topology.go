@@ -21,14 +21,6 @@ func topologyDesc() *db.ModelDescriptor {
 	}
 }
 
-
-//Topology which has been deployed by the service template
-type Topology struct {
-	gorm.Model
-	Name  string
-	Nodes []*Node
-}
-
 //NewTopology create a topology from service template
 func newTopology(t *ServiceTemplate, name string) *Topology {
 	topology := &Topology{Name:name, Nodes:[]*Node{}}
@@ -69,6 +61,13 @@ func traverse(tnodeMap map[string]*NodeTemplate, tnode *NodeTemplate, topology *
 			}
 		}
 	}
+}
+
+//Topology which has been deployed by the service template
+type Topology struct {
+	gorm.Model
+	Name  string
+	Nodes []*Node
 }
 
 //Install the topology and start to serve
