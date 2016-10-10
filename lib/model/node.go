@@ -61,7 +61,7 @@ func (p *Node) FindLinksByType(depType string) []*Link {
 	return links
 }
 
-// execute operation
+// Execute operation
 func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) {
 	log.LogCodeLine()
 	if p.Status != NodeStatusNew {

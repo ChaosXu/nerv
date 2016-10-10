@@ -112,8 +112,6 @@ func (p *Topology) Stop() {
 }
 
 func (p *Topology) installNode(node *Node, template *ServiceTemplate) {
-	log.LogCodeLine()
-
 	nodeTemplate := template.FindNode(node.Template)
 	if nodeTemplate != nil {
 		node.Execute("Create", nodeTemplate)
