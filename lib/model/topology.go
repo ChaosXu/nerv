@@ -33,17 +33,14 @@ type Topology struct {
 func newTopology(t *ServiceTemplate, name string) *Topology {
 	topology := &Topology{Name:name, Nodes:[]*Node{}}
 
-	tnodes := []NodeTemplate{}
-	db.DB.Where("service_template_id =? ", t.ID).Preload("Dependencies").Find(&tnodes)
 	tnodeMap := map[string]*NodeTemplate{}
-
-	for _, tnode := range tnodes {
+	for _, tnode := range t.Nodes {
 		node := &Node{Name:tnode.Name, Template:tnode.Name, Links:[]*Link{}, Status:NodeStatusNew}
 		topology.putNode(node)
 		tnodeMap[tnode.Name] = &tnode
 	}
 
-	for _, tnode := range tnodes {
+	for _, tnode := range t.Nodes {
 		traverse(tnodeMap, &tnode, topology)
 	}
 

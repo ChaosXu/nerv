@@ -74,6 +74,10 @@ type ServiceTemplate struct {
 
 // CreateTopology create a topology by the service template.
 func (p *ServiceTemplate) CreateTopology(name string) (*Topology, error) {
+	tnodes := []NodeTemplate{}
+	db.DB.Where("service_template_id =? ", p.ID).Preload("Dependencies").Find(&tnodes)
+	p.Nodes = tnodes
+
 	topology := newTopology(p, name)
 	if err := db.DB.Create(topology).Error; err != nil {
 		return nil, err
