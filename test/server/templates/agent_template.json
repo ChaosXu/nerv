@@ -1,0 +1,25 @@
+{
+  "name": "agent_template",
+  "version": 1,
+  "nodes": [
+    {
+      "name": "agent",
+      "type": "/nerv/Agent",
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "host",
+      "type": "/host/Host",
+      "properties": {
+        "ip": [
+          "host.chaosxu.com"
+        ]
+      }
+    }
+  ]
+}

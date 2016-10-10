@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/db"
+	"github.com/chaosxu/nerv/lib/log"
 )
 
 func init() {
@@ -72,6 +73,11 @@ type Topology struct {
 
 //Install the topology and start to serve
 func (p *Topology) Install() {
+	log.LogCodeLine()
+	tnodes := []*Node{}
+	db.DB.Where("topology_id =? ", p.ID).Preload("Nodes").Preload("Nodes.Links").Find(&tnodes)
+	p.Nodes = tnodes
+
 	for _, node := range p.Nodes {
 		p.postTraverse("contained", node, p.installNode)
 	}
@@ -98,6 +104,7 @@ func (p *Topology) Stop() {
 }
 
 func (p *Topology) installNode(node *Node) {
+	log.LogCodeLine()
 	//nt := node.Template
 	//class := GetClassRepository().Find(nt.Type)
 	//if class != nil {
