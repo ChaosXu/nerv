@@ -26,19 +26,19 @@ func topologyDesc() *db.ModelDescriptor {
 type Topology struct {
 	gorm.Model
 	Name  string
-	Nodes []Node
+	Nodes []*Node
 }
 
 //NewTopology create a topology from service template
 func newTopology(t *ServiceTemplate, name string) *Topology {
-	topology := &Topology{Name:name, Nodes:[]Node{}}
+	topology := &Topology{Name:name, Nodes:[]*Node{}}
 
 	tnodes := []NodeTemplate{}
 	db.DB.Where("service_template_id =? ", t.ID).Preload("Dependencies").Find(&tnodes)
 	tnodeMap := map[string]*NodeTemplate{}
 
 	for _, tnode := range tnodes {
-		node := &Node{Name:tnode.Name, Template:tnode.Name, Links:[]Link{}, Status:NodeStatusNew}
+		node := &Node{Name:tnode.Name, Template:tnode.Name, Links:[]*Link{}, Status:NodeStatusNew}
 		topology.putNode(node)
 		tnodeMap[tnode.Name] = &tnode
 	}
@@ -77,7 +77,7 @@ func traverse(tnodeMap map[string]*NodeTemplate, tnode *NodeTemplate, topology *
 //Install the topology and start to serve
 func (p *Topology) Install() {
 	for _, node := range p.Nodes {
-		p.postTraverse("contained", &node, p.installNode)
+		p.postTraverse("contained", node, p.installNode)
 	}
 }
 
@@ -130,14 +130,14 @@ func (p *Topology) postTraverse(depType string, parent *Node, fn func(node *Node
 func (p *Topology) putNode(node *Node) {
 	old := p.getNode(node.Name)
 	if old == nil {
-		p.Nodes = append(p.Nodes, *node)
+		p.Nodes = append(p.Nodes, node)
 	}
 }
 
 func (p *Topology) getNode(name string) *Node {
 	for _, node := range p.Nodes {
 		if node.Name == name {
-			return &node
+			return node
 		}
 	}
 	return nil

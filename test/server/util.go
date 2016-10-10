@@ -50,7 +50,7 @@ func remove(t *testing.T, class string, id interface{}) {
 	if err != nil {
 		assert.Nil(t, err, err.Error())
 	}
-	assert.Equal(t, 200, res.StatusCode())
+	assert.Equal(t, 200, res.StatusCode(), string(res.Body()))
 }
 
 func update(t *testing.T, class string, data interface{}) interface{} {
@@ -166,7 +166,11 @@ func invoke(t *testing.T, class string, id interface{}, method string, args ...i
 	assert.Equal(t, 200, res.StatusCode(), string(res.Body()))
 	b := res.Body();
 	fmt.Printf("%+v\n", string(b))
-	return b, err
+	ro := &[]interface{}{}
+	if err := json.Unmarshal(b, ro); err != nil {
+		assert.Nil(t, err, err.Error())
+	}
+	return ro, err
 }
 
 func getNil(t *testing.T, class string, id interface{}) interface{} {

@@ -53,9 +53,8 @@ func TestUpdateUpdateChild(t *testing.T) {
 
 func TestInvoke(t *testing.T) {
 	template := create(t, "ServiceTemplate", "templates/test_service_template.json")
-	//topology := model.NewTopology(template)
 	assert.NotNil(t, template)
-	//
+
 	//update(t, "Topology", topology)
 	v := reflect.ValueOf(template).Elem()
 	id := v.FieldByName("ID").Interface()
@@ -64,6 +63,12 @@ func TestInvoke(t *testing.T) {
 		assert.Nil(t, err, err.Error())
 	}
 	assert.NotNil(t, ret)
+	fmt.Printf("%+v\n", ret)
+	retObj := reflect.ValueOf(ret).Elem().Index(0).Interface().(map[string]interface{})
+	fmt.Printf("%+v\n", retObj)
+	fmt.Printf("%+v\n", retObj["ID"])
+	remove(t, "Topology", int(retObj["ID"].(float64)))
+	remove(t, "ServiceTemplate", id)
 }
 
 func testCRUD(t *testing.T, class string, dataPath string) {

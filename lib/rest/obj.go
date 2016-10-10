@@ -243,7 +243,6 @@ func invoke(w http.ResponseWriter, req *http.Request) {
 		render.Status(req, 200)
 		render.JSON(w, req, ret)
 	}
-
 }
 
 
