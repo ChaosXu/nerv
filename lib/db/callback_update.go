@@ -6,6 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"reflect"
 	"sort"
+	"github.com/chaosxu/nerv/lib/log"
 )
 
 type OrderIDs []uint64
@@ -70,7 +71,7 @@ func updateTimeStampForUpdateCallback(scope *gorm.Scope) {
 
 // updateCallback the callback used to update data to database
 func updateCallback(scope *gorm.Scope) {
-	//logCodeLine()
+	log.LogCodeLine()
 	if !scope.HasError() {
 		var sqls []string
 
@@ -150,7 +151,7 @@ func saveBeforeAssociationsCallback(scope *gorm.Scope) {
 }
 
 func saveAfterAssociationsCallback(scope *gorm.Scope) {
-	//logCodeLine()
+	log.LogCodeLine()
 	if !shouldSaveAssociations(scope) {
 		return
 	}
@@ -166,8 +167,15 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 				case reflect.Slice:
 					foreignValue := scope.IndirectValue().FieldByName(relationship.AssociationForeignFieldNames[0]).Uint()
 					sql := fmt.Sprintf("%s = ?", relationship.ForeignDBNames[0])
-					class := field.Field.Type().Elem()
-					updated := Models[class.Name()].NewSlice()
+					class := ""
+					elem := field.Field.Type().Elem()
+					if elem.Kind() == reflect.Ptr {
+						class = elem.Elem().Name()
+					} else {
+						class = elem.Name()
+					}
+
+					updated := Models[class].NewSlice()
 					if err := scope.NewDB().Select("id").Where(sql, foreignValue).Order("id asc").Find(updated).Error; err != nil {
 						scope.Err(err)
 					}
@@ -185,11 +193,15 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 				switch value.Kind() {
 				case reflect.Slice:
 					for i := 0; i < value.Len(); i++ {
+
 						newDB := scope.NewDB()
 						elem := value.Index(i).Addr().Interface()
 
-						//fmt.Printf("%+v\n", value.Index(i).FieldByName("Model").FieldByName("ID").Uint())
-						id := value.Index(i).FieldByName("Model").FieldByName("ID").Uint()
+						mv := value.Index(i)
+						if mv.Type().Kind() == reflect.Ptr {
+							mv = mv.Elem()
+						}
+						id := mv.FieldByName("Model").FieldByName("ID").Uint()
 						if id != 0 {
 							news = append(news, id)
 						}
@@ -275,7 +287,7 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 }
 
 func updatedAttrsWithValues(scope *gorm.Scope, value interface{}) (results map[string]interface{}, hasUpdate bool) {
-	//logCodeLine()
+	log.LogCodeLine()
 	if scope.IndirectValue().Kind() != reflect.Struct {
 		return convertInterfaceToMap(value, false), true
 	}

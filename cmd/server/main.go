@@ -12,6 +12,7 @@ import (
 	"github.com/chaosxu/nerv/lib/middleware"
 	"github.com/chaosxu/nerv/lib/rest"
 	"github.com/chaosxu/nerv/lib/db"
+	"github.com/chaosxu/nerv/lib/model"
 )
 
 //var routes = flag.Bool("routes", false, "Generate router documentation")
@@ -20,6 +21,20 @@ import (
 func main() {
 	flag.Parse()
 
+	initDB()
+	defer db.DB.Close()
+
+	model.InitClassRepository("resources")
+	r := chi.NewRouter()
+	r.Use(chim.Logger)
+	r.Use(middleware.ParamsParser)
+
+	rest.RouteObj(r)
+
+	log.Fatal(http.ListenAndServe(":3333", r))
+}
+
+func initDB() {
 	gdb, err := gorm.Open("mysql", "root:root@/nerv?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		panic(err)
@@ -29,15 +44,6 @@ func main() {
 	for _, v := range db.Models {
 		db.DB.AutoMigrate(v.Type)
 	}
-	defer db.DB.Close()
-
-	r := chi.NewRouter()
-	r.Use(chim.Logger)
-	r.Use(middleware.ParamsParser)
-
-	rest.RouteObj(r)
-
-	log.Fatal(http.ListenAndServe(":3333", r))
 }
 
 

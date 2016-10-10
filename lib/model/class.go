@@ -24,7 +24,7 @@ type Operation struct {
 	Implementor string                    //Function implement the operation
 }
 
-func (p *Class) Invoke(name string, node *Node) (NodeStatus, error) {
+func (p *Class) Invoke(name string, node *Node, template *NodeTemplate) (NodeStatus, error) {
 	return NodeStatusRed, fmt.Errorf("TBD")
 }
 

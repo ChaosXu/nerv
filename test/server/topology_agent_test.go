@@ -7,7 +7,7 @@ import (
 )
 
 func TestInstallAgent(t *testing.T) {
-	template := create(t, "ServiceTemplate", "templates/test_service_template.json")
+	template := create(t, "ServiceTemplate", "templates/agent_template.json")
 	assert.NotNil(t, template)
 	id := reflect.ValueOf(template).Elem().FieldByName("ID").Interface()
 	ret, err := invoke(t, "ServiceTemplate", id, "CreateTopology", "agentTopology")

@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/db"
 	"github.com/chaosxu/nerv/lib/log"
+	"fmt"
 )
 
 func init() {
@@ -24,7 +25,7 @@ func topologyDesc() *db.ModelDescriptor {
 
 //NewTopology create a topology from service template
 func newTopology(t *ServiceTemplate, name string) *Topology {
-	topology := &Topology{Name:name, Nodes:[]*Node{}}
+	topology := &Topology{Name:name, Template:t.Name, Version:t.Version, Nodes:[]*Node{}}
 
 	tnodeMap := map[string]*NodeTemplate{}
 	for _, tnode := range t.Nodes {
@@ -53,8 +54,7 @@ func traverse(tnodeMap map[string]*NodeTemplate, tnode *NodeTemplate, topology *
 			targetNode := topology.getNode(target)
 			sourceNode := topology.getNode(tnode.Name)
 			if targetNode != nil && sourceNode != nil {
-				//TBD: BUG
-				sourceNode.link(dep.Type, targetNode.Name)
+				sourceNode.Link(dep.Type, targetNode.Name)
 				targetNodeTemplate := tnodeMap[targetNode.Template]
 				if targetNodeTemplate != nil {
 					traverse(tnodeMap, targetNodeTemplate, topology)
@@ -67,19 +67,27 @@ func traverse(tnodeMap map[string]*NodeTemplate, tnode *NodeTemplate, topology *
 //Topology which has been deployed by the service template
 type Topology struct {
 	gorm.Model
-	Name  string
-	Nodes []*Node
+	Name     string //topology name
+	Template string //service template name
+	Version  int32  //service template version
+	Nodes    []*Node
 }
 
 //Install the topology and start to serve
 func (p *Topology) Install() {
 	log.LogCodeLine()
 	tnodes := []*Node{}
-	db.DB.Where("topology_id =? ", p.ID).Preload("Nodes").Preload("Nodes.Links").Find(&tnodes)
+	db.DB.Where("topology_id =? ", p.ID).Preload("Links").Find(&tnodes)
 	p.Nodes = tnodes
 
+	template := ServiceTemplate{}
+	if err := db.DB.Where("name=? and version=?", p.Template, p.Version).Preload("Nodes").First(&template).Error; err != nil {
+		//TBD
+		fmt.Sprintln(err.Error())
+	}
+
 	for _, node := range p.Nodes {
-		p.postTraverse("contained", node, p.installNode)
+		p.postTraverse("contained", node, &template, p.installNode)
 	}
 }
 
@@ -103,31 +111,28 @@ func (p *Topology) Stop() {
 
 }
 
-func (p *Topology) installNode(node *Node) {
+func (p *Topology) installNode(node *Node, template *ServiceTemplate) {
 	log.LogCodeLine()
-	//nt := node.Template
-	//class := GetClassRepository().Find(nt.Type)
-	//if class != nil {
-	//	status, err := class.Invoke("create", node)
-	//	if err != nil {
-	//		node.Error = err
-	//	}
-	//	node.Status = status
-	//} else {
-	//	node.Status = NodeStatusRed
-	//	node.Error = fmt.Errorf("type %s of node %s isn't exist", nt.Type, nt.Name)
-	//}
+
+	nodeTemplate := template.FindNode(node.Template)
+	if nodeTemplate != nil {
+		node.Execute("Create", nodeTemplate)
+	} else {
+		node.Status = NodeStatusRed
+		node.Error = fmt.Sprintf("template %s of node %s isn't exist", node.Template, node.Name)
+		db.DB.Save(node)
+	}
 }
 
-func (p *Topology) postTraverse(depType string, parent *Node, fn func(node *Node)) {
-	links := parent.findLinksByType(depType)
+func (p *Topology) postTraverse(depType string, parent *Node, template *ServiceTemplate, fn func(node *Node, template *ServiceTemplate)) {
+	links := parent.FindLinksByType(depType)
 	if links != nil {
 		for _, link := range links {
 			node := p.getNode(link.Target)
-			p.postTraverse(depType, node, fn)
+			p.postTraverse(depType, node, template, fn)
 		}
 	}
-	fn(parent)
+	fn(parent, template)
 }
 
 func (p *Topology) putNode(node *Node) {

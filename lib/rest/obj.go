@@ -32,11 +32,11 @@ func RouteObj(r *chi.Mux) {
 }
 
 func handlePanic(w http.ResponseWriter, req *http.Request) {
-	if r := recover(); r != nil {
-		fmt.Println(r)
-		render.Status(req, 500)
-		render.JSON(w, req, r)
-	}
+	//if r := recover(); r != nil {
+	//	fmt.Println(r)
+	//	render.Status(req, 500)
+	//	render.JSON(w, req, r)
+	//}
 }
 
 func list(w http.ResponseWriter, req *http.Request) {

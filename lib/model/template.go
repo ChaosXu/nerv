@@ -85,3 +85,13 @@ func (p *ServiceTemplate) CreateTopology(name string) (*Topology, error) {
 		return topology, nil
 	}
 }
+
+// FindNode return the node
+func (p *ServiceTemplate) FindNode(name string) *NodeTemplate {
+	for _, node := range p.Nodes {
+		if node.Name==name {
+			return &node
+		}
+	}
+	return nil
+}

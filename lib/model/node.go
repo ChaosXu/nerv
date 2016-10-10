@@ -3,6 +3,7 @@ package model
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/db"
+	"github.com/chaosxu/nerv/lib/log"
 )
 
 type NodeStatus int
@@ -22,7 +23,7 @@ type Node struct {
 	Template   string                    //template name
 	Links      []*Link
 	Status     NodeStatus                //status of node
-										 //Error    error      //error during the node process
+	Error      string                    //error information during the node process
 }
 
 func init() {
@@ -41,15 +42,16 @@ func nodeDesc() *db.ModelDescriptor {
 	}
 }
 
-//Link the source node to the target node
-func (p *Node) link(depType string, target string) {
+// link the source node to the target node
+func (p *Node) Link(depType string, target string) {
 	if p.Links == nil {
 		p.Links = []*Link{}
 	}
 	p.Links = append(p.Links, &Link{Type:depType, Source:p.Name, Target:target})
 }
 
-func (p *Node) findLinksByType(depType string) []*Link {
+// findLinksByType return all links of depType
+func (p *Node) FindLinksByType(depType string) []*Link {
 	links := []*Link{}
 	for _, link := range p.Links {
 		if link.Type == depType {
@@ -57,4 +59,25 @@ func (p *Node) findLinksByType(depType string) []*Link {
 		}
 	}
 	return links
+}
+
+// execute operation
+func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) {
+	log.LogCodeLine()
+	if p.Status != NodeStatusNew {
+		return
+	}
+
+	class := GetClassRepository().Find(nodeTemplate.Type)
+	if class == nil {
+		return
+	}
+
+	if status,err:=class.Invoke(operation, p, nodeTemplate);err!=nil{
+		p.Status = NodeStatusRed
+		p.Error = err.Error()
+	}else{
+		p.Status = status
+	}
+	db.DB.Save(p)
 }
