@@ -42,12 +42,7 @@
     },
     {
       "name": "host",
-      "type": "/host/Host",
-      "properties": {
-        "ip": [
-          "nginx.dev.chaosxu.com"
-        ]
-      }
+      "type": "/host/Host"
     }
   ]
 }

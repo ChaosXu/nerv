@@ -3,29 +3,29 @@
   "base": "/Resource",
   "operations": [
     {
-      "name": "create",
-      "type": "shell",
-      "implementor": "createHost"
+      "name": "Create",
+      "type": "go",
+      "implementor": "Agent"
     },
     {
-      "name": "delete",
-      "type": "shell",
-      "implementor": "deleteHost"
+      "name": "Delete",
+      "type": "go",
+      "implementor": "Agent"
     },
     {
-      "name": "setup",
-      "type": "shell",
-      "implementor": "setupHost"
+      "name": "Setup",
+      "type": "go",
+      "implementor": "Agent"
     },
     {
-      "name": "start",
-      "type": "shell",
-      "implementor": "startHost"
+      "name": "Start",
+      "type": "go",
+      "implementor": "Agent"
     },
     {
-      "name": "stop",
-      "type": "shell",
-      "implementor": "stopHost"
+      "name": "Stop",
+      "type": "go",
+      "implementor": "Agent"
     }
   ]
 }

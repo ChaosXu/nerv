@@ -12,6 +12,7 @@ import (
 	"github.com/chaosxu/nerv/lib/middleware"
 	"github.com/chaosxu/nerv/lib/rest"
 	"github.com/chaosxu/nerv/lib/db"
+	_ "github.com/chaosxu/nerv/lib/resource"
 )
 
 //var routes = flag.Bool("routes", false, "Generate router documentation")

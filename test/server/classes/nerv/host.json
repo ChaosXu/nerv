@@ -1,0 +1,31 @@
+{
+  "name": "/nerv/Host",
+  "base": "/Resource",
+  "operations": [
+    {
+      "name": "Create",
+      "type": "shell",
+      "implementor": "createHost"
+    },
+    {
+      "name": "Delete",
+      "type": "shell",
+      "implementor": "deleteHost"
+    },
+    {
+      "name": "Setup",
+      "type": "shell",
+      "implementor": "setupHost"
+    },
+    {
+      "name": "Start",
+      "type": "shell",
+      "implementor": "startHost"
+    },
+    {
+      "name": "Stop",
+      "type": "shell",
+      "implementor": "stopHost"
+    }
+  ]
+}

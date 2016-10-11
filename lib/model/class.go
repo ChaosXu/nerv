@@ -5,6 +5,7 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/db"
+	"github.com/chaosxu/nerv/lib/resource"
 )
 
 func init() {
@@ -63,7 +64,15 @@ func (p *Class) Invoke(operation string, node *Node, template *NodeTemplate) (No
 	case "shell":
 		return NodeStatusRed, fmt.Errorf("TBD operation type %s", op.Type)
 	case "go":
-		return NodeStatusRed, fmt.Errorf("TBD operation type %s", op.Type)
+		m := resource.Models
+		res := m[op.Implementor]
+		if res == nil {
+			return NodeStatusRed, fmt.Errorf("TBD operation type %s", op.Type)
+		} else {
+			res.Create()
+			return NodeStatusGreen, nil
+		}
+
 	default:
 		return NodeStatusRed, fmt.Errorf("unsupported operation type %s", op.Type)
 	}
