@@ -4,36 +4,37 @@ import (
 	"fmt"
 
 	"github.com/jinzhu/gorm"
+	"github.com/chaosxu/nerv/lib/db"
 )
 
-//func init() {
-//	db.Models["Class"] = classDesc()
-//	db.Models["Operation"] = operationDesc()
-//}
-//
-//func operationDesc() *db.ModelDescriptor {
-//	return &db.ModelDescriptor{
-//		Type: &Operation{},
-//		New: func() interface{} {
-//			return &Operation{}
-//		},
-//		NewSlice:func() interface{} {
-//			return &[]Operation{}
-//		},
-//	}
-//}
-//
-//func classDesc() *db.ModelDescriptor {
-//	return &db.ModelDescriptor{
-//		Type: &Class{},
-//		New: func() interface{} {
-//			return &Class{}
-//		},
-//		NewSlice:func() interface{} {
-//			return &[]Class{}
-//		},
-//	}
-//}
+func init() {
+	db.Models["Class"] = classDesc()
+	db.Models["Operation"] = operationDesc()
+}
+
+func operationDesc() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
+		Type: &Operation{},
+		New: func() interface{} {
+			return &Operation{}
+		},
+		NewSlice:func() interface{} {
+			return &[]Operation{}
+		},
+	}
+}
+
+func classDesc() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
+		Type: &Class{},
+		New: func() interface{} {
+			return &Class{}
+		},
+		NewSlice:func() interface{} {
+			return &[]Class{}
+		},
+	}
+}
 
 // Class is the metadata of the node
 type Class struct {

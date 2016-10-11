@@ -64,20 +64,23 @@ func (p *Node) FindLinksByType(depType string) []*Link {
 // Execute operation
 func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) {
 	log.LogCodeLine()
+
 	if p.Status != NodeStatusNew {
 		return
 	}
 
-	class := GetClassRepository().Find(nodeTemplate.Type)
-	if class == nil {
-		return
-	}
+	defer db.DB.Save(p)
 
-	if status,err:=class.Invoke(operation, p, nodeTemplate);err!=nil{
+	class := Class{}
+	if err := db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations").First(&class).Error; err != nil {
 		p.Status = NodeStatusRed
 		p.Error = err.Error()
-	}else{
+	}
+
+	if status, err := class.Invoke(operation, p, nodeTemplate); err != nil {
+		p.Status = NodeStatusRed
+		p.Error = err.Error()
+	} else {
 		p.Status = status
 	}
-	db.DB.Save(p)
 }
