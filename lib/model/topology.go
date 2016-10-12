@@ -67,7 +67,6 @@ func traverse(tnodeMap map[string]*NodeTemplate, tnode *NodeTemplate, topology *
 
 //Topology which has been deployed by the service template
 type Topology struct {
-	Lock
 	gorm.Model
 	Status
 	Name     string //topology name
@@ -80,13 +79,11 @@ type Topology struct {
 func (p *Topology) Install() error {
 	log.LogCodeLine()
 
-	//TBD:lock
-	//p.TryLock()
-	//defer p.Unlock()
-
-	if p.JobStatus == JobStatusDoing {
+	lock := GetLock("Topology", p.ID)
+	if !lock.TryLock() {
 		return fmt.Errorf("topology is installing. ID=%d", p.ID)
 	}
+	defer lock.Unlock()
 
 	tnodes := []*Node{}
 	db.DB.Where("topology_id =?", p.ID).Preload("Links").Find(&tnodes)
