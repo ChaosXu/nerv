@@ -30,7 +30,7 @@ func newTopology(t *ServiceTemplate, name string) *Topology {
 
 	tnodeMap := map[string]*NodeTemplate{}
 	for _, tnode := range t.Nodes {
-		node := &Node{Name:tnode.Name, Template:tnode.Name, Links:[]*Link{}, Status:Status{RunStatus:RunStatusNone, JobStatus:JobStatusNone}}
+		node := &Node{Name:tnode.Name, Template:tnode.Name, Links:[]*Link{}, Status:Status{RunStatus:RunStatusNone}}
 		topology.putNode(node)
 		tnodeMap[tnode.Name] = &tnode
 	}
@@ -115,7 +115,6 @@ func (p *Topology) Install() error {
 		}
 	}
 
-	p.JobStatus = JobStatusDone
 	if err == nil {
 		p.RunStatus = RunStatusGreen
 	} else {
