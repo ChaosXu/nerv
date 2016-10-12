@@ -6,24 +6,15 @@ import (
 	"github.com/chaosxu/nerv/lib/log"
 )
 
-type NodeStatus int
-
-const (
-	NodeStatusNew NodeStatus = iota //when new
-	NodeStatusGreen        //all element ok
-	NodeStatusYellow    //some ok,some failed
-	NodeStatusRed        //all element failed
-)
 
 //Node is element of topology
 type Node struct {
 	gorm.Model
+	Status
 	TopologyID int        `gorm:"index"` //Foreign key of the topology
 	Name       string                    //node name
 	Template   string                    //template name
 	Links      []*Link
-	Status     NodeStatus                //status of node
-	Error      string                    //error information during the node process
 }
 
 func init() {
@@ -62,25 +53,24 @@ func (p *Node) FindLinksByType(depType string) []*Link {
 }
 
 // Execute operation
-func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) {
+func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 	log.LogCodeLine()
 
-	if p.Status != NodeStatusNew {
-		return
-	}
+	p.RunStatus = RunStatusGreen
 
-	defer db.DB.Save(p)
-
+	var err error = nil
 	class := Class{}
-	if err := db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations").First(&class).Error; err != nil {
-		p.Status = NodeStatusRed
+	if err = db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations").First(&class).Error; err != nil {
+		p.RunStatus = RunStatusRed
 		p.Error = err.Error()
 	}
 
-	if status, err := class.Invoke(operation, p, nodeTemplate); err != nil {
-		p.Status = NodeStatusRed
+	if err = class.Invoke(operation, p, nodeTemplate); err != nil {
+		p.RunStatus = RunStatusRed
 		p.Error = err.Error()
-	} else {
-		p.Status = status
 	}
+
+
+	db.DB.Save(p)
+	return err
 }

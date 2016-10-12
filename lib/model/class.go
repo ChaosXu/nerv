@@ -55,28 +55,28 @@ type Operation struct {
 }
 
 // Invoke the operation of template's type on node
-func (p *Class) Invoke(operation string, node *Node, template *NodeTemplate) (NodeStatus, error) {
+func (p *Class) Invoke(operation string, node *Node, template *NodeTemplate) error {
 	op := p.findOperation(operation)
 	if op == nil {
-		return NodeStatusRed, fmt.Errorf("unsupported operation %s", operation)
+		return fmt.Errorf("unsupported operation %s", operation)
 	}
 	switch op.Type {
 	case "shell":
-		return NodeStatusRed, fmt.Errorf("TBD operation type %s", op.Type)
+		return fmt.Errorf("TBD operation type %s", op.Type)
 	case "go":
 		m := resource.Models
 		res := m[op.Implementor]
 		if res == nil {
-			return NodeStatusRed, fmt.Errorf("TBD operation type %s", op.Type)
+			return fmt.Errorf("TBD operation type %s", op.Type)
 		} else {
 			res.Create()
-			return NodeStatusGreen, nil
+			return nil
 		}
 
 	default:
-		return NodeStatusRed, fmt.Errorf("unsupported operation type %s", op.Type)
+		return fmt.Errorf("unsupported operation type %s", op.Type)
 	}
-	return NodeStatusRed, fmt.Errorf("invoke%s %s %s", operation, node.Name, template.Type)
+	return fmt.Errorf("invoke%s %s %s", operation, node.Name, template.Type)
 }
 
 func (p *Class)findOperation(opName string) *Operation {
