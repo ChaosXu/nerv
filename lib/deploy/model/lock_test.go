@@ -2,7 +2,7 @@ package model_test
 
 import (
 	"testing"
-	"github.com/chaosxu/nerv/lib/automation"
+	"github.com/chaosxu/nerv/lib/deploy"
 	"github.com/stretchr/testify/assert"
 	"github.com/chaosxu/nerv/lib/db"
 	"github.com/jinzhu/gorm"
@@ -13,8 +13,8 @@ func TestLock_TryLock(t *testing.T) {
 
 	initDB()
 
-	lock1 := automation.GetLock("obj", 1)
-	lock2 := automation.GetLock("obj", 1)
+	lock1 := deploy.GetLock("obj", 1)
+	lock2 := deploy.GetLock("obj", 1)
 	defer lock1.Unlock()
 	defer lock2.Unlock()
 

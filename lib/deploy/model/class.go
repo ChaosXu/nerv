@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"github.com/chaosxu/nerv/lib/automation/driver"
+	"github.com/chaosxu/nerv/lib/deploy/driver"
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/db"
 )

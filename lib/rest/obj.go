@@ -10,7 +10,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/rest/middleware"
 	"github.com/chaosxu/nerv/lib/db"
-	_ "github.com/chaosxu/nerv/lib/automation"
+	_ "github.com/chaosxu/nerv/lib/deploy/model"
 	"reflect"
 )
 
