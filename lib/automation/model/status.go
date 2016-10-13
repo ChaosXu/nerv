@@ -1,4 +1,4 @@
-package automation
+package model
 
 //RunStatus of the topology or node
 type RunStatus int

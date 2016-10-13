@@ -1,4 +1,4 @@
-package automation_test
+package model_test
 
 import (
 	"testing"

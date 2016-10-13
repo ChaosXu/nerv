@@ -1,4 +1,4 @@
-package automation
+package model
 
 import (
 	"fmt"
