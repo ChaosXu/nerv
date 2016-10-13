@@ -8,7 +8,7 @@ import (
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/render"
 	"github.com/jinzhu/gorm"
-	"github.com/chaosxu/nerv/lib/middleware"
+	"github.com/chaosxu/nerv/lib/rest/middleware"
 	"github.com/chaosxu/nerv/lib/db"
 	_ "github.com/chaosxu/nerv/lib/model"
 	"reflect"

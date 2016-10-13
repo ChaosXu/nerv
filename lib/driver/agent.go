@@ -1,4 +1,4 @@
-package resource
+package driver
 
 import "github.com/chaosxu/nerv/lib/log"
 

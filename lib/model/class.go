@@ -2,10 +2,9 @@ package model
 
 import (
 	"fmt"
-
+	"github.com/chaosxu/nerv/lib/driver"
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/db"
-	"github.com/chaosxu/nerv/lib/resource"
 )
 
 func init() {
@@ -64,7 +63,7 @@ func (p *Class) Invoke(operation string, node *Node, template *NodeTemplate) err
 	case "shell":
 		return fmt.Errorf("TBD operation type %s", op.Type)
 	case "go":
-		m := resource.Models
+		m := driver.Models
 		res := m[op.Implementor]
 		if res == nil {
 			return fmt.Errorf("TBD operation type %s", op.Type)

@@ -1,4 +1,4 @@
-package resource
+package driver
 
 //Models register all resources
 var Models map[string]Resource = map[string]Resource{}
