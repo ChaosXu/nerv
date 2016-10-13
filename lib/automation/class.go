@@ -1,8 +1,8 @@
-package model
+package automation
 
 import (
 	"fmt"
-	"github.com/chaosxu/nerv/lib/driver"
+	"github.com/chaosxu/nerv/lib/automation/driver"
 	"github.com/jinzhu/gorm"
 	"github.com/chaosxu/nerv/lib/db"
 )

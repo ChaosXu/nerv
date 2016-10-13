@@ -1,4 +1,4 @@
-package model
+package automation
 
 import (
 	"github.com/jinzhu/gorm"
