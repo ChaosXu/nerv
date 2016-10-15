@@ -2,4 +2,8 @@ language: go
 
 go:
   - 1.7
-  - tip
+
+deploy:
+  provider: releases
+  api_key: df86f57ea5cb0c0c1d9ce4f09cdad49d0f4b0509
+  file: release/server/bin/server
