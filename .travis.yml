@@ -8,3 +8,4 @@ deploy:
   api_key:
     secure: 5c8009f2a18fb5ced697f5b39f33c460f46876cc
   file: release/nerv/server/bin/server
+  skip_cleanup: true
