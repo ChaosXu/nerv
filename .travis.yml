@@ -5,5 +5,6 @@ go:
 
 deploy:
   provider: releases
-  api_key: df86f57ea5cb0c0c1d9ce4f09cdad49d0f4b0509
-  file: release/server/bin/server
+  api_key:
+    secure: 5c8009f2a18fb5ced697f5b39f33c460f46876cc
+  file: release/nerv/server/bin/server
