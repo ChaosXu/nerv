@@ -9,9 +9,9 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/jinzhu/gorm"
 	"github.com/pressly/chi"
-	"github.com/chaosxu/nerv/lib/rest/middleware"
-	"github.com/chaosxu/nerv/lib/rest"
-	"github.com/chaosxu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/rest/middleware"
+	"github.com/ChaosXu/nerv/lib/rest"
+	"github.com/ChaosXu/nerv/lib/db"
 	"fmt"
 )
 

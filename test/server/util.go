@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"github.com/toolkits/file"
 	"strings"
-	"github.com/chaosxu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/db"
 )
 
 func find(t *testing.T, class string) {

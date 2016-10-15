@@ -2,9 +2,9 @@ package model_test
 
 import (
 	"testing"
-	"github.com/chaosxu/nerv/lib/deploy"
+	"github.com/ChaosXu/nerv/lib/deploy"
 	"github.com/stretchr/testify/assert"
-	"github.com/chaosxu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )

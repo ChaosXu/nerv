@@ -1,6 +1,6 @@
 package driver
 
-import "github.com/chaosxu/nerv/lib/log"
+import "github.com/ChaosXu/nerv/lib/log"
 
 func init() {
 	Models["Agent"] = &Agent{}

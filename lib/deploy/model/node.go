@@ -2,8 +2,8 @@ package model
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/chaosxu/nerv/lib/db"
-	"github.com/chaosxu/nerv/lib/log"
+	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/log"
 )
 
 

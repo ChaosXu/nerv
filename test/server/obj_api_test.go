@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/chaosxu/nerv/lib/deploy/model"
+	"github.com/ChaosXu/nerv/lib/deploy/model"
 )
 
 func TestClassRest(t *testing.T) {
