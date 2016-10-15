@@ -12,12 +12,16 @@ import (
 	"github.com/chaosxu/nerv/lib/rest/middleware"
 	"github.com/chaosxu/nerv/lib/rest"
 	"github.com/chaosxu/nerv/lib/db"
+	"fmt"
 )
 
-//var routes = flag.Bool("routes", false, "Generate router documentation")
-
+var (
+	Version    = "main.min.build"
+)
 
 func main() {
+	fmt.Println("Version:"+Version)
+
 	flag.Parse()
 
 	initDB()
