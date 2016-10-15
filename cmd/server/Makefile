@@ -1,6 +1,6 @@
 LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
-RELEASE_DIR=../../release/server
+RELEASE_DIR=../../release/nerv/server
 BIN_DIR=$(RELEASE_DIR)/bin
 CONF_DIR=$(RELEASE_DIR)/conf
 
