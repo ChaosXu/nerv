@@ -12,11 +12,40 @@
 			"Rev": "6d212800a42e8ab5c146b8ace3490ee17e5225f9"
 		},
 		{
+			"ImportPath": "github.com/go-resty/resty",
+			"Comment": "v0.8-10-g65d3148",
+			"Rev": "65d31487e2200bd9122c42f9aa011cfcb204e97f"
+		},
+		{
+			"ImportPath": "github.com/go-sql-driver/mysql",
+			"Comment": "v1.2-198-g0b58b37",
+			"Rev": "0b58b37b664c21f3010e836f1b931e1d0b0b0685"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm",
+			"Comment": "v1.0-73-g5ec2f6c",
+			"Rev": "5ec2f6ceb66dbb99077a2b48a5a963d073d5459d"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/gorm/dialects/mysql",
+			"Comment": "v1.0-73-g5ec2f6c",
+			"Rev": "5ec2f6ceb66dbb99077a2b48a5a963d073d5459d"
+		},
+		{
+			"ImportPath": "github.com/jinzhu/inflection",
+			"Rev": "74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff"
+		},
+		{
 			"ImportPath": "github.com/pmezard/go-difflib/difflib",
 			"Rev": "f78a839676152fd9f4863704f5d516195c18fc14"
 		},
 		{
 			"ImportPath": "github.com/pressly/chi",
+			"Comment": "v2.0.0rc1-69-g7488f68",
+			"Rev": "7488f685eeba499189011a14ffed7c57dfc8b26b"
+		},
+		{
+			"ImportPath": "github.com/pressly/chi/middleware",
 			"Comment": "v2.0.0rc1-69-g7488f68",
 			"Rev": "7488f685eeba499189011a14ffed7c57dfc8b26b"
 		},
@@ -33,6 +62,14 @@
 		{
 			"ImportPath": "github.com/toolkits/file",
 			"Rev": "a5b3c5147e07f934d9f9d00b901a20b2529f1a57"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context",
+			"Rev": "f09c4662a0bd6bd8943ac7b4931e185df9471da4"
+		},
+		{
+			"ImportPath": "golang.org/x/net/publicsuffix",
+			"Rev": "f09c4662a0bd6bd8943ac7b4931e185df9471da4"
 		}
 	]
 }
