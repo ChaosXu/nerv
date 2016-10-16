@@ -5,9 +5,9 @@ deploy:
   provider: releases
   api_key:
     secure: bWGoRrTo7QJxIFwQ+eJ9xPp2Gwqk8ZzWWtcWHojfzS8kkOBuAQb0x1JPHTs4eYdB6TVDvNurFJ8Z3BHubfMjOXS7Ns1SQjpmgAJq+syHp73hNBzkAZdPk3LGG0k+mCAVWDN1UFZQJmwWMdYFpAeFtPozNpRBqwfzep4jmDi5H8v9wjls2afH6cF4xWt04oteyPyt07QM7ecKbjoWkmczjZq326uWOY3UOnoG4RKEia/TzK1pEFsA8/bV3JvG7zbJ2uzscT2/rehoxnYi4uCGItmoxIhcYPIqkhhk0e4Ds2GbxSsEXAi1uuZY2Vp4p9d7gv8MqWKK+ykeBJyp0OemPjoJiIubUyyvKVsGSapI5GS6O5WjVwsRHtzd/LJBPDeHiO9cSQ65VxV0nC4Noysx0+MseX/dehYjqFryuervnzTcwBqitjohjC6zGUHQEdHgXudkDW8mFobWtKq30gEVC6Jb7Ss+0InPUmbPlUmgOWQfMlHeXIjMWCg35SsSyiCil24cNOAzhR4HmQQBp4LN8fI6DOlmUsPS2MOL+0W9mUKhaEocG8fsl03vfsJKjwqmv54C3zc8XjPP6DOqF5J/Y6XHNyt9P5F5wEtp4OOUg6SwKVNc1lN2EfN5LpmEoDIaDvLrbhDHvY4QJVZOMfJaeZH8WGBy6vE3mFRm7V81TAU=
-  file: release/nerv/server/bin/server
+  file: release/nerv.tar.gz
   skip_cleanup: true
   overwrite: true
   on:
     repo: ChaosXu/nerv
-    tags: true
+    #tags: true
