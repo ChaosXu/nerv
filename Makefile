@@ -1,10 +1,14 @@
 export VERSION=0.0.1
 CMD_DIR=cmd
 
-all : server
+all : build
 	@echo "----tar----"
 	rm -rf release/nerv.tar.gz
-	tar -zcvf release/nerv.tar.gz release/nerv 
+	cd release
+	tar -zcvf nerv.tar.gz nerv 
+	@echo "----tar complete----"
+
+build : server
 	@echo "----build complete----"
 
 .PHONY : server 
