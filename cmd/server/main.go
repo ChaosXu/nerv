@@ -13,16 +13,32 @@ import (
 	"github.com/ChaosXu/nerv/lib/rest"
 	"github.com/ChaosXu/nerv/lib/db"
 	"fmt"
+	"github.com/ChaosXu/nerv/lib/util"
+	"os"
 )
 
 var (
-	Version    = "main.min.build"
+	Version = "main.min.build"
+	Config *util.Config
 )
 
 func main() {
-	fmt.Println("Version:"+Version)
+	fmt.Println("Version:" + Version)
+
+	configPath := flag.String("c", "../config/config.json", "configuration file")
+	debug := flag.Bool("d", false, "show debug info")
 
 	flag.Parse()
+
+	config, err := util.LoadConfig(*configPath)
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+	if *debug {
+		fmt.Printf("%+v\n", config)
+	}
+	Config = config
 
 	initDB()
 	defer db.DB.Close()
@@ -37,7 +53,13 @@ func main() {
 }
 
 func initDB() {
-	gdb, err := gorm.Open("mysql", "root:root@/nerv?charset=utf8&parseTime=True&loc=Local")
+	url := fmt.Sprintf(
+		"%s:%s@%s",
+		Config.GetProperty("user", "root"),
+		Config.GetProperty("password", "root"),
+		Config.GetProperty("url"),
+	)
+	gdb, err := gorm.Open("mysql", url)
 	if err != nil {
 		panic(err)
 	}
