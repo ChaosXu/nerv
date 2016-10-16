@@ -5,11 +5,9 @@ BIN_DIR=$(RELEASE_DIR)/bin
 CONF_DIR=$(RELEASE_DIR)/config
 
 server : clean
-	mkdir $(RELEASE_DIR)
-	mkdir $(CONF_DIR)
-	cp config/config.json $(CONF_DIR)/config.json 
 	go build $(LDFLAGS) -o $(BIN_DIR)/server
-
+	mkdir $(CONF_DIR)
+	cp config/config.json $(CONF_DIR)/config.json
 
 .PHONY : clean
 clean :
