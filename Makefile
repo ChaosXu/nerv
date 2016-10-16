@@ -4,8 +4,7 @@ CMD_DIR=cmd
 all : build
 	@echo "----tar----"
 	rm -rf release/nerv.tar.gz
-	cd release
-	tar -zcvf nerv.tar.gz nerv 
+	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----tar complete----"
 
 build : server
