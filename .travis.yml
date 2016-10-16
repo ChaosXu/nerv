@@ -10,4 +10,4 @@ deploy:
   overwrite: true
   on:
     repo: ChaosXu/nerv
-    #tags: true
+    tags: true
