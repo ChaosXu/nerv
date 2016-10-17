@@ -16,7 +16,7 @@ func find(t *testing.T, class string) {
 	logCodeLine()
 	md := db.Models[class]
 
-	url := fmt.Sprintf("http://localhost:3333/objs/%s?where=name=?&values=/host/Host", class)
+	url := fmt.Sprintf("%s/objs/%s?where=name=?&values=/host/Host", ServerUrl, class)
 	fmt.Println(url)
 	res, err := resty.R().
 			SetHeader("Content-Type", "application/json").
@@ -45,7 +45,7 @@ func remove(t *testing.T, class string, id interface{}) {
 
 	res, err = resty.R().
 			SetHeader("Content-Type", "application/json").
-			Delete(fmt.Sprintf("http://localhost:3333/objs/%s/%d", class, id))
+			Delete(fmt.Sprintf("%s/objs/%s/%d", ServerUrl, class, id))
 
 	if err != nil {
 		assert.Nil(t, err, err.Error())
@@ -67,7 +67,7 @@ func update(t *testing.T, class string, data interface{}) interface{} {
 	res, err = resty.R().
 			SetHeader("Content-Type", "application/json").
 			SetBody(body).
-			Put("http://localhost:3333/objs/" + class)
+			Put(fmt.Sprintf("%s/objs/%s", ServerUrl, class))
 
 	if err != nil {
 		assert.Nil(t, err, err.Error())
@@ -94,7 +94,7 @@ func create(t *testing.T, class string, dataPath string) interface{} {
 	res, err = resty.R().
 			SetHeader("Content-Type", "application/json").
 			SetBody(body).
-			Post("http://localhost:3333/objs/" + class)
+			Post(fmt.Sprintf("%s/objs/%s", ServerUrl, class))
 
 	if err != nil {
 		assert.Nil(t, err, err.Error())
@@ -116,9 +116,9 @@ func getAndPreLoad(t *testing.T, class string, id interface{}) interface{} {
 	ass := strings.Join(assList, ",")
 	var url string
 	if ass == "" {
-		url = fmt.Sprintf("http://localhost:3333/objs/%s", class, id)
+		url = fmt.Sprintf("%s/objs/%s", ServerUrl, class, id)
 	} else {
-		url = fmt.Sprintf("http://localhost:3333/objs/%s/%d?associations=%s", class, id, ass)
+		url = fmt.Sprintf("%s/objs/%s/%d?associations=%s", ServerUrl, class, id, ass)
 	}
 	res, err := resty.R().
 			SetHeader("Content-Type", "application/json").
@@ -158,7 +158,7 @@ func invoke(t *testing.T, class string, id interface{}, method string, args ...i
 	res, err = resty.R().
 			SetHeader("Content-Type", "application/json").
 			SetBody(body).
-			Post(fmt.Sprintf("http://localhost:3333/objs/%s/%d/%s", class, id, method))
+			Post(fmt.Sprintf("%s/objs/%s/%d/%s", ServerUrl, class, id, method))
 
 	if err != nil {
 		assert.Nil(t, err, err.Error())
@@ -180,9 +180,9 @@ func getNil(t *testing.T, class string, id interface{}) interface{} {
 	ass := strings.Join(assList, ",")
 	var url string
 	if ass == "" {
-		url = fmt.Sprintf("http://localhost:3333/objs/%s", class, id)
+		url = fmt.Sprintf("%s/objs/%s", ServerUrl, class, id)
 	} else {
-		url = fmt.Sprintf("http://localhost:3333/objs/%s/%d?associations=%s", class, id, ass)
+		url = fmt.Sprintf("%s/objs/%s/%d?associations=%s", ServerUrl, class, id, ass)
 	}
 	res, err := resty.R().
 			SetHeader("Content-Type", "application/json").
