@@ -2,15 +2,19 @@ export VERSION=0.0.1
 CMD_DIR=cmd
 
 all : build
-	@echo "----tar----"
+	@echo "----package----"
 	rm -rf release/nerv.tar.gz
 	cd release && tar -zcvf nerv.tar.gz nerv
-	@echo "----tar complete----"
+	@echo "----package complete----"
 
-build : server
+build : server agent
 	@echo "----build complete----"
 
-.PHONY : server 
+ 
 server :
 	@echo "----build server----"
 	cd $(CMD_DIR)/server && make server
+
+agent :
+	@echo "----build agent----"
+	cd $(CMD_DIR)/agent && make agent
