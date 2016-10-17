@@ -10,8 +10,13 @@ import (
 )
 
 var (
-	Receivers map[string]interface{} = map[string]interface{}{}
+	receivers []interface{} = []interface{}{} //RPC service registry
 )
+
+//Register a rpc service
+func Register(service interface{}) {
+	receivers = append(receivers, service)
+}
 
 //Start rpc server and register all rpc handlers from var Receivers.
 func Start() error {
@@ -27,11 +32,11 @@ func Start() error {
 	defer listener.Close()
 
 	srv := rpc.NewServer()
-	for name, rcvr := range Receivers {
-		if err := srv.RegisterName(name, rcvr); err != nil {
+	for rcvr := range receivers {
+		if err := srv.Register(rcvr); err != nil {
 			return err
 		} else {
-			log.Printf("Register %s\n", name)
+			log.Printf("Register %+v\n", rcvr)
 		}
 	}
 
