@@ -1,7 +1,6 @@
 package main
 
 import (
-	"flag"
 	"net/http"
 	"log"
 
@@ -13,51 +12,41 @@ import (
 	"github.com/ChaosXu/nerv/lib/rest"
 	"github.com/ChaosXu/nerv/lib/db"
 	"fmt"
-	"github.com/ChaosXu/nerv/lib/util"
+	"github.com/ChaosXu/nerv/lib/env"
 	"os"
 )
 
 var (
 	Version = "main.min.build"
-	Config *util.Config
 )
 
 func main() {
+	fmt.Println("Workspace:" + os.Args[0])
 	fmt.Println("Version:" + Version)
-
-	configPath := flag.String("c", "../config/config.json", "configuration file")
-	debug := flag.Bool("d", false, "show debug info")
-
-	flag.Parse()
-
-	config, err := util.LoadConfig(*configPath)
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
-	}
-	if *debug {
-		fmt.Printf("%+v\n", config)
-	}
-	Config = config
+	env.Init()
 
 	initDB()
 	defer db.DB.Close()
 
+	r := initRouter()
+	log.Fatal(http.ListenAndServe(":3333", r))
+}
+
+func initRouter() *chi.Mux {
 	r := chi.NewRouter()
 	r.Use(chim.Logger)
 	r.Use(middleware.ParamsParser)
 
 	rest.RouteObj(r)
-
-	log.Fatal(http.ListenAndServe(":3333", r))
+	return r
 }
 
 func initDB() {
 	url := fmt.Sprintf(
 		"%s:%s@%s",
-		Config.GetProperty("user", "root"),
-		Config.GetProperty("password", "root"),
-		Config.GetProperty("url"),
+		env.Config.GetProperty("user", "root"),
+		env.Config.GetProperty("password", "root"),
+		env.Config.GetProperty("url"),
 	)
 	gdb, err := gorm.Open("mysql", url)
 	if err != nil {

@@ -1,4 +1,4 @@
-package util
+package env
 
 import (
 	"encoding/json"
@@ -6,13 +6,13 @@ import (
 	"fmt"
 )
 
-//Config read configuration from file path
-type Config struct {
-	props map[string]string
+//Properties read configuration from file path
+type Properties struct {
+	data map[string]string
 }
 
 //LoadConfig return a pointer of the configuration from the json file in the path
-func LoadConfig(path string) (*Config, error) {
+func LoadConfig(path string) (*Properties, error) {
 	if !file.IsExist(path) {
 		return nil, fmt.Errorf("file: %s isn't exists", path)
 	}
@@ -22,8 +22,8 @@ func LoadConfig(path string) (*Config, error) {
 		return nil, err
 	}
 
-	config := &Config{props:map[string]string{}}
-	err = json.Unmarshal([]byte(body), &config.props)
+	config := &Properties{data:map[string]string{}}
+	err = json.Unmarshal([]byte(body), &config.data)
 	if err != nil {
 		return nil, err
 	} else {
@@ -31,8 +31,8 @@ func LoadConfig(path string) (*Config, error) {
 	}
 }
 
-func (p *Config) GetProperty(name string, value... string) string {
-	if r := p.props[name]; r != "" {
+func (p *Properties) GetProperty(name string, value... string) string {
+	if r := p.data[name]; r != "" {
 		return r
 	} else if len(value) > 0 {
 		return value[0]
