@@ -4,6 +4,10 @@ RELEASE_ROOT=release/nerv
 PKG_AGENT=agent.tar.gz
 
 all : build
+	@echo "----package----"
+	rm -rf release/nerv.tar.gz
+	cd release && tar -zcvf nerv.tar.gz nerv
+	@echo "----package complete----"
 	
 
 build : server agent file
