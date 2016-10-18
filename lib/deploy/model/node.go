@@ -63,14 +63,16 @@ func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 	if err = db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations").First(&class).Error; err != nil {
 		p.RunStatus = RunStatusRed
 		p.Error = err.Error()
+		db.DB.Save(p)
+		return err
 	}
 
 	if err = class.Invoke(operation, p, nodeTemplate); err != nil {
 		p.RunStatus = RunStatusRed
 		p.Error = err.Error()
+		db.DB.Save(p)
+		return err
 	}
 
-
-	db.DB.Save(p)
-	return err
+	return nil
 }
