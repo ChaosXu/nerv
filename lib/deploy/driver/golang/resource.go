@@ -1,4 +1,4 @@
-package driver
+package golang
 
 //Models register all resources
 var Models map[string]Resource = map[string]Resource{}
