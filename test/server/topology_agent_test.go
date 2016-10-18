@@ -7,8 +7,8 @@ import (
 )
 
 func TestInstallAgent(t *testing.T) {
-	create(t, "Class", "classes/nerv/agent.json")
-	create(t, "Class", "classes/host/host.json")
+	//create(t, "Class", "classes/nerv/agent.json")
+	//create(t, "Class", "classes/nerv/host.json")
 	template := create(t, "ServiceTemplate", "templates/agent_template.json")
 	assert.NotNil(t, template)
 	id := reflect.ValueOf(template).Elem().FieldByName("ID").Interface()

@@ -7,7 +7,7 @@ all : build
 	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----package complete----"
 
-build : server agent
+build : server agent file
 	@echo "----build complete----"
 
  
@@ -18,3 +18,7 @@ server :
 agent :
 	@echo "----build agent----"
 	cd $(CMD_DIR)/agent && make agent
+
+file :
+	@echo "----build file----"
+	cd $(CMD_DIR)/file && make file

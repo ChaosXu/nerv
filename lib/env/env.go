@@ -1,9 +1,9 @@
 package env
 
 import (
-	"fmt"
 	"os"
 	"flag"
+	"log"
 )
 
 var (
@@ -18,13 +18,13 @@ func Init() {
 	flag.Parse()
 
 	if config, err := LoadConfig(*configPath); err != nil {
-		fmt.Println(err.Error())
+		log.Println(err.Error())
 		os.Exit(1)
 	} else {
 		Config = config
 	}
 
 	if *Debug {
-		fmt.Printf("%+v\n", Config)
+		log.Printf("%+v\n", Config)
 	}
 }

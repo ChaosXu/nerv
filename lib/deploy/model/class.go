@@ -5,6 +5,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/deploy/driver/golang"
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/deploy/driver/shell"
 )
 
 func init() {
@@ -39,9 +40,9 @@ func classDesc() *db.ModelDescriptor {
 // Class is the metadata of the node
 type Class struct {
 	gorm.Model
-	Name       string      //The name of NodeType
-	Base       string      //Base type name
-	Operations []Operation //Operation of type
+	Name       string      `gorm:"unique"` //The name of NodeType
+	Base       string                      //Base type name
+	Operations []Operation                 //Operation of type
 }
 
 // Operation is action of type
@@ -61,7 +62,7 @@ func (p *Class) Invoke(operation string, node *Node, template *NodeTemplate) err
 	}
 	switch op.Type {
 	case "shell":
-		return fmt.Errorf("TBD operation type %s", op.Type)
+		return shell.Execute(op.Implementor)
 	case "go":
 		m := golang.Models
 		res := m[op.Implementor]

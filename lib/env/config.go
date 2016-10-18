@@ -8,7 +8,7 @@ import (
 
 //Properties read configuration from file path
 type Properties struct {
-	data map[string]string
+	data map[string]interface{}
 }
 
 //LoadConfig return a pointer of the configuration from the json file in the path
@@ -22,7 +22,7 @@ func LoadConfig(path string) (*Properties, error) {
 		return nil, err
 	}
 
-	config := &Properties{data:map[string]string{}}
+	config := &Properties{data:map[string]interface{}{}}
 	err = json.Unmarshal([]byte(body), &config.data)
 	if err != nil {
 		return nil, err
@@ -31,12 +31,31 @@ func LoadConfig(path string) (*Properties, error) {
 	}
 }
 
-func (p *Properties) GetProperty(name string, value... string) string {
-	if r := p.data[name]; r != "" {
-		return r
+//GetString return string from config
+func (p *Properties) GetString(name string, value... string) string {
+	if r := p.data[name]; r != nil {
+		return r.(string)
 	} else if len(value) > 0 {
 		return value[0]
 	} else {
 		return ""
+	}
+}
+
+//GetMapString return string from map in the config
+func (p *Properties) GetMapString(name string, field string) string {
+	if r := p.data[name]; r != nil {
+		return r.(map[string]interface{})[field].(string)
+	} else {
+		return ""
+	}
+}
+
+//GetMap return map from the config
+func (p *Properties) GetMap(name string) map[string]interface{} {
+	if r := p.data[name]; r != nil {
+		return r.(map[string]interface{})
+	} else {
+		return map[string]interface{}{}
 	}
 }

@@ -5,27 +5,27 @@
     {
       "name": "Create",
       "type": "shell",
-      "implementor": "createHost"
+      "implementor": "create.sh"
     },
     {
       "name": "Delete",
       "type": "shell",
-      "implementor": "deleteHost"
+      "implementor": "delete.sh"
     },
     {
       "name": "Setup",
       "type": "shell",
-      "implementor": "setupHost"
+      "implementor": "setup.sh"
     },
     {
       "name": "Start",
       "type": "shell",
-      "implementor": "startHost"
+      "implementor": "start.sh"
     },
     {
       "name": "Stop",
       "type": "shell",
-      "implementor": "stopHost"
+      "implementor": "stop.sh"
     }
   ]
 }

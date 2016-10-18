@@ -4,28 +4,28 @@
   "operations": [
     {
       "name": "Create",
-      "type": "go",
-      "implementor": "Agent"
+      "type": "shell",
+      "implementor": "create.sh"
     },
     {
       "name": "Delete",
-      "type": "go",
-      "implementor": "Agent"
+      "type": "shell",
+      "implementor": "delete.sh"
     },
     {
       "name": "Setup",
-      "type": "go",
-      "implementor": "Agent"
+      "type": "shell",
+      "implementor": "setup.sh"
     },
     {
       "name": "Start",
-      "type": "go",
-      "implementor": "Agent"
+      "type": "shell",
+      "implementor": "start.sh"
     },
     {
       "name": "Stop",
-      "type": "go",
-      "implementor": "Agent"
+      "type": "shell",
+      "implementor": "stop.sh"
     }
   ]
 }
