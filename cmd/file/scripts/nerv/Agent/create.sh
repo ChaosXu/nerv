@@ -4,18 +4,14 @@ PID_FILE=agent.pid
 
 function create() {
     echo $(pwd)
-    download
-    tar -zcvf $PKG $ROOT 
-}
-
-function download() {
-    wget PKG_URL
-    check_pid
-
+    wget $PKG_URL/$PKG.tar.gz
+    tar -xf $ROOT/$PKG.tar.gz 
+    cd $ROOT/$PKG/bin
+    ./app start
 }
 
 function check_pid() {
-    if [ -f $PID_FILE ];then
+    if [ -f $PID_FILE ]; then
         pid=`cat $PID_FILE`
         if [ -n $pid ]; then
             running=`ps -p $pid|grep -v "PID TTY" |wc -l`
