@@ -2,13 +2,16 @@ LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
 APP_SCRIPT=app
 MODULE=file
-RELEASE_DIR=../../release/nerv/$(MODULE)
+PKG=$(MODULE).tar.gz
+RELEASE_ROOT=../../release/nerv
+RELEASE_DIR=$(RELEASE_ROOT)/$(MODULE)
 BIN_DIR=$(RELEASE_DIR)/bin
 CONF_DIR=$(RELEASE_DIR)/config
 SCRIPTS_DIR=$(RELEASE_DIR)/scripts
+PKG_DIR=$(RELEASE_DIR)/pkg
 
 
-file : clean
+server : clean
 	go build $(LDFLAGS) -o $(BIN_DIR)/$(MODULE)
 	cp bin/$(APP_SCRIPT) $(BIN_DIR)/$(APP_SCRIPT)
 	chmod +x $(BIN_DIR)/$(APP_SCRIPT)
@@ -16,8 +19,11 @@ file : clean
 	cp config/config.json $(CONF_DIR)/config.json
 	mkdir $(SCRIPTS_DIR)
 	cp -R scripts/ $(SCRIPTS_DIR)
-	
-	
+	rm -rf $(RELEASE_DIR).tar.gz
+	mkdir $(PKG_DIR)
+	cd $(RELEASE_ROOT) && tar -zcvf $(PKG) $(MODULE)
+
+
 .PHONY : clean
 clean :
 	rm -rf $(RELEASE_DIR)

@@ -2,18 +2,22 @@ LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
 APP_SCRIPT=app
 MODULE=agent
-RELEASE_DIR=../../release/nerv/$(MODULE)
+PKG=$(MODULE).tar.gz
+RELEASE_ROOT=../../release/nerv
+RELEASE_DIR=$(RELEASE_ROOT)/$(MODULE)
 BIN_DIR=$(RELEASE_DIR)/bin
 CONF_DIR=$(RELEASE_DIR)/config
 
 
-agent : clean
+server : clean
 	go build $(LDFLAGS) -o $(BIN_DIR)/$(MODULE)
 	cp bin/$(APP_SCRIPT) $(BIN_DIR)/$(APP_SCRIPT)
 	chmod +x $(BIN_DIR)/$(APP_SCRIPT)
 	mkdir $(CONF_DIR)
 	cp config/config.json $(CONF_DIR)/config.json
-	
+	rm -rf $(RELEASE_DIR).tar.gz
+	cd $(RELEASE_ROOT) && tar -zcvf $(PKG) $(MODULE)
+
 
 .PHONY : clean
 clean :
