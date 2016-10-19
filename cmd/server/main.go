@@ -44,9 +44,9 @@ func initRouter() *chi.Mux {
 func initDB() {
 	url := fmt.Sprintf(
 		"%s:%s@%s",
-		env.Config.GetString("user", "root"),
-		env.Config.GetString("password", "root"),
-		env.Config.GetString("url"),
+		env.Config().GetString("user", "root"),
+		env.Config().GetString("password", "root"),
+		env.Config().GetString("url"),
 	)
 	gdb, err := gorm.Open("mysql", url)
 	if err != nil {

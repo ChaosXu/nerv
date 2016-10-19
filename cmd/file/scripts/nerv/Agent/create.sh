@@ -4,9 +4,14 @@ PID_FILE=agent.pid
 
 function create() {
     echo $(pwd)
-    $APP stop
-    wget $PKG_URL
-    tar -xf $ROOT/$PKG 
+    if [ -f $APP ]; then
+        $APP stop
+    fi
+    if [ -f $PKG_FILE ]; then
+        rm -rf $PKG_FILE
+    fi
+    curl -O $PKG_URL
+    tar -xf $PKG_FILE 
     $APP start
 }
 
@@ -16,6 +21,7 @@ elif [ "$ROOT" == ""  ]; then
     echo {\"error\":\"ROOT is empty\"}
 else
     PKG=${PKG_URL##*/}
+    PKG_FILE=$ROOT/$PKG
     APP=$ROOT/${PKG%%.*}/bin/app
     cd $ROOT
     create    

@@ -7,9 +7,21 @@ import (
 )
 
 var (
-	Config *Properties
+	config *Properties
 	Debug *bool
 )
+
+func SetConfig(c *Properties) {
+	config = c
+}
+
+func Config() *Properties {
+	if config == nil {
+		panic("config is nil")
+	} else {
+		return config
+	}
+}
 
 func Init() {
 	configPath := flag.String("c", "../config/config.json", "configuration file")
@@ -17,14 +29,14 @@ func Init() {
 
 	flag.Parse()
 
-	if config, err := LoadConfig(*configPath); err != nil {
+	if c, err := LoadConfig(*configPath); err != nil {
 		log.Println(err.Error())
 		os.Exit(1)
 	} else {
-		Config = config
+		config = c
 	}
 
 	if *Debug {
-		log.Printf("%+v\n", Config)
+		log.Printf("%+v\n", config)
 	}
 }

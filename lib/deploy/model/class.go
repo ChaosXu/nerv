@@ -5,7 +5,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/deploy/driver/golang"
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
-	"github.com/ChaosXu/nerv/lib/deploy/driver/shell"
+	_"github.com/ChaosXu/nerv/lib/deploy/driver/shell"
 )
 
 func init() {
@@ -62,7 +62,7 @@ func (p *Class) Invoke(operation string, node *Node, template *NodeTemplate) err
 	}
 	switch op.Type {
 	case "shell":
-		return shell.Execute(op.Implementor)
+		//return shell.Execute(op.Implementor)
 	case "go":
 		m := golang.Models
 		res := m[op.Implementor]

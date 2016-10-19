@@ -1,12 +1,13 @@
 package main
 
 import (
-	"net/http"
 	"log"
+	"net/http"
 
-	"github.com/pressly/chi"
-	"github.com/ChaosXu/nerv/lib/env"
 	"os"
+
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/pressly/chi"
 )
 
 var (
@@ -18,17 +19,17 @@ func main() {
 	log.Println("Version:" + Version)
 	env.Init()
 
-	port := env.Config.GetString("http_port")
+	port := env.Config().GetString("http_port")
 	if port == "" {
 		log.Fatalln("http_port isn't setted")
 	}
 
 	r := chi.NewRouter()
 
-	for url, file := range env.Config.GetMap("files") {
+	for url, file := range env.Config().GetMap("files") {
 		log.Printf("file router: %s -> %s", url, file)
 		r.FileServer(url, http.Dir(file.(string)))
 	}
 
-	log.Fatalln(http.ListenAndServe(":" + port, r))
+	log.Fatalln(http.ListenAndServe(":"+port, r))
 }

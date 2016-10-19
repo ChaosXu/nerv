@@ -45,10 +45,11 @@ func (p *Properties) GetString(name string, value... string) string {
 //GetMapString return string from map in the config
 func (p *Properties) GetMapString(name string, field string) string {
 	if r := p.data[name]; r != nil {
-		return r.(map[string]interface{})[field].(string)
-	} else {
-		return ""
+		if v := r.(map[string]interface{})[field]; v != nil {
+			return v.(string)
+		}
 	}
+	return ""
 }
 
 //GetMap return map from the config
