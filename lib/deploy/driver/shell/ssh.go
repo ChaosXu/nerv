@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-//Execute a script in the scriptPath
-func Execute(addr string, user string, password string, scriptUrl string, args map[string]string) error {
+//RemoteExecute a script on the host of addr
+func RemoteExecute(addr string, user string, password string, scriptUrl string, args map[string]string) error {
 	script, err := loadScript(scriptUrl)
 	if err != nil {
 		return err

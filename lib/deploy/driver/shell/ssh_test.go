@@ -17,7 +17,7 @@ func TestExecute(t *testing.T) {
 		"PKG_URL":"http://10.211.55.2:3332/pkg/agent.tar.gz",
 		"ROOT":"/opt",
 	}
-	err := shell.Execute(
+	err := shell.RemoteExecute(
 		"centos7.chaosxu.com:22",
 		"-", "-",
 		"http://10.211.55.2:3332/scripts/nerv/Agent/create.sh",
