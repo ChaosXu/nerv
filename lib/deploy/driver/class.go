@@ -1,11 +1,10 @@
-package model
+package driver
 
 import (
 	"fmt"
-	"github.com/ChaosXu/nerv/lib/deploy/driver/golang"
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
-	_"github.com/ChaosXu/nerv/lib/deploy/driver/shell"
+	"github.com/ChaosXu/nerv/lib/deploy/driver/shell"
 )
 
 func init() {
@@ -55,28 +54,28 @@ type Operation struct {
 }
 
 // Invoke the operation of template's type on node
-func (p *Class) Invoke(operation string, node *Node, template *NodeTemplate) error {
+func (p *Class) Invoke(operation string, address string, credential string, args map[string]string) error {
 	op := p.findOperation(operation)
 	if op == nil {
 		return fmt.Errorf("unsupported operation %s", operation)
 	}
 	switch op.Type {
 	case "shell":
-		//return shell.Execute(op.Implementor)
-	case "go":
-		m := golang.Models
-		res := m[op.Implementor]
-		if res == nil {
-			return fmt.Errorf("TBD operation type %s", op.Type)
-		} else {
-			res.Create()
-			return nil
-		}
+		return shell.RemoteExecute(address, credential, op.Implementor, args)
+	//case "go":
+	//	m := golang.Models
+	//	res := m[op.Implementor]
+	//	if res == nil {
+	//		return fmt.Errorf("TBD operation type %s", op.Type)
+	//	} else {
+	//		res.Create()
+	//		return nil
+	//	}
 
 	default:
 		return fmt.Errorf("unsupported operation type %s", op.Type)
 	}
-	return fmt.Errorf("invoke%s %s %s", operation, node.Name, template.Type)
+	return fmt.Errorf("invoke%s %s", operation, address)
 }
 
 func (p *Class)findOperation(opName string) *Operation {

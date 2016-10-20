@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/log"
+	"github.com/ChaosXu/nerv/lib/deploy/driver"
 )
 
 
@@ -15,6 +16,7 @@ type Node struct {
 	Name       string                    //node name
 	Template   string                    //template name
 	Address    string                    //address of node.
+	Credential string                    //credential key
 	Links      []*Link
 }
 
@@ -60,7 +62,7 @@ func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 	p.RunStatus = RunStatusGreen
 
 	var err error = nil
-	class := Class{}
+	class := driver.Class{}
 	if err = db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations").First(&class).Error; err != nil {
 		p.RunStatus = RunStatusRed
 		p.Error = err.Error()
@@ -68,7 +70,12 @@ func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 		return err
 	}
 
-	if err = class.Invoke(operation, p, nodeTemplate); err != nil {
+	args := map[string]string{}
+	for _, param := range nodeTemplate.Parameters {
+		args[param.Name] = param.Value
+	}
+
+	if err = class.Invoke(operation, p.Address, p.Credential, args); err != nil {
 		p.RunStatus = RunStatusRed
 		p.Error = err.Error()
 		db.DB.Save(p)

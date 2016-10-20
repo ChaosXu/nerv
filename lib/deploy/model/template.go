@@ -148,7 +148,14 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 			targetTemplate := p.findTemplate(dep.Target)
 			targetNodes = p.createNode(targetTemplate, topology)
 			for _, targetNode := range targetNodes {
-				sourceNode := &Node{Name:nodeTemplate.Name, Template:nodeTemplate.Name, Address:targetNode.Address, Links:[]*Link{}, Status:Status{RunStatus:RunStatusNone}}
+				sourceNode := &Node{
+					Name:nodeTemplate.Name,
+					Template:nodeTemplate.Name,
+					Address:targetNode.Address,
+					Credential:targetNode.Credential,
+					Links:[]*Link{},
+					Status:Status{RunStatus:RunStatusNone},
+				}
 				sourceNode.Link(dep.Type, targetNode.Name)
 				sourceNodes = append(sourceNodes, sourceNode)
 				topology.addNode(sourceNode)

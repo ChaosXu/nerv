@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/ChaosXu/nerv/lib/deploy/model"
+	"github.com/ChaosXu/nerv/lib/deploy/driver"
 )
 
 func TestClassRest(t *testing.T) {
@@ -32,17 +32,16 @@ func testCRUD(t *testing.T, class string, dataPath string) {
 	getNil(t, class, id)
 }
 
-
 func TestUpdateAddChild(t *testing.T) {
-	data := create(t, "Class", "classes/host/host.json").(*model.Class)
-	data.Operations = append(data.Operations, model.Operation{Name:"updateAddChile", Type:"go", Implementor:"test"})
+	data := create(t, "Class", "classes/host/host.json").(*driver.Class)
+	data.Operations = append(data.Operations, driver.Operation{Name:"updateAddChile", Type:"go", Implementor:"test"})
 	update(t, "Class", data)
 }
 
 func TestUpdateRemoveChild(t *testing.T) {
-	data := create(t, "Class", "classes/host/host.json").(*model.Class)
-	data.Operations = append(data.Operations, model.Operation{Name:"updateAddChile", Type:"go", Implementor:"test"})
-	data = update(t, "Class", data).(*model.Class)
+	data := create(t, "Class", "classes/host/host.json").(*driver.Class)
+	data.Operations = append(data.Operations, driver.Operation{Name:"updateAddChile", Type:"go", Implementor:"test"})
+	data = update(t, "Class", data).(*driver.Class)
 
 	fmt.Printf("%d\n", len(data.Operations))
 	data.Operations = data.Operations[:len(data.Operations) - 1]
@@ -51,16 +50,16 @@ func TestUpdateRemoveChild(t *testing.T) {
 }
 
 func TestUpdateAddRemoveAddChild(t *testing.T) {
-	data := create(t, "Class", "classes/host/host.json").(*model.Class)
-	data.Operations = append(data.Operations, model.Operation{Name:"uar-a", Type:"go", Implementor:"test"})
+	data := create(t, "Class", "classes/host/host.json").(*driver.Class)
+	data.Operations = append(data.Operations, driver.Operation{Name:"uar-a", Type:"go", Implementor:"test"})
 
 	time.Sleep(time.Second)
-	data = update(t, "Class", data).(*model.Class)
+	data = update(t, "Class", data).(*driver.Class)
 
 	fmt.Printf("%d\n", len(data.Operations))
 	data.Operations = data.Operations[:len(data.Operations) - 1]
 	fmt.Printf("%d\n", len(data.Operations))
-	data.Operations = append(data.Operations, model.Operation{Name:"uar-ara", Type:"go", Implementor:"test"})
+	data.Operations = append(data.Operations, driver.Operation{Name:"uar-ara", Type:"go", Implementor:"test"})
 
 	time.Sleep(time.Second)
 	update(t, "Class", data)

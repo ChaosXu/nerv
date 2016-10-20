@@ -5,25 +5,29 @@ import (
 	"bytes"
 	"fmt"
 	"log"
+	"strings"
+	"github.com/ChaosXu/nerv/lib/db"
 )
 
 //RemoteExecute a script on the host of addr
-func RemoteExecute(addr string, user string, password string, scriptUrl string, args map[string]string) error {
+func RemoteExecute(addr string, credentialRef string, scriptUrl string, args map[string]string) error {
 	script, err := loadScript(scriptUrl)
 	if err != nil {
 		return err
 	}
 	log.Println(script)
 
-	export := ""
-	for k, v := range args {
-		export = export + fmt.Sprintf(" %s=%s", k, v)
+
+	credential := Credential{}
+	pairs := strings.Split(credentialRef, ",")
+	if err := db.DB.Where("type=? and name=?", pairs[0], pairs[1]).First(&credential).Error; err != nil {
+		return err
 	}
 
 	config := &ssh.ClientConfig{
-		User:user,
+		User:credential.User,
 		Auth:[]ssh.AuthMethod{
-			ssh.Password(password),
+			ssh.Password(credential.Password),
 		},
 	}
 	client, err := ssh.Dial("tcp", addr, config)
@@ -40,6 +44,11 @@ func RemoteExecute(addr string, user string, password string, scriptUrl string, 
 	var stdout, stderr bytes.Buffer
 	session.Stdout = &stdout
 	session.Stderr = &stderr
+
+	export := ""
+	for k, v := range args {
+		export = export + fmt.Sprintf(" %s=%s", k, v)
+	}
 	script = "export " + export + " && " + script
 	log.Println(script)
 	if err := session.Run(script); err != nil {

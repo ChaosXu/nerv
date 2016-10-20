@@ -100,7 +100,7 @@ func (p *Topology) Install() error {
 	p.Nodes = tnodes
 
 	template := ServiceTemplate{}
-	if err := db.DB.Where("name=? and version=?", p.Template, p.Version).Preload("Nodes").First(&template).Error; err != nil {
+	if err := db.DB.Where("name=? and version=?", p.Template, p.Version).Preload("Nodes").Preload("Nodes.Parameters").First(&template).Error; err != nil {
 		//TBD
 		fmt.Sprintln(err.Error())
 	}

@@ -9,6 +9,7 @@ import (
 func TestInstallAgent(t *testing.T) {
 	create(t, "Class", "classes/nerv/agent.json")
 	create(t, "Class", "classes/nerv/host.json")
+	create(t, "Credential", "credentials/pwd.json")
 	template := create(t, "ServiceTemplate", "templates/agent_template.json")
 	assert.NotNil(t, template)
 	id := reflect.ValueOf(template).Elem().FieldByName("ID").Interface()

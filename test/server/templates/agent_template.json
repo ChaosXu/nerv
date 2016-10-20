@@ -5,6 +5,16 @@
     {
       "name": "agent",
       "type": "/nerv/Agent",
+      "parameters": [
+        {
+          "name": "PKG_URL",
+          "value": "http://10.211.55.2:3332/pkg/agent.tar.gz"
+        },
+        {
+          "name": "ROOT",
+          "value": "/opt"
+        }
+      ],
       "dependencies": [
         {
           "type": "contained",
@@ -19,6 +29,10 @@
         {
           "name": "addresses",
           "value": "10.211.55.26"
+        },
+        {
+          "name": "credential",
+          "value": "SSH,pwd"
         }
       ]
     }
