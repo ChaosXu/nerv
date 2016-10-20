@@ -36,5 +36,5 @@ Session.vim
 
 try/
 release/
-lib/deploy/driver/shell/cache/
+test/lib/deploy/driver/shell/cache/
 pkg/
