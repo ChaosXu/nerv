@@ -14,7 +14,13 @@
     },
     {
       "name": "host",
-      "type": "/nerv/Host"
+      "type": "/nerv/Host",
+      "parameters": [
+        {
+          "name": "addresses",
+          "value": "10.211.55.26"
+        }
+      ]
     }
   ]
 }

@@ -14,6 +14,25 @@ func TestClassRest(t *testing.T) {
 	testCRUD(t, "Class", "classes/host/host.json")
 }
 
+func testCRUD(t *testing.T, class string, dataPath string) {
+	data := create(t, class, dataPath)
+
+	find(t, class)
+
+	v := reflect.ValueOf(data).Elem()
+	id := v.FieldByName("ID").Interface()
+	data = getAndPreLoad(t, class, id)
+
+	time := v.FieldByName("UpdatedAt").Interface().(time.Time)
+	fmt.Println(time)
+	data = update(t, class, data)
+
+	remove(t, class, id)
+
+	getNil(t, class, id)
+}
+
+
 func TestUpdateAddChild(t *testing.T) {
 	data := create(t, "Class", "classes/host/host.json").(*model.Class)
 	data.Operations = append(data.Operations, model.Operation{Name:"updateAddChile", Type:"go", Implementor:"test"})
@@ -70,24 +89,3 @@ func TestInvoke(t *testing.T) {
 	remove(t, "Topology", int(retObj["ID"].(float64)))
 	remove(t, "ServiceTemplate", id)
 }
-
-func testCRUD(t *testing.T, class string, dataPath string) {
-	data := create(t, class, dataPath)
-
-	find(t, class)
-
-	v := reflect.ValueOf(data).Elem()
-	id := v.FieldByName("ID").Interface()
-	data = getAndPreLoad(t, class, id)
-
-	time := v.FieldByName("UpdatedAt").Interface().(time.Time)
-	fmt.Println(time)
-	data = update(t, class, data)
-
-	remove(t, class, id)
-
-	getNil(t, class, id)
-}
-
-
-

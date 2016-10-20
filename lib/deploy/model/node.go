@@ -14,6 +14,7 @@ type Node struct {
 	TopologyID int        `gorm:"index"` //Foreign key of the topology
 	Name       string                    //node name
 	Template   string                    //template name
+	Address    string                    //address of node.
 	Links      []*Link
 }
 

@@ -25,45 +25,55 @@ func topologyDesc() *db.ModelDescriptor {
 }
 
 //NewTopology create a topology from service template
-func newTopology(t *ServiceTemplate, name string) *Topology {
-	topology := &Topology{Name:name, Template:t.Name, Version:t.Version, Nodes:[]*Node{}}
-
-	tnodeMap := map[string]*NodeTemplate{}
-	for _, tnode := range t.Nodes {
-		node := &Node{Name:tnode.Name, Template:tnode.Name, Links:[]*Link{}, Status:Status{RunStatus:RunStatusNone}}
-		topology.putNode(node)
-		tnodeMap[tnode.Name] = &tnode
-	}
-
-	for _, tnode := range t.Nodes {
-		traverse(tnodeMap, &tnode, topology)
-	}
-
-	return topology
-}
-
-func traverse(tnodeMap map[string]*NodeTemplate, tnode *NodeTemplate, topology *Topology) {
-	deps := tnode.Dependencies
-	if deps == nil || len(deps) == 0 {
-		return
-	}
-
-	for _, dep := range deps {
-		target := dep.Target
-
-		if target != "" {
-			targetNode := topology.getNode(target)
-			sourceNode := topology.getNode(tnode.Name)
-			if targetNode != nil && sourceNode != nil {
-				sourceNode.Link(dep.Type, targetNode.Name)
-				targetNodeTemplate := tnodeMap[targetNode.Template]
-				if targetNodeTemplate != nil {
-					traverse(tnodeMap, targetNodeTemplate, topology)
-				}
-			}
-		}
-	}
-}
+//func newTopology(serviceTemplate *ServiceTemplate, name string) *Topology {
+//	topology := &Topology{Name:name, Template:serviceTemplate.Name, Version:serviceTemplate.Version, Nodes:[]*Node{}}
+//
+//	templates := map[string]*NodeTemplate{}
+//	for _, template := range serviceTemplate.Nodes {
+//		templates[template.Name] = &template
+//		//TBD: don't hard code that generate host from ip pool in node template of the nerv host
+//		if template.Type == "/nerv/Host" {
+//			nodes := createNodesByHostTemplate(template)
+//			for _, node := range nodes {
+//				topology.addNode(node)
+//			}
+//		} else {
+//			node := &Node{Name:template.Name, Template:template.Name, Links:[]*Link{}, Status:Status{RunStatus:RunStatusNone}}
+//			topology.putNode(node)
+//		}
+//	}
+//
+//	for _, template := range serviceTemplate.Nodes {
+//		traverse(templates, &template, topology)
+//	}
+//
+//	return topology
+//}
+//
+//func traverse(nodeTemplates map[string]*NodeTemplate, nodeTemplate *NodeTemplate, topology *Topology) {
+//	deps := nodeTemplate.Dependencies
+//	if deps == nil || len(deps) == 0 {
+//		return
+//	}
+//
+//	for _, dep := range deps {
+//		target := dep.Target
+//
+//		if target != "" {
+//			targetNodes := topology.getNodes(target)
+//			sourceNode := topology.getNode(nodeTemplate.Name)
+//			if sourceNode != nil {
+//				for _, targetNode := range targetNodes {
+//					sourceNode.Link(dep.Type, targetNode.Name)
+//					targetNodeTemplate := nodeTemplates[targetNode.Template]
+//					if targetNodeTemplate != nil {
+//						traverse(nodeTemplates, targetNodeTemplate, topology)
+//					}
+//				}
+//			}
+//		}
+//	}
+//}
 
 //Topology which has been deployed by the service template
 type Topology struct {
@@ -154,7 +164,7 @@ func (p *Topology) installNode(node *Node, template *ServiceTemplate) (<-chan er
 	}()
 
 	go func() {
-		nodeTemplate := template.FindNode(node.Template)
+		nodeTemplate := template.findTemplate(node.Template)
 		if nodeTemplate != nil {
 			if err := node.Execute("Create", nodeTemplate); err != nil {
 				done <- err
@@ -207,6 +217,11 @@ func (p *Topology) postTraverse(depType string, parent *Node, template *ServiceT
 	}
 }
 
+//Only used to add host node
+func (p *Topology) addNode(node *Node) {
+	p.Nodes = append(p.Nodes, node)
+}
+
 func (p *Topology) putNode(node *Node) {
 	old := p.getNode(node.Name)
 	if old == nil {
@@ -221,4 +236,14 @@ func (p *Topology) getNode(name string) *Node {
 		}
 	}
 	return nil
+}
+
+func (p *Topology) getNodes(name string) []*Node {
+	nodes := []*Node{}
+	for _, node := range p.Nodes {
+		if node.Name == name {
+			nodes = append(nodes, node)
+		}
+	}
+	return nodes
 }
