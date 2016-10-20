@@ -10,8 +10,7 @@ all : build
 	@echo "----package complete----"
 	
 
-build : server agent file
-	cp $(RELEASE_ROOT)/$(PKG_AGENT) $(RELEASE_ROOT)/file/pkg 
+build : server agent file scripts
 	@echo "----build complete----"
 
  
@@ -26,3 +25,8 @@ agent :
 file :
 	@echo "----build file----"
 	cd $(CMD_DIR)/file && make
+
+.PHONY : scripts
+scripts :
+	@echo "----build scripts----"
+	cd scripts && make

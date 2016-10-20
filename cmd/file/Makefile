@@ -7,8 +7,6 @@ RELEASE_ROOT=../../release/nerv
 RELEASE_DIR=$(RELEASE_ROOT)/$(MODULE)
 BIN_DIR=$(RELEASE_DIR)/bin
 CONF_DIR=$(RELEASE_DIR)/config
-SCRIPTS_DIR=$(RELEASE_DIR)/scripts
-PKG_DIR=$(RELEASE_DIR)/pkg
 
 
 server : clean
@@ -17,10 +15,7 @@ server : clean
 	chmod +x $(BIN_DIR)/$(APP_SCRIPT)
 	mkdir $(CONF_DIR)
 	cp config/config.json $(CONF_DIR)/config.json
-	mkdir $(SCRIPTS_DIR)
-	cp -R scripts/ $(SCRIPTS_DIR)
 	rm -rf $(RELEASE_DIR).tar.gz
-	mkdir $(PKG_DIR)
 	cd $(RELEASE_ROOT) && tar -zcvf $(PKG) $(MODULE)
 
 
