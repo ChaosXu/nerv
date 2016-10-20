@@ -19,7 +19,7 @@ func TestExecute(t *testing.T) {
 	}
 	err := shell.RemoteExecute(
 		"centos7.chaosxu.com:22",
-		"-", "-",
+		"_", "_",
 		"http://10.211.55.2:3332/scripts/nerv/Agent/create.sh",
 		args)
 	if err != nil {

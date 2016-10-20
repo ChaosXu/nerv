@@ -13,6 +13,7 @@ func RemoteExecute(addr string, user string, password string, scriptUrl string, 
 	if err != nil {
 		return err
 	}
+	log.Println(script)
 
 	export := ""
 	for k, v := range args {

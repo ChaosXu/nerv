@@ -8,6 +8,7 @@ import (
 
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/toolkits/file"
+	"log"
 )
 
 func loadScript(scriptUrl string) (string, error) {
@@ -22,10 +23,16 @@ func loadScript(scriptUrl string) (string, error) {
 	l := strings.LastIndex(url.Path, "/")
 	dir = dir + url.Path[:l]
 	script := dir + url.Path[l:]
-	os.MkdirAll(dir, os.ModeDir | os.ModePerm)
-	if err := file.Download(script, scriptUrl); err != nil {
-		return "", err
+	log.Println(scriptUrl)
+	scriptContent, err := file.ToString(script)
+	if err != nil {
+		os.MkdirAll(dir, os.ModeDir | os.ModePerm)
+		if err := file.Download(script, scriptUrl); err != nil {
+			return "", err
+		}
+		return file.ToString(script)
+	} else {
+		return scriptContent, nil
 	}
 
-	return file.ToString(script)
 }

@@ -35,5 +35,6 @@ Session.vim
 /.make/
 
 try/
-
 release/
+lib/deploy/driver/shell/cache/
+pkg/
