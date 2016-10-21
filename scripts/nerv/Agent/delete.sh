@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-PID_FILE=agent.pid
-
 function delete() {
     echo $(pwd)
-    if [ -f $APP ]; then
+    if [ -f $APP_PID ]; then
         $APP stop  || return 1
     fi
     if [ -d $APP_ROOT ]; then
@@ -23,7 +21,9 @@ else
     PKG=${PKG_URL##*/}
     PKG_FILE=$ROOT/$PKG
     APP_ROOT=$ROOT/${PKG%%.*}
+    APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
     cd $ROOT
     delete
 fi
+
