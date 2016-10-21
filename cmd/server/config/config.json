@@ -1,7 +1,7 @@
 {
-  "user": "root",
-  "password": "root",
-  "url": "/nerv?charset=utf8&parseTime=True&loc=Local",
+  "user": "",
+  "password": "",
+  "url": "",
   "cache":{
     "scripts":"cache"
   }

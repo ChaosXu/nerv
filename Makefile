@@ -26,6 +26,12 @@ file :
 	@echo "----build file----"
 	cd $(CMD_DIR)/file && make
 
+
+profile : all	
+	@echo "----profile $(ENV)----"
+	cp -R profile/$(ENV)/ $(RELEASE_ROOT)
+	@echo "----profile complete----"	
+
 .PHONY : scripts
 scripts :
 	@echo "----build scripts----"
