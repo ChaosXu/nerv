@@ -39,31 +39,33 @@ type Topology struct {
 //Install the topology and start to serve
 func (p *Topology) Install() error {
 	log.LogCodeLine()
-	return p.postTraverse("contained", p.installNode)
+	return p.postTraverse("contained", "Create")
 }
 
 //Uninstall the topology
 func (p *Topology) Uninstall() error {
 	log.LogCodeLine()
-	return p.preTraverse("contained", p.uninstallNode)
+	return p.preTraverse("contained", "Delete")
 }
 
 //Configure the topology for start
-func (p *Topology) Configure() {
-
+func (p *Topology) Configure() error {
+	return fmt.Errorf("TBD")
 }
 
 //Start the Topology
-func (p *Topology) Start() {
-
+func (p *Topology) Start() error {
+	log.LogCodeLine()
+	return p.postTraverse("contained", "Start")
 }
 
 //Stop the Topology
-func (p *Topology) Stop() {
-
+func (p *Topology) Stop() error {
+	log.LogCodeLine()
+	return p.preTraverse("contained", "Stop")
 }
 
-func (p *Topology) preTraverse(depType string, fn traverseCallback) error {
+func (p *Topology) preTraverse(depType string, operation string) error {
 	lock := GetLock("Topology", p.ID)
 	if !lock.TryLock() {
 		return fmt.Errorf("topology is doing. ID=%d", p.ID)
@@ -83,7 +85,7 @@ func (p *Topology) preTraverse(depType string, fn traverseCallback) error {
 	timeouts := []<-chan bool{}
 
 	for _, node := range p.Nodes {
-		done, timeout := p.preTraverseNode(depType, node, &template, fn)
+		done, timeout := p.preTraverseNode(depType, node, &template, operation)
 		dones = append(dones, done)
 		timeouts = append(timeouts, timeout)
 	}
@@ -109,7 +111,7 @@ func (p *Topology) preTraverse(depType string, fn traverseCallback) error {
 	return err
 }
 
-func (p *Topology) postTraverse(depType string, fn traverseCallback) error {
+func (p *Topology) postTraverse(depType string, operation string) error {
 	lock := GetLock("Topology", p.ID)
 	if !lock.TryLock() {
 		return fmt.Errorf("topology is doing. ID=%d", p.ID)
@@ -129,7 +131,7 @@ func (p *Topology) postTraverse(depType string, fn traverseCallback) error {
 	timeouts := []<-chan bool{}
 
 	for _, node := range p.Nodes {
-		done, timeout := p.postTraverseNode(depType, node, &template, fn)
+		done, timeout := p.postTraverseNode(depType, node, &template, operation)
 		dones = append(dones, done)
 		timeouts = append(timeouts, timeout)
 	}
@@ -155,7 +157,7 @@ func (p *Topology) postTraverse(depType string, fn traverseCallback) error {
 	return err
 }
 
-func (p *Topology) uninstallNode(node *Node, template *ServiceTemplate) (<-chan error, <-chan bool) {
+func (p *Topology) executeNode(operation string, node *Node, template *ServiceTemplate) (<-chan error, <-chan bool) {
 	done := make(chan error, 1)
 	timeout := make(chan bool, 1)
 
@@ -167,7 +169,7 @@ func (p *Topology) uninstallNode(node *Node, template *ServiceTemplate) (<-chan 
 	go func() {
 		nodeTemplate := template.findTemplate(node.Template)
 		if nodeTemplate != nil {
-			if err := node.Execute("Delete", nodeTemplate); err != nil {
+			if err := node.Execute(operation, nodeTemplate); err != nil {
 				done <- err
 			} else {
 				done <- nil
@@ -184,37 +186,8 @@ func (p *Topology) uninstallNode(node *Node, template *ServiceTemplate) (<-chan 
 	return done, timeout
 }
 
-func (p *Topology) installNode(node *Node, template *ServiceTemplate) (<-chan error, <-chan bool) {
-	done := make(chan error, 1)
-	timeout := make(chan bool, 1)
-
-	go func() {
-		time.Sleep(30 * time.Second)
-		timeout <- true
-	}()
-
-	go func() {
-		nodeTemplate := template.findTemplate(node.Template)
-		if nodeTemplate != nil {
-			if err := node.Execute("Create", nodeTemplate); err != nil {
-				done <- err
-			} else {
-				done <- nil
-			}
-		} else {
-			node.RunStatus = RunStatusRed
-			err := fmt.Errorf("template %s of node %s isn't exist", node.Template, node.Name)
-			node.Error = err.Error()
-			db.DB.Save(node)
-			done <- err
-		}
-	}()
-
-	return done, timeout
-}
-
-func (p *Topology) preTraverseNode(depType string, parent *Node, template *ServiceTemplate, fn traverseCallback) (<-chan error, <-chan bool) {
-	err, timeout := fn(parent, template)
+func (p *Topology) preTraverseNode(depType string, parent *Node, template *ServiceTemplate, operation string) (<-chan error, <-chan bool) {
+	err, timeout := p.executeNode(operation, parent, template)
 	select {
 	case e := <-err:
 		ec := make(chan error, 1)
@@ -232,7 +205,7 @@ func (p *Topology) preTraverseNode(depType string, parent *Node, template *Servi
 		timeouts := []<-chan bool{}
 		for _, link := range links {
 			node := p.getNode(link.Target)
-			done, timeout := p.preTraverseNode(depType, node, template, fn)
+			done, timeout := p.preTraverseNode(depType, node, template, operation)
 			dones = append(dones, done)
 			timeouts = append(timeouts, timeout)
 		}
@@ -263,14 +236,14 @@ func (p *Topology) preTraverseNode(depType string, parent *Node, template *Servi
 	return dc, tc
 }
 
-func (p *Topology) postTraverseNode(depType string, parent *Node, template *ServiceTemplate, fn traverseCallback) (<-chan error, <-chan bool) {
+func (p *Topology) postTraverseNode(depType string, parent *Node, template *ServiceTemplate, operation string) (<-chan error, <-chan bool) {
 	links := parent.FindLinksByType(depType)
 	if links != nil && len(links) > 0 {
 		dones := []<-chan error{}
 		timeouts := []<-chan bool{}
 		for _, link := range links {
 			node := p.getNode(link.Target)
-			done, timeout := p.postTraverseNode(depType, node, template, fn)
+			done, timeout := p.postTraverseNode(depType, node, template, operation)
 			dones = append(dones, done)
 			timeouts = append(timeouts, timeout)
 		}
@@ -287,7 +260,7 @@ func (p *Topology) postTraverseNode(depType string, parent *Node, template *Serv
 		}
 
 		if err == nil {
-			return fn(parent, template)
+			return p.executeNode(operation, parent, template)
 		} else {
 			done := make(chan error, 1)
 			timeout := make(chan bool, 1)
@@ -295,7 +268,7 @@ func (p *Topology) postTraverseNode(depType string, parent *Node, template *Serv
 			return done, timeout
 		}
 	} else {
-		return fn(parent, template)
+		return p.executeNode(operation, parent, template)
 	}
 }
 
