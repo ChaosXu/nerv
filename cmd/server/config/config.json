@@ -4,7 +4,8 @@
     "password": "",
     "url": ""
   },
-  "cache": {
-    "scripts": "cache"
+  "scripts": {
+    "repository": "localhost/scripts",
+    "cache": "cache"
   }
 }

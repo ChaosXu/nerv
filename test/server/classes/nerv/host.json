@@ -5,12 +5,12 @@
     {
       "name": "Create",
       "type": "shell",
-      "implementor": "http://10.211.55.2:3332/scripts/nerv/Host/create.sh"
+      "implementor": "/nerv/Host/create.sh"
     },
     {
       "name": "Delete",
       "type": "shell",
-      "implementor": "delete.sh"
+      "implementor": "/nerv/Host/delete.sh"
     },
     {
       "name": "Setup",

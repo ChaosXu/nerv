@@ -15,6 +15,12 @@ const (
 
 	//all elements failed
 	RunStatusRed
+
+	DownStatusGreen
+
+	DownStatusYellow
+
+	DownStatusRed
 )
 
 //Status of the topology or node

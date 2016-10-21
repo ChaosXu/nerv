@@ -12,9 +12,9 @@ import (
 )
 
 func loadScript(scriptUrl string) (string, error) {
-	dir := env.Config().GetMapString("cache", "scripts")
+	dir := env.Config().GetMapString("scripts", "cache")
 	if dir == "" {
-		return "", fmt.Errorf("cache.script isn't setted");
+		return "", fmt.Errorf("scripts.cache isn't setted");
 	}
 	url, err := url.Parse(scriptUrl)
 	if err != nil {

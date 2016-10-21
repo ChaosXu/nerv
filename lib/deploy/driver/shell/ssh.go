@@ -11,12 +11,17 @@ import (
 )
 
 //RemoteExecute a script on the host of addr
-func RemoteExecute(addr string, credentialRef string, scriptUrl string, args map[string]string) error {
+func RemoteExecute(addr string, credentialRef string, scriptUri string, args map[string]string) error {
+	rep := env.Config().GetMapString("scripts", "repository")
+	if rep == "" {
+		return fmt.Errorf("scripts.repository isn't setted")
+	}
+	scriptUrl := rep + scriptUri
+	log.Printf("url:%s\n", scriptUrl)
 	script, err := loadScript(scriptUrl)
 	if err != nil {
 		return err
 	}
-	log.Println(script)
 
 	credential := Credential{}
 	pairs := strings.Split(credentialRef, ",")
@@ -50,9 +55,8 @@ func RemoteExecute(addr string, credentialRef string, scriptUrl string, args map
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
 	script = "export " + export + " && " + script
-	if env.Debug {
-		log.Println(script)
-	}
+	log.Println(script)
+
 	stdoutContent := ""
 	stderrContent := ""
 	if err := session.Run(script); err != nil {
