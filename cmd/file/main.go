@@ -19,7 +19,7 @@ func main() {
 	log.Println("Version:" + Version)
 	env.Init()
 
-	port := env.Config().GetString("http_port")
+	port := env.Config().GetMapString("http","port")
 	if port == "" {
 		log.Fatalln("http_port isn't setted")
 	}
@@ -31,5 +31,5 @@ func main() {
 		r.FileServer(url, http.Dir(file.(string)))
 	}
 
-	log.Fatalln(http.ListenAndServe(":"+port, r))
+	log.Fatalln(http.ListenAndServe(":" + port, r))
 }

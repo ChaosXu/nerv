@@ -1,5 +1,7 @@
 {
-  "http_port": "3332",
+  "http": {
+    "port": "3332"
+  },
   "files": {
     "/scripts": "../scripts",
     "/pkg": "../pkg"
