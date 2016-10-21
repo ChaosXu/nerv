@@ -7,9 +7,9 @@ import (
 )
 
 func TestInstallAgent(t *testing.T) {
-	//create(t, "Class", "classes/nerv/agent.json")
-	//create(t, "Class", "classes/nerv/host.json")
-	//create(t, "Credential", "credentials/pwd.json")
+	create(t, "Class", "classes/nerv/agent.json")
+	create(t, "Class", "classes/nerv/host.json")
+	create(t, "Credential", "credentials/pwd.json")
 	template := create(t, "ServiceTemplate", "templates/agent_template.json")
 	assert.NotNil(t, template)
 	id := reflect.ValueOf(template).Elem().FieldByName("ID").Interface()
@@ -19,7 +19,7 @@ func TestInstallAgent(t *testing.T) {
 	}
 
 	retObj := reflect.ValueOf(ret).Elem().Index(0).Interface().(map[string]interface{})
-	invoke(t, "Topology", int(retObj["ID"].(float64)), "Install")
+	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Install")
 	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Stop")
 	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Start")
 	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Stop")
