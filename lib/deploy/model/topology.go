@@ -128,10 +128,11 @@ func (p *Topology) Install() error {
 	if err == nil {
 		p.RunStatus = RunStatusGreen
 	} else {
+		p.Error = err.Error()
 		p.RunStatus = RunStatusRed
 	}
 	db.DB.Save(p)
-	return nil
+	return err
 }
 
 //Uninstall the topology
@@ -173,8 +174,10 @@ func (p *Topology) installNode(node *Node, template *ServiceTemplate) (<-chan er
 			}
 		} else {
 			node.RunStatus = RunStatusRed
-			node.Error = fmt.Sprintf("template %s of node %s isn't exist", node.Template, node.Name)
-			done <- db.DB.Save(node).Error
+			err := fmt.Errorf("template %s of node %s isn't exist", node.Template, node.Name)
+			node.Error = err.Error()
+			db.DB.Save(node)
+			done <- err
 		}
 	}()
 

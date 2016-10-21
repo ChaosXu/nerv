@@ -63,7 +63,7 @@ func dependencyDesc() *db.ModelDescriptor {
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
 	gorm.Model
-	Name    string           `json:"name"`
+	Name    string           `json:"name";gorm:"unique"`
 	Version int32            `json:"version"`
 	Nodes   []NodeTemplate   `json:"nodes"`
 }
@@ -90,7 +90,7 @@ func (p *NodeTemplate) getParameterValue(name string) string {
 // Dependency is relationship  between two node
 type Dependency struct {
 	gorm.Model
-	NodeTemplateID int       `gorm:"index"`  //Foreign key of the node template
+	NodeTemplateID int                       //`gorm:"index"`  //Foreign key of the node template
 	Type           string    `json:"type"`   //The type of dependency: connect;contained
 	Target         string    `json:"target"` //The name of target node
 }
@@ -98,8 +98,8 @@ type Dependency struct {
 // Parameter is used to generate the node of template
 type Parameter struct {
 	gorm.Model
-	NodeTemplateID int       `gorm:"index;unique_index:idx_parameter_idn"` //Foreign key of the node template
-	Name           string    `json:"name";gorm:"unique_index:idx_parameter_idn"`
+	NodeTemplateID int       `gorm:"index"` //Foreign key of the node template
+	Name           string    `json:"name"`
 	Value          string    `json:"value"`
 }
 

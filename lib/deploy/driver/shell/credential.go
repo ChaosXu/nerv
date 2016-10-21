@@ -26,6 +26,6 @@ type Credential struct {
 	gorm.Model
 	Type     string    `json:"type"`
 	Name     string    `json:"name"`
-	User     string    `json:"name"`
+	User     string    `json:"user"`
 	Password string    `json:"password"`
 }

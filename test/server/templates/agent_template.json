@@ -28,7 +28,7 @@
       "parameters": [
         {
           "name": "addresses",
-          "value": "10.211.55.26"
+          "value": "10.211.55.26:22"
         },
         {
           "name": "credential",

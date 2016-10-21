@@ -5,7 +5,7 @@
     {
       "name": "Create",
       "type": "shell",
-      "implementor": "create.sh"
+      "implementor": "http://10.211.55.2:3332/scripts/nerv/Agent/create.sh"
     },
     {
       "name": "Delete",

@@ -5,13 +5,13 @@ PID_FILE=agent.pid
 function create() {
     echo $(pwd)
     if [ -f $APP ]; then
-        $APP stop
+        $APP stop  || return 1
     fi
     if [ -f $PKG_FILE ]; then
         rm -rf $PKG_FILE
     fi
-    curl -O $PKG_URL
-    tar -xf $PKG_FILE 
+    curl -Os $PKG_URL || return 1
+    tar -xf $PKG_FILE || return 1
     $APP start
 }
 

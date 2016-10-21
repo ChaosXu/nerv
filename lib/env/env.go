@@ -8,7 +8,7 @@ import (
 
 var (
 	config *Properties
-	Debug *bool
+	Debug bool
 )
 
 func SetConfig(c *Properties) {
@@ -25,7 +25,7 @@ func Config() *Properties {
 
 func Init() {
 	configPath := flag.String("c", "../config/config.json", "configuration file")
-	Debug = flag.Bool("d", false, "show debug info")
+	Debug = *flag.Bool("d", false, "show debug info")
 
 	flag.Parse()
 
@@ -36,7 +36,7 @@ func Init() {
 		config = c
 	}
 
-	if *Debug {
+	if Debug {
 		log.Printf("%+v\n", config)
 	}
 }

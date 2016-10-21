@@ -237,10 +237,18 @@ func invoke(w http.ResponseWriter, req *http.Request) {
 		}
 		values := m.Func.Call(in)
 		ret := []interface{}{}
+		httpCode := 200
 		for _, value := range values {
-			ret = append(ret, value.Interface())
+			rawValue := value.Interface()
+			if e, ok := rawValue.(error); ok {
+				httpCode = 500
+				ret = append(ret, e.Error())
+			}else{
+				ret = append(ret, rawValue)
+			}
+
 		}
-		render.Status(req, 200)
+		render.Status(req, httpCode)
 		render.JSON(w, req, ret)
 	}
 }

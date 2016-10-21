@@ -10,6 +10,8 @@ import (
 	"github.com/toolkits/file"
 	"strings"
 	"github.com/ChaosXu/nerv/lib/db"
+	_"github.com/ChaosXu/nerv/lib/deploy/model"
+	"log"
 )
 
 func find(t *testing.T, class string) {
@@ -165,7 +167,7 @@ func invoke(t *testing.T, class string, id interface{}, method string, args ...i
 	}
 	assert.Equal(t, 200, res.StatusCode(), string(res.Body()))
 	b := res.Body();
-	fmt.Printf("%+v\n", string(b))
+	log.Printf("%+vs", string(b))
 	ro := &[]interface{}{}
 	if err := json.Unmarshal(b, ro); err != nil {
 		assert.Nil(t, err, err.Error())

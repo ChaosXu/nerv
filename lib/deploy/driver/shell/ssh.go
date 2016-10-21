@@ -7,6 +7,7 @@ import (
 	"log"
 	"strings"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/env"
 )
 
 //RemoteExecute a script on the host of addr
@@ -16,7 +17,6 @@ func RemoteExecute(addr string, credentialRef string, scriptUrl string, args map
 		return err
 	}
 	log.Println(script)
-
 
 	credential := Credential{}
 	pairs := strings.Split(credentialRef, ",")
@@ -50,14 +50,33 @@ func RemoteExecute(addr string, credentialRef string, scriptUrl string, args map
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
 	script = "export " + export + " && " + script
-	log.Println(script)
+	if env.Debug {
+		log.Println(script)
+	}
+	stdoutContent := ""
+	stderrContent := ""
 	if err := session.Run(script); err != nil {
-		log.Println("stdout\n" + stdout.String())
-		log.Println("stderr\n" + stderr.String())
-		return err
+		stdoutContent = stdout.String()
+		if stdoutContent != "" {
+			log.Println("stdout\n" + stdoutContent)
+		}
+		stderrContent = stderr.String()
+		if stderrContent != "" {
+			log.Println("stderr\n" + stderrContent)
+			return fmt.Errorf("%s\n%s", err.Error(), stderrContent)
+		} else {
+			return err
+		}
 	} else {
-		log.Println("stdout\n" + stdout.String())
-		log.Println("stderr\n" + stderr.String())
+		stdoutContent = stdout.String()
+		if stdoutContent != "" {
+			log.Println("stdout\n" + stdoutContent)
+		}
+		stderrContent = stderr.String()
+		if stderrContent != "" {
+			log.Println("stderr\n" + stderrContent)
+			return fmt.Errorf("%s", stderrContent)
+		}
 	}
 
 	return nil

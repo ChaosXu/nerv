@@ -2,5 +2,7 @@
   "user": "root",
   "password": "root",
   "url": "/nerv?charset=utf8&parseTime=True&loc=Local",
-  "scripts":"/Users/chaosxu/code/go/src/github.com/ChaosXu/nerv/cmd/server/scriptsma"
+  "cache":{
+    "scripts":"cache"
+  }
 }

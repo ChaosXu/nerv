@@ -79,8 +79,7 @@ func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 		p.RunStatus = RunStatusRed
 		p.Error = err.Error()
 		db.DB.Save(p)
-		return err
 	}
 
-	return nil
+	return err
 }
