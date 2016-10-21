@@ -1,8 +1,10 @@
 {
-  "user": "",
-  "password": "",
-  "url": "",
-  "cache":{
-    "scripts":"cache"
+  "db": {
+    "user": "",
+    "password": "",
+    "url": ""
+  },
+  "cache": {
+    "scripts": "cache"
   }
 }

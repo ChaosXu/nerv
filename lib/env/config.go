@@ -43,13 +43,18 @@ func (p *Properties) GetString(name string, value... string) string {
 }
 
 //GetMapString return string from map in the config
-func (p *Properties) GetMapString(name string, field string) string {
+func (p *Properties) GetMapString(name string, field string, value... string) string {
 	if r := p.data[name]; r != nil {
 		if v := r.(map[string]interface{})[field]; v != nil {
 			return v.(string)
 		}
 	}
-	return ""
+
+	if len(value) > 0 {
+		return value[0]
+	} else {
+		return ""
+	}
 }
 
 //GetMap return map from the config
