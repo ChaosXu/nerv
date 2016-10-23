@@ -38,3 +38,6 @@ try/
 release/
 test/lib/deploy/driver/shell/cache/
 pkg/
+cache/
+
+test/server/credentials/pwd.json
