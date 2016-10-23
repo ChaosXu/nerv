@@ -15,17 +15,17 @@
     {
       "name": "Setup",
       "type": "shell",
-      "implementor": "setup.sh"
+      "implementor": "/nerv/Agent/setup.sh"
     },
     {
       "name": "Start",
       "type": "shell",
-      "implementor": "start.sh"
+      "implementor": "/nerv/Agent/start.sh"
     },
     {
       "name": "Stop",
       "type": "shell",
-      "implementor": "stop.sh"
+      "implementor": "/nerv/Agent/stop.sh"
     }
   ]
 }

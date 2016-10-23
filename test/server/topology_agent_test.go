@@ -19,8 +19,8 @@ func TestInstallAgent(t *testing.T) {
 	}
 
 	retObj := reflect.ValueOf(ret).Elem().Index(0).Interface().(map[string]interface{})
-	invoke(t, "Topology", int(retObj["ID"].(float64)), "Install")
-	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Stop")
+	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Install")
+	invoke(t, "Topology", int(retObj["ID"].(float64)), "Stop")
 	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Start")
 	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Stop")
 	//invoke(t, "Topology", int(retObj["ID"].(float64)), "Uninstall")
