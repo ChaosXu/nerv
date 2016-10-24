@@ -55,11 +55,7 @@ type Operation struct {
 }
 
 // Invoke the operation of template's type on node
-func (p *Class) Invoke(operation string, address string, credential string, args map[string]string) error {
-	op := p.findOperation(operation)
-	if op == nil {
-		return fmt.Errorf("unsupported operation %s", operation)
-	}
+func (p *Class) Invoke(op Operation, address string, credential string, args map[string]string) error {
 	switch op.Type {
 	case "ssh":
 		return ssh.Execute(address, op.Implementor, args, credential)
@@ -78,16 +74,6 @@ func (p *Class) Invoke(operation string, address string, credential string, args
 	default:
 		return fmt.Errorf("unsupported operation type %s", op.Type)
 	}
-	return fmt.Errorf("invoke%s %s", operation, address)
-}
-
-func (p *Class)findOperation(opName string) *Operation {
-	for _, op := range p.Operations {
-		if op.Name == opName {
-			return &op
-		}
-	}
-	return nil
 }
 
 

@@ -63,7 +63,7 @@ func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 	p.RunStatus = RunStatusGreen
 
 	class := driver.Class{}
-	if err := db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations").First(&class).Error; err != nil {
+	if err := db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations", "name = ?", operation).First(&class).Error; err != nil {
 		re := fmt.Errorf("%s execute %s error:%s", p.Name, operation, err.Error())
 		p.RunStatus = RunStatusRed
 		p.Error = re.Error()
@@ -76,7 +76,7 @@ func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 		args[param.Name] = param.Value
 	}
 
-	if err := class.Invoke(operation, p.Address, p.Credential, args); err != nil {
+	if err := class.Invoke(class.Operations[0], p.Address, p.Credential, args); err != nil {
 		re := fmt.Errorf("%s execute %s error:%s", p.Name, operation, err.Error())
 		p.RunStatus = RunStatusRed
 		p.Error = re.Error()
