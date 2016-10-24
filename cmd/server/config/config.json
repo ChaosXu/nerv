@@ -7,5 +7,8 @@
   "scripts": {
     "repository": "localhost/scripts",
     "cache": "cache"
+  },
+  "agent": {
+    "port": "3334",
   }
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/log"
 	"github.com/ChaosXu/nerv/lib/deploy/driver"
+	"fmt"
 )
 
 
@@ -61,13 +62,13 @@ func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 
 	p.RunStatus = RunStatusGreen
 
-	var err error = nil
 	class := driver.Class{}
-	if err = db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations").First(&class).Error; err != nil {
+	if err := db.DB.Where("name=?", nodeTemplate.Type).Preload("Operations").First(&class).Error; err != nil {
+		re := fmt.Errorf("%s execute %s error:%s", p.Name, operation, err.Error())
 		p.RunStatus = RunStatusRed
-		p.Error = err.Error()
+		p.Error = re.Error()
 		db.DB.Save(p)
-		return err
+		return re
 	}
 
 	args := map[string]string{}
@@ -75,11 +76,13 @@ func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
 		args[param.Name] = param.Value
 	}
 
-	if err = class.Invoke(operation, p.Address, p.Credential, args); err != nil {
+	if err := class.Invoke(operation, p.Address, p.Credential, args); err != nil {
+		re := fmt.Errorf("%s execute %s error:%s", p.Name, operation, err.Error())
 		p.RunStatus = RunStatusRed
-		p.Error = err.Error()
+		p.Error = re.Error()
 		db.DB.Save(p)
+		return re
 	}
 
-	return err
+	return nil
 }

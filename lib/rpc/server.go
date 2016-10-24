@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/rpc/jsonrpc"
 	"fmt"
+	"reflect"
 )
 
 var (
@@ -28,15 +29,17 @@ func Start() error {
 	listener, err := net.Listen("tcp", ":" + port)
 	if err != nil {
 		return err
+	} else {
+		log.Printf("Listen %s\n", port)
 	}
 	defer listener.Close()
 
 	srv := rpc.NewServer()
-	for rcvr := range receivers {
+	for _, rcvr := range receivers {
 		if err := srv.Register(rcvr); err != nil {
 			return err
 		} else {
-			log.Printf("Register %+v\n", rcvr)
+			log.Printf("Register %s\n", reflect.TypeOf(rcvr).String())
 		}
 	}
 

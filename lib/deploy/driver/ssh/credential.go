@@ -1,4 +1,4 @@
-package shell
+package ssh
 
 import (
 	"github.com/jinzhu/gorm"

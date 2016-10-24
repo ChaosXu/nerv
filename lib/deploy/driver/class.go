@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/deploy/driver/ssh"
 	"github.com/ChaosXu/nerv/lib/deploy/driver/shell"
 )
 
@@ -60,8 +61,10 @@ func (p *Class) Invoke(operation string, address string, credential string, args
 		return fmt.Errorf("unsupported operation %s", operation)
 	}
 	switch op.Type {
+	case "ssh":
+		return ssh.Execute(address, op.Implementor, args, credential)
 	case "shell":
-		return shell.RemoteExecute(address, credential, op.Implementor, args)
+		return shell.Execute(address, op.Implementor, args)
 	//case "go":
 	//	m := golang.Models
 	//	res := m[op.Implementor]

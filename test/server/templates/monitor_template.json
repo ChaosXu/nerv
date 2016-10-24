@@ -1,0 +1,32 @@
+{
+  "name": "monitor_template",
+  "version": 1,
+  "nodes": [
+    {
+      "name": "monitor",
+      "type": "/nerv/Monitor",
+      "parameters": [
+        {
+          "name": "PKG_URL",
+          "value": "http://10.211.55.2:3332/pkg/monitor.tar.gz"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "host",
+      "type": "/nerv/ECHost",
+      "parameters": [
+        {
+          "name": "addresses",
+          "value": "localhost"
+        }
+      ]
+    }
+  ]
+}

@@ -4,27 +4,27 @@
   "operations": [
     {
       "name": "Create",
-      "type": "shell",
+      "type": "ssh",
       "implementor": "/nerv/Agent/create.sh"
     },
     {
       "name": "Delete",
-      "type": "shell",
+      "type": "ssh",
       "implementor": "/nerv/Agent/delete.sh"
     },
     {
       "name": "Setup",
-      "type": "shell",
+      "type": "ssh",
       "implementor": "/nerv/Agent/setup.sh"
     },
     {
       "name": "Start",
-      "type": "shell",
+      "type": "ssh",
       "implementor": "/nerv/Agent/start.sh"
     },
     {
       "name": "Stop",
-      "type": "shell",
+      "type": "ssh",
       "implementor": "/nerv/Agent/stop.sh"
     }
   ]

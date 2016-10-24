@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/ChaosXu/nerv/lib/env"
-	"github.com/ChaosXu/nerv/lib/rpc"
 	"log"
 	"os"
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/rpc"
+	_ "github.com/ChaosXu/nerv/cmd/agent/shell"
 )
 
 var (

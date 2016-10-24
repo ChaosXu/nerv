@@ -1,4 +1,4 @@
-package shell
+package ssh
 
 import (
 	"golang.org/x/crypto/ssh"
@@ -8,23 +8,27 @@ import (
 	"strings"
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/deploy/driver/util"
 )
 
 //RemoteExecute a script on the host of addr
-func RemoteExecute(addr string, credentialRef string, scriptUri string, args map[string]string) error {
+func Execute(addr string, scriptUri string, args map[string]string, credentialRef string) error {
 	rep := env.Config().GetMapString("scripts", "repository")
 	if rep == "" {
 		return fmt.Errorf("scripts.repository isn't setted")
 	}
 	scriptUrl := rep + scriptUri
 	log.Printf("url:%s\n", scriptUrl)
-	script, err := loadScript(scriptUrl)
+	script, err := util.LoadScript(scriptUrl)
 	if err != nil {
 		return err
 	}
 
 	credential := Credential{}
 	pairs := strings.Split(credentialRef, ",")
+	if len(pairs) < 2 {
+		return fmt.Errorf("error credential: %s", credentialRef)
+	}
 	if err := db.DB.Where("type=? and name=?", pairs[0], pairs[1]).First(&credential).Error; err != nil {
 		return err
 	}

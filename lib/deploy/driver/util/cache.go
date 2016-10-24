@@ -1,4 +1,4 @@
-package shell
+package util
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"log"
 )
 
-func loadScript(scriptUrl string) (string, error) {
+func LoadScript(scriptUrl string) (string, error) {
 	dir := env.Config().GetMapString("scripts", "cache")
 	if dir == "" {
 		return "", fmt.Errorf("scripts.cache isn't setted");
