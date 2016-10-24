@@ -1,5 +1,8 @@
 {
   "rpc": {
     "port": "3334"
+  },
+  "app":{
+    "root":"agentapp"
   }
 }

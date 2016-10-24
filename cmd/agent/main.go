@@ -1,12 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"os"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/rpc"
-	_ "github.com/ChaosXu/nerv/cmd/agent/shell"
 )
 
 var (
@@ -14,10 +11,17 @@ var (
 )
 
 func main() {
-	fmt.Println("Version:" + Version)
+	log.Println("Version:" + Version)
 	env.Init()
+
+	if agent,err := NewAgent(); err != nil {
+		log.Fatalln(err.Error())
+	}else{
+		rpc.Register(agent)
+	}
+
 	if err := rpc.Start(); err != nil {
-		log.Println(err.Error())
-		os.Exit(1)
+		log.Fatalln(err.Error())
 	}
 }
+
