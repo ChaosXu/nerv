@@ -10,6 +10,7 @@ func createNodesByHostTemplate(nodeTemplate *NodeTemplate) []*Node {
 		node := &Node{
 			Name:nodeTemplate.Name,
 			Template:nodeTemplate.Name,
+			Class:nodeTemplate.Type,
 			Address:addr,
 			Credential: credential,
 			Links:[]*Link{},
@@ -28,6 +29,7 @@ func createNodesByECHostTemplate(nodeTemplate *NodeTemplate) []*Node {
 		node := &Node{
 			Name:nodeTemplate.Name,
 			Template:nodeTemplate.Name,
+			Class:nodeTemplate.Type,
 			Address:addr,
 			Links:[]*Link{},
 			Status:Status{RunStatus:RunStatusNone},

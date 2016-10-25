@@ -136,7 +136,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 			} else if nodeTemplate.Type == "/nerv/ECHost" {
 				targetNodes = createNodesByECHostTemplate(nodeTemplate)
 			} else {
-				targetNodes = append(targetNodes, &Node{Name:nodeTemplate.Name, Template:nodeTemplate.Name, Links:[]*Link{}, Status:Status{RunStatus:RunStatusNone}})
+				targetNodes = append(targetNodes, &Node{Name:nodeTemplate.Name, Template:nodeTemplate.Name, Class:nodeTemplate.Type,Links:[]*Link{}, Status:Status{RunStatus:RunStatusNone}})
 			}
 			for _, targetNode := range targetNodes {
 				topology.addNode(targetNode)
@@ -154,6 +154,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 				sourceNode := &Node{
 					Name:nodeTemplate.Name,
 					Template:nodeTemplate.Name,
+					Class:nodeTemplate.Type,
 					Address:targetNode.Address,
 					Credential:targetNode.Credential,
 					Links:[]*Link{},
