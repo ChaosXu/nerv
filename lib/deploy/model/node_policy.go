@@ -2,9 +2,11 @@ package model
 
 import "strings"
 
-func createNodesByHostTemplate(nodeTemplate *NodeTemplate) []*Node {
+func newNodesByHostTemplate(nodeTemplate *NodeTemplate) []*Node {
+	configs:=newConfigs(nodeTemplate)
 	addrs := nodeTemplate.getParameterValue("addresses")
 	credential := nodeTemplate.getParameterValue("credential")
+
 	nodes := []*Node{}
 	for _, addr := range strings.Split(addrs, ",") {
 		node := &Node{
@@ -14,6 +16,7 @@ func createNodesByHostTemplate(nodeTemplate *NodeTemplate) []*Node {
 			Address:addr,
 			Credential: credential,
 			Links:[]*Link{},
+			Properties:configs,
 			Status:Status{RunStatus:RunStatusNone},
 		}
 		nodes = append(nodes, node)
@@ -21,7 +24,8 @@ func createNodesByHostTemplate(nodeTemplate *NodeTemplate) []*Node {
 	return nodes
 }
 
-func createNodesByECHostTemplate(nodeTemplate *NodeTemplate) []*Node {
+func newNodesByECHostTemplate(nodeTemplate *NodeTemplate) []*Node {
+	configs := newConfigs(nodeTemplate)
 	addrs := nodeTemplate.getParameterValue("addresses")
 
 	nodes := []*Node{}
@@ -32,9 +36,29 @@ func createNodesByECHostTemplate(nodeTemplate *NodeTemplate) []*Node {
 			Class:nodeTemplate.Type,
 			Address:addr,
 			Links:[]*Link{},
+			Properties:configs,
 			Status:Status{RunStatus:RunStatusNone},
 		}
 		nodes = append(nodes, node)
 	}
 	return nodes
+}
+
+func newNodeByTemplate(nodeTemplate *NodeTemplate) *Node {
+	configs := newConfigs(nodeTemplate)
+	return &Node{Name:nodeTemplate.Name, Template:nodeTemplate.Name, Class:nodeTemplate.Type, Links:[]*Link{}, Properties:configs, Status:Status{RunStatus:RunStatusNone}}
+}
+
+func newConfigs(nodeTempalte *NodeTemplate) []*Property {
+	var configs []*Property
+	if nodeTempalte.Parameters == nil {
+		return configs
+	}
+
+	for _, param := range nodeTempalte.Parameters {
+		config := &Property{Key:param.Name, Value:param.Value}
+		configs = append(configs, config)
+	}
+
+	return configs;
 }

@@ -132,11 +132,11 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 		if len(targetNodes) == 0 {
 			//TBD: optimize
 			if nodeTemplate.Type == "/nerv/Host" {
-				targetNodes = createNodesByHostTemplate(nodeTemplate)
+				targetNodes = newNodesByHostTemplate(nodeTemplate)
 			} else if nodeTemplate.Type == "/nerv/ECHost" {
-				targetNodes = createNodesByECHostTemplate(nodeTemplate)
+				targetNodes = newNodesByECHostTemplate(nodeTemplate)
 			} else {
-				targetNodes = append(targetNodes, &Node{Name:nodeTemplate.Name, Template:nodeTemplate.Name, Class:nodeTemplate.Type,Links:[]*Link{}, Status:Status{RunStatus:RunStatusNone}})
+				targetNodes = append(targetNodes, newNodeByTemplate(nodeTemplate))
 			}
 			for _, targetNode := range targetNodes {
 				topology.addNode(targetNode)
@@ -158,6 +158,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 					Address:targetNode.Address,
 					Credential:targetNode.Credential,
 					Links:[]*Link{},
+					Properties:newConfigs(nodeTemplate),
 					Status:Status{RunStatus:RunStatusNone},
 				}
 				sourceNode.Link(dep.Type, targetNode.Name)

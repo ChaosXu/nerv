@@ -16,10 +16,11 @@ type Node struct {
 	TopologyID int        `gorm:"index"` //Foreign key of the topology
 	Name       string                    //node name
 	Template   string                    //template name
-	Class      string					 //the name of resource class
+	Class      string                    //the name of resource class
 	Address    string                    //address of node.
 	Credential string                    //credential key
 	Links      []*Link                   //dependencies of node
+	Properties []*Property               //the configuration of a node
 }
 
 func init() {

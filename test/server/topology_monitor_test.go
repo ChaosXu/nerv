@@ -7,9 +7,9 @@ import (
 )
 
 func TestInstallMonitor(t *testing.T) {
-	create(t, "Class", "../../classes/nerv/agent.json")
-	create(t, "Class", "../../classes/nerv/echost.json")
-	create(t, "Class", "../../classes/nerv/monitor.json")
+	//create(t, "Class", "../../classes/nerv/agent.json")
+	//create(t, "Class", "../../classes/nerv/echost.json")
+	//create(t, "Class", "../../classes/nerv/monitor.json")
 	template := create(t, "ServiceTemplate", "templates/monitor_template.json")
 	assert.NotNil(t, template)
 	id := reflect.ValueOf(template).Elem().FieldByName("ID").Interface()
