@@ -4,6 +4,7 @@ import (
 	"log"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/rpc"
+	"github.com/ChaosXu/nerv/cmd/agent/deploy"
 )
 
 var (
@@ -14,7 +15,7 @@ func main() {
 	log.Println("Version:" + Version)
 	env.Init()
 
-	if agent,err := NewAgent(); err != nil {
+	if agent,err := deploy.NewAgent(); err != nil {
 		log.Fatalln(err.Error())
 	}else{
 		rpc.Register(agent)
