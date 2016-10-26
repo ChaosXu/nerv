@@ -2,6 +2,11 @@ package monitor
 
 import "github.com/ChaosXu/nerv/lib/monitor/model"
 
+//Endpoint is a interface to access resource
+type Endpoint struct {
+
+}
+
 //Sample is the data collected
 type Sample struct {
 
@@ -9,17 +14,17 @@ type Sample struct {
 
 //Probe collects the data of metrics
 type Probe interface {
-	Table(metric *model.Metric) []*Sample
+	Table(ep *Endpoint, metric *model.Metric) []*Sample
 }
 
-type DefaultProbe struct{
+type DefaultProbe struct {
 
 }
 
-func NewCollector() Probe {
+func NewProbe() Probe {
 	return &DefaultProbe{}
 }
 //Table return table data
-func (p *DefaultProbe) Table(metric *model.Metric) []*Sample {
+func (p *DefaultProbe) Table(ep *Endpoint, metric *model.Metric) []*Sample {
 	return nil
 }

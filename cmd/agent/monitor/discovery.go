@@ -10,6 +10,7 @@ import (
 
 //Discovery search localhost to find resource
 type Discovery struct {
+	ep       *Endpoint
 	metrics  []*model.Metric
 	doing    bool
 	mutex    sync.Mutex
@@ -18,12 +19,12 @@ type Discovery struct {
 	transfer Transfer
 }
 
-func NewDiscovery(probe Probe, transfer Transfer) *Discovery {
-	return &Discovery{metrics:[]*model.Metric{}, probe:probe, transfer:transfer}
+func NewDiscovery(ep *Endpoint, probe Probe, transfer Transfer) *Discovery {
+	return &Discovery{ep:ep, metrics:[]*model.Metric{}, probe:probe, transfer:transfer}
 }
 
 func (p *Discovery) Start() error {
-	p.loadMetrics()
+	p.metrics = loadMetrics(env.Config().GetMapString("discovery", "path", "../config/discovery"))
 
 	period, err := strconv.ParseInt(env.Config().GetMapString("discovery", "period", "30"), 10, 0)
 	if err != nil {
@@ -46,7 +47,7 @@ func (p *Discovery) do() {
 
 			p.doing = true
 			for _, metric := range p.metrics {
-				samples := p.probe.Table(metric)
+				samples := p.probe.Table(p.ep, metric)
 				for _, sample := range samples {
 					p.transfer.Send(sample)
 				}

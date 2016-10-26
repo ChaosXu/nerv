@@ -2,18 +2,21 @@ package monitor
 
 //Monitor
 type Monitor struct {
-	Discovery *Discovery
+	discovery *Discovery
+	collector *Collector
 }
 
 func NewMonitor() *Monitor {
-	collector := NewCollector()
+	probe := NewProbe()
 	transfer := NewTransfer()
-	discovery := NewDiscovery(collector, transfer)
-	return &Monitor{Discovery:discovery}
+	discovery := NewDiscovery(probe, transfer)
+	collector := NewCollector(probe, transfer)
+	return &Monitor{discovery:discovery, collector:collector}
 }
 
 //Start monitor
 func (p *Monitor) Start() error {
-	p.Discovery.Start()
+	p.discovery.Start()
+	p.collector.Start()
 	return nil
 }
