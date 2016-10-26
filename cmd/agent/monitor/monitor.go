@@ -9,8 +9,8 @@ type Monitor struct {
 func NewMonitor() *Monitor {
 	probe := NewProbe()
 	transfer := NewTransfer()
-	discovery := NewDiscovery(probe, transfer)
-	collector := NewCollector(probe, transfer)
+	discovery := NewDiscovery(nil,probe, transfer)
+	collector := NewCollector(nil,probe, transfer)
 	return &Monitor{discovery:discovery, collector:collector}
 }
 

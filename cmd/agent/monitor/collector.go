@@ -10,6 +10,7 @@ import (
 
 //Collector collect all resources's metrics on localhost
 type Collector struct {
+	ep        *Endpoint
 	templates []*model.MonitorTemplate
 	metrics   []*model.Metric
 	doing     bool
@@ -19,8 +20,8 @@ type Collector struct {
 	transfer  Transfer
 }
 
-func NewCollector(probe Probe, transfer Transfer) *Collector {
-	return &Collector{metrics:[]*model.Metric{}, probe:probe, transfer:transfer}
+func NewCollector(ep *Endpoint, probe Probe, transfer Transfer) *Collector {
+	return &Collector{ep:ep, metrics:[]*model.Metric{}, probe:probe, transfer:transfer}
 }
 
 func (p *Collector) Start() error {
@@ -48,7 +49,7 @@ func (p *Collector) do() {
 
 			p.doing = true
 			for _, metric := range p.metrics {
-				samples := p.probe.Table(metric)
+				samples := p.probe.Table(p.ep, metric)
 				for _, sample := range samples {
 					p.transfer.Send(sample)
 				}
