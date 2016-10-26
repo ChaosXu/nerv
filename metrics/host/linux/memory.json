@@ -1,0 +1,97 @@
+{
+  "ResourceType": "/host/linux",
+  "Type": "struct",
+  "Name": "memory",
+  "Fields": [
+    {
+      "Name": "total",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "Script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "used",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "Script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "free",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "Script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "swapTotal",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "Script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "swapUsed",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "Script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "swapFree",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "Script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "usedRatio",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "Script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "freeRatio",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "swapUsedRatio",
+      "SampleType": "gauge",
+      "DataType": "long",
+      "Probe": {
+        "Type": "shell",
+        "script": "/host/linux/free.sh"
+      }
+    },
+    {
+      "Name": "swapFreeRatio",
+      "SampleType": "gauge",
+      "DataType": "integer",
+      "Probe": {
+        "Type": "ssh",
+        "Script": "/host/linux/free.sh"
+      }
+    }
+  ]
+}
