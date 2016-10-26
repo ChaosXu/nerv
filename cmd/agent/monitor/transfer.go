@@ -14,5 +14,5 @@ func NewTransfer() Transfer {
 }
 
 func (p *DefaultTransfer) Send(sample *Sample) {
-
+	//TBD
 }

@@ -10,27 +10,28 @@ import (
 
 //Discovery search localhost to find resource
 type Discovery struct {
-	metrics   []*model.Metric
-	doing     bool
-	mutex     sync.Mutex
-	ticker    *time.Ticker
-	collector Collector
-	transfer  Transfer
+	metrics  []*model.Metric
+	doing    bool
+	mutex    sync.Mutex
+	ticker   *time.Ticker
+	probe    Probe
+	transfer Transfer
 }
 
-func NewDiscovery(collector Collector, transfer Transfer) *Discovery {
-	return &Discovery{metrics:[]*model.Metric{}, collector:collector, transfer:transfer}
+func NewDiscovery(probe Probe, transfer Transfer) *Discovery {
+	return &Discovery{metrics:[]*model.Metric{}, probe:probe, transfer:transfer}
 }
 
 func (p *Discovery) Start() error {
+	p.loadMetrics()
+
 	period, err := strconv.ParseInt(env.Config().GetMapString("discovery", "period", "30"), 10, 0)
 	if err != nil {
 		return err
 	}
-
 	p.ticker = time.NewTicker(time.Duration(period) * time.Second)
-
 	go p.do()
+
 	return nil
 }
 
@@ -45,11 +46,15 @@ func (p *Discovery) do() {
 
 			p.doing = true
 			for _, metric := range p.metrics {
-				samples := p.collector.Table(metric)
+				samples := p.probe.Table(metric)
 				for _, sample := range samples {
 					p.transfer.Send(sample)
 				}
 			}
 		}()
 	}
+}
+
+func (p *Discovery) loadMetrics() {
+	//TBD
 }

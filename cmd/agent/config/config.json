@@ -2,10 +2,11 @@
   "rpc": {
     "port": "3334"
   },
-  "app": {
+  "deploy": {
     "root": "../app"
   },
   "discovery": {
-    "period": "30"
+    "period": "30",
+    "path": "../config/discovery"
   }
 }
