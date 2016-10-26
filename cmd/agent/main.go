@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	"github.com/ChaosXu/nerv/lib/env"
-	"github.com/ChaosXu/nerv/lib/rpc"
 	"github.com/ChaosXu/nerv/cmd/agent/deploy"
+	"github.com/ChaosXu/nerv/cmd/agent/monitor"
 )
 
 var (
@@ -15,13 +15,17 @@ func main() {
 	log.Println("Version:" + Version)
 	env.Init()
 
-	if agent,err := deploy.NewAgent(); err != nil {
+	agent, err := deploy.NewAgent()
+	if err != nil {
 		log.Fatalln(err.Error())
-	}else{
-		rpc.Register(agent)
 	}
 
-	if err := rpc.Start(); err != nil {
+	monitor := monitor.NewMonitor()
+	if err := monitor.Start(); err != nil {
+		log.Fatalln(err.Error())
+	}
+
+	if err := agent.Start(); err != nil {
 		log.Fatalln(err.Error())
 	}
 }

@@ -2,7 +2,10 @@
   "rpc": {
     "port": "3334"
   },
-  "app":{
-    "root":"../app"
+  "app": {
+    "root": "../app"
+  },
+  "discovery": {
+    "period": "30"
   }
 }

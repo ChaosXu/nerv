@@ -7,6 +7,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 	"fmt"
 	"os/exec"
+	"github.com/ChaosXu/nerv/lib/rpc"
 )
 
 //Agent execute the method of app
@@ -32,6 +33,11 @@ func NewAgent() (*Agent, error) {
 type RemoteScript struct {
 	Content string
 	Args    map[string]string
+}
+
+func (p *Agent) Start() error {
+	rpc.Register(p)
+	return rpc.Start()
 }
 
 //Execute a script in the host of the agent
