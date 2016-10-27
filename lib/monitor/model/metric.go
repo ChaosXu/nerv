@@ -82,25 +82,36 @@ const (
 //Metric define the KPI of resource
 type Metric struct {
 	gorm.Model
-	ResourceType string
-	Type         MetricType
-	Name         string
-	MetricField  []MetricField
+	ResourceType string                `json:"resourceType"`
+	Type         MetricType            `json:"type"`
+	Name         string                `json:"name"`
+	IsService    bool                  `json:"isService`
+	Fields       []MetricField         `json:"fields"`
+}
+
+func (p *Metric) Key() string {
+	for _, m := range p.Fields {
+		if m.Key {
+			return m.Name
+		}
+	}
+	return ""
 }
 
 //MetricField define the filed of KPI
 type MetricField struct {
 	gorm.Model
-	Name       string
-	IsKey      bool
-	DataType   MetricDataType
-	SampleType MetricSampleType
+	Name       string           `json:"name"`
+	Key        bool             `json:"key"`
+	DataType   MetricDataType   `json:"dataType"`
+	SampleType MetricSampleType `json:"sampleType"`
+	Probe      Probe            `json:"probe"`
 }
 
 //Probe define the sampling info
 type Probe struct {
-	Type        ProbeType
-	Implementor string
+	Type     ProbeType    `json:"type"`
+	Provider string       `json:"provider"`
 }
 
 

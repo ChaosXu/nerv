@@ -6,8 +6,34 @@ import (
 )
 
 func init() {
+	db.Models["DiscoveryTemplate"] = discoveryTemplate()
+	db.Models["DiscoveryItem"] = discoveryItem()
 	db.Models["MonitorTemplate"] = monitorTemplate()
 	db.Models["MonitorItem"] = monitorItem()
+}
+
+func discoveryTemplate() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
+		Type: &DiscoveryTemplate{},
+		New: func() interface{} {
+			return &DiscoveryTemplate{}
+		},
+		NewSlice:func() interface{} {
+			return &[]DiscoveryTemplate{}
+		},
+	}
+}
+
+func discoveryItem() *db.ModelDescriptor {
+	return &db.ModelDescriptor{
+		Type: &DiscoveryItem{},
+		New: func() interface{} {
+			return &DiscoveryItem{}
+		},
+		NewSlice:func() interface{} {
+			return &[]DiscoveryItem{}
+		},
+	}
 }
 
 func monitorTemplate() *db.ModelDescriptor {
@@ -34,16 +60,32 @@ func monitorItem() *db.ModelDescriptor {
 	}
 }
 
+//DiscoveryTemplate controls how to discovery resource on the host of the agent
+type DiscoveryTemplate struct {
+	gorm.Model
+	ResourceType string                	`json:"resourceType"`
+	Name         string                	`json:"name"`
+	IsService    bool                	`json:"isService"`
+	Items        []DiscoveryItem       	`json:"items"`
+}
+
+//DiscoveryItem controls how to discovery all configs of the resource
+type DiscoveryItem struct {
+	gorm.Model
+	Metric string    `json:"metric"`
+}
+
 //MonitorTemplate controls how to monitor metrics
 type MonitorTemplate struct {
 	gorm.Model
-	ResourceType string
-	Items        []MonitorItem
+	ResourceType string                   `json:"resourceType"`
+	Name         string                   `json:"name"`
+	Items        []MonitorItem            `json:"items"`
 }
 
 //MonitorItem controls how to collect a metric and process alert
 type MonitorItem struct {
 	gorm.Model
-	Metric string
-	Period int64
+	Metric string   `json:"metric"`
+	Period int64    `json:"period"`
 }

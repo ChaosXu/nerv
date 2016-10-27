@@ -6,27 +6,27 @@ import (
 	"strconv"
 	"time"
 	"sync"
+	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
 )
 
 //Collector collect all resources's metrics on localhost
 type Collector struct {
-	ep        *Endpoint
 	templates []*model.MonitorTemplate
 	metrics   []*model.Metric
 	doing     bool
 	mutex     sync.Mutex
 	ticker    *time.Ticker
-	probe     Probe
+	probe     probe.Probe
 	transfer  Transfer
 }
 
-func NewCollector(ep *Endpoint, probe Probe, transfer Transfer) *Collector {
-	return &Collector{ep:ep, metrics:[]*model.Metric{}, probe:probe, transfer:transfer}
+func NewCollector(probe probe.Probe, transfer Transfer) *Collector {
+	return &Collector{metrics:[]*model.Metric{}, probe:probe, transfer:transfer}
 }
 
 func (p *Collector) Start() error {
 	p.metrics = loadMetrics(env.Config().GetMapString("collector", "path", "../config/metrics"))
-	p.templates = LoadTemplates(env.Config().GetMapString("collector", "path", "../config/metrics"))
+	p.templates = LoadMonitorTemplates(env.Config().GetMapString("collector", "path", "../config/metrics"))
 
 	period, err := strconv.ParseInt(env.Config().GetMapString("collector", "period", "30"), 10, 0)
 	if err != nil {
@@ -39,22 +39,22 @@ func (p *Collector) Start() error {
 }
 
 func (p *Collector) do() {
-	for range p.ticker.C {
-		go func() {
-			p.mutex.Lock()
-			defer p.mutex.Unlock()
-			if p.doing {
-				return
-			}
-
-			p.doing = true
-			for _, metric := range p.metrics {
-				samples := p.probe.Table(p.ep, metric)
-				for _, sample := range samples {
-					p.transfer.Send(sample)
-				}
-			}
-		}()
-	}
+	//for range p.ticker.C {
+	//	go func() {
+	//		p.mutex.Lock()
+	//		defer p.mutex.Unlock()
+	//		if p.doing {
+	//			return
+	//		}
+	//
+	//		p.doing = true
+	//		for _, metric := range p.metrics {
+	//			samples := p.probe.Table(p.ep, metric)
+	//			for _, sample := range samples {
+	//				p.transfer.Send(sample)
+	//			}
+	//		}
+	//	}()
+	//}
 }
 

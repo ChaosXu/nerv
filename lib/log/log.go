@@ -1,13 +1,13 @@
 package log
 
 import (
-	"fmt"
 	"runtime"
+	glog "log"
 )
 
 func LogCodeLine() {
-	if fn, file, line, ok := runtime.Caller(1); ok {
-		fmt.Printf("%s:%d:%s\n", file, line, runtime.FuncForPC(fn).Name())
+	if _, file, line, ok := runtime.Caller(2); ok {
+		glog.Printf("%s:%d\n", file, line)
 	}
 }
 

@@ -1,0 +1,9 @@
+{
+  "resourceType": "/host/Linux",
+  "name": "mysql-discovery",
+  "items": [
+    {
+      "metric": "mysql"
+    }
+  ]
+}

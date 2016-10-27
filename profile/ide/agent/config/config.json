@@ -2,7 +2,15 @@
   "rpc": {
     "port": "3334"
   },
-  "app":{
-    "root":"agentapp"
+  "deploy": {
+    "root": "appagent"
+  },
+  "discovery": {
+    "period": "30",
+    "path": "profile/ide/agent/config/discovery"
+  },
+  "metrics": {
+    "path": "metrics",
+    "server":"localhost:3333"
   }
 }
