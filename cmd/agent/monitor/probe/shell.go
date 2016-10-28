@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"os/exec"
 	"encoding/json"
+	"github.com/ChaosXu/nerv/lib/env"
 )
 
 type ShellProbe struct {
@@ -65,12 +66,13 @@ func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*Sam
 
 func (p *ShellProbe) exec(file string, args map[string]string) (string, error) {
 	log.Printf("ShellProbe.exec %s %s", file, debug.CodeLine())
+	root := env.Config().GetMapString("scripts", "path", "../config/scripts")
 	export := ""
 	for k, v := range args {
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
 
-	shell := "export LC_TIME=POSIX " + export + " && " + "scripts/host/linux/mysql.sh"
+	shell := "export LC_TIME=POSIX " + export + " && " + root + file
 	log.Println(shell)
 
 	out, err := exec.Command("/bin/bash", "-c", shell).Output()

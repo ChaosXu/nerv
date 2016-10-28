@@ -7,10 +7,13 @@
   },
   "discovery": {
     "period": "30",
-    "path": "profile/ide/agent/config/discovery"
+    "path": "resources/discovery"
   },
   "metrics": {
-    "path": "metrics",
-    "server":"localhost:3333"
+    "path": "resources/metrics",
+    "server": "localhost:3333"
+  },
+  "scripts": {
+    "path": "resources/scripts"
   }
 }
