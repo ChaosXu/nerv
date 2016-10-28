@@ -12,8 +12,25 @@ import (
 	"strings"
 )
 
-func LoadMonitorTemplates(path string) []*model.MonitorTemplate {
-	return nil
+func LoadMonitorTemplates(path string) ([]*model.MonitorTemplate, error) {
+	templates := []*model.MonitorTemplate{}
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		if file.Ext(path) == ".json" {
+			template := &model.MonitorTemplate{}
+			if err := json.FromPath(path, template); err != nil {
+				return err
+			}
+			templates = append(templates, template)
+
+			log.Printf("LoadMonitorTemplates: %s %s", template.ResourceType, path)
+		}
+		return nil
+	})
+	return templates, err
 }
 
 func LoadDiscoveryTemplates(path string) ([]*model.DiscoveryTemplate, error) {

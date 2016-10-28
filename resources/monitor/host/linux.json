@@ -1,0 +1,14 @@
+{
+  "resourceType": "/host/Linux",
+  "name": "default-linux-monitor",
+  "items": [
+    {
+      "metric": "cpu",
+      "period": 30
+    },
+    {
+      "metric": "memory",
+      "period": 30
+    }
+  ]
+}

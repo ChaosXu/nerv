@@ -1,0 +1,61 @@
+{
+  "resourceType": "/host/linux",
+  "type": "struct",
+  "name": "cpu",
+  "fields": [
+    {
+      "name": "user",
+      "sampleType": "gauge",
+      "dataType": "double",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/cpu.sh"
+      }
+    },
+    {
+      "name": "nice",
+      "sampleType": "gauge",
+      "dataType": "double",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/cpu.sh"
+      }
+    },
+    {
+      "name": "sys",
+      "sampleType": "gauge",
+      "dataType": "double",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/cpu.sh"
+      }
+    },
+    {
+      "name": "iowait",
+      "sampleType": "gauge",
+      "dataType": "double",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/cpu.sh"
+      }
+    },
+    {
+      "name": "steal",
+      "sampleType": "gauge",
+      "dataType": "double",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/cpu.sh"
+      }
+    },
+    {
+      "name": "idle",
+      "sampleType": "gauge",
+      "dataType": "double",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/cpu.sh"
+      }
+    }
+  ]
+}

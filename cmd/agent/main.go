@@ -5,6 +5,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 _	"github.com/ChaosXu/nerv/cmd/agent/deploy"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor"
+	"github.com/ChaosXu/nerv/cmd/agent/deploy"
 )
 
 var (
@@ -20,16 +21,12 @@ func main() {
 		log.Fatalln(err.Error())
 	}
 
-	//agent, err := deploy.NewAgent()
-	//if err != nil {
-	//	log.Fatalln(err.Error())
-	//}
-
-	//if err := agent.Start(); err != nil {
-	//	log.Fatalln(err.Error())
-	//}
-	select{
-
+	agent, err := deploy.NewAgent()
+	if err != nil {
+		log.Fatalln(err.Error())
+	}
+	if err := agent.Start(); err != nil {
+		log.Fatalln(err.Error())
 	}
 }
 

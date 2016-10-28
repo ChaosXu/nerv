@@ -1,96 +1,96 @@
 {
-  "ResourceType": "/host/linux",
-  "Type": "struct",
-  "Name": "memory",
-  "Fields": [
+  "resourceType": "/host/linux",
+  "type": "struct",
+  "name": "memory",
+  "fields": [
     {
-      "Name": "total",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "Script": "/host/linux/free.sh"
+      "name": "total",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "used",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "Script": "/host/linux/free.sh"
+      "name": "used",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "free",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "Script": "/host/linux/free.sh"
+      "name": "free",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "swapTotal",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "Script": "/host/linux/free.sh"
+      "name": "swapTotal",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "swapUsed",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "Script": "/host/linux/free.sh"
+      "name": "swapUsed",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "swapFree",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "Script": "/host/linux/free.sh"
+      "name": "swapFree",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "usedRatio",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "Script": "/host/linux/free.sh"
+      "name": "usedRatio",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "freeRatio",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "script": "/host/linux/free.sh"
+      "name": "freeRatio",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "swapUsedRatio",
-      "SampleType": "gauge",
-      "DataType": "long",
-      "Probe": {
-        "Type": "shell",
-        "script": "/host/linux/free.sh"
+      "name": "swapUsedRatio",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
       }
     },
     {
-      "Name": "swapFreeRatio",
-      "SampleType": "gauge",
-      "DataType": "integer",
-      "Probe": {
-        "Type": "ssh",
-        "Script": "/host/linux/free.sh"
+      "name": "swapFreeRatio",
+      "sampleType": "gauge",
+      "dataType": "integer",
+      "probe": {
+        "type": "ssh",
+        "Script": "/host/linux/memory.sh"
       }
     }
   ]
