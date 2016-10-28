@@ -16,7 +16,7 @@ type Monitor struct {
 func NewMonitor() *Monitor {
 	probe := probe.NewProbe()
 	transfer := NewLogTransfer()
-	discovery := NewDiscovery(probe)
+	discovery := NewDiscovery(probe,transfer)
 	//collector := NewCollector(nil, probe, transfer)
 	return &Monitor{discovery:discovery, transfer:transfer}
 }
@@ -38,11 +38,5 @@ func (p *Monitor) startDiscovery() {
 		p.discovery.Add(template)
 	}
 
-	go p.discovery.Discover()
-
-	go func() {
-		for res := range p.discovery.C {
-			p.transfer.Send(res)
-		}
-	}()
+	p.discovery.Start()
 }

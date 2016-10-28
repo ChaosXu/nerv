@@ -5,6 +5,7 @@ import (
 	"log"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
 	"github.com/ChaosXu/nerv/lib/debug"
+	"time"
 )
 
 //Resource
@@ -14,14 +15,23 @@ type Resource struct {
 
 //Discovery search localhost to find resource
 type Discovery struct {
-	host     *model.DiscoveryTemplate
-	services map[string]*model.DiscoveryTemplate
-	probe    probe.Probe
-	C        chan *probe.Sample
+	host         *model.DiscoveryTemplate
+	services     map[string]*model.DiscoveryTemplate
+	probe        probe.Probe
+	transfer     Transfer
+	c            chan *probe.Sample
+	stopDiscover chan bool
+	stopTransfer chan bool
 }
 
-func NewDiscovery(p probe.Probe) *Discovery {
-	return &Discovery{services:map[string]*model.DiscoveryTemplate{}, probe:p, C:make(chan *probe.Sample, 50)}
+func NewDiscovery(p probe.Probe, transfer Transfer) *Discovery {
+	return &Discovery{
+		services:map[string]*model.DiscoveryTemplate{},
+		probe:p, transfer:transfer,
+		c:make(chan *probe.Sample, 50),
+		stopDiscover:make(chan bool, 1),
+		stopTransfer:make(chan bool, 1),
+	}
 }
 
 func (p *Discovery) Add(template *model.DiscoveryTemplate) {
@@ -32,7 +42,49 @@ func (p *Discovery) Add(template *model.DiscoveryTemplate) {
 	}
 }
 
-func (p *Discovery) Discover() {
+func (p *Discovery) Start() {
+	template := p.host
+	period := template.Period
+	if period == 0 {
+		period = 30
+	}
+	log.Printf("Discovery start %s %d\n", template.ResourceType, period)
+
+	go func() {
+		ticker := time.NewTicker(time.Duration(period) * time.Second)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ticker.C:
+				p.discover()
+			case <-p.stopDiscover:
+				log.Println("Discovery strop discover")
+				return
+			}
+		}
+	}()
+
+	go func() {
+		for {
+			select {
+			case sample := <-p.c:
+				p.transfer.Send(sample)
+			case <-p.stopTransfer:
+				log.Println("Discovery strop transfer")
+				return
+			}
+		}
+	}()
+}
+
+func (p *Discovery) Stop() {
+	log.Printf("Discovery start %s %d\n", p.host.ResourceType)
+
+	close(p.stopDiscover)
+	close(p.stopTransfer)
+}
+
+func (p *Discovery) discover() {
 	log.Printf("Discover: %s %s\n", p.host.ResourceType, p.host.Name)
 
 	template := p.host
@@ -56,7 +108,7 @@ func (p *Discovery) Discover() {
 				}
 			} else {
 				for _, sample := range samples {
-					p.C <- sample
+					p.c <- sample
 				}
 			}
 		}(template, item, metric)
@@ -87,7 +139,7 @@ func (p *Discovery) discoverService(resourceType string, v *probe.Sample) {
 			}
 
 			for _, sample := range samples {
-				p.C <- sample
+				p.c <- sample
 			}
 		}(template, metric)
 	}

@@ -66,6 +66,7 @@ type DiscoveryTemplate struct {
 	ResourceType string                 `json:"resourceType"`
 	Name         string                 `json:"name"`
 	Host         bool                   `json:"host"`
+	Period 		 int64 					`json:"period"`
 	Items        []DiscoveryItem        `json:"items"`
 }
 

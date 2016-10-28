@@ -2,6 +2,7 @@
   "resourceType": "/host/Linux",
   "name": "linux-default-discovery",
   "host": true,
+  "period": 30,
   "items": [
     {
       "metric": "mysql",
