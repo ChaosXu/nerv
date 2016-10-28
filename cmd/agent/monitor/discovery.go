@@ -51,6 +51,8 @@ func (p *Discovery) Start() {
 	log.Printf("Discovery start %s %d\n", template.ResourceType, period)
 
 	go func() {
+		p.discover()
+
 		ticker := time.NewTicker(time.Duration(period) * time.Second)
 		defer ticker.Stop()
 		for {
@@ -104,6 +106,8 @@ func (p *Discovery) discover() {
 
 			if item.Service != "" {
 				for _, sample := range samples {
+					sample.Tags["resourceType"]=item.Service
+					p.c <- sample
 					p.discoverService(item.Service, sample)
 				}
 			} else {
