@@ -30,7 +30,7 @@ func LoadDiscoveryTemplates(path string) ([]*model.DiscoveryTemplate, error) {
 			}
 			templates = append(templates, template)
 
-			log.Printf("LoadDiscoveryTemplates: %s", path)
+			log.Printf("LoadDiscoveryTemplates: %s %s", template.ResourceType, path)
 		}
 		return nil
 	})

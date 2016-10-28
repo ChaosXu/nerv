@@ -1,18 +1,23 @@
 {
   "resourceType": "/host/Linux",
-  "name": "mysql-discovery",
+  "name": "linux-default-discovery",
+  "host": true,
   "items": [
     {
-      "metric": "mysql"
+      "metric": "mysql",
+      "service": "/db/Mysql"
     },
     {
-      "metric": "nginx"
+      "metric": "nginx",
+      "service": "/middleware/Nginx"
     },
     {
-      "metric": "tomcat"
+      "metric": "tomcat",
+      "service": "/middleware/Tomcat"
     },
     {
-      "metric": "nerv-agent"
+      "metric": "nerv-agent",
+      "service": "/nerv/Agent"
     }
   ]
 }

@@ -36,18 +36,31 @@ func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*Sam
 					log.Printf("ShellProbe.Table error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
 					ch <- []*Sample{}
 				} else {
-					v := []map[string]interface{}{}
-					if err := json.Unmarshal([]byte(res), &v); err != nil {
-						log.Printf("ShellProbe.Table error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
-						ch <- []*Sample{}
-					} else {
-						log.Printf("ShellProbe.Table %s %s %s %s %s", res, metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
-						samples := []*Sample{}
-						for _, item := range v {
-							sample := NewSample(metric.Name, item, metric.ResourceType)
-							samples = append(samples, sample)
+					log.Printf("ShellProbe.Table %s %s %s %s %s", res, metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
+
+					switch metric.Type{
+					case model.MetricTypeStruct:
+						v := map[string]interface{}{}
+						if err := json.Unmarshal([]byte(res), &v); err != nil {
+							log.Printf("ShellProbe.Table error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
+							ch <- []*Sample{}
+						} else {
+							samples := []*Sample{NewSample(metric.Name, v, metric.ResourceType)}
+							ch <- samples
 						}
-						ch <- samples
+					case model.MetricTypeTable:
+						v := []map[string]interface{}{}
+						if err := json.Unmarshal([]byte(res), &v); err != nil {
+							log.Printf("ShellProbe.Table error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
+							ch <- []*Sample{}
+						} else {
+							samples := []*Sample{}
+							for _, item := range v {
+								sample := NewSample(metric.Name, item, metric.ResourceType)
+								samples = append(samples, sample)
+							}
+							ch <- samples
+						}
 					}
 				}
 			}(field, ch)

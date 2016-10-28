@@ -1,0 +1,34 @@
+{
+  "resourceType": "/db/Mysql",
+  "type": "struct",
+  "name": "system",
+  "fields": [
+    {
+      "name": "version",
+      "sampleType": "gauge",
+      "dataType": "string",
+      "probe": {
+        "type": "shell",
+        "provider": "/db/mysql/system.sh"
+      }
+    },
+    {
+      "name": "hostname",
+      "sampleType": "gauge",
+      "dataType": "string",
+      "probe": {
+        "type": "shell",
+        "provider": "/db/mysql/system.sh"
+      }
+    },
+    {
+      "name": "innodb_buffer_pool_size",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/db/mysql/system.sh"
+      }
+    }
+  ]
+}

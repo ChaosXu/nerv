@@ -63,16 +63,17 @@ func monitorItem() *db.ModelDescriptor {
 //DiscoveryTemplate controls how to discovery resource on the host of the agent
 type DiscoveryTemplate struct {
 	gorm.Model
-	ResourceType string                	`json:"resourceType"`
-	Name         string                	`json:"name"`
-	IsService    bool                	`json:"isService"`
-	Items        []DiscoveryItem       	`json:"items"`
+	ResourceType string                 `json:"resourceType"`
+	Name         string                 `json:"name"`
+	Host         bool                   `json:"host"`
+	Items        []DiscoveryItem        `json:"items"`
 }
 
 //DiscoveryItem controls how to discovery all configs of the resource
 type DiscoveryItem struct {
 	gorm.Model
-	Metric string    `json:"metric"`
+	Metric  string      `json:"metric"`
+	Service string      `json:"service`
 }
 
 //MonitorTemplate controls how to monitor metrics

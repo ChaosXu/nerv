@@ -1,0 +1,9 @@
+{
+  "resourceType": "/db/Mysql",
+  "name": "mysql-discovery",
+  "items": [
+    {
+      "metric": "system"
+    }
+  ]
+}
