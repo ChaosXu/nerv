@@ -1,5 +1,5 @@
 MODULE=scripts
-RELEASE_ROOT=../release/nerv
+RELEASE_ROOT=../../release/nerv
 RELEASE_DIR=$(RELEASE_ROOT)/$(MODULE)
 
 scripts : clean	

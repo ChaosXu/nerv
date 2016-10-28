@@ -35,4 +35,4 @@ profile : all
 .PHONY : scripts
 scripts :
 	@echo "----build scripts----"
-	cd scripts && make
+	cd resources/scripts && make
