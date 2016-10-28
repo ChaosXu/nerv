@@ -1,0 +1,16 @@
+{
+  "resourceType": "/host/Linux",
+  "type": "table",
+  "name": "nginx",
+  "fields": [
+    {
+      "name": "pid",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/nginx.sh"
+      }
+    }
+  ]
+}

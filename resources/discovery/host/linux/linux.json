@@ -4,6 +4,15 @@
   "items": [
     {
       "metric": "mysql"
+    },
+    {
+      "metric": "nginx"
+    },
+    {
+      "metric": "tomcat"
+    },
+    {
+      "metric": "nerv-agent"
     }
   ]
 }

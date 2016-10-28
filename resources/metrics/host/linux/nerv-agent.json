@@ -1,0 +1,16 @@
+{
+  "resourceType": "/host/Linux",
+  "type": "table",
+  "name": "nerv-agent",
+  "fields": [
+    {
+      "name": "pid",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/nerv-agent.sh"
+      }
+    }
+  ]
+}

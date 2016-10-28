@@ -41,6 +41,7 @@ func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*Sam
 						log.Printf("ShellProbe.Table error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
 						ch <- []*Sample{}
 					} else {
+						log.Printf("ShellProbe.Table %s %s %s %s %s", res, metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
 						samples := []*Sample{}
 						for _, item := range v {
 							sample := NewSample(metric.Name, item, metric.ResourceType)
@@ -80,6 +81,5 @@ func (p *ShellProbe) exec(file string, args map[string]string) (string, error) {
 		return "", err
 	}
 	s := string(out)
-	log.Println(s)
 	return s, nil
 }
