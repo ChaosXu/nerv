@@ -10,7 +10,7 @@ all : build
 	@echo "----package complete----"
 	
 
-build : server agent file scripts
+build : server agent file resoruces
 	@echo "----build complete----"
 
  
@@ -32,7 +32,7 @@ profile : all
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)
 	@echo "----profile complete----"	
 
-.PHONY : scripts
-scripts :
-	@echo "----build scripts----"
-	cd resources/scripts && make
+.PHONY : resources
+resoruces :
+	@echo "----build resources----"
+	cd resources && make
