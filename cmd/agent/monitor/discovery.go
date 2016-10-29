@@ -18,19 +18,16 @@ type Discovery struct {
 	host         *model.DiscoveryTemplate
 	services     map[string]*model.DiscoveryTemplate
 	probe        probe.Probe
-	transfer     Transfer
-	c            chan *probe.Sample
+	C            chan *probe.Sample
 	stopDiscover chan bool
-	stopTransfer chan bool
 }
 
-func NewDiscovery(p probe.Probe, transfer Transfer) *Discovery {
+func NewDiscovery(p probe.Probe) *Discovery {
 	return &Discovery{
 		services:map[string]*model.DiscoveryTemplate{},
-		probe:p, transfer:transfer,
-		c:make(chan *probe.Sample, 50),
+		probe:p,
+		C: make(chan *probe.Sample, 1000),
 		stopDiscover:make(chan bool, 1),
-		stopTransfer:make(chan bool, 1),
 	}
 }
 
@@ -65,26 +62,14 @@ func (p *Discovery) Start() {
 			}
 		}
 	}()
-
-	go func() {
-		for {
-			select {
-			case sample := <-p.c:
-				p.transfer.Send(sample)
-			case <-p.stopTransfer:
-				log.Println("Discovery strop transfer")
-				return
-			}
-		}
-	}()
 }
 
-func (p *Discovery) Stop() {
-	log.Printf("Discovery start %s %d\n", p.host.ResourceType)
-
-	close(p.stopDiscover)
-	close(p.stopTransfer)
-}
+//func (p *Discovery) Stop() {
+//	log.Printf("Discovery start %s %d\n", p.host.ResourceType)
+//
+//	close(p.stopDiscover)
+//	close(p.C)
+//}
 
 func (p *Discovery) discover() {
 	log.Printf("Discover: %s %s\n", p.host.ResourceType, p.host.Name)
@@ -106,13 +91,13 @@ func (p *Discovery) discover() {
 
 			if item.Service != "" {
 				for _, sample := range samples {
-					sample.Tags["resourceType"]=item.Service
-					p.c <- sample
+					sample.Tags["resourceType"] = item.Service
+					p.C <- sample
 					p.discoverService(item.Service, sample)
 				}
 			} else {
 				for _, sample := range samples {
-					p.c <- sample
+					p.C <- sample
 				}
 			}
 		}(template, item, metric)
@@ -143,7 +128,7 @@ func (p *Discovery) discoverService(resourceType string, v *probe.Sample) {
 			}
 
 			for _, sample := range samples {
-				p.c <- sample
+				p.C <- sample
 			}
 		}(template, metric)
 	}

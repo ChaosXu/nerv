@@ -10,21 +10,28 @@ import (
 type Monitor struct {
 	discovery *Discovery
 	collector *Collector
+	transfer  Transfer
 }
 
 func NewMonitor() *Monitor {
 	probe := probe.NewProbe()
 	transfer := NewLogTransfer()
-	discovery := NewDiscovery(probe, transfer)
+	discovery := NewDiscovery(probe)
 	collector := NewCollector(probe, transfer)
-	return &Monitor{discovery:discovery, collector:collector}
+	return &Monitor{discovery:discovery, collector:collector, transfer:transfer}
 }
 
 //Start monitor
-func (p *Monitor) Start() error {
+func (p *Monitor) Start() {
 	p.startDiscovery()
 	p.startCollector()
-	return nil
+	go func() {
+		for {
+			sample := <-p.discovery.C
+			p.transfer.Send(sample)
+			//p.collector.Collect(sample)
+		}
+	}()
 }
 
 func (p *Monitor) startDiscovery() {

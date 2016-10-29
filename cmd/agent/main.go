@@ -17,9 +17,7 @@ func main() {
 	env.Init()
 
 	monitor := monitor.NewMonitor()
-	if err := monitor.Start(); err != nil {
-		log.Fatalln(err.Error())
-	}
+	monitor.Start()
 
 	agent, err := deploy.NewAgent()
 	if err != nil {
