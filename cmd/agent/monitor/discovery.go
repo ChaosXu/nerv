@@ -8,17 +8,12 @@ import (
 	"time"
 )
 
-//Resource
-type Resource struct {
-
-}
-
 //Discovery search localhost to find resource
 type Discovery struct {
 	host         *model.DiscoveryTemplate
 	services     map[string]*model.DiscoveryTemplate
 	probe        probe.Probe
-	C            chan *probe.Sample
+	C            chan *Resource
 	stopDiscover chan bool
 }
 
@@ -26,7 +21,7 @@ func NewDiscovery(p probe.Probe) *Discovery {
 	return &Discovery{
 		services:map[string]*model.DiscoveryTemplate{},
 		probe:p,
-		C: make(chan *probe.Sample, 1000),
+		C: make(chan *Resource, 1000),
 		stopDiscover:make(chan bool, 1),
 	}
 }
@@ -48,14 +43,14 @@ func (p *Discovery) Start() {
 	log.Printf("Discovery start %s %d\n", template.ResourceType, period)
 
 	go func() {
-		p.discover()
+		p.discoverHost()
 
 		ticker := time.NewTicker(time.Duration(period) * time.Second)
 		defer ticker.Stop()
 		for {
 			select {
 			case <-ticker.C:
-				p.discover()
+				p.discoverHost()
 			case <-p.stopDiscover:
 				log.Println("Discovery strop discover")
 				return
@@ -71,9 +66,11 @@ func (p *Discovery) Start() {
 //	close(p.C)
 //}
 
-func (p *Discovery) discover() {
+func (p *Discovery) discoverHost() {
 	log.Printf("Discover: %s %s\n", p.host.ResourceType, p.host.Name)
 
+	localhost := p.newLocalHost()
+	p.C <- localhost
 	template := p.host
 	for _, item := range template.Items {
 		metric, err := readMetric(template.ResourceType, item.Metric)
@@ -92,20 +89,20 @@ func (p *Discovery) discover() {
 			if item.Service != "" {
 				for _, sample := range samples {
 					sample.Tags["resourceType"] = item.Service
-					p.C <- sample
-					p.discoverService(item.Service, sample)
+					service := NewResourceFromSample(sample)
+					p.C <- service
+					p.discoverService(service, item.Service, sample)
 				}
 			} else {
 				for _, sample := range samples {
-					p.C <- sample
+					localhost.AddComponent(sample)
 				}
 			}
 		}(template, item, metric)
-
 	}
 }
 
-func (p *Discovery) discoverService(resourceType string, v *probe.Sample) {
+func (p *Discovery) discoverService(service *Resource, resourceType string, v *probe.Sample) {
 	template := p.services[resourceType]
 	if template == nil {
 		log.Printf("discoverService: no discovery template for %s %s\n", resourceType, debug.CodeLine())
@@ -128,10 +125,14 @@ func (p *Discovery) discoverService(resourceType string, v *probe.Sample) {
 			}
 
 			for _, sample := range samples {
-				p.C <- sample
+				service.AddComponent(sample)
 			}
 		}(template, metric)
 	}
+}
+
+func (p *Discovery) newLocalHost() *Resource {
+	return NewResource("/host/Linux")
 }
 
 

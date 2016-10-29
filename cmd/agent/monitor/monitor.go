@@ -27,9 +27,9 @@ func (p *Monitor) Start() {
 	p.startCollector()
 	go func() {
 		for {
-			sample := <-p.discovery.C
-			p.transfer.Send(sample)
-			//p.collector.Collect(sample)
+			res := <-p.discovery.C
+			log.Printf("Push resource: %+v\n", res)
+			p.collector.Collect(res)
 		}
 	}()
 }
