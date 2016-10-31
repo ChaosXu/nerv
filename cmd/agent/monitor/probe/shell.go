@@ -72,12 +72,11 @@ func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*Sam
 
 func (p *ShellProbe) Row(metric *model.Metric, args map[string]string) (*Sample, error) {
 	log.Printf("ShellProbe.Row %s %s %s", metric.ResourceType, metric.Name, debug.CodeLine())
-	log.Printf("%+v", metric)
 	chs := map[string]chan *Sample{}
 	for _, field := range metric.Fields {
 		if field.Probe.Type == model.ProbeTypeShell {
 			ch := chs[field.Probe.Provider]
-			if ch == nil {
+			if ch != nil {
 				continue
 			}
 			//read once

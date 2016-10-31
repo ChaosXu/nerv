@@ -14,8 +14,7 @@ type Watcher struct {
 	period       int64
 	probe        probe.Probe
 	cancel       chan struct{}
-	out          chan <- *probe.Sample
-	items        []*model.MonitorItem
+	items        []model.MonitorItem
 	resources    []*Resource
 }
 
@@ -29,7 +28,7 @@ func NewWatcher(resType string, period int64, probe probe.Probe) *Watcher {
 }
 
 //AddItem add a template for metric
-func (p *Watcher) AddItem(item *model.MonitorItem) {
+func (p *Watcher) AddItem(item model.MonitorItem) {
 	log.Printf("Watcher.AddItem %s %s %ds\n", p.resourceType, item.Metric, item.Period)
 	p.items = append(p.items, item)
 }
@@ -51,7 +50,7 @@ func (p *Watcher) Start(out chan <- *probe.Sample) {
 		for {
 			select {
 			case <-timer.C:
-				p.read()
+				p.read(out)
 			case <-p.cancel:
 				return
 			}
@@ -67,14 +66,14 @@ func (p *Watcher) Stop() {
 	}
 }
 
-func (p *Watcher) read() {
+func (p *Watcher) read(out chan <-*probe.Sample) {
 	log.Printf("Watcher.read %s %d %d %d\n", p.resourceType, p.period, len(p.resources), len(p.items))
 	for _, res := range p.resources {
-		p.readItem(res)
+		p.readItem(res, out)
 	}
 }
 
-func (p *Watcher) readItem(res *Resource) {
+func (p *Watcher) readItem(res *Resource, out chan <-*probe.Sample) {
 	for _, item := range p.items {
 		log.Printf("Watcher.readItem. %s %s %s \n", p.resourceType, item.Metric, debug.CodeLine())
 		if metric, err := loadMetric(p.resourceType, item.Metric); err != nil {
@@ -85,13 +84,14 @@ func (p *Watcher) readItem(res *Resource) {
 				if sample, err := p.probe.Row(metric, p.metricArgs(item)); err != nil {
 					log.Printf("Watcher.readerItem error. %s %s %s %s\n", p.resourceType, item.Metric, err.Error(), debug.CodeLine())
 				} else {
-					p.out <- sample
+					out <- sample
+					log.Printf("Watcher.readerItem complete. %s %s %s\n", p.resourceType, item.Metric, debug.CodeLine())
 				}
 			}
 		}
 	}
 }
 
-func (p *Watcher) metricArgs(item *model.MonitorItem) map[string]string {
+func (p *Watcher) metricArgs(item model.MonitorItem) map[string]string {
 	return map[string]string{}
 }

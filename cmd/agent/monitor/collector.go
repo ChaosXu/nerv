@@ -33,7 +33,7 @@ func (p *Collector) Add(template *model.MonitorTemplate) {
 			watcher = NewWatcher(template.ResourceType, v.Period, p.probe)
 			periods[v.Period] = watcher
 		}
-		watcher.AddItem(&v)
+		watcher.AddItem(v)
 	}
 }
 
@@ -49,13 +49,13 @@ func (p *Collector) Start() {
 
 func (p *Collector) Stop() {
 	if p.C != nil {
-		close(p.C)
-		p.C = nil
 		for _, periods := range p.watchers {
 			for _, w := range periods {
 				w.Stop()
 			}
 		}
+		close(p.C)
+		p.C = nil
 	}
 
 }
