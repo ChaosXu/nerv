@@ -35,6 +35,7 @@ func (p *Sample) Merge(other *Sample) {
 //Probe collects the data of metrics
 type Probe interface {
 	Table(metric *model.Metric, args map[string]string) ([]*Sample, error)
+	Row(metric *model.Metric, args map[string]string) (*Sample, error)
 }
 
 type DefaultProbe struct {
@@ -89,4 +90,35 @@ func (p *DefaultProbe) Table(metric *model.Metric, args map[string]string) ([]*S
 		i++
 	}
 	return samples, nil
+}
+
+func (p *DefaultProbe) Row(metric *model.Metric, args map[string]string) (*Sample, error) {
+	log.Printf("DefaultProbe.Row %s %s %s", metric.ResourceType, metric.Name, debug.CodeLine())
+
+	chSamples := []chan *Sample{}
+	for _, probe := range p.probes {
+		ch := make(chan *Sample, 1)
+		chSamples = append(chSamples, ch)
+		go func(probe Probe, ch chan <- *Sample) {
+			sample, err := probe.Row(metric, args)
+			if err != nil {
+				log.Printf("Probe.Row error. %s", err.Error())
+				ch <- &Sample{}
+			} else {
+				ch <- sample
+			}
+		}(probe, ch)
+	}
+
+	var sample *Sample
+	for _, ch := range chSamples {
+		s := <-ch
+		if sample == nil {
+			sample = s
+		} else {
+			sample.Merge(s)
+		}
+	}
+
+	return sample, nil
 }

@@ -21,16 +21,16 @@ func NewShellProbe() Probe {
 func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*Sample, error) {
 	log.Printf("ShellProbe.Table %s %s %s", metric.ResourceType, metric.Name, debug.CodeLine())
 	log.Printf("%+v", metric)
-	files := map[string]chan []*Sample{}
+	chs := map[string]chan []*Sample{}
 	for _, field := range metric.Fields {
 		if field.Probe.Type == model.ProbeTypeShell {
-			ch := files[field.Probe.Provider]
+			ch := chs[field.Probe.Provider]
 			if ch != nil {
 				continue
 			}
 
 			ch = make(chan []*Sample, 1)
-			files[field.Probe.Provider] = ch
+			chs[field.Probe.Provider] = ch
 			go func(field model.MetricField, ch chan []*Sample) {
 				if res, err := p.exec(field.Probe.Provider, args); err != nil {
 					log.Printf("ShellProbe.Table error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
@@ -39,15 +39,7 @@ func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*Sam
 					log.Printf("ShellProbe.Table %s %s %s %s %s", res, metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
 
 					switch metric.Type{
-					case model.MetricTypeStruct:
-						v := map[string]interface{}{}
-						if err := json.Unmarshal([]byte(res), &v); err != nil {
-							log.Printf("ShellProbe.Table error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
-							ch <- []*Sample{}
-						} else {
-							samples := []*Sample{NewSample(metric.Name, v, metric.ResourceType)}
-							ch <- samples
-						}
+
 					case model.MetricTypeTable:
 						v := []map[string]interface{}{}
 						if err := json.Unmarshal([]byte(res), &v); err != nil {
@@ -68,7 +60,7 @@ func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*Sam
 	}
 
 	samples := []*Sample{}
-	for _, ch := range files {
+	for _, ch := range chs {
 		ss := <-ch
 		for _, s := range ss {
 			samples = append(samples, s)
@@ -76,6 +68,54 @@ func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*Sam
 	}
 
 	return samples, nil
+}
+
+func (p *ShellProbe) Row(metric *model.Metric, args map[string]string) (*Sample, error) {
+	log.Printf("ShellProbe.Row %s %s %s", metric.ResourceType, metric.Name, debug.CodeLine())
+	log.Printf("%+v", metric)
+	chs := map[string]chan *Sample{}
+	for _, field := range metric.Fields {
+		if field.Probe.Type == model.ProbeTypeShell {
+			ch := chs[field.Probe.Provider]
+			if ch == nil {
+				continue
+			}
+			//read once
+			ch = make(chan *Sample, 1)
+			chs[field.Probe.Provider] = ch
+			go func(field model.MetricField, ch chan *Sample) {
+				if res, err := p.exec(field.Probe.Provider, args); err != nil {
+					log.Printf("ShellProbe.Row error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
+					ch <- nil
+				} else {
+					log.Printf("ShellProbe.Row %s %s %s %s %s", res, metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
+
+					switch metric.Type{
+					case model.MetricTypeStruct:
+						v := map[string]interface{}{}
+						if err := json.Unmarshal([]byte(res), &v); err != nil {
+							log.Printf("ShellProbe.Row error %s %s %s %s %s", err.Error(), metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
+							ch <- nil
+						} else {
+							ch <- NewSample(metric.Name, v, metric.ResourceType)
+						}
+					}
+				}
+			}(field, ch)
+		}
+	}
+
+	var sample *Sample
+	for _, ch := range chs {
+		s := <-ch
+		if sample == nil {
+			sample = s
+		} else {
+			sample.Merge(s)
+		}
+	}
+
+	return sample, nil
 }
 
 func (p *ShellProbe) exec(file string, args map[string]string) (string, error) {

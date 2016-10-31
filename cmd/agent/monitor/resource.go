@@ -30,3 +30,5 @@ func (p *Resource) watchChSamples() {
 		p.components = append(p.components, c)
 	}
 }
+
+

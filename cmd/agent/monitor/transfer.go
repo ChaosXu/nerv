@@ -47,5 +47,5 @@ func NewLogTransfer() Transfer {
 }
 
 func (p *LogTransfer) Send(sample *probe.Sample) {
-	log.Printf("Push sample: %+v\n", sample)
+	log.Printf("Send sample: %+v\n", sample)
 }

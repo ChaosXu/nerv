@@ -54,7 +54,7 @@ func LoadDiscoveryTemplates(path string) ([]*model.DiscoveryTemplate, error) {
 	return templates, err
 }
 
-func readMetric(resourceType string, metricName string) (*model.Metric, error) {
+func loadMetric(resourceType string, metricName string) (*model.Metric, error) {
 	root := env.Config().GetMapString("metrics", "path", "../config/metrics")
 	file := path.Join(root, strings.ToLower(resourceType), metricName) + ".json"
 	metric := &model.Metric{}

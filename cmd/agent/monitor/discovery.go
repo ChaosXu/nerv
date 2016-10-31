@@ -73,7 +73,7 @@ func (p *Discovery) discoverHost() {
 	p.C <- localhost
 	template := p.host
 	for _, item := range template.Items {
-		metric, err := readMetric(template.ResourceType, item.Metric)
+		metric, err := loadMetric(template.ResourceType, item.Metric)
 		if err != nil {
 			log.Printf("Discover error. %s %s %s %s\n", template.ResourceType, item.Metric, err.Error(), debug.CodeLine())
 			continue
@@ -111,7 +111,7 @@ func (p *Discovery) discoverService(service *Resource, resourceType string, v *p
 	log.Printf("discoverService: %s %s\n", resourceType, template.Name)
 
 	for _, item := range template.Items {
-		metric, err := readMetric(template.ResourceType, item.Metric)
+		metric, err := loadMetric(template.ResourceType, item.Metric)
 		if err != nil {
 			log.Printf("discoverService error. %s %s %s\n", template.ResourceType, item.Metric, err.Error(), debug.CodeLine())
 			continue

@@ -10,56 +10,65 @@ import (
 type Collector struct {
 	watchers map[string]map[int64]*Watcher
 	probe    probe.Probe
-	transfer Transfer
+	C        chan *probe.Sample
 }
 
-func NewCollector(probe probe.Probe, transfer Transfer) *Collector {
+func NewCollector(probe probe.Probe) *Collector {
 	return &Collector{
 		watchers:map[string]map[int64]*Watcher{},
 		probe:probe,
-		transfer:transfer,
 	}
 }
 
 func (p *Collector) Add(template *model.MonitorTemplate) {
-	periods := map[int64]*Watcher{}
-	p.watchers[template.Name] = periods
+	periods := p.watchers[template.ResourceType]
+	if periods == nil {
+		periods = map[int64]*Watcher{}
+		p.watchers[template.ResourceType] = periods
+	}
+
 	for _, v := range template.Items {
 		watcher := periods[v.Period]
 		if watcher == nil {
-			watcher = NewWatcher(template.ResourceType)
+			watcher = NewWatcher(template.ResourceType, v.Period, p.probe)
 			periods[v.Period] = watcher
 		}
-		watcher.AddItem(v)
-		log.Printf("watcher add item: %s %s %ds\n", template.ResourceType, v.Metric, v.Period)
+		watcher.AddItem(&v)
 	}
 }
 
-func (p *Collector) Start() error {
+func (p *Collector) Start() {
 	log.Printf("Collector start\n")
-	//p.metrics = loadMetrics(env.Config().GetMapString("collector", "path", "../config/metrics"))
-	//p.templates = LoadMonitorTemplates(env.Config().GetMapString("collector", "path", "../config/metrics"))
-	//
-	//period, err := strconv.ParseInt(env.Config().GetMapString("collector", "period", "30"), 10, 0)
-	//if err != nil {
-	//	return err
-	//}
-	//p.ticker = time.NewTicker(time.Duration(period) * time.Second)
-	//go p.do()
+	p.C = make(chan *probe.Sample, 1000)
+	for _, periods := range p.watchers {
+		for _, w := range periods {
+			w.Start(p.C)
+		}
+	}
+}
 
-	return nil
+func (p *Collector) Stop() {
+	if p.C != nil {
+		close(p.C)
+		p.C = nil
+		for _, periods := range p.watchers {
+			for _, w := range periods {
+				w.Stop()
+			}
+		}
+	}
+
 }
 
 //Collect resource's metrics if it match a monitor template
 func (p *Collector) Collect(resource *Resource) {
-	//TBD: watch once if there is more than one period for one metric
 	periods := p.watchers[resource.Type]
 	if periods == nil {
 		return
 	}
 
 	for _, watcher := range periods {
-		watcher.Watch(resource)
+		watcher.AddResource(resource)
 	}
 }
 

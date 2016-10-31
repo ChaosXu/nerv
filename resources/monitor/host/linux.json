@@ -4,11 +4,11 @@
   "items": [
     {
       "metric": "cpu",
-      "period": 30
+      "period": 5
     },
     {
       "metric": "memory",
-      "period": 30
+      "period": 5
     }
   ]
 }

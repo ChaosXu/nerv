@@ -17,7 +17,7 @@ func NewMonitor() *Monitor {
 	probe := probe.NewProbe()
 	transfer := NewLogTransfer()
 	discovery := NewDiscovery(probe)
-	collector := NewCollector(probe, transfer)
+	collector := NewCollector(probe)
 	return &Monitor{discovery:discovery, collector:collector, transfer:transfer}
 }
 
@@ -30,6 +30,12 @@ func (p *Monitor) Start() {
 			res := <-p.discovery.C
 			log.Printf("Push resource: %+v\n", res)
 			p.collector.Collect(res)
+		}
+	}()
+
+	go func() {
+		for {
+			p.transfer.Send(<-p.collector.C)
 		}
 	}()
 }
