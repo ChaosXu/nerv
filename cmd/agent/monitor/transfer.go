@@ -3,13 +3,13 @@ package monitor
 import (
 	"github.com/ChaosXu/nerv/lib/env"
 	"net/rpc/jsonrpc"
-	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
 	"log"
+	"github.com/ChaosXu/nerv/lib/monitor/model"
 )
 
 //Transfer upload resource to server
 type Transfer interface {
-	Send(sample *probe.Sample)
+	Send(sample *model.Sample)
 }
 
 type DefaultTransfer struct {
@@ -21,7 +21,7 @@ func NewTransfer() Transfer {
 	return &DefaultTransfer{server:address}
 }
 
-func (p *DefaultTransfer) Send(sample *probe.Sample) {
+func (p *DefaultTransfer) Send(sample *model.Sample) {
 	//TBD: client pool
 	client, err := jsonrpc.Dial("tcp", p.server)
 	if err != nil {
@@ -46,6 +46,6 @@ func NewLogTransfer() Transfer {
 	return &LogTransfer{}
 }
 
-func (p *LogTransfer) Send(sample *probe.Sample) {
+func (p *LogTransfer) Send(sample *model.Sample) {
 	log.Printf("Send sample: %+v\n", sample)
 }

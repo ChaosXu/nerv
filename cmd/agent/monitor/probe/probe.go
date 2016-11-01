@@ -4,38 +4,12 @@ import (
 	"github.com/ChaosXu/nerv/lib/monitor/model"
 	"log"
 	"github.com/ChaosXu/nerv/lib/debug"
-	"time"
 )
-
-//Sample is the data collected
-type Sample struct {
-	Metric    string                 //metric name
-	Values    map[string]interface{} //values of metric fields
-	Tags      map[string]string      //every sample has default tags: resourceType,ip:
-	Timestamp int64                  //utc time
-}
-
-func NewSample(metric string, values map[string]interface{}, resourceType string) *Sample {
-	tags := map[string]string{
-		"resourceType":resourceType,
-	}
-	return &Sample{Metric:metric, Values:values, Tags:tags, Timestamp:time.Now().Unix()}
-}
-
-func (p *Sample) Merge(other *Sample) {
-	for k, v := range other.Values {
-		p.Values[k] = v
-	}
-
-	for k, v := range other.Tags {
-		p.Values[k] = v
-	}
-}
 
 //Probe collects the data of metrics
 type Probe interface {
-	Table(metric *model.Metric, args map[string]string) ([]*Sample, error)
-	Row(metric *model.Metric, args map[string]string) (*Sample, error)
+	Table(metric *model.Metric, args map[string]string) ([]*model.Sample, error)
+	Row(metric *model.Metric, args map[string]string) (*model.Sample, error)
 }
 
 type DefaultProbe struct {
@@ -50,17 +24,17 @@ func NewProbe() Probe {
 }
 
 //Table return table data
-func (p *DefaultProbe) Table(metric *model.Metric, args map[string]string) ([]*Sample, error) {
+func (p *DefaultProbe) Table(metric *model.Metric, args map[string]string) ([]*model.Sample, error) {
 	log.Printf("DefaultProbe.Table %s %s %s", metric.ResourceType, metric.Name, debug.CodeLine())
-	chSamples := []chan []*Sample{}
+	chSamples := []chan []*model.Sample{}
 	for _, probe := range p.probes {
-		ch := make(chan []*Sample, 1)
+		ch := make(chan []*model.Sample, 1)
 		chSamples = append(chSamples, ch)
-		go func(probe Probe, ch chan <- []*Sample) {
+		go func(probe Probe, ch chan <- []*model.Sample) {
 			samples, err := probe.Table(metric, args)
 			if err != nil {
 				log.Printf("Probe.Table error. %s", err.Error())
-				ch <- []*Sample{}
+				ch <- []*model.Sample{}
 			} else {
 				ch <- samples
 			}
@@ -68,7 +42,7 @@ func (p *DefaultProbe) Table(metric *model.Metric, args map[string]string) ([]*S
 	}
 
 	key := metric.Key()
-	sampleMap := map[interface{}]*Sample{}
+	sampleMap := map[interface{}]*model.Sample{}
 
 	for _, ch := range chSamples {
 		ss := <-ch
@@ -83,7 +57,7 @@ func (p *DefaultProbe) Table(metric *model.Metric, args map[string]string) ([]*S
 		}
 	}
 
-	samples := make([]*Sample, len(sampleMap))
+	samples := make([]*model.Sample, len(sampleMap))
 	i := 0
 	for _, s := range sampleMap {
 		samples[i] = s
@@ -92,25 +66,25 @@ func (p *DefaultProbe) Table(metric *model.Metric, args map[string]string) ([]*S
 	return samples, nil
 }
 
-func (p *DefaultProbe) Row(metric *model.Metric, args map[string]string) (*Sample, error) {
+func (p *DefaultProbe) Row(metric *model.Metric, args map[string]string) (*model.Sample, error) {
 	log.Printf("DefaultProbe.Row %s %s %s", metric.ResourceType, metric.Name, debug.CodeLine())
 
-	chSamples := []chan *Sample{}
+	chSamples := []chan *model.Sample{}
 	for _, probe := range p.probes {
-		ch := make(chan *Sample, 1)
+		ch := make(chan *model.Sample, 1)
 		chSamples = append(chSamples, ch)
-		go func(probe Probe, ch chan <- *Sample) {
+		go func(probe Probe, ch chan <- *model.Sample) {
 			sample, err := probe.Row(metric, args)
 			if err != nil {
 				log.Printf("Probe.Row error. %s", err.Error())
-				ch <- &Sample{}
+				ch <- &model.Sample{}
 			} else {
 				ch <- sample
 			}
 		}(probe, ch)
 	}
 
-	var sample *Sample
+	var sample *model.Sample
 	for _, ch := range chSamples {
 		s := <-ch
 		if sample == nil {

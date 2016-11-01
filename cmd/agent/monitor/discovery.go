@@ -13,7 +13,7 @@ type Discovery struct {
 	host         *model.DiscoveryTemplate
 	services     map[string]*model.DiscoveryTemplate
 	probe        probe.Probe
-	C            chan *Resource
+	C            chan *model.Resource
 	stopDiscover chan bool
 }
 
@@ -21,7 +21,7 @@ func NewDiscovery(p probe.Probe) *Discovery {
 	return &Discovery{
 		services:map[string]*model.DiscoveryTemplate{},
 		probe:p,
-		C: make(chan *Resource, 1000),
+		C: make(chan *model.Resource, 1000),
 		stopDiscover:make(chan bool, 1),
 	}
 }
@@ -89,7 +89,7 @@ func (p *Discovery) discoverHost() {
 			if item.Service != "" {
 				for _, sample := range samples {
 					sample.Tags["resourceType"] = item.Service
-					service := NewResourceFromSample(sample)
+					service := model.NewResourceFromSample(sample)
 					p.C <- service
 					p.discoverService(service, item.Service, sample)
 				}
@@ -102,7 +102,7 @@ func (p *Discovery) discoverHost() {
 	}
 }
 
-func (p *Discovery) discoverService(service *Resource, resourceType string, v *probe.Sample) {
+func (p *Discovery) discoverService(service *model.Resource, resourceType string, v *model.Sample) {
 	template := p.services[resourceType]
 	if template == nil {
 		log.Printf("discoverService: no discovery template for %s %s\n", resourceType, debug.CodeLine())
@@ -131,8 +131,8 @@ func (p *Discovery) discoverService(service *Resource, resourceType string, v *p
 	}
 }
 
-func (p *Discovery) newLocalHost() *Resource {
-	return NewResource("/host/Linux")
+func (p *Discovery) newLocalHost() *model.Resource {
+	return model.NewResource("/host/Linux")
 }
 
 

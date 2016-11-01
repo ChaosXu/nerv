@@ -1,27 +1,25 @@
-package monitor
+package model
 
 import (
 	"fmt"
 	"github.com/toolkits/net"
 	"github.com/ChaosXu/nerv/lib/debug"
-	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
-	"log"
 )
 
 //Resource is the object discovered
 type Resource struct {
 	Type       string          //resource type
 	Address    string          //resource ip
-	components []*probe.Sample //resource components
-	chSamples  chan *probe.Sample
+	components []*Sample //resource components
+	chSamples  chan *Sample
 }
 
-func NewResourceFromSample(sample *probe.Sample) *Resource {
+func NewResourceFromSample(sample *Sample) *Resource {
 	r := &Resource{
 		Type:sample.Tags["resourceType"],
 		Address: getLocalAddress(),
-		components:[]*probe.Sample{},
-		chSamples:make(chan *probe.Sample, 10),
+		components:[]*Sample{},
+		chSamples:make(chan *Sample, 10),
 	}
 	go r.watchChSamples()
 	return r
@@ -31,8 +29,8 @@ func NewResource(resType string) *Resource {
 	r := &Resource{
 		Type:resType,
 		Address: getLocalAddress(),
-		components:[]*probe.Sample{},
-		chSamples:make(chan *probe.Sample, 10),
+		components:[]*Sample{},
+		chSamples:make(chan *Sample, 10),
 
 	}
 	go r.watchChSamples()
@@ -47,7 +45,7 @@ func getLocalAddress() string {
 	}
 }
 
-func (p *Resource) AddComponent(c *probe.Sample) {
+func (p *Resource) AddComponent(c *Sample) {
 	p.chSamples <- c
 }
 

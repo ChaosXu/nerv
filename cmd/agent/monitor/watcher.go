@@ -15,7 +15,7 @@ type Watcher struct {
 	probe        probe.Probe
 	cancel       chan struct{}
 	items        []model.MonitorItem
-	resources    map[string]*Resource
+	resources    map[string]*model.Resource
 }
 
 //NewWatcher create a watcher
@@ -24,7 +24,7 @@ func NewWatcher(resType string, period int64, probe probe.Probe) *Watcher {
 		resourceType:resType,
 		period:period,
 		probe:probe,
-		resources:map[string]*Resource{},
+		resources:map[string]*model.Resource{},
 	}
 }
 
@@ -35,7 +35,7 @@ func (p *Watcher) AddItem(item model.MonitorItem) {
 }
 
 //Watch the resource through monitor items that has been added by AddItem
-func (p *Watcher) AddResource(res *Resource) {
+func (p *Watcher) AddResource(res *model.Resource) {
 	key := res.Key()
 	if p.resources[key] == nil {
 		log.Printf("Watcher.AddResoruce %s %d %s\n", res.Type, p.period, debug.CodeLine())
@@ -44,7 +44,7 @@ func (p *Watcher) AddResource(res *Resource) {
 }
 
 //Start watcher to collect items periodically
-func (p *Watcher) Start(out chan <- *probe.Sample) {
+func (p *Watcher) Start(out chan <- *model.Sample) {
 	log.Printf("Watcher.Start %s %d\n", p.resourceType, p.period)
 	p.cancel = make(chan struct{})
 
@@ -70,14 +70,14 @@ func (p *Watcher) Stop() {
 	}
 }
 
-func (p *Watcher) read(out chan <-*probe.Sample) {
+func (p *Watcher) read(out chan <-*model.Sample) {
 	log.Printf("Watcher.read %s %d %d %d\n", p.resourceType, p.period, len(p.resources), len(p.items))
 	for _, res := range p.resources {
 		p.readItem(res, out)
 	}
 }
 
-func (p *Watcher) readItem(res *Resource, out chan <-*probe.Sample) {
+func (p *Watcher) readItem(res *model.Resource, out chan <-*model.Sample) {
 	for _, item := range p.items {
 		log.Printf("Watcher.readItem. %s %s %s \n", p.resourceType, item.Metric, debug.CodeLine())
 		if metric, err := loadMetric(p.resourceType, item.Metric); err != nil {

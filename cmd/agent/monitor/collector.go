@@ -10,7 +10,7 @@ import (
 type Collector struct {
 	watchers map[string]map[int64]*Watcher
 	probe    probe.Probe
-	C        chan *probe.Sample
+	C        chan *model.Sample
 }
 
 func NewCollector(probe probe.Probe) *Collector {
@@ -39,7 +39,7 @@ func (p *Collector) Add(template *model.MonitorTemplate) {
 
 func (p *Collector) Start() {
 	log.Printf("Collector start\n")
-	p.C = make(chan *probe.Sample, 1000)
+	p.C = make(chan *model.Sample, 1000)
 	for _, periods := range p.watchers {
 		for _, w := range periods {
 			w.Start(p.C)
@@ -61,7 +61,7 @@ func (p *Collector) Stop() {
 }
 
 //Collect resource's metrics if it match a monitor template
-func (p *Collector) Collect(resource *Resource) {
+func (p *Collector) Collect(resource *model.Resource) {
 	periods := p.watchers[resource.Type]
 	if periods == nil {
 		return
