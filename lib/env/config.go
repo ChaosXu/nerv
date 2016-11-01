@@ -11,6 +11,10 @@ type Properties struct {
 	data map[string]interface{}
 }
 
+func NewProperties(data map[string]interface{}) *Properties {
+	return &Properties{data:data}
+}
+
 //LoadConfig return a pointer of the configuration from the json file in the path
 func LoadConfig(path string) (*Properties, error) {
 	if !file.IsExist(path) {
@@ -22,7 +26,7 @@ func LoadConfig(path string) (*Properties, error) {
 		return nil, err
 	}
 
-	config := &Properties{data:map[string]interface{}{}}
+	config := NewProperties(map[string]interface{}{})
 	err = json.Unmarshal([]byte(body), &config.data)
 	if err != nil {
 		return nil, err

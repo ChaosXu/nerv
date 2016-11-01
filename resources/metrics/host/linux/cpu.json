@@ -1,5 +1,5 @@
 {
-  "resourceType": "/host/linux",
+  "resourceType": "/host/Linux",
   "type": "struct",
   "name": "cpu",
   "fields": [

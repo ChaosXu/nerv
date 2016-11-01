@@ -16,9 +16,9 @@ type Monitor struct {
 
 func NewMonitor(cfg *env.Properties) *Monitor {
 	probe := probe.NewProbe(cfg)
-	transfer := NewLogTransfer()
+	transfer := NewRpcTransfer(cfg)
 	discovery := NewDiscovery(cfg, probe)
-	collector := NewCollector(cfg,probe)
+	collector := NewCollector(cfg, probe)
 	return &Monitor{
 		discovery:discovery,
 		collector:collector,
