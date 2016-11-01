@@ -15,7 +15,7 @@ type Watcher struct {
 	probe        probe.Probe
 	cancel       chan struct{}
 	items        []model.MonitorItem
-	resources    []*Resource
+	resources    map[string]*Resource
 }
 
 //NewWatcher create a watcher
@@ -24,6 +24,7 @@ func NewWatcher(resType string, period int64, probe probe.Probe) *Watcher {
 		resourceType:resType,
 		period:period,
 		probe:probe,
+		resources:map[string]*Resource{},
 	}
 }
 
@@ -35,8 +36,11 @@ func (p *Watcher) AddItem(item model.MonitorItem) {
 
 //Watch the resource through monitor items that has been added by AddItem
 func (p *Watcher) AddResource(res *Resource) {
-	log.Printf("Watcher.AddResoruce %s %d %s\n", res.Type, p.period, debug.CodeLine())
-	p.resources = append(p.resources, res)
+	key := res.Key()
+	if p.resources[key] == nil {
+		log.Printf("Watcher.AddResoruce %s %d %s\n", res.Type, p.period, debug.CodeLine())
+		p.resources[key] = res
+	}
 }
 
 //Start watcher to collect items periodically
