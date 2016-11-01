@@ -4,12 +4,11 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 	"net/rpc/jsonrpc"
 	"log"
-	"github.com/ChaosXu/nerv/lib/monitor/model"
 )
 
-//Transfer upload resource to server
+//Transfer upload data to the server
 type Transfer interface {
-	Send(sample *model.Sample)
+	Send(v interface{})
 }
 
 type DefaultTransfer struct {
@@ -21,7 +20,7 @@ func NewTransfer() Transfer {
 	return &DefaultTransfer{server:address}
 }
 
-func (p *DefaultTransfer) Send(sample *model.Sample) {
+func (p *DefaultTransfer) Send(v interface{}) {
 	//TBD: client pool
 	client, err := jsonrpc.Dial("tcp", p.server)
 	if err != nil {
@@ -31,10 +30,8 @@ func (p *DefaultTransfer) Send(sample *model.Sample) {
 	defer client.Close()
 
 	var out string
-	if err := client.Call("Metrics.Push", sample, &out); err != nil {
+	if err := client.Call("Metrics.Push", v, &out); err != nil {
 		log.Printf("Push sample error. %s", err.Error())
-	} else {
-		log.Printf("Push sampleL %s %s %s", sample.Tags["resourceType"], sample.Tags["ip"], sample.Metric, out)
 	}
 }
 
@@ -46,6 +43,6 @@ func NewLogTransfer() Transfer {
 	return &LogTransfer{}
 }
 
-func (p *LogTransfer) Send(sample *model.Sample) {
-	log.Printf("Send sample: %+v\n", sample)
+func (p *LogTransfer) Send(v interface{}) {
+	log.Printf("Send: %+v\n", v)
 }
