@@ -16,7 +16,7 @@ func main() {
 	log.Println("Version:" + Version)
 	env.Init()
 
-	monitor := monitor.NewMonitor()
+	monitor := monitor.NewMonitor(env.Config())
 	monitor.Start()
 
 	agent, err := deploy.NewAgent()

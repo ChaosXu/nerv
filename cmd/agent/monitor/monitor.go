@@ -11,14 +11,20 @@ type Monitor struct {
 	discovery *Discovery
 	collector *Collector
 	transfer  Transfer
+	cfg       *env.Properties
 }
 
-func NewMonitor() *Monitor {
+func NewMonitor(cfg *env.Properties) *Monitor {
 	probe := probe.NewProbe()
 	transfer := NewLogTransfer()
 	discovery := NewDiscovery(probe)
 	collector := NewCollector(probe)
-	return &Monitor{discovery:discovery, collector:collector, transfer:transfer}
+	return &Monitor{
+		discovery:discovery,
+		collector:collector,
+		transfer:transfer,
+		cfg:cfg,
+	}
 }
 
 //Start monitor
@@ -41,7 +47,7 @@ func (p *Monitor) Start() {
 }
 
 func (p *Monitor) startDiscovery() {
-	path := env.Config().GetMapString("discovery", "path", "../resources/discovery")
+	path := p.cfg.GetMapString("discovery", "path", "../resources/discovery")
 
 	templates, err := LoadDiscoveryTemplates(path)
 	if err != nil {
@@ -54,7 +60,7 @@ func (p *Monitor) startDiscovery() {
 }
 
 func (p *Monitor) startCollector() {
-	path := env.Config().GetMapString("monitor", "path", "../resources/monitor")
+	path := p.cfg.GetMapString("monitor", "path", "../resources/monitor")
 	templates, err := LoadMonitorTemplates(path)
 	if err != nil {
 		log.Fatal(err.Error())
