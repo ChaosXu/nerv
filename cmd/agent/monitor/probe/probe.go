@@ -4,6 +4,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/monitor/model"
 	"log"
 	"github.com/ChaosXu/nerv/lib/debug"
+	"github.com/ChaosXu/nerv/lib/env"
 )
 
 //Probe collects the data of metrics
@@ -16,9 +17,9 @@ type DefaultProbe struct {
 	probes map[model.ProbeType]Probe
 }
 
-func NewProbe() Probe {
+func NewProbe(cfg *env.Properties) Probe {
 	probes := map[model.ProbeType]Probe{
-		model.ProbeTypeShell: NewShellProbe(),
+		model.ProbeTypeShell: NewShellProbe(cfg),
 	}
 	return &DefaultProbe{probes:probes}
 }

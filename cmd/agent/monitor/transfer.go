@@ -13,11 +13,12 @@ type Transfer interface {
 
 type DefaultTransfer struct {
 	server string
+	cfg    *env.Properties
 }
 
-func NewTransfer() Transfer {
-	address := env.Config().GetMapString("metrics", "server", "3334")
-	return &DefaultTransfer{server:address}
+func NewTransfer(cfg *env.Properties) Transfer {
+	address := cfg.GetMapString("metrics", "server", "3334")
+	return &DefaultTransfer{server:address, cfg:cfg}
 }
 
 func (p *DefaultTransfer) Send(v interface{}) {

@@ -4,17 +4,20 @@ import (
 	"log"
 	"github.com/ChaosXu/nerv/lib/monitor/model"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
+	"github.com/ChaosXu/nerv/lib/env"
 )
 
 //Collector collect all resources's metrics on localhost
 type Collector struct {
+	cfg      *env.Properties
 	watchers map[string]map[int64]*Watcher
 	probe    probe.Probe
 	C        chan *model.Sample
 }
 
-func NewCollector(probe probe.Probe) *Collector {
+func NewCollector(cfg *env.Properties, probe probe.Probe) *Collector {
 	return &Collector{
+		cfg:cfg,
 		watchers:map[string]map[int64]*Watcher{},
 		probe:probe,
 	}
@@ -30,7 +33,7 @@ func (p *Collector) Add(template *model.MonitorTemplate) {
 	for _, v := range template.Items {
 		watcher := periods[v.Period]
 		if watcher == nil {
-			watcher = NewWatcher(template.ResourceType, v.Period, p.probe)
+			watcher = NewWatcher(template.ResourceType, v.Period, p.probe, p.cfg)
 			periods[v.Period] = watcher
 		}
 		watcher.AddItem(v)

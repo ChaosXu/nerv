@@ -11,11 +11,11 @@ import (
 )
 
 type ShellProbe struct {
-
+	cfg *env.Properties
 }
 
-func NewShellProbe() Probe {
-	return &ShellProbe{}
+func NewShellProbe(cfg *env.Properties) Probe {
+	return &ShellProbe{cfg:cfg}
 }
 
 func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*model.Sample, error) {
@@ -119,7 +119,7 @@ func (p *ShellProbe) Row(metric *model.Metric, args map[string]string) (*model.S
 
 func (p *ShellProbe) exec(file string, args map[string]string) (string, error) {
 	log.Printf("ShellProbe.exec %s %s", file, debug.CodeLine())
-	root := env.Config().GetMapString("scripts", "path", "../config/scripts")
+	root := p.cfg.GetMapString("scripts", "path", "../config/scripts")
 	export := ""
 	for k, v := range args {
 		export = export + fmt.Sprintf(" %s=%s", k, v)

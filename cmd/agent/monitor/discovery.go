@@ -6,10 +6,12 @@ import (
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
 	"github.com/ChaosXu/nerv/lib/debug"
 	"time"
+	"github.com/ChaosXu/nerv/lib/env"
 )
 
 //Discovery search localhost to find resource
 type Discovery struct {
+	cfg          *env.Properties
 	host         *model.DiscoveryTemplate
 	services     map[string]*model.DiscoveryTemplate
 	probe        probe.Probe
@@ -17,8 +19,9 @@ type Discovery struct {
 	stopDiscover chan bool
 }
 
-func NewDiscovery(p probe.Probe) *Discovery {
+func NewDiscovery(cfg *env.Properties, p probe.Probe) *Discovery {
 	return &Discovery{
+		cfg:cfg,
 		services:map[string]*model.DiscoveryTemplate{},
 		probe:p,
 		C: make(chan *model.Resource, 1000),
@@ -73,7 +76,7 @@ func (p *Discovery) discoverHost() {
 	p.C <- localhost
 	template := p.host
 	for _, item := range template.Items {
-		metric, err := loadMetric(template.ResourceType, item.Metric)
+		metric, err := loadMetric(p.cfg, template.ResourceType, item.Metric)
 		if err != nil {
 			log.Printf("Discover error. %s %s %s %s\n", template.ResourceType, item.Metric, err.Error(), debug.CodeLine())
 			continue
@@ -111,7 +114,7 @@ func (p *Discovery) discoverService(service *model.Resource, resourceType string
 	log.Printf("discoverService: %s %s\n", resourceType, template.Name)
 
 	for _, item := range template.Items {
-		metric, err := loadMetric(template.ResourceType, item.Metric)
+		metric, err := loadMetric(p.cfg, template.ResourceType, item.Metric)
 		if err != nil {
 			log.Printf("discoverService error. %s %s %s\n", template.ResourceType, item.Metric, err.Error(), debug.CodeLine())
 			continue

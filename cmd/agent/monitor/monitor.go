@@ -15,10 +15,10 @@ type Monitor struct {
 }
 
 func NewMonitor(cfg *env.Properties) *Monitor {
-	probe := probe.NewProbe()
+	probe := probe.NewProbe(cfg)
 	transfer := NewLogTransfer()
-	discovery := NewDiscovery(probe)
-	collector := NewCollector(probe)
+	discovery := NewDiscovery(cfg, probe)
+	collector := NewCollector(cfg,probe)
 	return &Monitor{
 		discovery:discovery,
 		collector:collector,
