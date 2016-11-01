@@ -13,15 +13,16 @@ import (
 //Agent execute the method of app
 type Agent struct {
 	AppRoot string //the root path of app
+	cfg *env.Properties
 }
 
-func NewAgent() (*Agent, error) {
+func NewAgent(cfg *env.Properties) (*Agent, error) {
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	appRoot := env.Config().GetMapString("app", "root", "../app")
+	appRoot := cfg.GetMapString("app", "root", "../app")
 	appRoot = filepath.Join(dir, appRoot)
 	if err := os.MkdirAll(appRoot, os.ModeDir | os.ModePerm); err != nil {
 		return nil, err
@@ -37,7 +38,7 @@ type RemoteScript struct {
 
 func (p *Agent) Start() error {
 	rpc.Register(p)
-	return rpc.Start()
+	return rpc.Start(p.cfg)
 }
 
 //Execute a script in the host of the agent

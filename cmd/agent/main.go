@@ -19,7 +19,7 @@ func main() {
 	monitor := monitor.NewMonitor(env.Config())
 	monitor.Start()
 
-	agent, err := deploy.NewAgent()
+	agent, err := deploy.NewAgent(env.Config())
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
