@@ -8,12 +8,12 @@ all : build
 	rm -rf release/nerv.tar.gz
 	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----package complete----"
-	
 
-build : server agent file resoruces
+
+build : server agent file resources bin
 	@echo "----build complete----"
 
- 
+
 server :
 	@echo "----build server----"
 	cd $(CMD_DIR)/server && make
@@ -27,12 +27,17 @@ file :
 	cd $(CMD_DIR)/file && make
 
 
-profile : all	
+profile : all
 	@echo "----profile $(ENV)----"
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)
-	@echo "----profile complete----"	
+	@echo "----profile complete----"
 
 .PHONY : resources
-resoruces :
+resources :
 	@echo "----build resources----"
 	cd resources && make
+
+.PHONY : bin
+bin :
+	@echo "----build bin----"
+	cd bin && make

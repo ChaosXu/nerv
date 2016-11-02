@@ -9,6 +9,6 @@
     "cache": "cache"
   },
   "agent": {
-    "port": "3334",
+    "port": "3334"
   }
 }

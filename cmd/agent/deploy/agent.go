@@ -13,7 +13,7 @@ import (
 //Agent execute the method of app
 type Agent struct {
 	AppRoot string //the root path of app
-	cfg *env.Properties
+	cfg     *env.Properties
 }
 
 func NewAgent(cfg *env.Properties) (*Agent, error) {
@@ -28,7 +28,7 @@ func NewAgent(cfg *env.Properties) (*Agent, error) {
 		return nil, err
 	}
 
-	return &Agent{AppRoot:appRoot}, nil
+	return &Agent{AppRoot:appRoot, cfg:cfg}, nil
 }
 
 type RemoteScript struct {

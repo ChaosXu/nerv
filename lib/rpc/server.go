@@ -21,7 +21,7 @@ func Register(service interface{}) {
 
 //Start rpc server and register all rpc handlers from var Receivers.
 func Start(cfg *env.Properties) error {
-	port := cfg.GetMapString("rpc", "port")
+	port := cfg.GetMapString("rpc", "port","3334")
 	if port == "" {
 		return fmt.Errorf("rpc_port isn't setted")
 	}

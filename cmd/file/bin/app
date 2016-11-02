@@ -35,7 +35,7 @@ function start() {
     running=`ps -p $! | grep -v "PID TTY" | wc -l`
     if [ $running -gt 0 ];then
         echo $! > $PID_FILE
-        echo "$APP started..., pid=$!"
+        echo "$APP started, pid=$!"
     else
         echo "$APP failed to start."
         return 1
@@ -46,7 +46,7 @@ function stop() {
     pid=`cat $PID_FILE`
     kill $pid
     rm -f $PID_FILE
-    echo "$APP stoped..."
+    echo "$APP stopped"
 }
 
 function restart() {
@@ -59,9 +59,10 @@ function status() {
     check_pid
     running=$?
     if [ $running -gt 0 ];then
-        echo started
+        echo -n "$APP started, pid="
+        cat $PID_FILE
     else
-        echo stoped
+        echo stopped
     fi
 }
 
