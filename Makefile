@@ -10,7 +10,7 @@ all : build
 	@echo "----package complete----"
 
 
-build : server agent file resources bin
+build : server pkg file resources bin
 	@echo "----build complete----"
 
 
@@ -25,6 +25,12 @@ agent :
 file :
 	@echo "----build file----"
 	cd $(CMD_DIR)/file && make
+
+pkg : agent
+	@echo "----build pkg----"
+	rm -rf $(RELEASE_ROOT)/pkg
+	mkdir $(RELEASE_ROOT)/pkg
+	mv $(RELEASE_ROOT)/agent.tar.gz $(RELEASE_ROOT)/pkg
 
 
 profile : all

@@ -1,0 +1,22 @@
+{
+  "rpc": {
+    "port": "3334"
+  },
+  "deploy": {
+    "root": "appagent"
+  },
+  "discovery": {
+    "period": "30",
+    "path": "resources/discovery"
+  },
+  "monitor": {
+    "path": "resources/monitor"
+  },
+  "metrics": {
+    "path": "resources/metrics",
+    "server": "localhost:3333"
+  },
+  "scripts": {
+    "path": "resources/scripts"
+  }
+}
