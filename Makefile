@@ -10,7 +10,7 @@ all : build
 	@echo "----package complete----"
 
 
-build : server pkg file resources bin
+build : server file  store pkg resources bin
 	@echo "----build complete----"
 
 
@@ -18,13 +18,13 @@ server :
 	@echo "----build server----"
 	cd $(CMD_DIR)/server && make
 
-agent :
-	@echo "----build agent----"
-	cd $(CMD_DIR)/agent && make
-
 file :
 	@echo "----build file----"
 	cd $(CMD_DIR)/file && make
+
+agent :
+	@echo "----build agent----"
+	cd $(CMD_DIR)/agent && make
 
 pkg : agent
 	@echo "----build pkg----"
@@ -32,6 +32,9 @@ pkg : agent
 	mkdir $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/agent.tar.gz $(RELEASE_ROOT)/pkg
 
+store :
+	@echo "----build store----"
+	cd $(CMD_DIR)/store && make
 
 profile : all
 	@echo "----profile $(ENV)----"

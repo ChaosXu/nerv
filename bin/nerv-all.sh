@@ -1,16 +1,20 @@
 #!/usr/bin/env bash
 
+echo "start nev all-in-one..."
+
 WORKSPACE=$(cd $(dirname $0)/; pwd)
 cd $WORKSPACE
 
 function start() {
     ../server/bin/app start
     ../file/bin/app start
+    ../store/bin/app start
 }
 
 function stop() {
     ../server/bin/app stop
     ../file/bin/app stop
+    ../store/bin/app stop
 }
 
 function restart() {
@@ -21,6 +25,7 @@ function restart() {
 
 function status() {
     ../server/bin/app status
+    ../file/bin/app status
     ../file/bin/app status
 }
 

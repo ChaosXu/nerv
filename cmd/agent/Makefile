@@ -9,7 +9,7 @@ BIN_DIR=$(RELEASE_DIR)/bin
 CONF_DIR=$(RELEASE_DIR)/config
 
 
-server : clean
+agent : clean
 	go build $(LDFLAGS) -o $(BIN_DIR)/$(MODULE)
 	cp bin/$(APP_SCRIPT) $(BIN_DIR)/$(APP_SCRIPT)
 	chmod +x $(BIN_DIR)/$(APP_SCRIPT)

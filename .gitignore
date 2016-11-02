@@ -39,5 +39,6 @@ release/
 test/lib/deploy/driver/shell/cache/
 pkg/
 cache/
+cmd/store/bin/elasticsearch-5.0.0.tar.gz
 
 test/server/credentials/pwd.json
