@@ -1,0 +1,12 @@
+{
+  "rpc": {
+    "port": "3334"
+  },
+  "shipper": {
+    "type": "elasticsearch",
+    "server": "localhost:9200"
+  },
+  "metrics": {
+    "path": "resources/metrics"
+  }
+}

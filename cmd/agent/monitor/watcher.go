@@ -83,7 +83,7 @@ func (p *Watcher) read(out chan <-*model.Sample) {
 func (p *Watcher) readItem(res *model.Resource, out chan <-*model.Sample) {
 	for _, item := range p.items {
 		log.Printf("Watcher.readItem. %s %s %s \n", p.resourceType, item.Metric, debug.CodeLine())
-		if metric, err := loadMetric(p.cfg,p.resourceType, item.Metric); err != nil {
+		if metric, err := model.LoadMetric(p.cfg,p.resourceType, item.Metric); err != nil {
 			log.Printf("Watcher.readerItem error. %s %s %s %s\n", p.resourceType, item.Metric, err.Error(), debug.CodeLine())
 		} else {
 			switch metric.Type {

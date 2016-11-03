@@ -1,9 +1,10 @@
-package shipper
+package rpc
 
 import (
-	"github.com/ChaosXu/nerv/lib/env"
-	"net/rpc/jsonrpc"
 	"log"
+	"net/rpc/jsonrpc"
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/monitor/shipper"
 )
 
 type RpcShipper struct {
@@ -11,9 +12,13 @@ type RpcShipper struct {
 	cfg    *env.Properties
 }
 
-func NewRpcShipper(cfg *env.Properties) Shipper {
+func NewShipper(cfg *env.Properties) shipper.Shipper {
 	address := cfg.GetMapString("shipper", "server", "3334")
 	return &RpcShipper{server:address, cfg:cfg}
+}
+
+func (p *RpcShipper) Init() error {
+	return nil
 }
 
 func (p *RpcShipper) Send(v interface{}) {

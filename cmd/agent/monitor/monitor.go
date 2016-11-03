@@ -4,7 +4,10 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 	"log"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
-	"github.com/ChaosXu/nerv/cmd/agent/monitor/shipper"
+	"github.com/ChaosXu/nerv/lib/monitor/shipper"
+	"github.com/ChaosXu/nerv/lib/monitor/shipper/elasticsearch"
+	"github.com/ChaosXu/nerv/lib/monitor/shipper/rpc"
+	"github.com/ChaosXu/nerv/lib/monitor/model"
 )
 
 //Monitor
@@ -19,27 +22,28 @@ func NewMonitor(cfg *env.Properties) *Monitor {
 	probe := probe.NewProbe(cfg)
 	discovery := NewDiscovery(cfg, probe)
 	collector := NewCollector(cfg, probe)
+	shipper := newShipper(cfg)
 	return &Monitor{
 		discovery:discovery,
 		collector:collector,
-		shipper:newShipper(cfg),
+		shipper:shipper,
 		cfg:cfg,
 	}
 }
 func newShipper(cfg *env.Properties) shipper.Shipper {
-	t:=cfg.GetMapString("shipper","type","rpc")
+	t := cfg.GetMapString("shipper", "type", "rpc")
 	switch t {
 	case "elasticsearch":
-		return shipper.NewElasticsearchShipper(cfg)
+		return elasticsearch.NewShipper(cfg)
 	default:
-		return shipper.NewRpcShipper(cfg)
+		return rpc.NewShipper(cfg)
 	}
-
 
 }
 
 //Start monitor
 func (p *Monitor) Start() {
+	p.shipper.Init()
 	p.startDiscovery()
 	p.startCollector()
 	go func() {
@@ -60,7 +64,7 @@ func (p *Monitor) Start() {
 func (p *Monitor) startDiscovery() {
 	path := p.cfg.GetMapString("discovery", "path", "../resources/discovery")
 
-	templates, err := LoadDiscoveryTemplates(path)
+	templates, err := model.LoadDiscoveryTemplates(path)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -72,7 +76,7 @@ func (p *Monitor) startDiscovery() {
 
 func (p *Monitor) startCollector() {
 	path := p.cfg.GetMapString("monitor", "path", "../resources/monitor")
-	templates, err := LoadMonitorTemplates(path)
+	templates, err := model.LoadMonitorTemplates(path)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
