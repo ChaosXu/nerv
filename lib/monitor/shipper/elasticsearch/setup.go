@@ -13,7 +13,7 @@ import (
 func CreateSchemas(server string, metrics []*model.Metric) {
 
 	for _, metric := range metrics {
-		templateName := getTemplateName(metric)
+		templateName := getTemplateName(metric.ResourceType,metric.Name)
 		template := metricToTemplate(metric, templateName)
 
 		body, err := json.Marshal(template)
@@ -39,8 +39,8 @@ func CreateSchemas(server string, metrics []*model.Metric) {
 	}
 }
 
-func getTemplateName(metric *model.Metric) string {
-	return strings.Replace(strings.ToLower(metric.ResourceType), "/", ".", -1)[1:] + "." + metric.Name
+func getTemplateName(resType string,metric string) string {
+	return strings.Replace(strings.ToLower(resType), "/", ".", -1)[1:] + "." + metric
 }
 
 func metricToTemplate(metric *model.Metric, templateName string) map[string]interface{} {
