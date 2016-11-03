@@ -9,12 +9,14 @@ function start() {
     ../server/bin/app start
     ../file/bin/app start
     ../store/bin/app start
+    ../agent/bin/app start
 }
 
 function stop() {
     ../server/bin/app stop
     ../file/bin/app stop
     ../store/bin/app stop
+    ../agent/bin/app stop
 }
 
 function restart() {
@@ -27,6 +29,7 @@ function status() {
     ../server/bin/app status
     ../file/bin/app status
     ../file/bin/app status
+    ../agent/bin/app status
 }
 
 

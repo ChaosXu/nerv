@@ -2,6 +2,10 @@
   "rpc": {
     "port": "3334"
   },
+  "shipper": {
+    "type": "elasticsearch",
+    "server": "localhost:9200"
+  },
   "deploy": {
     "root": "appagent"
   },
@@ -13,8 +17,7 @@
     "path": "resources/monitor"
   },
   "metrics": {
-    "path": "resources/metrics",
-    "server": "localhost:3333"
+    "path": "resources/metrics"
   },
   "scripts": {
     "path": "resources/scripts"

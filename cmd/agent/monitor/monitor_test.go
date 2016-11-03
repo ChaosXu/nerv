@@ -123,6 +123,10 @@ func TestStartStop(t *testing.T) {
 		"rpc":map[string]interface{}{
 			"port":"4333",
 		},
+		"shipper":map[string]interface{}{
+			"type":"rpc",
+			"server":"localhost:4333",
+		},
 		"discovery":map[string]interface{}{
 			"period":"30",
 			"path":"../../../resources/discovery",
@@ -132,7 +136,6 @@ func TestStartStop(t *testing.T) {
 		},
 		"metrics":map[string]interface{}{
 			"path":"../../../resources/metrics",
-			"server":"localhost:4333",
 		},
 		"scripts":map[string]interface{}{
 			"path":"../../../resources/scripts",

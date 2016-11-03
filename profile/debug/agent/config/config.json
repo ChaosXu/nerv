@@ -5,18 +5,22 @@
   "deploy": {
     "root": "appagent"
   },
+  "shipper": {
+    "type": "elasticsearch",
+    "server": "localhost:9200"
+  },
   "discovery": {
     "period": "30",
-    "path": "resources/discovery"
+    "path": "../../resources/discovery"
   },
   "monitor": {
-    "path": "resources/monitor"
+    "path": "../../resources/monitor"
   },
   "metrics": {
-    "path": "resources/metrics",
+    "path": "../../resources/metrics",
     "server": "localhost:3333"
   },
   "scripts": {
-    "path": "resources/scripts"
+    "path": "../../resources/scripts"
   }
 }

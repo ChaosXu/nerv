@@ -4,27 +4,38 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 	"log"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
+	"github.com/ChaosXu/nerv/cmd/agent/monitor/shipper"
 )
 
 //Monitor
 type Monitor struct {
 	discovery *Discovery
 	collector *Collector
-	transfer  Transfer
+	shipper   shipper.Shipper
 	cfg       *env.Properties
 }
 
 func NewMonitor(cfg *env.Properties) *Monitor {
 	probe := probe.NewProbe(cfg)
-	transfer := NewRpcTransfer(cfg)
 	discovery := NewDiscovery(cfg, probe)
 	collector := NewCollector(cfg, probe)
 	return &Monitor{
 		discovery:discovery,
 		collector:collector,
-		transfer:transfer,
+		shipper:newShipper(cfg),
 		cfg:cfg,
 	}
+}
+func newShipper(cfg *env.Properties) shipper.Shipper {
+	t:=cfg.GetMapString("shipper","type","rpc")
+	switch t {
+	case "elasticsearch":
+		return shipper.NewElasticsearchShipper(cfg)
+	default:
+		return shipper.NewRpcShipper(cfg)
+	}
+
+
 }
 
 //Start monitor
@@ -34,14 +45,14 @@ func (p *Monitor) Start() {
 	go func() {
 		for {
 			res := <-p.discovery.C
-			p.transfer.Send(res)
+			p.shipper.Send(res)
 			p.collector.Collect(res)
 		}
 	}()
 
 	go func() {
 		for {
-			p.transfer.Send(<-p.collector.C)
+			p.shipper.Send(<-p.collector.C)
 		}
 	}()
 }

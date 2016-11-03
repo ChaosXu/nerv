@@ -1,4 +1,4 @@
-package monitor
+package shipper
 
 import (
 	"github.com/ChaosXu/nerv/lib/env"
@@ -6,22 +6,17 @@ import (
 	"log"
 )
 
-//Transfer upload data to the server
-type Transfer interface {
-	Send(v interface{})
-}
-
-type RpcTransfer struct {
+type RpcShipper struct {
 	server string
 	cfg    *env.Properties
 }
 
-func NewRpcTransfer(cfg *env.Properties) Transfer {
-	address := cfg.GetMapString("metrics", "server", "3334")
-	return &RpcTransfer{server:address, cfg:cfg}
+func NewRpcShipper(cfg *env.Properties) Shipper {
+	address := cfg.GetMapString("shipper", "server", "3334")
+	return &RpcShipper{server:address, cfg:cfg}
 }
 
-func (p *RpcTransfer) Send(v interface{}) {
+func (p *RpcShipper) Send(v interface{}) {
 	//TBD: client pool
 	client, err := jsonrpc.Dial("tcp", p.server)
 	if err != nil {
