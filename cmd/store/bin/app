@@ -44,7 +44,8 @@ function start() {
 
 function stop() {
     pid=`cat $PID_FILE`
-    kill $pid
+    kill -SIGTERM $pid
+    sleep 3
     rm -f $PID_FILE
     echo "$APP: stopped"
 }

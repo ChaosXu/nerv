@@ -3,7 +3,6 @@ package elasticsearch
 import (
 	"log"
 	"fmt"
-	"strings"
 	"encoding/json"
 	"github.com/go-resty/resty"
 	"github.com/ChaosXu/nerv/lib/monitor/model"
@@ -40,7 +39,8 @@ func CreateSchemas(server string, metrics []*model.Metric) {
 }
 
 func getTemplateName(resType string,metric string) string {
-	return strings.Replace(strings.ToLower(resType), "/", ".", -1)[1:] + "." + metric
+	//return strings.Replace(strings.ToLower(resType), "/", ".", -1)[1:] + "." + metric
+	return "metrics"
 }
 
 func metricToTemplate(metric *model.Metric, templateName string) map[string]interface{} {
