@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Console } from './console/console';
-import { Catalog } from './catalog/catalog';
+import { Console } from './ui/console/console';
+import { StartMenu } from './ui/startmenu/startmenu';
 
 @NgModule({
   imports: [BrowserModule],
   declarations: [
     Console,
-    Catalog
+    StartMenu
   ],
   bootstrap: [Console]
 })

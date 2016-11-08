@@ -2854,7 +2854,9 @@ body {
     text-align: center;
     line-height: 54px;
     background-color: #3664c8;
-    cursor: pointer
+    cursor: pointer;
+    font-weight:bold;
+    font-size: 24;
 }
 
 .top__logo-icon {
