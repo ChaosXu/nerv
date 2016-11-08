@@ -1,0 +1,46 @@
+<html>
+
+<head>
+	<style type="text/css">
+		@charset "UTF-8";
+		[ng\:cloak],
+		[ng-cloak],
+		[data-ng-cloak],
+		[x-ng-cloak],
+		.ng-cloak,
+		.x-ng-cloak,
+		.ng-hide:not(.ng-hide-animate) {
+			display: none !important;
+		}
+		
+		ng\:form {
+			display: block;
+		}
+	</style>
+	<title>Nerv Console</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Cache-Control" content="no-cache">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<!--<link favicon-change="favicon.ico" class="ng-isolate-scope">-->
+	<link rel="styelsheet" href="css/reset.css">
+	<link rel="stylesheet" href="css/console.css">
+	<link rel="stylesheet" href="css/console.new.css">
+	<!-- 1. Load libraries -->
+	<!-- Polyfill(s) for older browsers -->
+	<script src="node_modules/core-js/client/shim.min.js"></script>
+	<script src="node_modules/zone.js/dist/zone.js"></script>
+	<script src="node_modules/reflect-metadata/Reflect.js"></script>
+	<script src="node_modules/systemjs/dist/system.src.js"></script>
+	<!-- 2. Configure SystemJS -->
+	<script src="systemjs.config.js"></script>
+	<script>
+      System.import('app').catch(function(err){ console.error(err); });
+    </script>
+</head>
+<!-- 3. Display the application -->
+
+<body>
+	<nerv-console>Loading...</nerv-console>
+</body>
+
+</html>

@@ -1,0 +1,372 @@
+<div class="top__summary">
+	<div style="postition: relative">
+		<div class="u-dropdown-heaer" (click)="onToggle()">
+			<div class="uc-tipshead">
+				<span>{{title}}</span>
+			</div>
+		</div>
+		<div class="uc-dashboard ng-scope" *ngIf="display" style="background: rgb(255, 255, 255); overflow: auto; transition: opacity 0.1s linear; display: block; opacity: 100; width: 1857px; height: 429px; right: auto; z-index: 100; position: absolute; top: 56px; left: 0px;">
+			<div class="dashboard__main u-clearfix">
+				<!-- ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_COMPUTE">计算</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope active" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UHost"
+									target="" href="/uhost"><span class="dashboard__item-icon icon--sm icon__uhost"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">云主机</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UHost</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UPHost"
+									target="" href="/uphost"><span class="dashboard__item-icon icon--sm icon__uphost"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">物理云主机</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UPHost</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UHybrid"
+									target="" href="/uhybrid/"><span class="dashboard__item-icon icon--sm icon__uhybrid"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">混合云</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UHybrid</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UAS"
+									target="" href="/uas"><span class="dashboard__item-icon icon--sm icon__uas"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">自动伸缩</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UAS</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_NETWORK">网络</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UNet"
+									target="" href="/unet"><span class="dashboard__item-icon icon--sm icon__unet"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">基础网络</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UNet</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UVPC"
+									target="" href="/uvpc"><span class="dashboard__item-icon icon--sm icon__uvpc"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">私有网络</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UVPC</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UDEE"
+									target="" href="/udee"><span class="dashboard__item-icon icon--sm icon__udee"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">内网域名解析</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UDEE</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope active" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="ULB"
+									target="" href="/ulb"><span class="dashboard__item-icon icon--sm icon__ulb"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">负载均衡</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">ULB</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_STORAGE">存储和分发</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope active" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UDisk"
+									target="" href="/udisk"><span class="dashboard__item-icon icon--sm icon__udisk"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">云硬盘</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UDisk</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UFile"
+									target="" href="/ufile"><span class="dashboard__item-icon icon--sm icon__ufile"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">对象存储</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UFile</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UCDN"
+									target="" href="/ucdn"><span class="dashboard__item-icon icon--sm icon__ucdn"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">云分发</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UCDN</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UMQ"
+									target="" href="/umq"><span class="dashboard__item-icon icon--sm icon__umq"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">消息队列</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UMQ</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UDataArk"
+									target="" href="/uark"><span class="dashboard__item-icon icon--sm icon__udataark"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">数据方舟</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UDataArk</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_DB">数据库</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope active" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UDB"
+									target="" href="/udb"><span class="dashboard__item-icon icon--sm icon__udb"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">云数据库</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UDB</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UMem"
+									target="" href="/umem"><span class="dashboard__item-icon icon--sm icon__umem"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">云内存存储</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UMem</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_VIDEO">视频服务</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="Ulive"
+									target="" href="/ulive"><span class="dashboard__item-icon icon--sm icon__ulive"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">云直播</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">ULive</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_SHIELD">优盾</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="USec"
+									target="" href="/usec"><span class="dashboard__item-icon icon--sm icon__usec"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">基础安全防护</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">USec</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UADS"
+									target="" href="/uads"><span class="dashboard__item-icon icon--sm icon__uads"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">DDoS高防服务</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UADS</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UHas"
+									target="" href="/uhas"><span class="dashboard__item-icon icon--sm icon__uhas"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">运维审计系统</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UHAS</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UIps"
+									target="" href="/uips"><span class="dashboard__item-icon icon--sm icon__uips"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">入侵防御</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UIPS</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UWaf"
+									target="" href="/uwaf"><span class="dashboard__item-icon icon--sm icon__uwaf"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">WEB应用防护</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UWAF</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_ANALYSIS">数据分析</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UHadoop"
+									target="" href="/uhadoop"><span class="dashboard__item-icon icon--sm icon__uhadoop"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">托管集群</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UHadoop</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UKafka"
+									target="" href="/ukafka"><span class="dashboard__item-icon icon--sm icon__ukafka"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">分布式消息系统</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UKafka</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UDW"
+									target="" href="/udw"><span class="dashboard__item-icon icon--sm icon__udw"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">云数据仓库</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UDW</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_MONITOR_MANAGEMENT">监控管理</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="Company"
+									target="" href="/company"><span class="dashboard__item-icon icon--sm icon__company"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">权限与账号管理</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UAM</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope active" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UMon"
+									target="" href="/umon"><span class="dashboard__item-icon icon--sm icon__umon"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">监控</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UMon</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="ShockWave"
+									target="" href="/shockwave"><span class="dashboard__item-icon icon--sm icon__shockwave"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">网络流分析</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">ShockWave</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="Apikey"
+									target="" href="/apikey"><span class="dashboard__item-icon icon--sm icon__apikey"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">API密钥</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UAPI</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="Ticket"
+									target="_blank" href="https://accountv2.ucloud.cn/work_ticket"><span class="dashboard__item-icon icon--sm icon__ticket"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">工单管理</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UTicket</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="ULog"
+									target="" href="/ulog"><span class="dashboard__item-icon icon--sm icon__ulog"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">操作日志</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">ULog</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="URecord"
+									target="_blank" href="https://beianv2.ucloud.cn"><span class="dashboard__item-icon icon--sm icon__urecord"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">备案</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">ICP</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope active" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="Recycle"
+									target="" href="/recycle"><span class="dashboard__item-icon icon--sm icon__recycle"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">回收站</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">Recycle</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<div class="dashboard__piece ng-scope" ng-repeat="item in menu track by $index" ng-if="(item | filterTopNavShow)> 0">
+					<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_MARKET">U市场</div>
+					<div class="dashboard__piece-list">
+						<ul>
+							<!-- ngRepeat: nav in item track by nav.name -->
+							<!-- ngIf: nav.show -->
+							<li class="dashboard__piece-item ng-scope" ng-repeat="nav in item track by nav.name" ng-if="nav.show" ng-class="{'active':isExist(nav)}"><a class="dashboard__item-link ng-isolate-scope" uc-tooltip="" content="nav.name | uppercase | translate" ui-sref="UMarket"
+									target="" href="/umarket"><span class="dashboard__item-icon icon--sm icon__umarket"></span> <span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">U市场</span> <span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UMarket</span></a>								<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr ng-isolate-scope" ng-click="addRemoveQuickMenu(nav,$event)"
+									uc-tooltip="" content="'INDEX_TOP12' | translate"></span> <span class="active dashboard__mark-icon icon__collected u-fr ng-isolate-scope"
+									ng-click="addRemoveQuickMenu(nav,$event)" uc-tooltip="" content="'INDEX_TOP11' | translate"></span></li>
+							<!-- end ngIf: nav.show -->
+							<!-- end ngRepeat: nav in item track by nav.name -->
+						</ul>
+					</div>
+				</div>
+				<!-- end ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+				<!-- ngIf: (item | filterTopNavShow)> 0 -->
+				<!-- end ngRepeat: item in menu track by $index -->
+			</div>
+		</div>
+	</div>
+</div>
