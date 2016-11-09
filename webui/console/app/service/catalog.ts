@@ -20,6 +20,14 @@ const Catalogs = [
             icon: 'icon__uhost',
             url: '/uhost'
         }]
+    },
+    {
+        name: '管理',
+        items: [{
+            name: '账号与权限',
+            icon: 'icon__company',
+            url: '/company'
+        }]
     }
 ];
 

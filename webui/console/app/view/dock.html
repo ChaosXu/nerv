@@ -3,7 +3,7 @@
 		<ul>
 			<li *ngFor="let item of docks">
 				<a class="nav__item nav__item--dashbord">
-					<span class="nav__icon icon__dashboard icon--md" ng-class="{'nav__icon--current':item.name === currentProductState}"></span>
+					<span class="nav__icon icon--md {{item.icon}}"  ng-class="{'nav__icon--current':item.name === currentProductState}"></span>
 					<span class="nav__title">
                         <span>{{item.name}}</span>
 					</span>

@@ -14,7 +14,7 @@
 							<ul>
 								<li class="dashboard__piece-item " [ngClass]="{'active':item.dock}" *ngFor="let item of catalog.items">
 									<a class="dashboard__item-link" >
-										<span class="dashboard__item-icon icon--sm icon__uhost"></span>
+										<span class="dashboard__item-icon icon--sm {{item.icon}}"></span>
 										<span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">{{item.name}}</span>
 										<span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UHost</span>
 									</a>
