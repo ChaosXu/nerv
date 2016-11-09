@@ -14,19 +14,15 @@ export interface CatalogItem {
 
 const Catalogs = [
     {
-        name: '计算',
-        items: [{
-            name: '云主机',
-            icon: 'icon__uhost',
-            url: '/uhost'
-        }]
-    },
-    {
         name: '管理',
         items: [{
-            name: '账号与权限',
+            name: '用户',
             icon: 'icon__company',
-            url: '/company'
+            url: '/user'
+        },{
+            name: '监控',
+            icon: 'icon__umon',
+            url: '/monitor'
         }]
     }
 ];

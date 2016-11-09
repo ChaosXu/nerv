@@ -9,7 +9,7 @@
 			</a>
 		</li>
 		<li *ngFor="let item of docks">
-			<a class="nav__item nav__item--dashbord" routerLink="/user" routerLinkActive="nav__item--current">
+			<a class="nav__item" routerLink="{{item.url}}" routerLinkActive="nav__item--current">
 				<span class="nav__icon icon--md {{item.icon}}" routerLinkActive="nav__icon--current"></span>
 				<span class="nav__title">
                         <span>{{item.name}}</span>
