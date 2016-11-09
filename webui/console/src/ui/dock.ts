@@ -5,9 +5,8 @@ import { CatalogItem } from '../service/catalog';
 
 @Component({
     selector: 'nerv-dock',
-    templateUrl: 'app/view/dock.html',
-    inputs: ['docks'],
-    providers: [CatalogService]
+    templateUrl: 'view/dock.html',
+    inputs: ['docks']    
 })
 export class Dock implements OnInit {
     catalogSvc: CatalogService;
