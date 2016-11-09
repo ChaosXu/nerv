@@ -1,14 +1,16 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Console } from './ui/console/console';
-import { StartMenu } from './ui/startmenu/startmenu';
+import { Application } from './ui/application';
+import { StartMenu } from './ui/startmenu';
+import { Dock } from './ui/dock';
 
 @NgModule({
   imports: [BrowserModule],
   declarations: [
-    Console,
-    StartMenu
+    Application,
+    StartMenu,
+    Dock
   ],
-  bootstrap: [Console]
+  bootstrap: [Application]
 })
 export class AppModule { }

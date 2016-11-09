@@ -1,0 +1,48 @@
+<div style="height:100%;width:100%">
+	<div class="uc-main-wrapper">
+		<div class="uc-top">
+			<a class="top__logo u-white">
+				<h1>N</h1>
+			</a>
+			<nerv-startmenu (dock)="toggleDock($event)"></nerv-startmenu>
+			<div class="top__user">
+				<div class="top__user-mail top-entry">
+					<div class="u-dropdown">
+						<div style="position: relative">
+							<div class="u-dropdown-header ng-scope" ng-transclude="">
+								<div class="uc-tipshead ng-scope ng-isolate-scope" uc-tooltip="" content="('INDEX_TOP7' | translate)">
+									<span class="user__icon icon__mail icon--sm u-white"></span>
+									<span class="message-notice ng-binding ng-scope" ng-if="total > 0" ng-bind="(total>0?showNumber:'0')">1</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="top__user-mail top__user-help top-entry">
+					<div ng-class="{'disabled':$udropdown.disabled}" class="u-dropdown ng-isolate-scope">
+						<div style="position: relative">
+							<div class="u-dropdown-header ng-scope" ng-transclude="">
+								<div class="uc-tipshead ng-scope ng-isolate-scope" uc-tooltip="" content="'INDEX_TOP8' | translate">
+									<span class="user__icon icon__circle-question icon--sm u-white"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="user__name">
+					<div class="u-dropdown ng-isolate-scope">
+						<div style="position: relative">
+							<div class="u-dropdown-header ng-scope" ng-transclude="">
+								<div class="uc-drophead ng-scope">
+									<span class="u-dib ng-binding">user</span>
+									<span class="user-icon icon__down icon--xs u-white"></span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<nerv-dock [docks]="docks"></nerv-dock>	
+	</div>
+</div>

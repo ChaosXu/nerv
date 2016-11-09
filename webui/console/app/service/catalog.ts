@@ -9,6 +9,7 @@ export interface CatalogItem {
     name: string;
     icon: string;
     url: string;
+    dock: boolean;
 }
 
 const Catalogs = [
@@ -23,7 +24,7 @@ const Catalogs = [
 ];
 
 @Injectable()
-export class CatalogService {
+export class CatalogService {    
     getCatalogs(): Promise<Catalog[]> {
         return Promise.resolve(Catalogs);
     }
