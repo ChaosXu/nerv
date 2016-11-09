@@ -5,18 +5,21 @@ import { Application } from './ui/application';
 import { StartMenu } from './ui/startmenu';
 import { Dock } from './ui/dock';
 import { CatalogService } from './service/catalog';
+import { UserApp } from './app/user/user';
+import { DashboardApp } from './app/dashboard/dashboard';
+import { Routing } from './routing';
 
 @NgModule({
   imports: [
-    BrowserModule//ßß,
-    // RouterModule.forRoot(
-    //   {path:'company',component:}
-    // )
+    BrowserModule,
+    Routing
   ],
   declarations: [
     Application,
     StartMenu,
-    Dock
+    Dock,
+    UserApp,
+    DashboardApp
   ],
   providers: [CatalogService],
   bootstrap: [Application]

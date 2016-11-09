@@ -1,17 +1,20 @@
-<div class="uc-wrapper">
-	<div class="uc-nav nav--show">
-		<ul>
-			<li *ngFor="let item of docks">
-				<a class="nav__item nav__item--dashbord" routerLink="[item.url]">
-					<span class="nav__icon icon--md {{item.icon}}"  ng-class="{'nav__icon--current':item.name === currentProductState}"></span>
-					<span class="nav__title">
+<div class="uc-nav nav--show">
+	<ul>
+		<li>
+			<a class="nav__item nav__item--dashbord" routerLink="/dashboard">
+				<span class="nav__icon icon--md icon__dashboard" ng-class="{'nav__icon--current':item.name === currentProductState}"></span>
+				<span class="nav__title">
+                        <span>总览</span>
+				</span>
+			</a>
+		</li>
+		<li *ngFor="let item of docks">
+			<a class="nav__item nav__item--dashbord" routerLink="/user">
+				<span class="nav__icon icon--md {{item.icon}}" ng-class="{'nav__icon--current':item.name === currentProductState}"></span>
+				<span class="nav__title">
                         <span>{{item.name}}</span>
-					</span>
-				</a>
-			</li>			
-		</ul>
-	</div>
-	<div class="uc-contont">
-		
-	</div>
+				</span>
+			</a>
+		</li>
+	</ul>
 </div>
