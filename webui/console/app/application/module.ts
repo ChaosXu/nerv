@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { Application } from './ui/application';
-import { StartMenu } from './ui/startmenu';
-import { Dock } from './ui/dock';
+import { Application } from './application';
+import { StartMenu } from './startmenu';
+import { Dock } from './dock';
 import { CatalogService } from './service/catalog';
 
 const routes: Routes = [

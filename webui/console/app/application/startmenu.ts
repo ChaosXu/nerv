@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import { CatalogService } from '../service/catalog';
-import { Catalog } from '../service/catalog';
-import { CatalogItem } from '../service/catalog';
+import { CatalogService } from './service/catalog';
+import { Catalog } from './service/catalog';
+import { CatalogItem } from './service/catalog';
 
 @Component({
     selector: 'nerv-startmenu',
-    templateUrl: 'view/startmenu.html',
+    templateUrl: 'app/application/startmenu.html',
     outputs: ['eventDockCatalogItem:dock']
 })
 export class StartMenu {

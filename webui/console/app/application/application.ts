@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { CatalogItem } from '../service/catalog';
+import { CatalogItem } from './service/catalog';
 
 @Component({
   selector: 'nerv-console',
-  templateUrl: 'view/application.html'
+  templateUrl: 'app/application/application.html'
 })
 export class Application {
   docks: CatalogItem[] = []
