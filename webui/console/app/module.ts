@@ -1,30 +1,27 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { RouterModule,Routes } from '@angular/router';
-import { UserModule } from './app/user/module';
-import { DashboardModule } from './app/dashboard/module';
-import { MonitorModule } from './app/monitor/module';
+import { RouterModule, Routes } from '@angular/router';
 import { Application } from './ui/application';
 import { StartMenu } from './ui/startmenu';
 import { Dock } from './ui/dock';
 import { CatalogService } from './service/catalog';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: 'dashboard', loadChildren: 'app/dashboard/module#DashboardModule' },
+  { path: 'user', loadChildren: 'app/user/module#UserModule' },
+  { path: 'monitor', loadChildren: 'app/monitor/module#MonitorModule' }
 ];
 
 @NgModule({
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes),
-    DashboardModule,
-    UserModule,    
-    MonitorModule
+    RouterModule.forRoot(routes)
   ],
   declarations: [
     Application,
     StartMenu,
-    Dock    
+    Dock
   ],
   providers: [CatalogService],
   bootstrap: [Application]

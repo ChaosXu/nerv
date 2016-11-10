@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { UserApp } from './user';
 import { RoleComponent } from './role';
 
 const routes: Routes = [
     {
-        path: 'user', component: UserApp,
+        path: '', component: UserApp,
         children: [
-            { path: '', },
+            { path: '' },
             { path: 'project', component: UserApp },
             { path: 'account', component: UserApp },
             { path: 'role', component: RoleComponent }
@@ -18,7 +18,7 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-        BrowserModule,
+        CommonModule,
         RouterModule.forChild(routes)
     ],
     exports: [

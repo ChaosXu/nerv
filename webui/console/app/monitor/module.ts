@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { MonitorApp } from './monitor';
 
 const routes: Routes = [
-    { path: 'monitor', component: MonitorApp }
+    { path: '', component: MonitorApp }
 ];
 
 @NgModule({

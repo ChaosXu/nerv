@@ -8,7 +8,7 @@ interface Menu {
 
 @Component({
     selector: 'nerv-app-user',
-    templateUrl: 'src/app/user/user.html', 
+    templateUrl: 'app/user/user.html', 
 })
 export class UserApp {
     menus: Menu[];
