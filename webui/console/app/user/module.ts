@@ -8,7 +8,7 @@ const routes: Routes = [
     {
         path: '', component: UserApp,
         children: [
-            { path: '' },
+            { path: '', redirectTo: "role", pathMatch: "prefix" },
             { path: 'project', component: UserApp },
             { path: 'account', component: UserApp },
             { path: 'role', component: RoleComponent }
