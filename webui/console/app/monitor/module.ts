@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MonitorApp } from './monitor';
+import { MonitorApp } from './app';
 
 const routes: Routes = [
     { path: '', component: MonitorApp }

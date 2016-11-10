@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { UserApp } from './user';
+import { UserApp } from './app';
 import { RoleComponent } from './role';
 
 const routes: Routes = [
