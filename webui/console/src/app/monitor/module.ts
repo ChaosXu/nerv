@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MonitorApp } from './monitor';
 
-const routes: Routes = [    
+const routes: Routes = [
     { path: 'monitor', component: MonitorApp }
 ];
 
 @NgModule({
     imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule]
+    exports: [RouterModule],
+    declarations: [MonitorApp]
 })
-export class MonitorRouting { }
+export class MonitorModule { }

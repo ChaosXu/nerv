@@ -1,0 +1,102 @@
+<div class="ng-scope">
+	<div class="role-perate pl20 pt10 pb10"> <button class="console-btn base-btn ng-scope" ng-click="addRole()" translate="USUBACCOUNT159">创建新角色</button> </div>
+	<div
+		class="top-tips"> <span class="console-icon small-infor-t"></span>
+		<span translate="USUBACCOUNT160" class="ng-scope">角色是指一组产品权限的集合，您可以创建一个只有Uhost查看权限的角色，并将此角色赋予某个项目内的成员。</span> </div>
+<!-- ngIf: loading -->
+<div class="uc-f-t ng-isolate-scope" ng-class="css.table" ng-style="sty.table" uc-fixed-table="" data="items">
+	<div class="uc-f-t-h thead-viewport" ng-class="css.thead" ng-style="sty.thead">
+		<table class="table table-bord" uc-fixed-thead-transclude="table">
+			<thead class="ng-scope">
+				<tr>
+					<th translate="USUBACCOUNT161" class="ng-scope" style="width: 782px;">角色</th>
+					<th translate="USUBACCOUNT162" class="ng-scope" style="width: auto;">操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+	<div uc-adaptive-height="" class="page-padding-height" no-auto-height="" style="height: 350px; position: relative;">
+		<div ng-show="data.length>0" class="uc-f-t-b tab-new-main" ng-class="css.tbody" ng-style="sty.tbody">
+			<table class="table table-bord table-striped table-hover" uc-fixed-tbody-transclude="table">
+				<tbody class="ng-scope">
+					<!-- ngRepeat: item in items -->
+					<tr ng-repeat="item in items" class="ng-scope">
+						<td class="name">
+							<p>
+								<!-- ngIf: item.Modifiable == false --><span ng-if="item.Modifiable == false" class="red pl5 pr5 ng-scope">*</span>
+								<!-- end ngIf: item.Modifiable == false --><span ng-bind="item.CharacterName" class="ng-binding">Admin</span></p>
+							<p ng-bind="item.CharacterDescription" class="ng-binding">管理员</p>
+						</td>
+						<td> <a class="table-operate" ng-click="lookRole(item)"><i class="icon-new icon-table sta-eye"></i><span translate="USUBACCOUNT163" class="ng-scope">查看</span></a>
+							<!-- ngIf: item.Modifiable == true -->
+							<!-- ngIf: item.Modifiable == true -->
+						</td>
+					</tr>
+					<!-- end ngRepeat: item in items -->
+				</tbody>
+				<thead>
+					<tr class="hidden-td">
+						<th class="ng-scope">
+							<div class="u-f-t-h-td" style="display:block">角色</div>
+						</th>
+						<th class="ng-scope">
+							<div class="u-f-t-h-td" style="display:block">操作</div>
+						</th>
+					</tr>
+				</thead>
+				<tfoot></tfoot>
+			</table>
+		</div>
+		<div class="no-content-warp ng-hide" ng-show="key" key="false" message="" parent="$parent">
+			<div class="no-content-tab " ng-class="css" uc-compile="message | trans" uc-compile-parent="parent"></div>
+		</div>
+		<div class="no-content-warp ng-hide" ng-show="key" key="false" message="" type="error" parent="$parent">
+			<div class="no-content-tab  warning" ng-class="css" uc-compile="message | trans" uc-compile-parent="parent"></div>
+		</div>
+	</div>
+	<div class="uc-f-t-f" ng-class="css.tfoot" ng-style="sty.tfoot">
+		<table class="table table-bord" uc-fixed-tfoot-transclude="table"> </table>
+	</div>
+</div>
+<div class="console-footer-content ng-isolate-scope" ng-show="totalSize" boundary-links="true" total-size="totalSize" page-size="pageSize"
+	max-page="maxPage" current-page="currentPage" change-page="changePage()">
+	<div class="console-pagination">
+		<ul class="page-current pagination ng-isolate-scope ng-valid ng-hide" ng-show="totalSize > pageSize" boundary-links="true"
+			total-items="totalSize" items-per-page="pageSize" max-size="maxPage" ng-model="currentPage" ng-change="changePageFuc(currentPage)"
+			previous-text="上一页" next-text="下一页" first-text="首页" last-text="尾页">
+			<!-- ngIf: boundaryLinks -->
+			<li ng-if="boundaryLinks" ng-class="{disabled: noPrevious()}" class="ng-scope disabled"><a href="" ng-click="selectPage(1)" class="ng-binding">首页</a></li>
+			<!-- end ngIf: boundaryLinks -->
+			<!-- ngIf: directionLinks -->
+			<li ng-if="directionLinks" ng-class="{disabled: noPrevious()}" class="ng-scope disabled"><a href="" ng-click="selectPage(page - 1)" class="ng-binding">上一页</a></li>
+			<!-- end ngIf: directionLinks -->
+			<!-- ngRepeat: page in pages track by $index -->
+			<li ng-repeat="page in pages track by $index" ng-class="{active: page.active}" class="ng-scope active"><a href="" ng-click="selectPage(page.number)" class="ng-binding">1</a></li>
+			<!-- end ngRepeat: page in pages track by $index -->
+			<!-- ngIf: directionLinks -->
+			<li ng-if="directionLinks" ng-class="{disabled: noNext()}" class="ng-scope disabled"><a href="" ng-click="selectPage(page + 1)" class="ng-binding">下一页</a></li>
+			<!-- end ngIf: directionLinks -->
+			<!-- ngIf: boundaryLinks -->
+			<li ng-if="boundaryLinks" ng-class="{disabled: noNext()}" class="ng-scope disabled"><a href="" ng-click="selectPage(totalPages)" class="ng-binding">尾页</a></li>
+			<!-- end ngIf: boundaryLinks -->
+		</ul>
+		<ul class="page-num">
+			<li>每页显示：</li>
+			<!-- ngRepeat: page in pageSizeItems track by $index -->
+			<li ng-repeat="page in pageSizeItems track by $index" ng-click="changePageSize(page)" ng-class="{'active':currentPageSize==page}"
+				class="ng-scope active"><a ng-bind="page" class="ng-binding">10</a></li>
+			<!-- end ngRepeat: page in pageSizeItems track by $index -->
+			<li ng-repeat="page in pageSizeItems track by $index" ng-click="changePageSize(page)" ng-class="{'active':currentPageSize==page}"
+				class="ng-scope"><a ng-bind="page" class="ng-binding">25</a></li>
+			<!-- end ngRepeat: page in pageSizeItems track by $index -->
+			<li ng-repeat="page in pageSizeItems track by $index" ng-click="changePageSize(page)" ng-class="{'active':currentPageSize==page}"
+				class="ng-scope"><a ng-bind="page" class="ng-binding">50</a></li>
+			<!-- end ngRepeat: page in pageSizeItems track by $index -->
+			<li ng-repeat="page in pageSizeItems track by $index" ng-click="changePageSize(page)" ng-class="{'active':currentPageSize==page}"
+				class="ng-scope"><a ng-bind="page" class="ng-binding">100</a></li>
+			<!-- end ngRepeat: page in pageSizeItems track by $index -->
+		</ul>
+		<div ng-transclude=""></div>
+	</div>
+</div>
+</div>

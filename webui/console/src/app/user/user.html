@@ -1,1 +1,14 @@
-user
+<div class="uc-subnav">
+	<ul>
+		<li><span class="subnav__item subnav__item--type ng-scope" translate="COMPANY">用户</span></li>
+		<li *ngFor="let menu of menus">
+			<a class="subnav__item" routerLink="{{menu.url}}" routerLinkActive="subnav__item--current">
+				<span translate="PROJECT_MANAGE" class="ng-scope">{{menu.name}}</span>
+			</a>
+		</li>
+	</ul>
+</div>
+
+<div style="height:100%" class="uc-main">
+    <router-outlet > </router-outlet>
+</div>
