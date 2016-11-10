@@ -11,20 +11,18 @@ import { CatalogItem } from './service/catalog';
 })
 export class StartMenu {
     title = '产品与服务';
-    display: boolean;
     catalogs: Catalog[];
     catalogSvc: CatalogService;
+    display: boolean;
     eventDockCatalogItem = new EventEmitter<CatalogItem>();
 
     constructor(catalogSvc: CatalogService) {
         this.catalogSvc = catalogSvc;
     }
 
-    onToggle(): void {
+    showMenu(): void {
         this.display = !this.display;
-        if (this.display) {
-            this.catalogSvc.getCatalogs().then(catalogs => this.catalogs = catalogs);
-        }
+        this.catalogSvc.getCatalogs().then(catalogs => this.catalogs = catalogs);
     }
 
     onDockCatalogItem(item: CatalogItem): void {

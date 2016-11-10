@@ -1,12 +1,12 @@
 <div class="top__summary">
 	<div class="u-dropdown">
 		<div style="postition: relative">
-			<div class="u-dropdown-header" (click)="onToggle()">
+			<div class="u-dropdown-header" (click)="showMenu()">
 				<div class="uc-tipshead">
 					<span>{{title}}</span>
 				</div>
 			</div>
-			<div class="uc-dashboard" *ngIf="display" style="background: rgb(255, 255, 255); overflow: auto; transition: opacity 0.1s linear; display: block; opacity: 100; width: 1000px; height: 700px; right: auto; z-index: 100; position: absolute; top: 56px; left: 0px;">
+			<div class="uc-dashboard" (mouseleave)='display=false' *ngIf="display" style="background: rgb(255, 255, 255); overflow: auto; transition: opacity 0.1s linear; display: block; opacity: 100; width: 1000px; height: 700px; right: auto; z-index: 100; position: absolute; top: 56px; left: 0px;">
 				<div class="dashboard__main u-clearfix">
 					<div class="dashboard__piece" *ngFor="let catalog of catalogs">
 						<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_COMPUTE">{{catalog.name}}</div>
