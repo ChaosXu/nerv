@@ -43,5 +43,5 @@ cmd/store/bin/elasticsearch-5.0.0.tar.gz
 
 test/server/credentials/pwd.json
 
-webui/console/js/
-webui/console/node_modules/
+cmd/webui/console/js/
+cmd/webui/console/node_modules/

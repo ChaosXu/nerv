@@ -10,7 +10,7 @@ all : build
 	@echo "----package complete----"
 
 
-build : server file  store pkg resources bin
+build : server file  store pkg webui resources bin
 	@echo "----build complete----"
 
 
@@ -35,6 +35,10 @@ pkg : agent
 store :
 	@echo "----build store----"
 	cd $(CMD_DIR)/store && make
+
+webui :
+	@echo "----build webui----"
+	cd $(CMD_DIR)/webui && make
 
 profile : all
 	@echo "----profile $(ENV)----"
