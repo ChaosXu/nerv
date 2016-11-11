@@ -9,8 +9,7 @@ all : build
 	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----package complete----"
 
-
-build : server file  store pkg webui resources bin
+build : server file  store pkg resources bin
 	@echo "----build complete----"
 
 
@@ -36,6 +35,7 @@ store :
 	@echo "----build store----"
 	cd $(CMD_DIR)/store && make
 
+.PHONY : webui
 webui :
 	@echo "----build webui----"
 	cd $(CMD_DIR)/webui && make
