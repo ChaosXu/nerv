@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
+// import { ModalModule } from 'angular2-modal';
+// import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
 import { Application } from './application';
 import { StartMenu } from './startmenu';
 import { Dock } from './dock';
@@ -16,7 +18,9 @@ const routes: Routes = [
 @NgModule({
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes)    
+    // ModalModule.forRoot(),
+    // BootstrapModalModule
   ],
   declarations: [
     Application,

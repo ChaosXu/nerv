@@ -25,6 +25,8 @@
       // other libraries
       'rxjs':                      'npm:rxjs',
       'angular-in-memory-web-api': 'npm:angular-in-memory-web-api/bundles/in-memory-web-api.umd.js'
+      // 'angular2-modal': 'npm:angular2-modal/bundles/angular2-modal.umd.js',
+      // 'angular2-modal/plugins/bootstrap': 'npm:angular2-modal/bundles/angular2-modal.bootstrap.umd.js'
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {

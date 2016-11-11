@@ -1,16 +1,24 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { LibModule } from '../lib/module';
 import { RouterModule, Routes } from '@angular/router';
 import { UserApp } from './app';
 import { RoleComponent } from './role';
+import { AccountComponent } from './account';
+import { AccountAddComponent } from './account_add';
+import { AccountService } from './account.service';
 
 const routes: Routes = [
     {
         path: '', component: UserApp,
         children: [
-            { path: '', redirectTo: "role", pathMatch: "prefix" },
-            { path: 'project', component: UserApp },
-            { path: 'account', component: UserApp },
+            { path: '', redirectTo: "account", pathMatch: "prefix" },
+            {
+                path: 'account',
+                children: [
+                    { path: '', component: AccountComponent },
+                    { path: 'add', component: AccountAddComponent }
+                ]
+            },
             { path: 'role', component: RoleComponent }
         ]
     }
@@ -18,7 +26,7 @@ const routes: Routes = [
 
 @NgModule({
     imports: [
-        CommonModule,
+        LibModule,
         RouterModule.forChild(routes)
     ],
     exports: [
@@ -27,7 +35,12 @@ const routes: Routes = [
     ],
     declarations: [
         UserApp,
+        AccountComponent,
+        AccountAddComponent,
         RoleComponent
     ],
+    providers: [
+        AccountService
+    ]
 })
 export class UserModule { }

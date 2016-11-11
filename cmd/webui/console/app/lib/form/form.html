@@ -1,0 +1,10 @@
+<div>
+	<form class="form-horizontal" (ngSubmit)="onSubmit()">
+        <div *ngFor="let field of meta.fields">        
+            <nerv-form-field [form]="meta" [field]="field"  [data]="data && data[field.name]"></nerv-form-field>
+        </div>
+        <div>
+            <!--<button type="submit" [disabled]="!form.valid">保存</button>-->
+        </div>
+	</form>
+</div>

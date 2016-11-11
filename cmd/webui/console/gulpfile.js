@@ -10,11 +10,15 @@ var distRoot = '../../../release/nerv/webui';
 var dist = distRoot + '/console';
 
 
-gulp.task('clean', function () {
-    del([dist, 'js'], { force: true });
+gulp.task('clean', ['clean:ts'], function () {
+    del([dist], { force: true });
 });
 
-gulp.task('compile:ts', function () {
+gulp.task('clean:ts', function () {
+    del(['js'], { force: true });
+})
+
+gulp.task('compile:ts', ['clean:ts'], function () {
     var tsProject = ts.createProject('tsconfig.json');
     return tsProject.src()
         .pipe(sourcemaps.init())
@@ -47,7 +51,7 @@ gulp.task('copy:libs', ['compile'], function () {
         .pipe(gulp.dest(dist))
 });
 
-gulp.task('copy:npm', ['compile'],function () {
+gulp.task('copy:npm', ['compile'], function () {
     return gulp.src(npm(null, './package.json'), { base: './' })
         .pipe(gulp.dest(dist));
 })
@@ -73,8 +77,14 @@ gulp.task('connect', function () {
     });
 });
 
-gulp.task('reload', function () {
-    return gulp.src(['app/**/*.html', 'js/**/*', 'css/**/*', 'images/**/*', 'fonts/**/*'], { base: './' })
+gulp.task('reload:assets', function () {
+    return gulp.src(['js/**/*', 'css/**/*', 'images/**/*', 'fonts/**/*'], { base: './' })
+        .pipe(gulp.dest('./'))
+        .pipe(connect.reload());
+})
+
+gulp.task('reload:ts', ['compile:ts'], function () {
+    return gulp.src(['js/**/*'], { base: './' })
         .pipe(gulp.dest('./'))
         .pipe(connect.reload());
 })
@@ -84,10 +94,9 @@ gulp.task('build', ['clean', 'compile', 'copy:libs', 'copy:assets', 'copy:npm'])
 gulp.task('default', ['build']);
 
 gulp.task('serve', ['compile:ts', 'connect'], function () {
-    gulp.watch('app/**/*', ['compile:ts'])
-    gulp.watch('index.html', ['reload'])
-    gulp.watch('css/**/*.css', ['reload']);
-    gulp.watch('images/**/*', ['reload']);
-    gulp.watch('fonts/**/*', ['reload']);
-    gulp.watch('js/**/*', ['reload']);
+    gulp.watch('app/**/*', ['reload:ts'])
+    gulp.watch('index.html', ['reload:assets'])
+    gulp.watch('css/**/*.css', ['reload:assets']);
+    gulp.watch('images/**/*', ['reload:assets']);
+    gulp.watch('fonts/**/*', ['reload:assets']);
 });
