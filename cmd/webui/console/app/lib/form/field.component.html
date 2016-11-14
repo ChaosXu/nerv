@@ -1,12 +1,13 @@
-<div class="form-group">
+<div class="form-group" [formGroup]="formGroup">
 	<label class="control-label" [attr.for]="field.name">{{field.label}}</label>
 	<div class="controls" [ngSwitch]="field.control">
-		<input class="base-input" *ngSwitchCase="'textbox'" [name]="field.name" [id]="field.name" [type]="field.type">
+		<input class="base-input" *ngSwitchCase="'textbox'" [formControlName]="field.name" [id]="field.name" [type]="field.type" [(ngModel)]="value">
 		<!--<select *ngSwitchCase="'dropdown'" [id]="field.name" [formControlName]="field.name">
             <option *ngFor="let opt of field.options" [value]="opt.key">
                 {{opt.value}}
             </option>
         </select>-->
         <div class="error-masseg" *ngIf="!isValid">{{field.label}}输入错误</div>
-	</div>	
+	</div>
+    {{value}}
 </div>

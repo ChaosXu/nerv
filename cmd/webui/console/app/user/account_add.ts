@@ -1,6 +1,6 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { AccountService, Account } from './account.service';
-import { Form, Field } from '../lib/form/metadata';
+import { Form, Field } from '../lib/form/form.service';
 
 const form: Form = {
     name: "form_user_add",
@@ -18,14 +18,16 @@ const form: Form = {
 })
 export class AccountAddComponent implements OnInit {
     form = form;
+    data = {};
     accounts: Account[];
 
     constructor(private accountSvc: AccountService) {
 
     }
 
-    ngOnInit(): void {
+    ngOnInit(): void { }
 
+    onSave(): void {
+        //this.accountSvc.create(this.data).then()
     }
-
 }

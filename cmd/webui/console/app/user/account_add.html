@@ -6,7 +6,7 @@
 		<a routerLink="/user/account">
 			<button class="console-btn base-btn">返回</button>
 		</a>
-        <button class="console-btn base-btn ng-scope">保存</button>
+        <button class="console-btn base-btn" [ngClass]="{'disabled':!nervForm.valid}" (click)="onSave()">保存</button>
 	</div>
-    <nerv-form [meta]="form"></nerv-form>
+    <nerv-form #nervForm [meta]="form" [data]="data"></nerv-form>
 </div>
