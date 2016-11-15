@@ -73,7 +73,17 @@ gulp.task('connect', function () {
     connect.server({
         root: ['.'],
         port: 3000,
-        livereload: true
+        livereload: true,
+        middleware: function (connect, o) {
+            var proxy = require('http-proxy-middleware');
+            return [
+                proxy('/api', {
+                    target: 'http://localhost:3333',
+                    changeOrigin: true,
+                    ws: true
+                })
+            ];
+        }
     });
 });
 

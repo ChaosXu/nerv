@@ -1,25 +1,33 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
+import { RestyService } from '../lib/resty/resty.service';
 // import { Overlay } from 'angular2-modal';
 // import { Modal } from 'angular2-modal/plugins/bootstrap';
-import { AccountService, Account } from './account.service';
+
 
 @Component({
     selector: 'nerv-app-user-account',
     templateUrl: 'app/user/account.html',
 })
 export class AccountComponent implements OnInit {
+    accounts: any;
 
-    accounts: Account[];
+    constructor(
+        private resty: RestyService
+    ) {
 
-    constructor(private accountSvc: AccountService) {
-        
     }
 
     ngOnInit(): void {
-        this.accountSvc.find().then(accounts => this.accounts = accounts)
+        this.resty.find('Account')
+            .then(response => this.accounts = response.data)
+            .catch(this.error);
     }
 
     onAdd() {
-       
+
+    }
+
+    private error(error: any) {
+        return alert(error.text());
     }
 }

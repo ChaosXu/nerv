@@ -5,7 +5,6 @@ import { UserApp } from './app';
 import { RoleComponent } from './role';
 import { AccountComponent } from './account';
 import { AccountAddComponent } from './account_add';
-import { AccountService } from './account.service';
 
 const routes: Routes = [
     {
@@ -38,9 +37,6 @@ const routes: Routes = [
         AccountComponent,
         AccountAddComponent,
         RoleComponent
-    ],
-    providers: [
-        AccountService
     ]
 })
 export class UserModule { }

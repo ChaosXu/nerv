@@ -35,7 +35,8 @@ func main() {
 		defer db.DB.Close()
 
 		r := initRouter()
-		log.Fatal(http.ListenAndServe(":3333", r))
+		port := env.Config().GetMapString("http","port","3333")
+		log.Fatal(http.ListenAndServe(":"+port, r))
 	}
 }
 

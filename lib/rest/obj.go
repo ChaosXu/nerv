@@ -12,7 +12,9 @@ import (
 	"github.com/ChaosXu/nerv/lib/db"
 	_ "github.com/ChaosXu/nerv/lib/deploy/model"
 	_ "github.com/ChaosXu/nerv/lib/monitor/model"
+	_ "github.com/ChaosXu/nerv/lib/user/model"
 	"reflect"
+	"strconv"
 )
 
 type User struct {
@@ -20,7 +22,7 @@ type User struct {
 }
 
 func RouteObj(r *chi.Mux) {
-	r.Route("/objs/:class", func(r chi.Router) {
+	r.Route("/api/objs/:class", func(r chi.Router) {
 		r.Get("/", list)
 		r.Post("/", create)
 		r.Put("/", update)
@@ -63,19 +65,55 @@ func list(w http.ResponseWriter, req *http.Request) {
 	}
 
 	d := db.DB
+	var count int64
+	if where != "" {
+		d = db.DB.Where(where, args)
+	}
+	if err := d.Model(md.NewSlice()).Count(&count).Error; err != nil {
+		render.Status(req, 500)
+		render.JSON(w, req, err.Error())
+		return
+	}
+
+	var page, pageCount, limit int64
+	var err error
+	paramPage := middleware.CurrentParams(req).QueryParam("page")
+	paramSize := middleware.CurrentParams(req).QueryParam("pageSize")
+
+	if paramSize != "" {
+		limit, err = strconv.ParseInt(paramSize, 10, 32)
+		if err != nil {
+			limit = 10
+		}
+		pageCount = count / limit;
+		if count % limit > 0 {
+			pageCount += 1
+		}
+	}
+	if paramPage != "" {
+		page, err = strconv.ParseInt(paramPage, 10, 32)
+		if err != nil {
+			page = 0
+		} else {
+			if page >= pageCount {
+				page = pageCount - 1
+			}
+		}
+	}
+
 	if where != "" {
 		d = db.DB.Where(where, args)
 	}
 
 	data := md.NewSlice()
-	if d.Find(data).RecordNotFound() {
+	if d.Offset(page * limit).Limit(limit).Find(data).RecordNotFound() {
 		render.Status(req, 200)
 		render.JSON(w, req, data)
 		return
 	}
 
 	render.Status(req, 200)
-	render.JSON(w, req, data)
+	render.JSON(w, req, map[string]interface{}{"data":data, "page":page, "pageSize":limit, "pageCount":pageCount})
 }
 
 // get one obj. query params: assocations=a,b...
@@ -244,7 +282,7 @@ func invoke(w http.ResponseWriter, req *http.Request) {
 			if e, ok := rawValue.(error); ok {
 				httpCode = 500
 				ret = append(ret, e.Error())
-			}else{
+			} else {
 				ret = append(ret, rawValue)
 			}
 

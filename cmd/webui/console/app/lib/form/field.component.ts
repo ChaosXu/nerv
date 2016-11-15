@@ -13,7 +13,7 @@ export class FieldComponent implements OnInit {
     @Input() data: any;  //form data
     @Input() set value(value: any) {
         if(value) {
-            this.data[this.field.name] = value;
+            this.data[this.field.name] = this.parse(value);
         }
     }
 
@@ -23,5 +23,14 @@ export class FieldComponent implements OnInit {
 
     ngOnInit(): void {
 
+    }
+
+    parse(value: any): any {
+        switch (this.field.type) {
+            case 'long':
+                return parseInt(value);
+            default:
+                return value;
+        }
     }
 }

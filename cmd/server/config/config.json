@@ -4,6 +4,9 @@
     "password": "",
     "url": ""
   },
+  "http":{
+      "port":3333
+  },
   "scripts": {
     "repository": "localhost/scripts",
     "cache": "cache"
