@@ -75,7 +75,8 @@ func list(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	var page, pageCount, limit int64
+	var page, pageCount,limit int64
+	limit = 10
 	var err error
 	paramPage := middleware.CurrentParams(req).QueryParam("page")
 	paramSize := middleware.CurrentParams(req).QueryParam("pageSize")
@@ -85,20 +86,20 @@ func list(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			limit = 10
 		}
-		pageCount = count / limit;
-		if count % limit > 0 {
-			pageCount += 1
-		}
 	}
+	pageCount = count / limit
+	if count % limit >= 0 {
+		pageCount += 1
+	}
+
 	if paramPage != "" {
 		page, err = strconv.ParseInt(paramPage, 10, 32)
 		if err != nil {
 			page = 0
-		} else {
-			if page >= pageCount {
-				page = pageCount - 1
-			}
 		}
+	}
+	if page >= pageCount {
+		page = pageCount - 1
 	}
 
 	if where != "" {
