@@ -25,11 +25,23 @@ func main() {
 	fmt.Println("Version:" + Version)
 	env.Init()
 
-	initDB()
-	defer db.DB.Close()
+	if *env.Setup {
+		log.Println("setup...")
+		setup()
+		log.Println("setup success")
+	} else {
+		log.Println("run")
+		initDB()
+		defer db.DB.Close()
 
-	r := initRouter()
-	log.Fatal(http.ListenAndServe(":3333", r))
+		r := initRouter()
+		log.Fatal(http.ListenAndServe(":3333", r))
+	}
+}
+
+func setup() {
+	initDB();
+	db.DB.Close();
 }
 
 func initRouter() *chi.Mux {

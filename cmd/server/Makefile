@@ -13,6 +13,8 @@ server : clean
 	go build $(LDFLAGS) -o $(BIN_DIR)/$(MODULE)
 	cp bin/$(APP_SCRIPT) $(BIN_DIR)/$(APP_SCRIPT)
 	chmod +x $(BIN_DIR)/$(APP_SCRIPT)
+	cp bin/setup.sh $(BIN_DIR)/setup.sh
+	chmod +x $(BIN_DIR)/setup.sh
 	mkdir $(CONF_DIR)
 	cp config/config.json $(CONF_DIR)/config.json
 	rm -rf $(RELEASE_DIR).tar.gz
