@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
-import { Form, Validator } from './model';
+import { Form } from './model';
 
 @Component({
     //moduleId: module.id,
