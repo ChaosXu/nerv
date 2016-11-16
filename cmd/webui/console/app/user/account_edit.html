@@ -1,11 +1,12 @@
 <div>
 	<div class="top-tips">
-		<span>查看用户</span>
+		<span>编辑用户</span>
 	</div>
 	<div class="role-perate pl20 pt10 pb10">
 		<a routerLink="/user/account">
 			<button class="console-btn base-btn">返回</button>
-		</a>        
+		</a>
+        <button class="console-btn base-btn" [ngClass]="{'disabled':!nervForm.valid}" (click)="onSave()">保存</button>
 	</div>
     <nerv-form #nervForm [meta]="form" [data]="data"></nerv-form>
 </div>

@@ -3,19 +3,28 @@ import { LibModule } from '../lib/module';
 import { RouterModule, Routes } from '@angular/router';
 import { UserApp } from './app';
 import { RoleComponent } from './role';
+import { AccountsComponent } from './accounts';
 import { AccountComponent } from './account';
 import { AccountAddComponent } from './account_add';
+import { AccountEditComponent } from './account_edit';
 
 const routes: Routes = [
     {
         path: '', component: UserApp,
         children: [
-            { path: '', redirectTo: "account", pathMatch: "prefix" },
+            { path: ''}, 
             {
                 path: 'account',
                 children: [
-                    { path: '', component: AccountComponent },
-                    { path: 'add', component: AccountAddComponent }
+                    { path: '', component: AccountsComponent },
+                    { path: 'add', component: AccountAddComponent },
+                    {
+                        path: ':id',
+                        children: [
+                            { path: '', component: AccountComponent },
+                            { path: 'edit', component: AccountEditComponent }
+                        ]
+                    }
                 ]
             },
             { path: 'role', component: RoleComponent }
@@ -34,8 +43,10 @@ const routes: Routes = [
     ],
     declarations: [
         UserApp,
+        AccountsComponent,
         AccountComponent,
         AccountAddComponent,
+        AccountEditComponent,
         RoleComponent
     ]
 })

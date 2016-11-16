@@ -9,11 +9,17 @@ import { Form } from './model';
 })
 export class FormComponent implements OnInit {
 
-    @Input() meta: Form;
-    @Input() data: {};
-    @Input() errorMessages: {}
-    formGroup: FormGroup;
 
+    @Input() meta: Form;
+    @Input('data') set setData(value:{}) {
+        this.data = value;
+        if(this.formGroup){
+            this.formGroup.reset(this.data);
+        }        
+    }
+    data:{};
+    formGroup: FormGroup;
+    
     get valid(): boolean {
         return this.formGroup ? this.formGroup.valid : false;
     }

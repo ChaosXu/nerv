@@ -10,7 +10,7 @@ import { Form, Field } from './model';
 export class FieldComponent implements OnInit {
     @Input() formGroup: FormGroup;
     @Input() field: Field;
-    @Input() data: any;  //form data
+    @Input() data: {};
     error: string = '';
 
     get value(): any {
@@ -22,7 +22,8 @@ export class FieldComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        const control = this.formGroup.get(this.field.name);
+        const control = this.formGroup.get(this.field.name);  
+          
         control.valueChanges.subscribe(value => this.onValueChanges(value));
     }
 
@@ -51,5 +52,10 @@ export class FieldComponent implements OnInit {
             default:
                 return value;
         }
+    }
+
+    private setControlValue(): void {
+        const name = this.field.name;
+        this.formGroup.get(name).reset(this.data[name]);
     }
 }

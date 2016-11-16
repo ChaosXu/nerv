@@ -5,9 +5,9 @@ import { Form, Field } from '../lib/form/model';
 import { form } from './account_form';
 
 @Component({
-    templateUrl: 'app/user/account.html',
+    templateUrl: 'app/user/account_edit.html',
 })
-export class AccountComponent implements OnInit {
+export class AccountEditComponent implements OnInit {
     form = form;
     data = {};
 

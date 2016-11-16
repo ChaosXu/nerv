@@ -14,14 +14,13 @@ export class RestyService {
         return this.http.get(url, { headers: this.headers })
             .toPromise()
             .then(response => {
-                var body = response.json();
-                console.log(body);
+                var body = response.json();                
                 return body;
             })
             .catch(this.error);
     }
 
-    getOne(type: string, id: number): Promise<any> {
+    get(type: string, id: number): Promise<any> {
         const url = `api/objs/${type}/${id}`;
         return this.http.get(url, { headers: this.headers })
             .toPromise()

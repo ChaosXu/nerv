@@ -1,25 +1,8 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RestyService } from '../lib/resty/resty.service';
 import { Form, Field } from '../lib/form/model';
-
-const form: Form = {
-    name: "form_user_add",
-    fields: [
-        {
-            name: "name", label: "用户名", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
-        },
-        {
-            name: "nick", label: "昵称", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
-        },
-        { name: "mail", label: "邮件", control: "email", type: "string" },
-        { name: "phone", label: "电话", control: "text", type: "long" }
-    ]
-};
-
+import { form } from './account_form';
 
 @Component({
     templateUrl: 'app/user/account_add.html',
@@ -28,7 +11,10 @@ export class AccountAddComponent implements OnInit {
     form = form;
     data = {};
 
-    constructor(private resty: RestyService) { }
+    constructor(
+        private router: Router,
+        private resty: RestyService
+    ) { }
     ngOnInit(): void { }
 
     onSave(): void {
@@ -37,6 +23,10 @@ export class AccountAddComponent implements OnInit {
                 alert('save ok');
             })
             .catch(this.error);
+    }
+
+    onBack(): void {
+        this.router.navigate(['/user/account']);
     }
 
     private error(error: any) {

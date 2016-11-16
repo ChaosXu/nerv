@@ -3,10 +3,8 @@
 		<span>添加用户</span>
 	</div>
 	<div class="role-perate pl20 pt10 pb10">
-		<a routerLink="/user/account">
-			<button class="console-btn base-btn">返回</button>
-		</a>
-        <button class="console-btn base-btn" [ngClass]="{'disabled':!nervForm.valid}" (click)="onSave()">保存</button>
+		<button class="console-btn base-btn" (click)="onBack()">返回</button>
+		<button class="console-btn base-btn" [ngClass]="{'disabled':!nervForm.valid}" (click)="onSave()">保存</button>
 	</div>
-    <nerv-form #nervForm [meta]="form" [data]="data"></nerv-form>
+	<nerv-form #nervForm [meta]="form" [data]="data"></nerv-form>
 </div>
