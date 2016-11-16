@@ -1,4 +1,4 @@
-import {Form} from '../lib/form/model';
+import {Form} from '../lib/form/forms';
 
 export const form: Form = {
     name: "form_user_add",

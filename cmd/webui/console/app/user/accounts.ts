@@ -1,7 +1,7 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RestyService } from '../lib/resty/resty.service';
-import { FormsComponent } from '../lib/form/forms.component';
+import { FormsBaseComponent } from '../lib/form/forms';
 // import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 
@@ -9,7 +9,7 @@ import { FormsComponent } from '../lib/form/forms.component';
     selector: 'nerv-app-user-account',
     templateUrl: 'app/user/accounts.html',
 })
-export class AccountsComponent extends FormsComponent{
+export class AccountsComponent extends FormsBaseComponent{
     accounts: any;
 
     constructor(

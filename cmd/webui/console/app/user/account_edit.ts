@@ -1,41 +1,24 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { RestyService } from '../lib/resty/resty.service';
-import { Form, Field } from '../lib/form/model';
+import { FormBaseComponent, Form, Field } from '../lib/form/forms';
 import { form } from './account_form';
 
 @Component({
     templateUrl: 'app/user/account_edit.html',
 })
-export class AccountEditComponent implements OnInit {
-    form = form;
-    data = {};
+export class AccountEditComponent extends FormBaseComponent {
 
     constructor(
-        private route: ActivatedRoute,
-        private resty: RestyService
-    ) { }
-
-    ngOnInit(): void {
-        this.route.params.forEach((params: Params) => {
-            let id = +params['id'];
-            this.resty.get('Account', id)
-                .then((data) => {
-                    this.data = data;
-                })
-                .catch(this.error);
-        });
-    }
-
-    onSave(): void {
-        this.resty.update('Account', this.data['ID'], this.data)
-            .then(() => {
-                alert('save ok');
-            })
-            .catch(this.error);
-    }
-
-    private error(error: any) {
-        return alert(error.text());
+        router: Router,
+        route: ActivatedRoute,
+        resty: RestyService
+    ) {
+        super(router, route, resty, {
+            prefix: "/user",
+            type: "Account"
+        },
+            form
+        )
     }
 }

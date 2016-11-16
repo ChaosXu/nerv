@@ -38,8 +38,8 @@ export class RestyService {
             .catch(this.error);
     }
 
-    update(type: string, id: number, instance: any): Promise<any> {
-        const url = `api/objs/${type}/${id}`;
+    update(type: string, instance: any): Promise<any> {
+        const url = `api/objs/${type}`;
         var body = JSON.stringify(instance);
         console.log(body)
         return this.http.put(url, body, { headers: this.headers })
