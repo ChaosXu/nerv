@@ -1,7 +1,7 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { RestyService } from '../lib/resty/resty.service';
-// import { Overlay } from 'angular2-modal';
+import { FormsComponent } from '../lib/form/forms.component';
 // import { Modal } from 'angular2-modal/plugins/bootstrap';
 
 
@@ -9,37 +9,42 @@ import { RestyService } from '../lib/resty/resty.service';
     selector: 'nerv-app-user-account',
     templateUrl: 'app/user/accounts.html',
 })
-export class AccountsComponent implements OnInit {
+export class AccountsComponent extends FormsComponent{
     accounts: any;
 
     constructor(
-        private router: Router,
-        private resty: RestyService
-    ) { }
-
-    ngOnInit(): void {
-        this.resty.find('Account')
-            .then(response => this.accounts = response.data)
-            .catch(this.error);
+        router: Router,
+        resty: RestyService
+    ) {
+        super(router, resty, {
+            prefix:"/user",
+            type:'Account'
+        });
     }
 
-    onAdd(): void {
-        this.router.navigate(['/user/account/add']);
-    }
+    // ngOnInit(): void {
+    //     this.resty.find('Account')
+    //         .then(response => this.accounts = response.data)
+    //         .catch(this.error);
+    // }
 
-    onShow(item: {}): void {
-        this.router.navigate(['/user/account', item['ID']]);
-    }
+    // onAdd(): void {
+    //     this.router.navigate(['/user/account/add']);
+    // }
 
-    onEdit(item: {}): void {
-        this.router.navigate(['/user/account', item['ID'], 'edit']);
-    }
+    // onShow(item: {}): void {
+    //     this.router.navigate(['/user/account', item['ID']]);
+    // }
 
-    onRemove(item: {}): void {
-        
-    }
+    // onEdit(item: {}): void {
+    //     this.router.navigate(['/user/account', item['ID'], 'edit']);
+    // }
 
-    private error(error: any) {
-        return alert(error.text());
-    }
+    // onRemove(item: {}): void {
+
+    // }
+
+    // private error(error: any) {
+    //     return alert(error.text());
+    // }
 }
