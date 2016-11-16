@@ -1,29 +1,56 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { FormService, Form } from './form.service';
+import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
+import { Form, Validator } from './model';
 
 @Component({
     //moduleId: module.id,
     selector: 'nerv-form',
-    templateUrl: 'app/lib/form/form.component.html',
-    providers: [
-        FormService
-    ]
+    templateUrl: 'app/lib/form/form.component.html'
 })
 export class FormComponent implements OnInit {
 
     @Input() meta: Form;
-    @Input() data: any;
+    @Input() data: {};
+    @Input() errorMessages: {}
     formGroup: FormGroup;
-    debugData: any;
 
     get valid(): boolean {
         return this.formGroup ? this.formGroup.valid : false;
     }
-    
-    constructor(private formService: FormService) { }
 
     ngOnInit(): void {
-        this.formGroup = this.formService.toFormGroup(this.meta);
+        this.buildForm();
+    }
+
+    private buildForm(): void {
+        let group: any = {};
+
+        this.meta.fields.forEach(field => {
+            group[field.name] = new FormControl('', this.getValidators(field.validators))
+        });
+
+        this.formGroup = new FormGroup(group);
+    }
+
+    private getValidators(validators?: {}): ValidatorFn[] {
+        if (!validators) return null;
+        let fns: ValidatorFn[] = [];
+        for (let key in validators) {
+            let v = this.getValidator(key)
+            if (v != null) {
+                fns.push(v);
+            }
+        }
+
+        return fns;
+    }
+
+    private getValidator(name: string): ValidatorFn {
+        switch (name) {
+            case 'required':
+                return Validators.required;
+            default:
+                return null;
+        }
     }
 }

@@ -1,14 +1,22 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { RestyService } from '../lib/resty/resty.service';
-import { Form, Field } from '../lib/form/form.service';
+import { Form, Field } from '../lib/form/model';
 
 const form: Form = {
     name: "form_user_add",
     fields: [
-        { name: "name", label: "用户名", control: "text", type: "string", required: true },
-        { name: "nick", label: "昵称", control: "text", type: "string", required: true },
-        { name: "mail", label: "邮件", control: "email", type: "string", required: true },
-        { name: "phone", label: "电话", control: "text", type: "long", required: true }
+        {
+            name: "name", label: "用户名", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },
+        {
+            name: "nick", label: "昵称", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },
+        { name: "mail", label: "邮件", control: "email", type: "string" },
+        { name: "phone", label: "电话", control: "text", type: "long" }
     ]
 };
 
