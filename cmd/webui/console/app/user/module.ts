@@ -3,28 +3,25 @@ import { LibModule } from '../lib/module';
 import { RouterModule, Routes } from '@angular/router';
 import { UserApp } from './app';
 import { RoleComponent } from './role';
-import { AccountsComponent } from './accounts';
-import { AccountComponent } from './account';
-import { AccountAddComponent } from './account_add';
-import { AccountEditComponent } from './account_edit';
+import { ListComponent } from '../lib/form/list'
+import { AddComponent } from '../lib/form/add'
+import { DetailComponent } from '../lib/form/detail'
+import { EditComponent } from '../lib/form/edit'
 
 const routes: Routes = [
     {
         path: '', component: UserApp,
         children: [
-            { path: ''}, 
             {
-                path: 'account',
+                path: ''
+            },
+            {
+                path: ':type',
                 children: [
-                    { path: '', component: AccountsComponent },
-                    { path: 'add', component: AccountAddComponent },
-                    {
-                        path: ':id',
-                        children: [
-                            { path: '', component: AccountComponent },
-                            { path: 'edit', component: AccountEditComponent }
-                        ]
-                    }
+                    { path: '', component: ListComponent },
+                    { path: 'add', component: AddComponent },
+                    { path: ':id', component: DetailComponent },
+                    { path: ':id/edit', component: EditComponent }
                 ]
             },
             { path: 'role', component: RoleComponent }
@@ -43,10 +40,10 @@ const routes: Routes = [
     ],
     declarations: [
         UserApp,
-        AccountsComponent,
-        AccountComponent,
-        AccountAddComponent,
-        AccountEditComponent,
+        ListComponent,
+        DetailComponent,
+        AddComponent,
+        EditComponent,
         RoleComponent
     ]
 })

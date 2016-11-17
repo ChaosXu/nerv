@@ -16,10 +16,10 @@ export class UserApp {
     constructor() {
         this.menus = [{
             name: "人员管理",
-            url: "/user/account"
+            url: "/user/Account"
         }, {
             name: "权限管理",
-            url: "/user/role"
+            url: "/user/Role"
         }];
     }
 }

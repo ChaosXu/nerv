@@ -1,37 +1,64 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import 'rxjs/add/operator/toPromise';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { RestyService } from '../resty/resty.service';
 import { ModalConfirm } from './confirm.modal';
 
+export const form: Form = {
+    name: "form_user_add",
+    fields: [
+        {
+            name: "Name", label: "用户名", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },
+        {
+            name: "Nick", label: "昵称", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },
+        { name: "Mail", label: "邮件", control: "email", type: "string" },
+        { name: "Phone", label: "电话", control: "text", type: "long" }
+    ]
+};
+
+export class ModelService {
+
+    get(name: string): Form {
+        return form;
+    }
+}
+
 export abstract class FormsBaseComponent implements OnInit {
     list: any;
+    private type: string;
 
     constructor(
+        private modelService: ModelService,
         private modalService: NgbModal,
         private router: Router,
-        private resty: RestyService,
-        private config: {
-            prefix: string,
-            type: string
-        }
-    ) {
-    }
+        private route: ActivatedRoute,
+        private resty: RestyService
+    ) { }
 
     ngOnInit(): void {
+        this.route.params.forEach((params: Params) => {
+            this.type = params['type']
+        });
         this.load();
     }
 
     onAdd(): void {
-        this.router.navigate([`${this.config.prefix}/${this.config.type.toLowerCase()}/add`]);
+        this.router.navigate(['add'], { relativeTo: this.route });
     }
 
     onShow(item: {}): void {
-        this.router.navigate([`${this.config.prefix.toLowerCase()}/${this.config.type.toLowerCase()}`, item['ID']]);
+        this.router.navigate([item['ID']], { relativeTo: this.route });
     }
 
     onEdit(item: {}): void {
-        this.router.navigate([`${this.config.prefix.toLowerCase()}/${this.config.type.toLowerCase()}`, item['ID'], 'edit']);
+        this.router.navigate([item['ID'], 'edit'], { relativeTo: this.route });
     }
 
     onRemove(item: {}): void {
@@ -46,7 +73,7 @@ export abstract class FormsBaseComponent implements OnInit {
     }
 
     private remove(item: {}): void {
-        this.resty.remove(this.config.type, item['ID'])
+        this.resty.remove(this.type, item['ID'])
             .then(() => {
                 this.load();
             })
@@ -61,9 +88,9 @@ export abstract class FormsBaseComponent implements OnInit {
     }
 
     private load(): void {
-        this.resty.find(this.config.type)
+        this.resty.find(this.type)
             .then(response => this.list = response.data)
-            .catch((error) => this.error('加载错误', `加载列表${this.config.type}失败\r\n${error}`));
+            .catch((error) => this.error('加载错误', `加载列表${this.type}失败\r\n${error}`));
     }
 }
 
@@ -72,43 +99,51 @@ export abstract class FormsBaseComponent implements OnInit {
 import { ActivatedRoute, Params } from '@angular/router';
 
 export abstract class FormBaseComponent implements OnInit {
+    form: Form;
     data = {};
+    private type: string;
+    private id: number;
 
     constructor(
+        private modelService: ModelService,
         private modalService: NgbModal,
         private router: Router,
         private route: ActivatedRoute,
-        private resty: RestyService,
-        private config: {
-            prefix: string,
-            type: string,
-        },
-        public form: Form
+        private resty: RestyService
     ) { }
 
     ngOnInit(): void {
         this.route.params.forEach((params: Params) => {
-            let id = +params['id'];
-            this.resty.get(`${this.config.type}`, id)
-                .then((data) => this.data = data)
-                .catch((error) => this.error('加载错误', `加载对象${this.data['Name']}失败\r\n${error}`));
+            this.type = params['type']
+            this.id = +params['id'];
+            this.form = this.modelService.get(this.type);
+            if (this.id) {
+                this.load();
+            }
+            // this.modelService.get(this.type).then((form) => {
+            //     this.form = form;
+            //     if (this.id) {
+            //         this.load();
+            //     }
+            // })
+            //     .catch((error) => this.error('加载表单错误', `${error}`));
         });
     }
 
     onUpdate(): void {
-        this.resty.update(`${this.config.type}`, this.data)
+        this.resty.update(`${this.type}`, this.data)
             .then(() => this.info('更新成功', `对象${this.data['Name']}已更新`))
             .catch((error) => this.error('更新错误', `更新对象${this.data['Name']}失败\r\n${error}`));
     }
 
     onCreate(): void {
-        this.resty.create(`${this.config.type}`, this.data)
+        this.resty.create(`${this.type}`, this.data)
             .then(() => this.info('创建成功', `对象${this.data['Name']}已创建`))
             .catch((error) => this.error('创建错误', `创建对象${this.data['Name']}失败\r\n${error}`));
     }
 
-    onBack(): void {
-        this.router.navigate([`/${this.config.prefix}/${this.config.type.toLowerCase()}`]);
+    onBack(url:string): void {
+        this.router.navigate([url], { relativeTo: this.route });
     }
 
     private error(title: string, error: any): void {
@@ -123,6 +158,14 @@ export abstract class FormBaseComponent implements OnInit {
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = message;
         modalRef.componentInstance.buttons = { ok: true, cancel: false };
+    }
+
+    private load(): void {
+        if (this.id) {
+            this.resty.get(`${this.type}`, this.id)
+                .then((data) => this.data = data)
+                .catch((error) => this.error('加载错误', `加载对象${this.data['Name']}失败\r\n${error}`));
+        }
     }
 }
 

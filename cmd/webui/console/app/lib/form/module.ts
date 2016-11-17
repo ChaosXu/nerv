@@ -5,6 +5,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormComponent } from './form.component';
 import { FieldComponent } from './field.component';
 import { ModalConfirm } from './confirm.modal';
+import { ModelService } from './forms';
+
 
 @NgModule({
     imports: [
@@ -24,6 +26,9 @@ import { ModalConfirm } from './confirm.modal';
     ],
     entryComponents: [
         ModalConfirm
+    ],
+    providers :[
+        ModelService
     ]
 })
 export class FormModule { }
