@@ -8,7 +8,7 @@ import { FormBaseComponent, ModelService, Form, Field } from './forms';
     templateUrl: 'app/lib/form/add.html',
 })
 export class AddComponent extends FormBaseComponent {
-   
+
     constructor(
         modelService: ModelService,
         modalService: NgbModal,
@@ -16,6 +16,6 @@ export class AddComponent extends FormBaseComponent {
         route: ActivatedRoute,
         resty: RestyService
     ) {
-        super(modelService, modalService, router, route, resty);
+        super('add', modelService, modalService, router, route, resty);
     }
 }

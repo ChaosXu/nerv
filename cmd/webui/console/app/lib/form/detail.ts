@@ -17,6 +17,6 @@ export class DetailComponent extends FormBaseComponent {
         route: ActivatedRoute,
         resty: RestyService
     ) {
-        super(modelService, modalService, router, route, resty);
+        super('detail', modelService, modalService, router, route, resty);
     }
 }

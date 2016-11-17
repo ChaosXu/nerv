@@ -5,32 +5,24 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { RestyService } from '../resty/resty.service';
 import { ModalConfirm } from './confirm.modal';
 
-export const form: Form = {
-    name: "form_user_add",
-    fields: [
-        {
-            name: "Name", label: "用户名", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
-        },
-        {
-            name: "Nick", label: "昵称", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
-        },
-        { name: "Mail", label: "邮件", control: "email", type: "string" },
-        { name: "Phone", label: "电话", control: "text", type: "long" }
-    ]
-};
-
 export class ModelService {
+    models = {};
 
-    get(name: string): Form {
-        return form;
+    public put(name: string, model: {
+        list: { title: string },
+        add: { title: string, form: Form },
+        edit: { title: string, form: Form },
+        detail: { title: string, form: Form },
+    }): void {
+        this.models[name] = model;
+    }
+    public get(name: string): any {
+        return this.models[name];
     }
 }
 
 export abstract class FormsBaseComponent implements OnInit {
+    title: string;
     list: any;
     private type: string;
 
@@ -46,6 +38,8 @@ export abstract class FormsBaseComponent implements OnInit {
         this.route.params.forEach((params: Params) => {
             this.type = params['type']
         });
+
+        this.title = this.modelService.get(this.type)['list'].title
         this.load();
     }
 
@@ -100,11 +94,13 @@ import { ActivatedRoute, Params } from '@angular/router';
 
 export abstract class FormBaseComponent implements OnInit {
     form: Form;
+    title: string;
     data = {};
     private type: string;
     private id: number;
 
     constructor(
+        private mode: string,
         private modelService: ModelService,
         private modalService: NgbModal,
         private router: Router,
@@ -116,7 +112,9 @@ export abstract class FormBaseComponent implements OnInit {
         this.route.params.forEach((params: Params) => {
             this.type = params['type']
             this.id = +params['id'];
-            this.form = this.modelService.get(this.type);
+            const config = this.modelService.get(this.type)[this.mode];
+            this.form = config.form;
+            this.title = config.titile;
             if (this.id) {
                 this.load();
             }
@@ -142,7 +140,7 @@ export abstract class FormBaseComponent implements OnInit {
             .catch((error) => this.error('创建错误', `创建对象${this.data['Name']}失败\r\n${error}`));
     }
 
-    onBack(url:string): void {
+    onBack(url: string): void {
         this.router.navigate([url], { relativeTo: this.route });
     }
 

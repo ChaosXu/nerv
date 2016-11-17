@@ -2,11 +2,11 @@ import { NgModule } from '@angular/core';
 import { LibModule } from '../lib/module';
 import { RouterModule, Routes } from '@angular/router';
 import { UserApp } from './app';
-import { RoleComponent } from './role';
-import { ListComponent } from '../lib/form/list'
-import { AddComponent } from '../lib/form/add'
-import { DetailComponent } from '../lib/form/detail'
-import { EditComponent } from '../lib/form/edit'
+import { ListComponent } from '../lib/form/list';
+import { AddComponent } from '../lib/form/add';
+import { DetailComponent } from '../lib/form/detail';
+import { EditComponent } from '../lib/form/edit';
+import { ModelService, Form } from '../lib/form/forms';
 
 const routes: Routes = [
     {
@@ -24,10 +24,27 @@ const routes: Routes = [
                     { path: ':id/edit', component: EditComponent }
                 ]
             },
-            { path: 'role', component: RoleComponent }
         ]
     }
 ];
+
+const form: Form = {
+    name: "user_form",
+    fields: [
+        {
+            name: "Name", label: "用户名", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },
+        {
+            name: "Nick", label: "昵称", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },
+        { name: "Mail", label: "邮件", control: "email", type: "string" },
+        { name: "Phone", label: "电话", control: "text", type: "long" }
+    ]
+};
 
 @NgModule({
     imports: [
@@ -43,8 +60,23 @@ const routes: Routes = [
         ListComponent,
         DetailComponent,
         AddComponent,
-        EditComponent,
-        RoleComponent
+        EditComponent
     ]
 })
-export class UserModule { }
+export class UserModule {
+
+    constructor(modelService: ModelService) {
+        modelService.put('Account', {
+            list: { title: '使用系统的用户' },
+            add: { title: '添加', form: form },
+            edit: { title: '添加', form: form },
+            detail: { title: '添加', form: form }
+        });
+        // modelService.put('Role', {
+        //     list: { title: '用户角色' },
+        //     add: { title: '添加', form: form },
+        //     edit: { title: '添加', form: form },
+        //     detail: { title: '添加', form: form }
+        // });
+    }
+}
