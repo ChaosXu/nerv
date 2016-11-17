@@ -1,7 +1,8 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RestyService } from '../lib/resty/resty.service';
-import { FormBaseComponent,Form, Field  } from '../lib/form/forms';
+import { FormBaseComponent, Form, Field } from '../lib/form/forms';
 import { form } from './account_form';
 
 @Component({
@@ -10,11 +11,12 @@ import { form } from './account_form';
 export class AccountComponent extends FormBaseComponent {
 
     constructor(
+        modalService: NgbModal,
         router: Router,
         route: ActivatedRoute,
         resty: RestyService
     ) {
-        super(router, route, resty, {
+        super(modalService, router, route, resty, {
             prefix: "/user",
             type: "Account"
         },

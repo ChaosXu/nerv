@@ -57,6 +57,6 @@ export class RestyService {
     }
 
     private error(error: any): Promise<any> {
-        return Promise.reject(error);
+        return Promise.reject(error.text());
     }
 }
