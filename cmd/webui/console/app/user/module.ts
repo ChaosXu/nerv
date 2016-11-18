@@ -1,32 +1,7 @@
 import { NgModule } from '@angular/core';
-import { LibModule } from '../lib/module';
 import { RouterModule, Routes } from '@angular/router';
-import { UserApp } from './app';
-import { ListComponent } from '../lib/form/list';
-import { AddComponent } from '../lib/form/add';
-import { DetailComponent } from '../lib/form/detail';
-import { EditComponent } from '../lib/form/edit';
-import { ModelService, Form } from '../lib/form/forms';
-
-const routes: Routes = [
-    {
-        path: '', component: UserApp,
-        children: [
-            {
-                path: ''
-            },
-            {
-                path: ':type',
-                children: [
-                    { path: '', component: ListComponent },
-                    { path: 'add', component: AddComponent },
-                    { path: ':id', component: DetailComponent },
-                    { path: ':id/edit', component: EditComponent }
-                ]
-            },
-        ]
-    }
-];
+import { Form } from '../lib/form/model';
+import { ConfigService } from '../lib/config/config.service';
 
 const form: Form = {
     name: "user_form",
@@ -47,36 +22,27 @@ const form: Form = {
 };
 
 @NgModule({
-    imports: [
-        LibModule,
-        RouterModule.forChild(routes)
-    ],
-    exports: [
-        RouterModule,
-        UserApp
-    ],
-    declarations: [
-        UserApp,
-        ListComponent,
-        DetailComponent,
-        AddComponent,
-        EditComponent
-    ]
 })
 export class UserModule {
 
-    constructor(modelService: ModelService) {
-        modelService.put('Account', {
-            list: { title: '使用系统的用户' },
-            add: { title: '添加', form: form },
-            edit: { title: '添加', form: form },
-            detail: { title: '添加', form: form }
-        });
-        // modelService.put('Role', {
-        //     list: { title: '用户角色' },
-        //     add: { title: '添加', form: form },
-        //     edit: { title: '添加', form: form },
-        //     detail: { title: '添加', form: form }
-        // });
+    constructor(configService: ConfigService) {
+        configService.put('user',
+            {
+                menus: [
+                    {
+                        name: "人员管理",
+                        url: "/user/Account"
+                    }, {
+                        name: "权限管理",
+                        url: "/user/Role"
+                    }
+                ],
+                Account: {
+                    list: { title: '人员列表' },
+                    add: { title: '添加人员', form: form },
+                    edit: { title: '编辑人员', form: form },
+                    detail: { title: '查看人员', form: form }
+                }
+            });
     }
 }

@@ -1,22 +1,23 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ConfigService } from '../config/config.service';
 import { RestyService } from '../resty/resty.service';
-import { FormBaseComponent, ModelService, Form, Field } from './forms';
-
+import { FormBaseComponent} from './base';
+import { Form,Field } from '../form/model';
 
 @Component({
-    templateUrl: 'app/lib/form/detail.html',
+    templateUrl: 'app/lib/app/edit.form.html',
 })
-export class DetailComponent extends FormBaseComponent {
+export class EditComponent extends FormBaseComponent {
 
     constructor(
-        modelService: ModelService,
+        configService: ConfigService,
         modalService: NgbModal,
         router: Router,
         route: ActivatedRoute,
         resty: RestyService
     ) {
-        super('detail', modelService, modalService, router, route, resty);
+        super('edit', configService, modalService, router, route, resty);
     }
 }

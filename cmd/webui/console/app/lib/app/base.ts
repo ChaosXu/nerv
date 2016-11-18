@@ -1,33 +1,20 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { ConfigService } from '../config/config.service';
 import { RestyService } from '../resty/resty.service';
-import { ModalConfirm } from './confirm.modal';
-
-export class ModelService {
-    models = {};
-
-    public put(name: string, model: {
-        list: { title: string },
-        add: { title: string, form: Form },
-        edit: { title: string, form: Form },
-        detail: { title: string, form: Form },
-    }): void {
-        this.models[name] = model;
-    }
-    public get(name: string): any {
-        return this.models[name];
-    }
-}
+import { ModalConfirm } from '../form/confirm.modal';
+import { Form } from '../form/model';
 
 export abstract class FormsBaseComponent implements OnInit {
     title: string;
     list: any;
+    private app: string;
     private type: string;
 
     constructor(
-        private modelService: ModelService,
+        private configService: ConfigService,
         private modalService: NgbModal,
         private router: Router,
         private route: ActivatedRoute,
@@ -35,11 +22,14 @@ export abstract class FormsBaseComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.route.parent.parent.params.forEach((params: Params) => {
+            this.app = params['app']
+        });
         this.route.params.forEach((params: Params) => {
             this.type = params['type']
         });
 
-        this.title = this.modelService.get(this.type)['list'].title
+        this.title = this.configService.get(this.app)[this.type]['list'].title
         this.load();
     }
 
@@ -90,18 +80,19 @@ export abstract class FormsBaseComponent implements OnInit {
 
 
 
-import { ActivatedRoute, Params } from '@angular/router';
+
 
 export abstract class FormBaseComponent implements OnInit {
     form: Form;
     title: string;
     data = {};
+    private app: string;
     private type: string;
     private id: number;
 
     constructor(
         private mode: string,
-        private modelService: ModelService,
+        private configService: ConfigService,
         private modalService: NgbModal,
         private router: Router,
         private route: ActivatedRoute,
@@ -109,23 +100,19 @@ export abstract class FormBaseComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.route.params.forEach((params: Params) => {
+        this.route.parent.parent.parent.params.forEach((params: Params) => {
+            this.app = params['app']
+        });
+        this.route.params.forEach((params: Params) => {            
             this.type = params['type']
             this.id = +params['id'];
-            const config = this.modelService.get(this.type)[this.mode];
-            this.form = config.form;
-            this.title = config.titile;
-            if (this.id) {
-                this.load();
-            }
-            // this.modelService.get(this.type).then((form) => {
-            //     this.form = form;
-            //     if (this.id) {
-            //         this.load();
-            //     }
-            // })
-            //     .catch((error) => this.error('加载表单错误', `${error}`));
         });
+        const config = this.configService.get(this.app)[this.type][this.mode];
+        this.form = config.form;
+        this.title = config.title;
+        if (this.id) {
+            this.load();
+        }
     }
 
     onUpdate(): void {
@@ -167,23 +154,3 @@ export abstract class FormBaseComponent implements OnInit {
     }
 }
 
-import { Injectable } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-
-export class Form {
-    name: string;
-    fields: Field[];
-}
-
-export class Field {
-    name: string;
-    label: string;
-    control: string;
-    type: string;
-    validators?: {};
-}
-
-export class Textbox extends Field {
-    control = 'textbox';
-    type = 'string'
-}

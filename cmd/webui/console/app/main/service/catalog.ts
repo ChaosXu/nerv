@@ -18,7 +18,7 @@ const Catalogs = [
         items: [{
             name: '用户',
             icon: 'icon__company',
-            url: '/user'
+            url: '/user/Account'
         },{
             name: '监控',
             icon: 'icon__umon',

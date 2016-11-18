@@ -9,4 +9,4 @@ import { RestyService } from './resty.service';
     ],
     providers: [RestyService]
 })
-export class DbModule { }
+export class RestyModule { }

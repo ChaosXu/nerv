@@ -6,7 +6,7 @@ import { CatalogItem } from './service/catalog';
 
 @Component({
     selector: 'nerv-startmenu',
-    templateUrl: 'app/application/startmenu.html',
+    templateUrl: 'app/main/startmenu.html',
     outputs: ['eventDockCatalogItem:dock']
 })
 export class StartMenu {

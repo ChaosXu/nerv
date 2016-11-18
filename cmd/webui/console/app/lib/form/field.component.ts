@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Form, Field } from './forms';
+import { Form, Field } from './model';
 
 @Component({
     //moduleId: module.id,

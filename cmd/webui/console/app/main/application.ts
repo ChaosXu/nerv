@@ -3,7 +3,7 @@ import { CatalogItem } from './service/catalog';
 
 @Component({
   selector: 'nerv-console',
-  templateUrl: 'app/application/application.html'
+  templateUrl: 'app/main/application.html'
 })
 export class Application {
   docks: CatalogItem[] = []
