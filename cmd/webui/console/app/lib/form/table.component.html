@@ -1,0 +1,38 @@
+<table class="{{class}}">
+	<thead>
+		<tr>
+			<th *ngFor="let column of columns">
+				{{column.label}}
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let item of data">
+			<td class="name">{{item.Name}}</td>
+			<td class="name">{{item.Nick}}</td>
+			<td class="name">{{item.Mail}}</td>
+			<td class="name">{{item.Phone}}</td>
+			<td>
+				<a class="table-operate" (click)="onShow(item)">
+					<i class="icon-new icon-table sta-eye"></i>
+					<span>查看</span>
+				</a>
+				<a class="table-operate ng-scope" (click)="onEdit(item)">
+					<i class="icon-new icon-table prefetch"></i>
+					<span>编辑</span>
+				</a>
+				<a class="table-operate ng-scope" (click)="onRemove(item)">
+					<i class="icon-new icon-table trash"></i>
+					<span>删除</span>
+				</a>
+			</td>
+		</tr>
+	</tbody>
+	<!--<tfoot>
+		<tr>
+			<td [attr.colspan]="columns ? columns.length+1:0">
+				<mfBootstrapPaginator [rowsOnPageSet]="[5,10,20]"></mfBootstrapPaginator>
+			</td>
+		</tr>
+	</tfoot>-->
+</table>

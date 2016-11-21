@@ -1,0 +1,21 @@
+<div>
+	<div class="top-tips">
+		<span translate="USUBACCOUNT160">{{title}}</span>
+	</div>
+	<div class="role-perate pl20 pt10 pb10">
+		<a>
+			<button class="console-btn base-btn" (click)="onAdd()">添加</button>
+		</a>
+	</div>
+
+	<div class="uc-f-t">
+		<div class="page-padding-height" style="height: 350px; position: relative;">
+			<div class="uc-f-t-b tab-new-main">
+				<nerv-table [class]="'table table-bord table-striped table-hover'" [columns]="columns" [data]="list" (show)="onShow($event)" (remove)="onRemove($event)" (edit)="onEdit($event)">
+				</nerv-table>
+			</div>
+		</div>
+
+	</div>
+
+</div>

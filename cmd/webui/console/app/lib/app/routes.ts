@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { ListApp } from './list.app';
-import { ListComponent } from './list.form';
+import { ListComponent } from './list.component';
 import { AddComponent } from './add.form';
 import { EditComponent } from './edit.form';
 import { DetailComponent } from './detail.form';
