@@ -35,7 +35,7 @@ export class TableComponent implements OnInit {
     }
 
     onSort(column: string) {
-        if (column!='') return;
+        if (!column) return;
         this.sortBy = { column: column, asc: !this.sortBy.asc };
         this.sort.emit(this.sortBy);
     }
