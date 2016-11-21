@@ -1,8 +1,9 @@
 <table class="{{class}}">
 	<thead>
 		<tr>
-			<th *ngFor="let column of columns">
+			<th *ngFor="let column of columns" (click)="onSort(column.name)">
 				{{column.label}}
+				<span class="glyphicon " *ngIf="column.name && column.name==sortBy.column" [ngClass]="{'glyphicon-triangle-bottom':!sortBy.asc,'glyphicon-triangle-top':sortBy.asc}"></span>
 			</th>
 		</tr>
 	</thead>

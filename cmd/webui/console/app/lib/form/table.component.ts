@@ -8,12 +8,15 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 })
 export class TableComponent implements OnInit {
     @Input() class: string;
-    @Input() columns:Array<any>;
+    @Input() columns: Array<any>;
     @Input() data: Array<any>;
 
     @Output() show: EventEmitter<any> = new EventEmitter();
     @Output() remove: EventEmitter<any> = new EventEmitter();
     @Output() edit: EventEmitter<any> = new EventEmitter();
+    @Output() sort: EventEmitter<any> = new EventEmitter();
+
+    sortBy: { column: string, asc: boolean } = { column: '', asc: true };
 
     ngOnInit(): void {
 
@@ -29,5 +32,11 @@ export class TableComponent implements OnInit {
 
     onEdit(item: {}) {
         this.edit.emit(item);
+    }
+
+    onSort(column: string) {
+        if (column!='') return;
+        this.sortBy = { column: column, asc: !this.sortBy.asc };
+        this.sort.emit(this.sortBy);
     }
 }

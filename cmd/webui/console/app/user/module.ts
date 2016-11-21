@@ -40,10 +40,10 @@ export class UserModule {
                 Account: {
                     list: {
                         title: '人员列表', columns: [
-                            { label: '用户名' },
-                            { label: '昵称' },
-                            { label: '邮件' },
-                            { label: '电话' },
+                            { label: '用户名', name: 'Name' },
+                            { label: '昵称', name: 'Nick' },
+                            { label: '邮件', name: 'Mail' },
+                            { label: '电话', name: 'Phone' },
                             { label: '操作' }
                         ]
                     },

@@ -11,7 +11,7 @@ import { ModalConfirm } from '../form/confirm.modal';
 })
 export class ListComponent {
 
- title: string;
+    title: string;
     list: Array<any>;
     columns: Array<any>;
     limit = 10;
@@ -26,7 +26,7 @@ export class ListComponent {
         private resty: RestyService
     ) { }
 
-    ngOnInit(): void {
+    ngOnInit() {
         this.route.parent.parent.params.forEach((params: Params) => {
             this.app = params['app']
         });
@@ -40,19 +40,19 @@ export class ListComponent {
         this.load();
     }
 
-    onAdd(): void {
+    onAdd() {
         this.router.navigate(['add'], { relativeTo: this.route });
     }
 
-    onShow(item: {}): void {
+    onShow(item: {}) {
         this.router.navigate([item['ID']], { relativeTo: this.route });
     }
 
-    onEdit(item: {}): void {
+    onEdit(item: {}) {
         this.router.navigate([item['ID'], 'edit'], { relativeTo: this.route });
     }
 
-    onRemove(item: {}): void {
+    onRemove(item: {}) {
         const modalRef = this.modalService.open(ModalConfirm);
         modalRef.componentInstance.title = '删除';
         modalRef.componentInstance.message = `删除对象${item['Name']}?`;
@@ -61,6 +61,10 @@ export class ListComponent {
                 this.remove(item);
             }
         });
+    }
+
+    onSort(column: { column: string, asc: boolean }) {
+        console.log(column);
     }
 
     private remove(item: {}): void {
@@ -83,5 +87,5 @@ export class ListComponent {
             .then(response => this.list = response.data)
             .catch((error) => this.error('加载错误', `加载列表${this.type}失败\r\n${error}`));
     }
-    
+
 }
