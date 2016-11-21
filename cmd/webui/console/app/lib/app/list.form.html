@@ -28,11 +28,7 @@
 				<table class="table table-bord table-striped table-hover" uc-fixed-tbody-transclude="table">
 					<thead>
 						<tr>
-							<th>用户名</th>
-							<th>昵称</th>
-							<th>邮件</th>
-							<th>电话</th>
-							<th>操作</th>
+							<th *ngFor="let column of columns">{{column.label}}</th>							
 						</tr>
 					</thead>
 					<tbody>

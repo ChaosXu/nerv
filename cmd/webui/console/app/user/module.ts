@@ -38,7 +38,15 @@ export class UserModule {
                     }
                 ],
                 Account: {
-                    list: { title: '人员列表' },
+                    list: {
+                        title: '人员列表', columns: [
+                            { label: '用户名' },
+                            { label: '昵称' },
+                            { label: '邮件' },
+                            { label: '电话' },
+                            { label: '操作' }
+                        ]
+                    },
                     add: { title: '添加人员', form: form },
                     edit: { title: '编辑人员', form: form },
                     detail: { title: '查看人员', form: form }

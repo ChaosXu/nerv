@@ -10,6 +10,7 @@ import { Form } from '../form/model';
 export abstract class FormsBaseComponent implements OnInit {
     title: string;
     list: any;
+    columns: Array<any>;
     private app: string;
     private type: string;
 
@@ -29,7 +30,9 @@ export abstract class FormsBaseComponent implements OnInit {
             this.type = params['type']
         });
 
-        this.title = this.configService.get(this.app)[this.type]['list'].title
+        const config = this.configService.get(this.app)[this.type]['list'];
+        this.title = config.title;
+        this.columns = config.columns;
         this.load();
     }
 
@@ -103,7 +106,7 @@ export abstract class FormBaseComponent implements OnInit {
         this.route.parent.parent.parent.params.forEach((params: Params) => {
             this.app = params['app']
         });
-        this.route.params.forEach((params: Params) => {            
+        this.route.params.forEach((params: Params) => {
             this.type = params['type']
             this.id = +params['id'];
         });
