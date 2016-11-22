@@ -9,12 +9,28 @@ export class RestyService {
 
     constructor(private http: Http) { }
 
-    find(type: string): Promise<any> {
-        const url = `api/objs/${type}`;
+    find(type: string, where?: { conditions: string, values: Array<any> }, order?: string, offset?: number, limit?: number): Promise<any> {
+        let url = `api/objs/${type}`;
+        let queryString='';
+        if (where) {
+            queryString = `${queryString}${queryString!='' ? '&' : '?'}where=${where.conditions}&values=${where.values}`;
+        }
+        if (order) {
+            queryString = `${queryString}${queryString!='' ? '&' : '?'}order=${order}`;
+        }
+        if (offset) {
+            queryString = `${queryString}${queryString!='' ? '&' : '?'}page=${offset}`;
+        }
+        if (limit) {
+            queryString = `${queryString}${queryString!='' ? '&' : '?'}pageSize=${limit}`;
+        }
+        if (queryString) {
+            url = `${url}${queryString}`;
+        }
         return this.http.get(url, { headers: this.headers })
             .toPromise()
             .then(response => {
-                var body = response.json();                
+                var body = response.json();
                 return body;
             })
             .catch(this.error);

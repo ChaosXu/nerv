@@ -9,15 +9,17 @@
 	</div>
 
 	<div class="uc-f-t">
-		<div class="page-padding-height" style="height: 350px; position: relative;">
+		<div class="page-padding-height" style="height: 100%; position: relative;">
 			<div class="uc-f-t-b tab-new-main">
 				<nerv-table [class]="'table table-bord table-striped table-hover'" 
 					[columns]="columns" 
-					[data]="list" 
+					[model]="data" 
 					(show)="onShow($event)" 
 					(remove)="onRemove($event)" 
 					(edit)="onEdit($event)"
 					(sort)="onSort($event)"
+					(paging)="onPaging($event)"
+					(pageSize)="onPageSize($event)"
 					>
 				</nerv-table>
 			</div>

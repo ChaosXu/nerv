@@ -1,0 +1,19 @@
+<ul class="pagination pagination-sm" *ngIf="pages.length>1">
+	<li>
+        <a (click)="onPaging(0)"><<</a>
+    </li>
+	<li *ngFor="let item of pages" [ngClass]="{'active':item.index==page}">
+        <a *ngIf="item.index==page">{{item.label}}</a>
+        <a *ngIf="item.index!=page" (click)="onPaging(item.index)">{{item.label}}</a>    
+	</li>
+	<li >
+        <a (click)="onPaging(pages[pages.length-1].index)">>></a>
+    </li>
+</ul>
+
+<ul class="pagination pagination-sm" *ngIf="pages.length>0" style="position:relative;float:right">	
+	<li *ngFor="let i of pageSizes" [ngClass]="{'active':i==limit}">
+        <a *ngIf="i==pageSize">{{i}}</a>
+        <a *ngIf="i!=pageSize" (click)="onPageSize(i)">{{i}}</a>    
+	</li>	
+</ul>

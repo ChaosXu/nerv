@@ -64,6 +64,7 @@ func list(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+	//count
 	d := db.DB
 	var count int64
 	if where != "" {
@@ -75,6 +76,8 @@ func list(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
+
+	//order page
 	var page, pageCount,limit int64
 	limit = 10
 	var err error
@@ -106,6 +109,10 @@ func list(w http.ResponseWriter, req *http.Request) {
 		d = db.DB.Where(where, args)
 	}
 
+	order:= middleware.CurrentParams(req).QueryParam("order")
+	if order!="" {
+		d = d.Order(order);
+	}
 	data := md.NewSlice()
 	if d.Offset(page * limit).Limit(limit).Find(data).RecordNotFound() {
 		render.Status(req, 200)

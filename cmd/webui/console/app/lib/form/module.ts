@@ -6,6 +6,7 @@ import { TableComponent } from './table.component';
 import { FormComponent } from './form.component';
 import { FieldComponent } from './field.component';
 import { ModalConfirm } from './confirm.modal';
+import { PaginationComponent } from './pagination.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ModalConfirm } from './confirm.modal';
         FormComponent,
         FieldComponent,
         TableComponent,
-        ModalConfirm
+        ModalConfirm,
+        PaginationComponent
     ],
     exports: [
         CommonModule,
@@ -27,7 +29,8 @@ import { ModalConfirm } from './confirm.modal';
         ReactiveFormsModule,
         FormComponent,
         FieldComponent,
-        TableComponent
+        TableComponent,
+        PaginationComponent
     ],
     entryComponents: [
         ModalConfirm

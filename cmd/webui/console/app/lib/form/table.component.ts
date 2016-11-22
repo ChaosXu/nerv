@@ -9,12 +9,14 @@ import { Component, Input, Output, OnInit, EventEmitter } from '@angular/core';
 export class TableComponent implements OnInit {
     @Input() class: string;
     @Input() columns: Array<any>;
-    @Input() data: Array<any>;
+    @Input() model: any;
 
     @Output() show: EventEmitter<any> = new EventEmitter();
     @Output() remove: EventEmitter<any> = new EventEmitter();
     @Output() edit: EventEmitter<any> = new EventEmitter();
     @Output() sort: EventEmitter<any> = new EventEmitter();
+    @Output() paging: EventEmitter<any> = new EventEmitter();
+    @Output() pageSize: EventEmitter<any> = new EventEmitter();
 
     sortBy: { column: string, asc: boolean } = { column: '', asc: true };
 
@@ -38,5 +40,13 @@ export class TableComponent implements OnInit {
         if (!column) return;
         this.sortBy = { column: column, asc: !this.sortBy.asc };
         this.sort.emit(this.sortBy);
+    }
+
+    onPaging(page: number) {
+        this.paging.emit(page);
+    }
+
+    onPageSize(size: number) {
+        this.pageSize.emit(size);
     }
 }

@@ -40,19 +40,23 @@ export abstract class FormBaseComponent implements OnInit {
         }
     }
 
-    onUpdate(): void {
+    onAdd() {
+        this.router.navigate(['add'], { relativeTo: this.route });
+    }
+
+    onUpdate() {
         this.resty.update(`${this.type}`, this.data)
             .then(() => this.info('更新成功', `对象${this.data['Name']}已更新`))
             .catch((error) => this.error('更新错误', `更新对象${this.data['Name']}失败\r\n${error}`));
     }
 
-    onCreate(): void {
+    onCreate() {
         this.resty.create(`${this.type}`, this.data)
             .then(() => this.info('创建成功', `对象${this.data['Name']}已创建`))
             .catch((error) => this.error('创建错误', `创建对象${this.data['Name']}失败\r\n${error}`));
     }
 
-    onBack(url: string): void {
+    onBack(url: string) {
         this.router.navigate([url], { relativeTo: this.route });
     }
 

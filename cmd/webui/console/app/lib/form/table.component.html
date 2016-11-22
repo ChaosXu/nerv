@@ -1,14 +1,14 @@
 <table class="{{class}}">
 	<thead>
 		<tr>
-			<th *ngFor="let column of columns" (click)="onSort(column.name)">
+			<th *ngFor="let column of columns" (click)="onSort(column.name)" style="cursor:default">
 				{{column.label}}
 				<span class="glyphicon " *ngIf="column.name && column.name==sortBy.column" [ngClass]="{'glyphicon-triangle-bottom':!sortBy.asc,'glyphicon-triangle-top':sortBy.asc}"></span>
 			</th>
 		</tr>
 	</thead>
 	<tbody>
-		<tr *ngFor="let item of data">
+		<tr *ngFor="let item of model?model.data:[]">
 			<td class="name">{{item.Name}}</td>
 			<td class="name">{{item.Nick}}</td>
 			<td class="name">{{item.Mail}}</td>
@@ -29,11 +29,11 @@
 			</td>
 		</tr>
 	</tbody>
-	<!--<tfoot>
+	<tfoot>
 		<tr>
 			<td [attr.colspan]="columns ? columns.length+1:0">
-				<mfBootstrapPaginator [rowsOnPageSet]="[5,10,20]"></mfBootstrapPaginator>
+				<nerv-pagination [page]="model? model.page:0" [pageCount]="model?model.pageCount:0" (paging)="onPaging($event)" (pageSize)="onPageSize($event)"></nerv-pagination>
 			</td>
 		</tr>
-	</tfoot>-->
+	</tfoot>
 </table>

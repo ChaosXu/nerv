@@ -12,11 +12,14 @@ import { ModalConfirm } from '../form/confirm.modal';
 export class ListComponent {
 
     title: string;
-    list: Array<any>;
+    data: any;
     columns: Array<any>;
-    limit = 10;
+
     private app: string;
     private type: string;
+    private sortBy: { column: string, asc: boolean };
+    private offset = 0;
+    private limit = 10;
 
     constructor(
         private configService: ConfigService,
@@ -64,7 +67,18 @@ export class ListComponent {
     }
 
     onSort(column: { column: string, asc: boolean }) {
-        console.log(column);
+        this.sortBy = column;
+        this.load();
+    }
+
+    onPaging(page: number) {
+        this.offset = page;
+        this.load();
+    }
+
+    onPageSize(size:number) {
+        this.limit = size;
+        this.load();
     }
 
     private remove(item: {}): void {
@@ -83,8 +97,12 @@ export class ListComponent {
     }
 
     private load(): void {
-        this.resty.find(this.type)
-            .then(response => this.list = response.data)
+        let order;
+        if (this.sortBy) {
+            order = `${this.sortBy.column} ${this.sortBy.asc ? 'asc' : 'desc'}`;
+        }
+        this.resty.find(this.type, null, order, this.offset, this.limit)
+            .then(response => this.data = response)
             .catch((error) => this.error('加载错误', `加载列表${this.type}失败\r\n${error}`));
     }
 

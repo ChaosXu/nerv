@@ -5,6 +5,7 @@
 	<div class="role-perate pl20 pt10 pb10">
 		<button class="console-btn base-btn" (click)="onBack('../')">返回</button>
 		<button class="console-btn base-btn" [ngClass]="{'disabled':!nervForm.valid}" (click)="onCreate()">保存</button>
+		<button class="console-btn base-btn" (click)="onAdd()">添加</button>
 	</div>
 	<nerv-form #nervForm [meta]="form" [data]="data"></nerv-form>
 </div>
