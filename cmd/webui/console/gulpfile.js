@@ -59,7 +59,7 @@ gulp.task('copy:npm', ['compile'], function () {
 gulp.task('copy:assets', ['compile'], function () {
     return gulp.src([
         'app/**/*.html',
-        'index.html',
+        '*.html',
         'css/**/*.css',
         'images/**/*',
         'fonts/**/*'],
@@ -105,7 +105,7 @@ gulp.task('default', ['build']);
 
 gulp.task('serve', ['compile:ts', 'connect'], function () {
     gulp.watch('app/**/*', ['reload:ts'])
-    gulp.watch('index.html', ['reload:assets'])
+    gulp.watch('*.html', ['reload:assets'])
     gulp.watch('css/**/*.css', ['reload:assets']);
     gulp.watch('images/**/*', ['reload:assets']);
     gulp.watch('fonts/**/*', ['reload:assets']);

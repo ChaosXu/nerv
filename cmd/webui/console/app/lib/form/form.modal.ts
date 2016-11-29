@@ -4,11 +4,12 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'nerv-modal-confirm',
-  templateUrl: 'app/lib/form/confirm.modal.html'
+  templateUrl: 'app/lib/form/form.modal.html'
 })
-export class ConfirmModal {
+export class FormModal {
   @Input() title;
-  @Input() message;
+  @Input() form;
+  @Input() data;
   @Input() buttons: {
     ok: boolean,
     cancel: boolean
@@ -18,4 +19,12 @@ export class ConfirmModal {
   };
 
   constructor(public activeModal: NgbActiveModal) { }
+
+  onOk() {
+    this.activeModal.close('ok');
+  }
+
+  onCancel() {
+    this.activeModal.close('cancel');
+  }
 }

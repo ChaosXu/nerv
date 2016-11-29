@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigService } from '../config/config.service';
 import { RestyService } from '../resty/resty.service';
-import { ModalConfirm } from '../form/confirm.modal';
+import { ConfirmModal } from '../form/confirm.modal';
 
 @Component({
     selector: 'nerv-app-user-account',
@@ -56,7 +56,7 @@ export class ListComponent {
     }
 
     onRemove(item: {}) {
-        const modalRef = this.modalService.open(ModalConfirm);
+        const modalRef = this.modalService.open(ConfirmModal);
         modalRef.componentInstance.title = '删除';
         modalRef.componentInstance.message = `删除对象${item['Name']}?`;
         modalRef.result.then((result) => {
@@ -90,7 +90,7 @@ export class ListComponent {
     }
 
     private error(title: string, error: any): void {
-        const modalRef = this.modalService.open(ModalConfirm);
+        const modalRef = this.modalService.open(ConfirmModal);
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = error.toString();
         modalRef.componentInstance.buttons = { ok: true, cancel: false };

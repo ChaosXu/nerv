@@ -12,6 +12,7 @@ type Account struct {
 	Nick string `gorm:"not null;unique"`
 	Mail string	`gorm:"not null;unique"`
 	Phone int64 `gorm:"not null;unique"`
+	Password string `gorm:"not null"`
 }
 
 func init() {

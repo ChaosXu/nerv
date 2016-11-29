@@ -1,0 +1,13 @@
+<div class="modal-header">
+	<button type="button" class="close" aria-label="Close" (click)="activeModal.close('cancel')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+	<h3 class="modal-title">{{title}}</h3>
+</div>
+<div class="modal-body">
+	<nerv-form [meta]="form" [data]="data"></nerv-form>
+</div>
+<div class="modal-footer">
+	<button *ngIf='buttons.ok' type="button" class="console-btn base-btn submit" (click)="onOk()">确定</button>
+	<button *ngIf='buttons.cancel' type="button" class="console-btn base-btn cancel" (click)="onCancel()">取消</button>
+</div>

@@ -9,6 +9,7 @@ import { Dock } from './dock';
 import { CatalogService } from './service/catalog';
 import { routes } from './routes';
 import { UserModule } from '../user/module';
+import { LoginModule } from '../login/module';
 
 @NgModule({
   imports: [
@@ -16,14 +17,17 @@ import { UserModule } from '../user/module';
     RouterModule.forRoot(routes),
     NgbModule.forRoot(),
     ConfigModule,
-    UserModule
+    UserModule,
+    LoginModule
   ],
   declarations: [
     Application,
     StartMenu,
     Dock
   ],
-  providers: [CatalogService],
+  providers: [
+    CatalogService    
+  ],
   bootstrap: [Application]
 })
 export class MainModule { }

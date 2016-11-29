@@ -5,7 +5,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableComponent } from './table.component';
 import { FormComponent } from './form.component';
 import { FieldComponent } from './field.component';
-import { ModalConfirm } from './confirm.modal';
+import { ConfirmModal } from './confirm.modal';
+import { FormModal } from './form.modal';
 import { PaginationComponent } from './pagination.component';
 
 
@@ -20,7 +21,8 @@ import { PaginationComponent } from './pagination.component';
         FormComponent,
         FieldComponent,
         TableComponent,
-        ModalConfirm,
+        ConfirmModal,
+        FormModal,
         PaginationComponent
     ],
     exports: [
@@ -30,10 +32,11 @@ import { PaginationComponent } from './pagination.component';
         FormComponent,
         FieldComponent,
         TableComponent,
-        PaginationComponent
+        PaginationComponent,
     ],
     entryComponents: [
-        ModalConfirm
+        ConfirmModal,
+        FormModal
     ]
 })
 export class FormModule { }

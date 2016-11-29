@@ -7,5 +7,5 @@
 		<button class="console-btn base-btn" [ngClass]="{'disabled':!nervForm.valid}" (click)="onCreate()">保存</button>
 		<button class="console-btn base-btn" (click)="nervForm.ngOnInit()">重置</button>
 	</div>
-	<nerv-form #nervForm [meta]="form" [data]="data"></nerv-form>
+	<nerv-form [meta]="form" [data]="data"></nerv-form>
 </div>

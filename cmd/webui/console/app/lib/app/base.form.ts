@@ -5,7 +5,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigService } from '../config/config.service';
 import { RestyService } from '../resty/resty.service';
 import { Form } from '../form/model';
-import { ModalConfirm } from '../form/confirm.modal';
+import { ConfirmModal } from '../form/confirm.modal';
 
 export abstract class FormBaseComponent implements OnInit {
     form: Form;
@@ -61,14 +61,14 @@ export abstract class FormBaseComponent implements OnInit {
     }
 
     private error(title: string, error: any): void {
-        const modalRef = this.modalService.open(ModalConfirm);
+        const modalRef = this.modalService.open(ConfirmModal);
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = error;
         modalRef.componentInstance.buttons = { ok: true, cancel: false };
     }
 
     private info(title: string, message: string): void {
-        const modalRef = this.modalService.open(ModalConfirm);
+        const modalRef = this.modalService.open(ConfirmModal);
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = message;
         modalRef.componentInstance.buttons = { ok: true, cancel: false };

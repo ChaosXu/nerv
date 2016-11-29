@@ -8,8 +8,6 @@ import { Form } from './model';
     templateUrl: 'app/lib/form/form.component.html'
 })
 export class FormComponent implements OnInit {
-
-
     @Input() meta: Form;
     @Input('data') set setData(value:{}) {
         this.data = value;

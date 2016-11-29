@@ -6,5 +6,5 @@
 		<button class="console-btn base-btn" (click)="onBack('../../')">返回</button>
 		<button class="console-btn base-btn" [ngClass]="{'disabled':!nervForm.valid}" (click)="onUpdate()">保存</button>
 	</div>
-	<nerv-form #nervForm [meta]="form" [data]="data"></nerv-form>
+	<nerv-form [meta]="form" [data]="data"></nerv-form>
 </div>

@@ -2,7 +2,6 @@
 	<form class="form-horizontal" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
         <div *ngFor="let field of meta.fields">        
             <nerv-form-field [formGroup]="formGroup" [field]="field" [data]="data"></nerv-form-field>
-        </div>
-        <div>{{debugData}}</div>        
+        </div>           
 	</form>
 </div>

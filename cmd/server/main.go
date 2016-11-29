@@ -11,6 +11,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/rest/middleware"
 	"github.com/ChaosXu/nerv/lib/rest"
 	"github.com/ChaosXu/nerv/lib/db"
+	user "github.com/ChaosXu/nerv/lib/user/model"
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/env"
 	"os"
@@ -35,14 +36,28 @@ func main() {
 		defer db.DB.Close()
 
 		r := initRouter()
-		port := env.Config().GetMapString("http","port","3333")
-		log.Fatal(http.ListenAndServe(":"+port, r))
+		port := env.Config().GetMapString("http", "port", "3333")
+		log.Fatal(http.ListenAndServe(":" + port, r))
 	}
 }
 
 func setup() {
 	initDB();
+	createAdmin();
 	db.DB.Close();
+}
+
+func createAdmin() {
+	admin := &user.Account{
+		Name:"admin",
+		Nick:"admin",
+		Mail: "admin@nerv.com",
+		Phone: 11111111111,
+		Password:"admin",
+	}
+	if err := db.DB.Create(admin).Error; err != nil {
+		log.Fatal(err.Error());
+	}
 }
 
 func initRouter() *chi.Mux {

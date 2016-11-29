@@ -4387,3 +4387,10 @@ a.uc-info__balance {
     width: 32px;
     height: 32px
 }
+
+.nerv-loading-title {
+    float: right;
+    background: url(../images/data-loading.gif) no-repeat;    
+    width: 32px;
+    height: 32px
+}
