@@ -18,7 +18,7 @@ const form: Form = {
         },
         { name: "Mail", label: "邮件", control: "email", type: "string" },
         { name: "Phone", label: "电话", control: "text", type: "long" },
-        { name: "Password", label: "电话", control: "password", type: "string" }
+        { name: "Password", label: "密码", control: "password", type: "string" }
     ]
 };
 
