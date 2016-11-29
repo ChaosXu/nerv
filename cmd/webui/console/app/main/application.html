@@ -1,13 +1,13 @@
 <div style="height:100%;width:100%">
 	<template ngbModalContainer></template>
-	<div class="uc-main-wrapper">		
+	<div class="uc-main-wrapper">
 		<div class="uc-top">
 			<a class="top__logo u-white">
 				<h1>N</h1>
 			</a>
 			<nerv-startmenu (dock)="toggleDock($event)"></nerv-startmenu>
 			<div class="top__user">
-				<div class="top__user-mail top-entry">
+				<!--<div class="top__user-mail top-entry">
 					<div class="u-dropdown">
 						<div style="position: relative">
 							<div class="u-dropdown-header ng-scope" ng-transclude="">
@@ -29,13 +29,14 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div>-->
+
 				<div class="user__name">
 					<div class="u-dropdown ng-isolate-scope">
 						<div style="position: relative">
 							<div class="u-dropdown-header ng-scope" ng-transclude="">
 								<div class="uc-drophead ng-scope">
-									<span class="u-dib ng-binding">user</span>
+									<span class="u-dib ng-binding">{{user}}</span>
 									<span class="user-icon icon__down icon--xs u-white"></span>
 								</div>
 							</div>
@@ -44,11 +45,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="uc-wrapper">			
+		<div class="uc-wrapper">
 			<nerv-dock [docks]="docks"></nerv-dock>
 			<div class="uc-contont">
-					<router-outlet></router-outlet>
+				<router-outlet></router-outlet>
 			</div>
-		</div>		
+		</div>
 	</div>
 </div>

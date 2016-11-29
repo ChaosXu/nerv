@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CatalogItem } from './service/catalog';
+import { LoginService } from '../lib/security/login.service';
 
 @Component({
   selector: 'nerv-console',
@@ -7,6 +8,17 @@ import { CatalogItem } from './service/catalog';
 })
 export class Application {
   docks: CatalogItem[] = []
+  user = '';
+
+  constructor(
+    private loginService: LoginService
+  ) {
+    this.loginService.loginSuccess.subscribe(function (target:Application) {
+      return function(user:string) {
+        target.user = user;
+      }
+    }(this));
+  }
 
   toggleDock(item: CatalogItem): void {
     var index = this.docks.findIndex(e => e.name == item.name);

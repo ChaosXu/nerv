@@ -4,8 +4,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot
 } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { LoginModal } from './login.modal';
+import { LoginService } from './login.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -14,11 +13,11 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     private router: Router,
-    private modalService: NgbModal
+    private loginService:LoginService
   ) { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    if (this.isLogin) {
+    if (this.loginService.isLogin()) {
       return true;
     } else {
       this.login(state.url);
@@ -26,10 +25,8 @@ export class AuthGuard implements CanActivate {
   }
 
   private login(url: string) {
-    let data = {};
-    const modalRef = this.modalService.open(LoginModal, { backdrop: 'static' });
     
-    modalRef.result.then((result) => {
+    this.loginService.login().then((result) => {
       if (result == 'ok') {
         this.isLogin = true;
         this.router.navigate([url]);

@@ -9,7 +9,7 @@ import { Dock } from './dock';
 import { CatalogService } from './service/catalog';
 import { routes } from './routes';
 import { UserModule } from '../user/module';
-import { LoginModule } from '../login/module';
+import { SecurityModule } from '../lib/security/module';
 
 @NgModule({
   imports: [
@@ -18,7 +18,7 @@ import { LoginModule } from '../login/module';
     NgbModule.forRoot(),
     ConfigModule,
     UserModule,
-    LoginModule
+    SecurityModule
   ],
   declarations: [
     Application,

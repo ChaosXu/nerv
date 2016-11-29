@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule, Routes } from '@angular/router';
-import { FormModule } from '../lib/form/module';
-import { RestyModule } from '../lib/resty/module';
+import { FormModule } from '../form/module';
+import { RestyModule } from '../resty/module';
 import { LoginModal } from './login.modal';
 import { AuthGuard } from './auth.guard';
+import { LoginService } from './login.service';
 
 @NgModule({
     imports: [
@@ -13,16 +14,17 @@ import { AuthGuard } from './auth.guard';
         RestyModule    
     ],   
     declarations:[
-        LoginModal
+        LoginModal,
     ], 
     exports: [
         RouterModule,
     ],
     providers: [
-        AuthGuard
+        AuthGuard,
+        LoginService
     ],
     entryComponents:[
         LoginModal
     ]    
 })
-export class LoginModule { }
+export class SecurityModule { }

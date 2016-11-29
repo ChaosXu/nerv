@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { RestyService } from '../lib/resty/resty.service';
+import { RestyService } from '../resty/resty.service';
 import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConfirmModal } from '../lib/form/confirm.modal';
+import { ConfirmModal } from '../form/confirm.modal';
 
 const form = {
     name: "login_form",
@@ -21,7 +21,7 @@ const form = {
 
 @Component({
     selector: 'nerv-modal-confirm',
-    templateUrl: 'app/login/login.modal.html'
+    templateUrl: 'app/lib/security/login.modal.html'
 })
 export class LoginModal {
     title = '登录';
@@ -41,12 +41,11 @@ export class LoginModal {
         this.resty.create('Login', this.data)
             .then(() => {
                 this.doing = false;
-                this.activeModal.close('ok')
+                this.activeModal.close(this.data);
             })
             .catch((error) => {
                 this.title = '登录';
-                this.doing = false;
-                console.log(`${error}`);
+                this.doing = false;                
                 this.error('登录错误', '用户名和密码错误');
             });
     }
