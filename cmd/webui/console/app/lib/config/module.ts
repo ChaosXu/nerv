@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { ConfigService } from './config.service';
+import { FormConfig } from './form.config';
 
 @NgModule({
     providers:[
-        ConfigService
+        FormConfig
     ]
 })
 export class ConfigModule {

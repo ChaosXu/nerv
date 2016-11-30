@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Form } from '../lib/form/model';
-import { ConfigService } from '../lib/config/config.service';
+import { FormConfig } from '../lib/config/form.config';
 
 const form: Form = {
     name: "user_form",
@@ -26,7 +26,7 @@ const form: Form = {
 })
 export class UserModule {
 
-    constructor(configService: ConfigService) {
+    constructor(configService: FormConfig) {
         configService.put('user',
             {
                 menus: [

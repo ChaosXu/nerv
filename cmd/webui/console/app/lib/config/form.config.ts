@@ -1,5 +1,5 @@
 //app config
-export class ConfigService {
+export class FormConfig {
     formConfig = {};
 
     get(name: string): any {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { ConfigService } from '../config/config.service';
+import { FormConfig } from '../config/form.config';
 
 export interface Menu {
     name: string;
@@ -17,7 +17,7 @@ export class ListApp {
     private type: string;
 
     constructor(
-        configService: ConfigService,
+        configService: FormConfig,
         router: Router,
         route: ActivatedRoute,
     ) {

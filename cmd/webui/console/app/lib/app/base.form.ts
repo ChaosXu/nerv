@@ -2,7 +2,7 @@ import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { ConfigService } from '../config/config.service';
+import { FormConfig } from '../config/form.config';
 import { RestyService } from '../resty/resty.service';
 import { Form } from '../form/model';
 import { ConfirmModal } from '../form/confirm.modal';
@@ -17,7 +17,7 @@ export abstract class FormBaseComponent implements OnInit {
 
     constructor(
         private mode: string,
-        private configService: ConfigService,
+        private configService: FormConfig,
         private modalService: NgbModal,
         private router: Router,
         private route: ActivatedRoute,

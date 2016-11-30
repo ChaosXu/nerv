@@ -1,7 +1,7 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ConfigService } from '../config/config.service';
+import { FormConfig } from '../config/form.config';
 import { RestyService } from '../resty/resty.service';
 import { FormBaseComponent} from './base.form';
 import { Form,Field } from '../form/model';
@@ -12,7 +12,7 @@ import { Form,Field } from '../form/model';
 export class AddComponent extends FormBaseComponent {
 
     constructor(
-        configService: ConfigService,
+        configService: FormConfig,
         modalService: NgbModal,
         router: Router,
         route: ActivatedRoute,
