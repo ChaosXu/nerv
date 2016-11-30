@@ -30,7 +30,9 @@ export class LoginService {
         });
     }
 
-    logout() {
-
+    logout(): Promise<any> {
+        const user = this.currentUser;
+        this.currentUser = '';
+        return Promise.resolve(user);        
     }
 }

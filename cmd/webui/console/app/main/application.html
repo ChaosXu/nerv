@@ -32,14 +32,21 @@
 				</div>-->
 
 				<div class="user__name">
-					<div class="u-dropdown ng-isolate-scope">
+					<div class="u-dropdown" >
 						<div style="position: relative">
-							<div class="u-dropdown-header ng-scope" ng-transclude="">
-								<div class="uc-drophead ng-scope">
-									<span class="u-dib ng-binding">{{user}}</span>
+							<div class="u-dropdown-header" (click)="toggleUserMenu()">
+								<div class="uc-drophead">
+									<span class="u-dib">{{user}}</span>
 									<span class="user-icon icon__down icon--xs u-white"></span>
 								</div>
-							</div>
+							</div>							
+							<div class="uc-dropdown uc-dropdown--border hide"  *ngIf="displayUserMenu" (mouseleave)='displayUserMenu=false' style="transition: opacity 0.1s linear; display: block; opacity: 100; width: 207px; right: 0px; z-index: 100; position: absolute; top: 56px; left: auto;">
+								<ul>
+									<li *ngFor="let item of userMenus" class="dropdown--last">
+										<span class="dropdown__Item" (click)="onUserMenu(item.name)">{{item.label}}</span>
+									</li>
+								</ul>
+							</div>							
 						</div>
 					</div>
 				</div>

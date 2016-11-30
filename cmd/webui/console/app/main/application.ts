@@ -7,17 +7,32 @@ import { LoginService } from '../lib/security/login.service';
   templateUrl: 'app/main/application.html'
 })
 export class Application {
-  docks: CatalogItem[] = []
-  user = '';
+  docks: CatalogItem[] = [];
+  userMenus = [
+    { 'label': '退出', 'name': 'exit' }
+  ];
 
-  constructor(
+  cmds = {
+    'exit': {
+      cmd: (function (self) {
+        return function () {
+          self.loginService.logout().then(() => window.location.href='/');
+        }
+      })(this)
+    }
+  };
+
+  user = '';
+  displayUserMenu = false;
+
+  constructor(    
     private loginService: LoginService
   ) {
-    this.loginService.loginSuccess.subscribe(function (target:Application) {
-      return function(user:string) {
+    this.loginService.loginSuccess.subscribe(function (target: Application) {
+      return function (user: string) {
         target.user = user;
       }
-    }(this));
+    } (this));
   }
 
   toggleDock(item: CatalogItem): void {
@@ -27,5 +42,13 @@ export class Application {
     } else {
       this.docks.push(item);
     }
+  }
+
+  toggleUserMenu() {
+    this.displayUserMenu = !this.displayUserMenu;
+  }
+
+  onUserMenu(name:string) {
+    this.cmds[name].cmd();
   }
 }
