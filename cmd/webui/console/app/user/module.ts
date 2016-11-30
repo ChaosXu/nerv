@@ -33,9 +33,6 @@ export class UserModule {
                     {
                         name: "人员管理",
                         url: "/user/Account"
-                    }, {
-                        name: "权限管理",
-                        url: "/user/Role"
                     }
                 ],
                 Account: {

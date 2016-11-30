@@ -1,22 +1,11 @@
 import { Component } from '@angular/core';
-import { OnInit } from '@angular/core';
-import { CatalogService } from './service/catalog';
-import { CatalogItem } from './service/catalog';
+import { CatalogItem } from '../lib/config/catalog.config';
 
 @Component({
     selector: 'nerv-dock',
     templateUrl: 'app/main/dock.html',
-    inputs: ['docks']    
+    inputs: ['docks']
 })
-export class Dock implements OnInit {
-    catalogSvc: CatalogService;
-    docks: CatalogItem[] = [];
-
-    constructor(catalogSvc: CatalogService) {
-        this.catalogSvc = catalogSvc
-    }
-
-    ngOnInit(): void {
-
-    }
+export class Dock {    
+    docks: Array<CatalogItem> = [];
 }

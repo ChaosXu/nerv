@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { EventEmitter } from '@angular/core';
-import { CatalogService } from './service/catalog';
-import { Catalog } from './service/catalog';
-import { CatalogItem } from './service/catalog';
+import { Catalog,CatalogItem, CatalogConfig } from '../lib/config/catalog.config';
 
 @Component({
     selector: 'nerv-startmenu',
@@ -12,11 +10,11 @@ import { CatalogItem } from './service/catalog';
 export class StartMenu {
     title = '产品与服务';
     catalogs: Catalog[];
-    catalogSvc: CatalogService;
+    catalogSvc: CatalogConfig;
     display: boolean;
     eventDockCatalogItem = new EventEmitter<CatalogItem>();
 
-    constructor(catalogSvc: CatalogService) {
+    constructor(catalogSvc: CatalogConfig) {
         this.catalogSvc = catalogSvc;
     }
 

@@ -6,10 +6,11 @@ import { ConfigModule } from '../lib/config/module';
 import { Application } from './application';
 import { StartMenu } from './startmenu';
 import { Dock } from './dock';
-import { CatalogService } from './service/catalog';
+import { CatalogConfig } from '../lib/config/catalog.config';
 import { routes } from './routes';
 import { UserModule } from '../user/module';
 import { SecurityModule } from '../lib/security/module';
+import { OrchestrationModule } from '../orchestration/module';
 
 @NgModule({
   imports: [
@@ -18,7 +19,8 @@ import { SecurityModule } from '../lib/security/module';
     NgbModule.forRoot(),
     ConfigModule,
     UserModule,
-    SecurityModule
+    SecurityModule,
+    OrchestrationModule
   ],
   declarations: [
     Application,
@@ -26,7 +28,7 @@ import { SecurityModule } from '../lib/security/module';
     Dock
   ],
   providers: [
-    CatalogService    
+    CatalogConfig    
   ],
   bootstrap: [Application]
 })

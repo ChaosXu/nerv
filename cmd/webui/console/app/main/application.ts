@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CatalogItem } from './service/catalog';
+import { CatalogConfig, CatalogItem } from '../lib/config/catalog.config';
 import { LoginService } from '../lib/security/login.service';
 
 @Component({
@@ -7,7 +7,7 @@ import { LoginService } from '../lib/security/login.service';
   templateUrl: 'app/main/application.html'
 })
 export class Application {
-  docks: CatalogItem[] = [];
+  docks: Array<CatalogItem> = [];
   userMenus = [
     { 'label': '退出', 'name': 'exit' }
   ];
@@ -16,7 +16,7 @@ export class Application {
     'exit': {
       cmd: (function (self) {
         return function () {
-          self.loginService.logout().then(() => window.location.href='/');
+          self.loginService.logout().then(() => window.location.href = '/');
         }
       })(this)
     }
@@ -25,7 +25,7 @@ export class Application {
   user = '';
   displayUserMenu = false;
 
-  constructor(    
+  constructor(
     private loginService: LoginService
   ) {
     this.loginService.loginSuccess.subscribe(function (target: Application) {
@@ -48,7 +48,7 @@ export class Application {
     this.displayUserMenu = !this.displayUserMenu;
   }
 
-  onUserMenu(name:string) {
+  onUserMenu(name: string) {
     this.cmds[name].cmd();
   }
 }

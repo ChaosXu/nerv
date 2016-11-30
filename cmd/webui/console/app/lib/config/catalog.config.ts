@@ -16,19 +16,27 @@ const Catalogs = [
     {
         name: '管理',
         items: [{
-            name: '用户',
-            icon: 'icon__company',
-            url: '/user/Account'
+            name: '资源编排',
+            icon: 'icon__ucdn',
+            url: '/orchestration/ServiceTemplate'
         },{
             name: '监控',
             icon: 'icon__umon',
             url: '/monitor'
         }]
+    },
+    {
+        name: '系统',
+        items: [{
+            name: '用户',
+            icon: 'icon__company',
+            url: '/user/Account'
+        }]
     }
 ];
 
 @Injectable()
-export class CatalogService {    
+export class CatalogConfig {    
     getCatalogs(): Promise<Catalog[]> {
         return Promise.resolve(Catalogs);
     }

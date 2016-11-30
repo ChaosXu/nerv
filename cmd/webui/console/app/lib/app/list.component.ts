@@ -30,29 +30,28 @@ export class ListComponent {
     ) { }
 
     ngOnInit() {
-        this.route.parent.parent.params.forEach((params: Params) => {
-            this.app = params['app']
+        this.route.parent.parent.params.subscribe((params: Params) => {
+            this.app = params['app'];            
         });
-        this.route.params.forEach((params: Params) => {
-            this.type = params['type']
-        });
-
-        const config = this.configService.get(this.app)[this.type]['list'];
-        this.title = config.title;
-        this.columns = config.columns;
-        this.load();
+        this.route.params.subscribe((params: Params) => {
+            this.type = params['type'];            
+            const config = this.configService.get(this.app)[this.type]['list'];
+            this.title = config.title;
+            this.columns = config.columns;
+            this.load();
+        });        
     }
 
     onAdd() {
-        this.router.navigate(['add'], { relativeTo: this.route });
+        this.router.navigate(['add'], { relativeTo: this.route, replaceUrl: true });
     }
 
     onShow(item: {}) {
-        this.router.navigate([item['ID']], { relativeTo: this.route });
+        this.router.navigate([item['ID']], { relativeTo: this.route, replaceUrl: true });
     }
 
     onEdit(item: {}) {
-        this.router.navigate([item['ID'], 'edit'], { relativeTo: this.route });
+        this.router.navigate([item['ID'], 'edit'], { relativeTo: this.route, replaceUrl: true });
     }
 
     onRemove(item: {}) {
@@ -76,7 +75,7 @@ export class ListComponent {
         this.load();
     }
 
-    onPageSize(size:number) {
+    onPageSize(size: number) {
         this.limit = size;
         this.load();
     }

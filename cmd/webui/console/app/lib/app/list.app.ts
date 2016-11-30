@@ -13,18 +13,15 @@ export interface Menu {
 })
 export class ListApp {
     menus: Menu[];
-    private app: string;
-    private type: string;
 
     constructor(
         configService: FormConfig,
         router: Router,
         route: ActivatedRoute,
     ) {
-        route.params.forEach((params: Params) => {
-            this.app = params['app']
-            this.type = params['type']
-        });
-        this.menus = configService.get(this.app)['menus'];
+        route.params.subscribe((params: Params) => {
+            const app = params['app'];            
+            this.menus = configService.get(app)['menus'];
+        });                
     }
 }
