@@ -29,6 +29,7 @@ export class UserModule {
     constructor(configService: FormConfig) {
         configService.put('user',
             {
+                title: '用户',
                 menus: [
                     {
                         name: "人员管理",

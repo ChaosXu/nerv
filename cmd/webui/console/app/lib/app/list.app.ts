@@ -12,6 +12,7 @@ export interface Menu {
     templateUrl: 'app/lib/app/list.app.html',
 })
 export class ListApp {
+    title: string;
     menus: Menu[];
 
     constructor(
@@ -20,8 +21,10 @@ export class ListApp {
         route: ActivatedRoute,
     ) {
         route.params.subscribe((params: Params) => {
-            const app = params['app'];            
-            this.menus = configService.get(app)['menus'];
-        });                
+            const app = params['app'];
+            const config = configService.get(app);
+            this.title = config['title'];
+            this.menus = config['menus'];
+        });
     }
 }

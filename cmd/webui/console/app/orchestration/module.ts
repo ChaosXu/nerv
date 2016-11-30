@@ -47,6 +47,7 @@ export class OrchestrationModule {
     constructor(configService: FormConfig) {
         configService.put('orchestration',
             {
+                title: '资源编排',
                 menus: [
                     {
                         name: "模板管理",
@@ -87,7 +88,7 @@ export class OrchestrationModule {
                 ResourceType: {
                     list: {
                         title: '资源类列表', columns: [
-                            { label: '名称', name: 'Name' },                                                        
+                            { label: '名称', name: 'Name' },
                             { label: '操作' }
                         ]
                     },
