@@ -4,10 +4,7 @@
         <span class="red" *ngIf="required">*</span>
     </label>
 	<div class="controls" [ngSwitch]="field.control">
-		<input class="base-input" *ngSwitchCase="'text'" [formControlName]="field.name" [id]="field.name" [type]="field.control" >
-        <input class="base-input" *ngSwitchCase="'number'" [formControlName]="field.name" [id]="field.name" [type]="field.control" >
-        <input class="base-input" *ngSwitchCase="'email'"  [formControlName]="field.name" [id]="field.name" [type]="field.control" >
-        <input class="base-input" *ngSwitchCase="'password'" [formControlName]="field.name" [id]="field.name" [type]="field.control" >
+		<input class="base-input" *ngSwitchDefault [formControlName]="field.name" [id]="field.name" [type]="field.control" >                
 		<!--<select *ngSwitchCase="'dropdown'" [id]="field.name" [formControlName]="field.name">
             <option *ngFor="let opt of field.options" [value]="opt.key">
                 {{opt.value}}

@@ -4,10 +4,10 @@ import { Form, Field } from './model';
 
 @Component({
     //moduleId: module.id,
-    selector: 'nerv-form-field',
-    templateUrl: 'app/lib/form/field.component.html',
+    selector: 'nerv-input-field',
+    templateUrl: 'app/lib/form/input.field.html',
 })
-export class FieldComponent implements OnInit {
+export class InputField implements OnInit {
     @Input() formGroup: FormGroup;
     @Input() field: Field;
     @Input() data: {};
