@@ -7,12 +7,12 @@ const stForm: Form = {
     name: "service_template_form",
     fields: [
         {
-            name: "Name", label: "名称", control: "text", type: "string", validators: {
+            name: "name", label: "名称", control: "text", type: "string", validators: {
                 'required': '不能为空'
             }
         },
         {
-            name: "Version", label: "版本", control: "text", type: "string", validators: {
+            name: "version", label: "版本", control: "number", type: "long", validators: {
                 'required': '不能为空'
             }
         }
@@ -23,17 +23,33 @@ const topoForm: Form = {
     name: "topology_form",
     fields: [
         {
-            name: "Name", label: "名称", control: "text", type: "string", validators: {
+            name: "name", label: "名称", control: "text", type: "string", validators: {
                 'required': '不能为空'
             }
         },
         {
-            name: "Template", label: "模板", control: "text", type: "string", validators: {
+            name: "template", label: "模板", control: "text", type: "string", validators: {
                 'required': '不能为空'
             }
         },
         {
-            name: "Version", label: "版本", control: "text", type: "string", validators: {
+            name: "version", label: "版本", control: "number", type: "long", validators: {
+                'required': '不能为空'
+            }
+        }
+    ]
+};
+
+const rtForm: Form = {
+    name: "resource_type_form",
+    fields: [
+        {
+            name: "name", label: "名称", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },        
+        {
+            name: "version", label: "版本", control: "number", type: "long", validators: {
                 'required': '不能为空'
             }
         }
@@ -63,8 +79,8 @@ export class OrchestrationModule {
                 ServiceTemplate: {
                     list: {
                         title: '模板列表', columns: [
-                            { label: '名称', name: 'Name' },
-                            { label: '版本', name: 'Version' },
+                            { label: '名称', name: 'name' },
+                            { label: '版本', name: 'version' },
                             { label: '操作' }
                         ]
                     },
@@ -75,9 +91,9 @@ export class OrchestrationModule {
                 Topology: {
                     list: {
                         title: '拓扑列表', columns: [
-                            { label: '名称', name: 'Name' },
-                            { label: '模板', name: 'Template' },
-                            { label: '版本', name: 'Version' },
+                            { label: '名称', name: 'name' },
+                            { label: '模板', name: 'template' },
+                            { label: '版本', name: 'version' },
                             { label: '操作' }
                         ]
                     },
@@ -88,13 +104,13 @@ export class OrchestrationModule {
                 ResourceType: {
                     list: {
                         title: '资源类列表', columns: [
-                            { label: '名称', name: 'Name' },
+                            { label: '名称', name: 'name' },
                             { label: '操作' }
                         ]
                     },
-                    add: { title: '添加资源类', form: topoForm },
-                    edit: { title: '编辑资源类', form: topoForm },
-                    detail: { title: '查看资源类', form: topoForm }
+                    add: { title: '添加资源类', form: rtForm },
+                    edit: { title: '编辑资源类', form: rtForm },
+                    detail: { title: '查看资源类', form: rtForm }
                 }
             });
     }
