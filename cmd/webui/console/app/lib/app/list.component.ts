@@ -57,7 +57,7 @@ export class ListComponent {
     onRemove(item: {}) {
         const modalRef = this.modalService.open(ConfirmModal);
         modalRef.componentInstance.title = '删除';
-        modalRef.componentInstance.message = `删除对象${item['Name']}?`;
+        modalRef.componentInstance.message = `删除${item['Name'] || item['name']}?`;
         modalRef.result.then((result) => {
             if (result == 'ok') {
                 this.remove(item);

@@ -47,13 +47,13 @@ export abstract class FormBaseComponent implements OnInit {
     onUpdate() {
         this.resty.update(`${this.type}`, this.data)
             .then(() => this.info('更新', '更新成功'))
-            .catch((error) => this.error('错误', `更新失败\r\n${error}`));
+            .catch((error) => this.error('错误', `更新${this.data['Name'] || this.data['name']}失败\r\n${error}`));
     }
 
     onCreate() {
         this.resty.create(`${this.type}`, this.data)
             .then(() => this.info('创建', '创建成功'))
-            .catch((error) => this.error('错误', `创建失败\r\n${error}`));
+            .catch((error) => this.error('错误', `创建${this.data['Name'] || this.data['name']}失败\r\n${error}`));
     }
 
     onBack(url: string) {
@@ -78,7 +78,7 @@ export abstract class FormBaseComponent implements OnInit {
         if (this.id) {
             this.resty.get(`${this.type}`, this.id)
                 .then((data) => this.data = data)
-                .catch((error) => this.error('错误', `加载失败\r\n${error}`));
+                .catch((error) => this.error('错误', `加载${this.type}失败\r\n${error}`));
         }
     }
 }
