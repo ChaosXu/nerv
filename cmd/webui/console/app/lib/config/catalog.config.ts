@@ -12,31 +12,35 @@ export interface CatalogItem {
     dock: boolean;
 }
 
-const Catalogs = [
-    {
-        name: '管理',
-        items: [{
-            name: '资源编排',
-            icon: 'icon__ucdn',
-            url: '/orchestration/ServiceTemplate'
-        },{
-            name: '监控',
-            icon: 'icon__umon',
-            url: '/monitor'
-        }]
-    },
-    {
-        name: '系统',
-        items: [{
-            name: '用户',
-            icon: 'icon__company',
-            url: '/user/Account'
-        }]
-    }
-];
+const Catalogs = [{
+    name: '管理',
+    items: [{
+        name: '资源编排',
+        icon: 'icon__ucdn',
+        url: '/orchestration/ServiceTemplate'
+    }, {
+        name: '监控',
+        icon: 'icon__umon',
+        url: '/monitor'
+    }]
+}, {
+    name: '基础设施',
+    items: [{
+        name: '物理主机',
+        icon:'icon__uphost',
+        url: '/infrastructure/Host'
+    }]
+}, {
+    name: '系统',
+    items: [{
+        name: '用户',
+        icon: 'icon__company',
+        url: '/user/Account'
+    }]
+}];
 
 @Injectable()
-export class CatalogConfig {    
+export class CatalogConfig {
     getCatalogs(): Promise<Catalog[]> {
         return Promise.resolve(Catalogs);
     }

@@ -11,6 +11,7 @@ import { routes } from './routes';
 import { UserModule } from '../user/module';
 import { SecurityModule } from '../lib/security/module';
 import { OrchestrationModule } from '../orchestration/module';
+import { InfrastructureModule } from '../infrastructure/module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { OrchestrationModule } from '../orchestration/module';
     ConfigModule,
     UserModule,
     SecurityModule,
-    OrchestrationModule
+    OrchestrationModule,
+    InfrastructureModule
   ],
   declarations: [
     Application,
@@ -28,7 +30,7 @@ import { OrchestrationModule } from '../orchestration/module';
     Dock
   ],
   providers: [
-    CatalogConfig    
+    CatalogConfig
   ],
   bootstrap: [Application]
 })

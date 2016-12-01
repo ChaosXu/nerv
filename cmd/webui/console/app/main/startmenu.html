@@ -9,14 +9,13 @@
 			<div class="uc-dashboard" (mouseleave)='display=false' *ngIf="display" style="background: rgb(255, 255, 255); overflow: auto; transition: opacity 0.1s linear; display: block; opacity: 100; width: 1000px; height: 700px; right: auto; z-index: 100; position: absolute; top: 56px; left: 0px;">
 				<div class="dashboard__main u-clearfix">
 					<div class="dashboard__piece" *ngFor="let catalog of catalogs">
-						<div class="dashboard__piece-title ng-scope" translate="INDEX_TOP_COMPUTE">{{catalog.name}}</div>
+						<div class="dashboard__piece-title" translate="INDEX_TOP_COMPUTE">{{catalog.name}}</div>
 						<div class="dashboard__piece-list">
 							<ul>
 								<li class="dashboard__piece-item " [ngClass]="{'active':item.dock}" *ngFor="let item of catalog.items">
 									<a class="dashboard__item-link" >
 										<span class="dashboard__item-icon icon--sm {{item.icon}}"></span>
-										<span ng-bind="nav.name | uppercase | translate | byteEllipsis:16" class="ng-binding">{{item.name}}</span>
-										<span class="ml5 ng-binding" ng-bind="nav.name | topNavNameFilter">UHost</span>
+										<span>{{item.name}}</span>										
 									</a>
 									<span class="dashboard__mark--hover dashboard__mark-icon icon__collect u-fr " (click)="onDockCatalogItem(item)"></span>
 									<span class="active dashboard__mark-icon icon__collected u-fr " (click)="onDockCatalogItem(item)"></span>
