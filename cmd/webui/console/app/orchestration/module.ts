@@ -55,16 +55,44 @@ const rtForm: Form = {
             }
         },
         {
-            name: "operation", label: "操作", control: "table", type: "operation[]",
+            name: "operations", label: "操作", control: "table", type: "Operation",
+            condition: 'resource_type_id=?',
+            forms: {
+                add: 'orchestration.rt.op.add',
+                edit: 'orchestration.rt.op.edit',
+                detail: 'orchestration.rt.op.detail',
+            },
             validators: {
                 'required': '不能为空'
             },
             display: {
-                columnus: [
+                columns: [
                     { label: '名称', name: 'name' },
                     { label: '类型', name: 'type' },
                     { label: '实现', name: 'implementor' },
                 ]
+            },
+
+        }
+    ]
+};
+
+const opForm: Form = {
+    name: "op_form",
+    fields: [
+        {
+            name: "name", label: "名称", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },
+        {
+            name: "type", label: "类型", control: "text", type: "string", validators: {
+                'required': '不能为空'
+            }
+        },
+        {
+            name: "implementor", label: "实现", control: "text", type: "text", validators: {
+                'required': '不能为空'
             }
         }
     ]
@@ -89,6 +117,10 @@ export class OrchestrationModule {
         formRegistry.put('orchestration.rt.add', rtForm);
         formRegistry.put('orchestration.rt.edit', rtForm);
         formRegistry.put('orchestration.rt.detail', rtForm);
+
+        formRegistry.put('orchestration.rt.op.add', opForm);
+        formRegistry.put('orchestration.rt.op.edit', opForm);
+        formRegistry.put('orchestration.rt.op.detail', opForm);
 
         configService.put('orchestration',
             {

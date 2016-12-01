@@ -9,7 +9,7 @@
 	    </div>
         <nerv-table [class]="'table table-bord table-striped table-hover'" 
             [columns]="field.display.columns" 
-            [model]="data[field.name]" 
+            [model]="model" 
             (show)="onShow($event)"
             (remove)="onRemove($event)" 
             (edit)="onEdit($event)" 

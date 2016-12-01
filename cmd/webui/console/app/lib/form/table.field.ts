@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { Form, Field } from './model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormConfig } from '../config/form.config';
+import { FormRegistry } from '../form/form.registry';
 import { RestyService } from '../resty/resty.service';
 import { ConfirmModal } from '../form/confirm.modal';
 import { FormModal } from '../form/form.modal';
@@ -16,19 +17,32 @@ export class TableField implements OnInit {
 
     @Input() field: Field;
     @Input() data: {};
+    model: {};
 
     constructor(
+        private formRegistry: FormRegistry,
         private configService: FormConfig,
         private modalService: NgbModal,
         private resty: RestyService
     ) { }
 
     ngOnInit(): void {
+        if (this.data && (this.data['id'] || this.data['ID'])) {
+            this.load();
+        }
     }
 
     onAdd() {
-        //this.configService.get(this.field.)
-        
+        let newItem = {};
+        const modalRef = this.modalService.open(FormModal);
+        modalRef.componentInstance.title = '添加';
+        modalRef.componentInstance.form = this.formRegistry.get(this.field.forms.add);
+        modalRef.componentInstance.data = newItem;
+        modalRef.result.then((result) => {
+            if (result == 'ok') {
+                this.add(newItem);
+            }
+        });
     }
 
     onShow(item: {}) {
@@ -82,12 +96,25 @@ export class TableField implements OnInit {
     }
 
     private load(): void {
-        // let order;
+        let order;
+        let offset;
+        let limit;
         // if (this.sortBy) {
         //     order = `${this.sortBy.column} ${this.sortBy.asc ? 'asc' : 'desc'}`;
         // }
-        // this.resty.find(this.type, null, order, this.offset, this.limit)
-        //     .then(response => this.data = response)
-        //     .catch((error) => this.error('加载错误', `加载列表${this.type}失败\r\n${error}`));
+        const type = this.field.type;
+        const conditions = this.field.condition;
+        this.resty.find(type, { conditions: conditions, values: [this.data['id'] || this.data['ID'],] }, order, offset, limit)
+            .then(response => this.data = response)
+            .catch((error) => this.error('加载错误', `加载列表${type}失败\r\n${error}`));
+    }
+
+    private add(item: {}) {
+        let items = this.data[this.field.name];
+        if (!items) {
+            items = this.data[this.field.name] = [];
+        }
+        items.push(item);
+        this.model = { data: items };               
     }
 }
