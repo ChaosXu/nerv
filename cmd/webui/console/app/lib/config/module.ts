@@ -3,9 +3,9 @@ import { FormConfig } from './form.config';
 import { CatalogConfig } from './catalog.config';
 
 @NgModule({
-    providers:[
+    providers: [
         FormConfig,
-        CatalogConfig
+        CatalogConfig    
     ]
 })
 export class ConfigModule {

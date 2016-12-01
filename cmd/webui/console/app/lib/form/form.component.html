@@ -1,7 +1,8 @@
 <div>
 	<form class="form-horizontal" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
-        <div *ngFor="let field of meta.fields">        
-            <nerv-input-field [formGroup]="formGroup" [field]="field" [data]="data"></nerv-input-field>
+        <div *ngFor="let field of meta.fields" [ngSwitch]="field.control">
+            <nerv-table-field *ngSwitchCase="'table'" [field]="field" [data]="data"></nerv-table-field>        
+            <nerv-input-field *ngSwitchDefault [formGroup]="formGroup" [field]="field" [data]="data"></nerv-input-field>
         </div>           
 	</form>
 </div>

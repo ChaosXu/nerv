@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Form } from '../lib/form/model';
 import { FormConfig } from '../lib/config/form.config';
+import { FormRegistry } from '../lib/form/form.registry';
 
 const hostForm: Form = {
     name: "host_form",
@@ -23,7 +24,14 @@ const hostForm: Form = {
 })
 export class InfrastructureModule {
 
-    constructor(configService: FormConfig) {
+    constructor(
+        formRegistry: FormRegistry,
+        configService: FormConfig
+    ) {
+        formRegistry.put('infrastructure.host.add', hostForm);
+        formRegistry.put('infrastructure.host.edit', hostForm);
+        formRegistry.put('infrastructure.host.detail', hostForm);
+
         configService.put('infrastructure',
             {
                 title: '基础设施',
@@ -41,9 +49,9 @@ export class InfrastructureModule {
                             { label: '操作' }
                         ]
                     },
-                    add: { title: '添加主机', form: hostForm },
-                    edit: { title: '编辑主机', form: hostForm },
-                    detail: { title: '查看主机', form: hostForm }
+                    add: { title: '添加主机', form: 'infrastructure.host.add' },
+                    edit: { title: '编辑主机', form: 'infrastructure.host.add' },
+                    detail: { title: '查看主机', form: 'infrastructure.host.add' }
                 }
             });
     }

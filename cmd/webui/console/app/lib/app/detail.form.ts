@@ -2,9 +2,10 @@ import { Component, ViewContainerRef, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormConfig } from '../config/form.config';
+import { FormRegistry } from '../form/form.registry';
 import { RestyService } from '../resty/resty.service';
-import { FormBaseComponent} from './base.form';
-import { Form,Field } from '../form/model';
+import { FormBaseComponent } from './base.form';
+import { Form, Field } from '../form/model';
 
 
 @Component({
@@ -13,12 +14,13 @@ import { Form,Field } from '../form/model';
 export class DetailComponent extends FormBaseComponent {
 
     constructor(
+        formRegistry: FormRegistry,
         configService: FormConfig,
         modalService: NgbModal,
         router: Router,
         route: ActivatedRoute,
         resty: RestyService
     ) {
-        super('detail', configService, modalService, router, route, resty);
+        super('detail', formRegistry, configService, modalService, router, route, resty);
     }
 }

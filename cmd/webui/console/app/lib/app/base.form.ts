@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormConfig } from '../config/form.config';
+import { FormRegistry } from '../form/form.registry';
 import { RestyService } from '../resty/resty.service';
 import { Form } from '../form/model';
 import { ConfirmModal } from '../form/confirm.modal';
@@ -17,6 +18,7 @@ export abstract class FormBaseComponent implements OnInit {
 
     constructor(
         private mode: string,
+        private formRegistry: FormRegistry,
         private configService: FormConfig,
         private modalService: NgbModal,
         private router: Router,
@@ -33,7 +35,7 @@ export abstract class FormBaseComponent implements OnInit {
             this.id = +params['id'];
         });
         const config = this.configService.get(this.app)[this.type][this.mode];
-        this.form = config.form;
+        this.form = this.formRegistry.get(config.form);
         this.title = config.title;
         if (this.id) {
             this.load();

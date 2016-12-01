@@ -1,0 +1,22 @@
+<div class="form-group">
+	<label class="control-label" [attr.for]="field.name">
+        <span>{{field.label}}</span>
+        <span class="red" *ngIf="field.validators['required']">*</span>
+    </label>
+	<div class="controls">
+        <div class="role-perate pl20 pt10 pb10">
+            <div class="console-btn base-btn" (click)="onAdd()">添加</div>		    
+	    </div>
+        <nerv-table [class]="'table table-bord table-striped table-hover'" 
+            [columns]="field.display.columns" 
+            [model]="data[field.name]" 
+            (show)="onShow($event)"
+            (remove)="onRemove($event)" 
+            (edit)="onEdit($event)" 
+            (sort)="onSort($event)" 
+            (paging)="onPaging($event)" 
+            (pageSize)="onPageSize($event)"
+        >
+        </nerv-table>		
+	</div>
+</div>

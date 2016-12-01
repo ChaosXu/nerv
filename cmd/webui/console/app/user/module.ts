@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Form } from '../lib/form/model';
 import { FormConfig } from '../lib/config/form.config';
+import { FormRegistry } from '../lib/form/form.registry';
 
 const form: Form = {
     name: "user_form",
@@ -26,7 +27,14 @@ const form: Form = {
 })
 export class UserModule {
 
-    constructor(configService: FormConfig) {
+    constructor(
+        formRegistry: FormRegistry,
+        configService: FormConfig
+    ) {
+        formRegistry.put('user.account.add', form);
+        formRegistry.put('user.account.edit', form);
+        formRegistry.put('user.account.detail', form);
+
         configService.put('user',
             {
                 title: '用户',
@@ -46,9 +54,9 @@ export class UserModule {
                             { label: '操作' }
                         ]
                     },
-                    add: { title: '添加人员', form: form },
-                    edit: { title: '编辑人员', form: form },
-                    detail: { title: '查看人员', form: form }
+                    add: { title: '添加人员', form: 'user.account.add' },
+                    edit: { title: '编辑人员', form: 'user.account.edit' },
+                    detail: { title: '查看人员', form: 'user.account.detail' }
                 }
             });
     }

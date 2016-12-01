@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Form } from '../lib/form/model';
 import { FormConfig } from '../lib/config/form.config';
+import { FormRegistry } from '../lib/form/form.registry';
 
 const stForm: Form = {
     name: "service_template_form",
@@ -47,10 +48,23 @@ const rtForm: Form = {
             name: "name", label: "名称", control: "text", type: "string", validators: {
                 'required': '不能为空'
             }
-        },        
+        },
         {
             name: "version", label: "版本", control: "number", type: "long", validators: {
                 'required': '不能为空'
+            }
+        },
+        {
+            name: "operation", label: "操作", control: "table", type: "operation[]",
+            validators: {
+                'required': '不能为空'
+            },
+            display: {
+                columnus: [
+                    { label: '名称', name: 'name' },
+                    { label: '类型', name: 'type' },
+                    { label: '实现', name: 'implementor' },
+                ]
             }
         }
     ]
@@ -60,7 +74,22 @@ const rtForm: Form = {
 })
 export class OrchestrationModule {
 
-    constructor(configService: FormConfig) {
+    constructor(
+        formRegistry: FormRegistry,
+        configService: FormConfig
+    ) {
+        formRegistry.put('orchestration.st.add', stForm);
+        formRegistry.put('orchestration.st.edit', stForm);
+        formRegistry.put('orchestration.st.detail', stForm);
+
+        formRegistry.put('orchestration.topo.add', topoForm);
+        formRegistry.put('orchestration.topo.edit', topoForm);
+        formRegistry.put('orchestration.topo.detail', topoForm);
+
+        formRegistry.put('orchestration.rt.add', rtForm);
+        formRegistry.put('orchestration.rt.edit', rtForm);
+        formRegistry.put('orchestration.rt.detail', rtForm);
+
         configService.put('orchestration',
             {
                 title: '资源编排',
@@ -84,9 +113,9 @@ export class OrchestrationModule {
                             { label: '操作' }
                         ]
                     },
-                    add: { title: '添加模板', form: stForm },
-                    edit: { title: '编辑模板', form: stForm },
-                    detail: { title: '查看模板', form: stForm }
+                    add: { title: '添加模板', form: 'orchestration.st.add' },
+                    edit: { title: '编辑模板', form: 'orchestration.st.edit' },
+                    detail: { title: '查看模板', form: 'orchestration.st.detail' }
                 },
                 Topology: {
                     list: {
@@ -97,9 +126,9 @@ export class OrchestrationModule {
                             { label: '操作' }
                         ]
                     },
-                    add: { title: '添加拓扑', form: topoForm },
-                    edit: { title: '编辑拓扑', form: topoForm },
-                    detail: { title: '查看拓扑', form: topoForm }
+                    add: { title: '添加拓扑', form: 'orchestration.topo.add' },
+                    edit: { title: '编辑拓扑', form: 'orchestration.topo.edit' },
+                    detail: { title: '查看拓扑', form: 'orchestration.topo.detail' }
                 },
                 ResourceType: {
                     list: {
@@ -108,9 +137,9 @@ export class OrchestrationModule {
                             { label: '操作' }
                         ]
                     },
-                    add: { title: '添加资源类', form: rtForm },
-                    edit: { title: '编辑资源类', form: rtForm },
-                    detail: { title: '查看资源类', form: rtForm }
+                    add: { title: '添加资源类', form: 'orchestration.rt.add' },
+                    edit: { title: '编辑资源类', form: 'orchestration.rt.edit' },
+                    detail: { title: '查看资源类', form: 'orchestration.rt.detail' }
                 }
             });
     }

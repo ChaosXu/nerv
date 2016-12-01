@@ -4,14 +4,10 @@ export class Form {
 }
 
 export class Field {
-    name: string;
-    label: string;
-    control: string;
-    type: string;
+    name: string;       //data property name
+    label: string;      //display name
+    control: string;    //input control
+    type: string;       //data type
     validators?: {};
-}
-
-export class Textbox extends Field {
-    control = 'textbox';
-    type = 'string'
+    display?:{};        //display setting         
 }

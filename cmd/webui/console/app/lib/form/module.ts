@@ -4,11 +4,12 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableComponent } from './table.component';
 import { FormComponent } from './form.component';
-import { InputField } from './input.field';
+import { PaginationComponent } from './pagination.component';
 import { ConfirmModal } from './confirm.modal';
 import { FormModal } from './form.modal';
-import { PaginationComponent } from './pagination.component';
-
+import { InputField } from './input.field';
+import { TableField } from './table.field';
+import { FormRegistry } from './form.registry';
 
 @NgModule({
     imports: [
@@ -18,21 +19,26 @@ import { PaginationComponent } from './pagination.component';
         FormsModule
     ],
     declarations: [
-        FormComponent,
-        InputField,
-        TableComponent,
         ConfirmModal,
         FormModal,
-        PaginationComponent
+        FormComponent,
+        TableComponent,
+        PaginationComponent,
+        InputField,
+        TableField
     ],
     exports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
         FormComponent,
-        InputField,
         TableComponent,
         PaginationComponent,
+        InputField,
+        TableField
+    ],
+    providers: [
+        FormRegistry
     ],
     entryComponents: [
         ConfirmModal,
