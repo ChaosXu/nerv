@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Form, Field } from './model';
+import { Form, Field } from '../model';
 
 @Component({
     //moduleId: module.id,
     selector: 'nerv-input-field',
-    templateUrl: 'app/lib/form/input.field.html',
+    templateUrl: 'app/lib/form/fields/input.field.html',
 })
 export class InputField implements OnInit {
     @Input('readonly') enableReadonly: boolean = false;

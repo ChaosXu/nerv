@@ -65,10 +65,25 @@ const opForm: Form = {
     name: "op_form",
     fields: [
         {
-            name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
+            name: "name", label: "名称", control: "select", type: "string", validators: { 'required': { message: '不能为空' } },
+            display: {
+                options: [                    
+                    { label: 'Create', value: 'Create', default: true },
+                    { label: 'Delete', value: 'Delete' },
+                    { label: 'Setup', value: 'Setup' },
+                    { label: 'Start', value: 'Start' },
+                    { label: 'Stop', value: 'Stop' },
+                ]
+            }
         },
         {
-            name: "type", label: "类型", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
+            name: "type", label: "类型", control: "select", type: "string", validators: { 'required': { message: '不能为空' } },
+            display: {
+                options: [                    
+                    { label: 'Shell', value: 'shell', default: true },
+                    { label: 'GO', value: 'go' }
+                ]
+            }
         },
         {
             name: "implementor", label: "实现", control: "text", type: "text", validators: { 'required': { message: '不能为空' } }

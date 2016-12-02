@@ -7,8 +7,9 @@ import { FormComponent } from './form.component';
 import { PaginationComponent } from './pagination.component';
 import { ConfirmModal } from './confirm.modal';
 import { FormModal } from './form.modal';
-import { InputField } from './input.field';
-import { TableField } from './table.field';
+import { InputField } from './fields/input.field';
+import { TableField } from './fields/table.field';
+import { SelectField } from './fields/select.field';
 import { FormRegistry } from './form.registry';
 import { ValidatorRegistry } from './validators/validator.registry';
 
@@ -26,7 +27,8 @@ import { ValidatorRegistry } from './validators/validator.registry';
         TableComponent,
         PaginationComponent,
         InputField,
-        TableField
+        TableField,
+        SelectField
     ],
     exports: [
         CommonModule,
@@ -36,7 +38,8 @@ import { ValidatorRegistry } from './validators/validator.registry';
         TableComponent,
         PaginationComponent,
         InputField,
-        TableField
+        TableField,
+        SelectField
     ],
     providers: [
         FormRegistry,

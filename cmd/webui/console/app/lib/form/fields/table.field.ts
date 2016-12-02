@@ -1,17 +1,17 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Form, Field } from './model';
+import { Form, Field } from '../model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormConfig } from '../config/form.config';
-import { FormRegistry } from '../form/form.registry';
-import { RestyService } from '../resty/resty.service';
-import { ConfirmModal } from '../form/confirm.modal';
-import { FormModal } from '../form/form.modal';
+import { FormConfig } from '../../config/form.config';
+import { FormRegistry } from '../../form/form.registry';
+import { RestyService } from '../../resty/resty.service';
+import { ConfirmModal } from '../../form/confirm.modal';
+import { FormModal } from '../../form/form.modal';
 
 @Component({
     //moduleId: module.id,
     selector: 'nerv-table-field',
-    templateUrl: 'app/lib/form/table.field.html',
+    templateUrl: 'app/lib/form/fields/table.field.html',
 })
 export class TableField implements OnInit {
     @Input('readonly') enableReadonly = false;
@@ -62,14 +62,19 @@ export class TableField implements OnInit {
         let newItem = {};
         const modalRef = this.modalService.open(FormModal);
         modalRef.componentInstance.title = '查看';
-        modalRef.componentInstance.enableReadonly = this.enableReadonly;
+        modalRef.componentInstance.enableReadonly = true;
         modalRef.componentInstance.form = this.formRegistry.get(this.field.forms.detail);
         modalRef.componentInstance.data = item;
         
     }
 
     onEdit(item: {}) {
-        alert('onShow ' + JSON.stringify(item));
+        let newItem = {};
+        const modalRef = this.modalService.open(FormModal);
+        modalRef.componentInstance.title = '编辑';
+        modalRef.componentInstance.enableReadonly = false;
+        modalRef.componentInstance.form = this.formRegistry.get(this.field.forms.detail);
+        modalRef.componentInstance.data = item;
     }
 
     onRemove(item: {}) {

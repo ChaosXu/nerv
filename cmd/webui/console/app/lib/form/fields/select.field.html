@@ -1,0 +1,21 @@
+<div class="form-group">
+    <label class="control-label" [attr.for]="field.name">
+        <span>{{field.label}}</span>
+        <span class="red" *ngIf="required">*</span>
+    </label>
+    <div class="controls">
+        <div class="uc-btn-group u-clearfix uc-btn-group uc-clearfix uc-btn-group uc-clearfix">
+            <div class="uc-btn-group uc-clearfix" *ngIf="!enableReadonly">
+                <button type="button" class="btn-group__item =" [ngClass]="{'active':opt==selected}" *ngFor="let opt of field.display.options"
+                    (click)="onSelect(opt)">      
+                <span class="u-promote__wrapper" >{{opt.label}}</span> 
+               </button>
+            </div>
+            <div class="uc-btn-group" *ngIf="enableReadonly">
+                <button type="button" class="btn-group__item =" [ngClass]="{'active':opt==selected}" *ngFor="let opt of field.display.options">      
+                <span class="u-promote__wrapper" >{{opt.label}}</span> 
+               </button>
+            </div>
+        </div>
+    </div>
+</div>

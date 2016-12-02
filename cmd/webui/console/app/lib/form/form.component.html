@@ -1,8 +1,9 @@
 <div>
-	<form class="form-horizontal" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <form class="form-horizontal" [formGroup]="formGroup" (ngSubmit)="onSubmit()">
         <div *ngFor="let field of meta.fields" [ngSwitch]="field.control">
-            <nerv-table-field *ngSwitchCase="'table'" [field]="field" [data]="data" [readonly]="enableReadonly"></nerv-table-field>        
+            <nerv-table-field *ngSwitchCase="'table'" [field]="field" [data]="data" [readonly]="enableReadonly"></nerv-table-field>
+            <nerv-select-field *ngSwitchCase="'select'" [field]="field" [data]="data" [readonly]="enableReadonly"></nerv-select-field>
             <nerv-input-field *ngSwitchDefault [formGroup]="formGroup" [field]="field" [data]="data" [readonly]="enableReadonly"></nerv-input-field>
-        </div>           
-	</form>
+        </div>
+    </form>
 </div>
