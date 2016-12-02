@@ -4,7 +4,7 @@
         <span class="red" *ngIf="required">*</span>
     </label>
 	<div class="controls">
-        <div class="role-perate pl20 pt10 pb10">
+        <div class="role-perate pl20 pt10 pb10" *ngIf="!enableReadonly">
             <div class="console-btn base-btn" (click)="onAdd()">添加</div>		    
 	    </div>
         <nerv-table [class]="'table table-bord table-striped table-hover'" 
@@ -12,6 +12,7 @@
             [model]="model" 
             [enablePaging] = "false"
             [enableSort] = "false"
+            [readonly]="enableReadonly"
             (show)="onShow($event)"
             (remove)="onRemove($event)" 
             (edit)="onEdit($event)" 

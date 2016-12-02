@@ -12,6 +12,7 @@ export class TableComponent implements OnInit {
     @Input() model: any;
     @Input() enablePaging: boolean = true;
     @Input() enableSort: boolean = true;
+    @Input('readonly') enableReadonly = false;
 
     @Output() show: EventEmitter<any> = new EventEmitter();
     @Output() remove: EventEmitter<any> = new EventEmitter();

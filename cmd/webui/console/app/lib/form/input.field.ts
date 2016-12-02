@@ -8,6 +8,7 @@ import { Form, Field } from './model';
     templateUrl: 'app/lib/form/input.field.html',
 })
 export class InputField implements OnInit {
+    @Input('readonly') enableReadonly: boolean = false;
     @Input() formGroup: FormGroup;
     @Input() field: Field;
     @Input() data: {};

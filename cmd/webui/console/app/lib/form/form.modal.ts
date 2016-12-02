@@ -7,6 +7,7 @@ import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: 'app/lib/form/form.modal.html'
 })
 export class FormModal {
+  @Input('readonly') enableReadonly = false;
   @Input() title;
   @Input() form;
   @Input() data;

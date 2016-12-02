@@ -15,11 +15,11 @@
 					<i class="icon-new icon-table sta-eye"></i>
 					<span>查看</span>
 				</a>
-				<a class="table-operate ng-scope" (click)="onEdit(item)">
+				<a class="table-operate ng-scope" (click)="onEdit(item)" *ngIf="!enableReadonly">
 					<i class="icon-new icon-table prefetch"></i>
 					<span>编辑</span>
 				</a>
-				<a class="table-operate ng-scope" (click)="onRemove(item)">
+				<a class="table-operate ng-scope" (click)="onRemove(item)" *ngIf="!enableReadonly">
 					<i class="icon-new icon-table trash"></i>
 					<span>删除</span>
 				</a>

@@ -5,7 +5,7 @@
 	<h3 class="modal-title">{{title}}</h3>
 </div>
 <div class="modal-body">
-	<nerv-form [meta]="form" [data]="data"></nerv-form>
+	<nerv-form [meta]="form" [data]="data" [readonly]="enableReadonly"></nerv-form>
 </div>
 <div class="modal-footer">
 	<button *ngIf='buttons.ok' type="button" class="console-btn base-btn submit" (click)="onOk()">确定</button>

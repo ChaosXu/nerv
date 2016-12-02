@@ -9,6 +9,7 @@ import { ValidatorRegistry } from './validators/validator.registry';
     templateUrl: 'app/lib/form/form.component.html'
 })
 export class FormComponent implements OnInit {
+    @Input('readonly') enableReadonly = false;
     @Input() meta: Form;
     @Input('data') set setData(value: {}) {
         this.data = value;
@@ -43,6 +44,7 @@ export class FormComponent implements OnInit {
         });
 
         this.formGroup = new FormGroup(group);
+        this.formGroup.reset(this.data);
     }
 
     private getValidators(validators?: {}): ValidatorFn[] {

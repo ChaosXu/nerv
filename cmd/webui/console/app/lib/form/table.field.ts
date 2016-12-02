@@ -14,7 +14,7 @@ import { FormModal } from '../form/form.modal';
     templateUrl: 'app/lib/form/table.field.html',
 })
 export class TableField implements OnInit {
-
+    @Input('readonly') enableReadonly = false;
     @Input() field: Field;
     @Input() get data(): any {
         return this._data;
@@ -59,7 +59,13 @@ export class TableField implements OnInit {
     }
 
     onShow(item: {}) {
-        alert('onShow ' + JSON.stringify(item));
+        let newItem = {};
+        const modalRef = this.modalService.open(FormModal);
+        modalRef.componentInstance.title = '查看';
+        modalRef.componentInstance.enableReadonly = this.enableReadonly;
+        modalRef.componentInstance.form = this.formRegistry.get(this.field.forms.detail);
+        modalRef.componentInstance.data = item;
+        
     }
 
     onEdit(item: {}) {
@@ -67,15 +73,21 @@ export class TableField implements OnInit {
     }
 
     onRemove(item: {}) {
-        alert('onShow ' + JSON.stringify(item));
-        // const modalRef = this.modalService.open(ConfirmModal);
-        // modalRef.componentInstance.title = '删除';
-        // modalRef.componentInstance.message = `删除${item['Name'] || item['name']}?`;
-        // modalRef.result.then((result) => {
-        //     if (result == 'ok') {
-        //         this.remove(item);
-        //     }
-        // });
+        const modalRef = this.modalService.open(ConfirmModal);
+        modalRef.componentInstance.title = '删除';
+        modalRef.componentInstance.message = `删除${item['Name'] || item['name']}?`;
+        modalRef.result.then((result) => {
+            if (result == 'ok') {
+                let items = this.data[this.field.name];
+                if (items) {
+                    let index = items.indexOf(item);
+                    if (index >= 0) {
+                        items.splice(index, 1);
+                    }
+                }
+                this.model = { data: items };
+            }
+        });
     }
 
     onSort(column: { column: string, asc: boolean }) {

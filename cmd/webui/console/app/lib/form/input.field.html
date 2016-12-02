@@ -1,15 +1,16 @@
 <div class="form-group" [formGroup]="formGroup">
-	<label class="control-label" [attr.for]="field.name">
+    <label class="control-label" [attr.for]="field.name">
         <span>{{field.label}}</span>
         <span class="red" *ngIf="required">*</span>
     </label>
-	<div class="controls" [ngSwitch]="field.control">
-		<input class="base-input" *ngSwitchDefault [formControlName]="field.name" [id]="field.name" [type]="field.control" >                
-		<!--<select *ngSwitchCase="'dropdown'" [id]="field.name" [formControlName]="field.name">
+    <div class="controls">        
+        <input class="base-input" [formControlName]="field.name" [id]="field.name" [type]="field.control" *ngIf="enableReadonly" readonly="readonly">
+        <input class="base-input" [formControlName]="field.name" [id]="field.name" [type]="field.control" *ngIf="!enableReadonly">
+        <!--<select *ngSwitchCase="'dropdown'" [id]="field.name" [formControlName]="field.name">
             <option *ngFor="let opt of field.options" [value]="opt.key">
                 {{opt.value}}
             </option>
         </select>-->
         <div class="red" *ngIf="error!=''">{{error}}</div>
-	</div>
+    </div>
 </div>
