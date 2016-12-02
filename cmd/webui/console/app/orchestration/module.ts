@@ -8,14 +8,10 @@ const stForm: Form = {
     name: "service_template_form",
     fields: [
         {
-            name: "name", label: "名称", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "version", label: "版本", control: "number", type: "long", validators: {
-                'required': '不能为空'
-            }
+            name: "version", label: "版本", control: "number", type: "long", validators: { 'required': { message: '不能为空' } }
         }
     ]
 };
@@ -24,19 +20,13 @@ const topoForm: Form = {
     name: "topology_form",
     fields: [
         {
-            name: "name", label: "名称", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "template", label: "模板", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "template", label: "模板", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "version", label: "版本", control: "number", type: "long", validators: {
-                'required': '不能为空'
-            }
+            name: "version", label: "版本", control: "number", type: "long", validators: { 'required': { message: '不能为空' } }
         }
     ]
 };
@@ -45,14 +35,10 @@ const rtForm: Form = {
     name: "resource_type_form",
     fields: [
         {
-            name: "name", label: "名称", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "version", label: "版本", control: "number", type: "long", validators: {
-                'required': '不能为空'
-            }
+            name: "version", label: "版本", control: "number", type: "long", validators: { 'required': { message: '不能为空' } }
         },
         {
             name: "operations", label: "操作", control: "table", type: "Operation",
@@ -62,9 +48,7 @@ const rtForm: Form = {
                 edit: 'orchestration.rt.op.edit',
                 detail: 'orchestration.rt.op.detail',
             },
-            validators: {
-                'required': '不能为空'
-            },
+            //validators: { 'table_required': { message: '不能为空' } },
             display: {
                 columns: [
                     { label: '名称', name: 'name' },
@@ -81,19 +65,13 @@ const opForm: Form = {
     name: "op_form",
     fields: [
         {
-            name: "name", label: "名称", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "type", label: "类型", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "type", label: "类型", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "implementor", label: "实现", control: "text", type: "text", validators: {
-                'required': '不能为空'
-            }
+            name: "implementor", label: "实现", control: "text", type: "text", validators: { 'required': { message: '不能为空' } }
         }
     ]
 };

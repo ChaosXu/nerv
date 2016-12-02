@@ -39,13 +39,18 @@ func (p *Params) QueryParam(key string) string {
 	if p.queryParams == nil {
 		p.queryParams = map[string]string{}
 		rq := p.req.URL.RawQuery
+
 		if rq != "" {
 			for _, pair := range strings.Split(rq, "&") {
-				kv := strings.Split(pair, "=")
-				if uv, err := url.QueryUnescape(kv[1]); err != nil {
+				index := strings.Index(pair, "=");
+				if index <= 0 || index == len(pair) - 1 {
+					continue
+				}
+				kv := pair[0:index]
+				if uv, err := url.QueryUnescape(pair[index + 1:]); err != nil {
 					panic(err)
-				}else {
-					p.queryParams[kv[0]] = uv
+				} else {
+					p.queryParams[kv] = uv
 				}
 			}
 		}

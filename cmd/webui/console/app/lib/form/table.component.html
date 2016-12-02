@@ -3,7 +3,7 @@
 		<tr>
 			<th *ngFor="let column of columns" (click)="onSort(column.name)" style="cursor:default">
 				{{column.label}}
-				<span class="glyphicon " *ngIf="column.name && column.name==sortBy.column" [ngClass]="{'glyphicon-triangle-bottom':!sortBy.asc,'glyphicon-triangle-top':sortBy.asc}"></span>
+				<span class="glyphicon " *ngIf="enableSort && column.name && column.name==sortBy.column" [ngClass]="{'glyphicon-triangle-bottom':!sortBy.asc,'glyphicon-triangle-top':sortBy.asc}"></span>
 			</th>
 		</tr>
 	</thead>
@@ -26,7 +26,7 @@
 			</td>
 		</tr>
 	</tbody>
-	<tfoot>
+	<tfoot *ngIf="enablePaging || enableSort">
 		<tr>
 			<td [attr.colspan]="columns ? columns.length+1:0">
 				<nerv-pagination [page]="model? model.page:0" [pageCount]="model?model.pageCount:0" (paging)="onPaging($event)" (pageSize)="onPageSize($event)"></nerv-pagination>

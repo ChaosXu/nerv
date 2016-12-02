@@ -1,7 +1,7 @@
 <div class="form-group">
 	<label class="control-label" [attr.for]="field.name">
         <span>{{field.label}}</span>
-        <span class="red" *ngIf="field.validators['required']">*</span>
+        <span class="red" *ngIf="required">*</span>
     </label>
 	<div class="controls">
         <div class="role-perate pl20 pt10 pb10">
@@ -10,12 +10,12 @@
         <nerv-table [class]="'table table-bord table-striped table-hover'" 
             [columns]="field.display.columns" 
             [model]="model" 
+            [enablePaging] = "false"
+            [enableSort] = "false"
             (show)="onShow($event)"
             (remove)="onRemove($event)" 
             (edit)="onEdit($event)" 
-            (sort)="onSort($event)" 
-            (paging)="onPaging($event)" 
-            (pageSize)="onPageSize($event)"
+            (sort)="onSort($event)"                        
         >
         </nerv-table>		
 	</div>

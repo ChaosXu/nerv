@@ -10,6 +10,8 @@ export class TableComponent implements OnInit {
     @Input() class: string;
     @Input() columns: Array<any>;
     @Input() model: any;
+    @Input() enablePaging: boolean = true;
+    @Input() enableSort: boolean = true;
 
     @Output() show: EventEmitter<any> = new EventEmitter();
     @Output() remove: EventEmitter<any> = new EventEmitter();
@@ -37,7 +39,7 @@ export class TableComponent implements OnInit {
     }
 
     onSort(column: string) {
-        if (!column) return;
+        if (!this.enableSort || !column) return;
         this.sortBy = { column: column, asc: !this.sortBy.asc };
         this.sort.emit(this.sortBy);
     }

@@ -22,8 +22,8 @@ export class InputField implements OnInit {
     }
 
     ngOnInit(): void {
-        const control = this.formGroup.get(this.field.name);  
-          
+        const control = this.formGroup.get(this.field.name);
+
         control.valueChanges.subscribe(value => this.onValueChanges(value));
     }
 
@@ -40,7 +40,7 @@ export class InputField implements OnInit {
         const control = formGroup.get(field.name);
         if (control && control.dirty && !control.valid) {
             for (const key in control.errors) {
-                this.error += field.validators[key] + ' ';
+                this.error += field.validators[key].message + ' ';
             }
         }
     }
@@ -52,10 +52,5 @@ export class InputField implements OnInit {
             default:
                 return value;
         }
-    }
-
-    private setControlValue(): void {
-        const name = this.field.name;
-        this.formGroup.get(name).reset(this.data[name]);
     }
 }

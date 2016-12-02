@@ -7,14 +7,10 @@ const form = {
     name: "login_form",
     fields: [
         {
-            name: "Name", label: "用户名", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "Name", label: "用户名", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "Password", label: "密码", control: "password", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "Password", label: "密码", control: "password", type: "string", validators: { 'required': { message: '不能为空' } }
         },
     ]
 };

@@ -17,3 +17,7 @@ export class Field {
         detail: string
     }
 }
+
+export interface Constraint {
+    message: string;
+}

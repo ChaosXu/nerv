@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
-import { Form } from './model';
+import { Form, Constraint } from './model';
+import { ValidatorRegistry } from './validators/validator.registry';
 
 @Component({
     //moduleId: module.id,
@@ -9,18 +10,24 @@ import { Form } from './model';
 })
 export class FormComponent implements OnInit {
     @Input() meta: Form;
-    @Input('data') set setData(value:{}) {
+    @Input('data') set setData(value: {}) {
         this.data = value;
-        if(this.formGroup){
+        if (this.formGroup) {
             this.formGroup.reset(this.data);
-        }        
+        }
     }
-    data:{};
+    data: {};
     formGroup: FormGroup;
-    
+
+    constructor(
+        private validatorRegistry: ValidatorRegistry
+    )
+    { }
+
     get valid(): boolean {
         return this.formGroup ? this.formGroup.valid : false;
     }
+
 
     ngOnInit(): void {
         this.buildForm();
@@ -30,7 +37,9 @@ export class FormComponent implements OnInit {
         let group: any = {};
 
         this.meta.fields.forEach(field => {
-            group[field.name] = new FormControl('', this.getValidators(field.validators))
+            //if (field.control != 'table') {
+                group[field.name] = new FormControl('', this.getValidators(field.validators));
+            //}
         });
 
         this.formGroup = new FormGroup(group);
@@ -39,22 +48,13 @@ export class FormComponent implements OnInit {
     private getValidators(validators?: {}): ValidatorFn[] {
         if (!validators) return null;
         let fns: ValidatorFn[] = [];
-        for (let key in validators) {
-            let v = this.getValidator(key)
-            if (v != null) {
+        for (let k in validators) {
+            let v = this.validatorRegistry.get(k);
+            if (v) {
                 fns.push(v);
             }
         }
 
         return fns;
-    }
-
-    private getValidator(name: string): ValidatorFn {
-        switch (name) {
-            case 'required':
-                return Validators.required;
-            default:
-                return null;
-        }
     }
 }

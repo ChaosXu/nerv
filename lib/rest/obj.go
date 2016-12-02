@@ -69,7 +69,7 @@ func login(w http.ResponseWriter, req *http.Request) {
 	if db.RecordNotFound() {
 		render.Status(req, 404)
 		render.JSON(w, req, map[string]string{"Name":account.Name})
-	}else{
+	} else {
 		render.Status(req, 200)
 		render.JSON(w, req, map[string]string{"Name":account.Name})
 	}
@@ -90,6 +90,7 @@ func list(w http.ResponseWriter, req *http.Request) {
 			render.JSON(w, req, fmt.Sprintf("the values query param must be provided if the where query param is exists"))
 		}
 	}
+
 	md := db.Models[class]
 	if md == nil {
 		render.Status(req, 400)
@@ -98,12 +99,12 @@ func list(w http.ResponseWriter, req *http.Request) {
 	}
 
 	//count
-	d := db.DB
+	d := db.DB.Model(md.NewSlice());
 	var count int64
 	if where != "" {
-		d = db.DB.Where(where, args)
+		d = d.Where(where, args)
 	}
-	if err := d.Model(md.NewSlice()).Count(&count).Error; err != nil {
+	if err := d.Count(&count).Error; err != nil {
 		render.Status(req, 500)
 		render.JSON(w, req, err.Error())
 		return

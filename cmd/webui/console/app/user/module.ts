@@ -8,14 +8,10 @@ const form: Form = {
     name: "user_form",
     fields: [
         {
-            name: "Name", label: "用户名", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "Name", label: "用户名", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "Nick", label: "昵称", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "Nick", label: "昵称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         { name: "Mail", label: "邮件", control: "email", type: "string" },
         { name: "Phone", label: "电话", control: "text", type: "long" },

@@ -8,14 +8,10 @@ const hostForm: Form = {
     name: "host_form",
     fields: [
         {
-            name: "name", label: "名称", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         },
         {
-            name: "ip", label: "IP", control: "text", type: "string", validators: {
-                'required': '不能为空'
-            }
+            name: "ip", label: "IP", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
         }
     ]
 };

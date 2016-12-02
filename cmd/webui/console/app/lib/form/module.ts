@@ -10,6 +10,7 @@ import { FormModal } from './form.modal';
 import { InputField } from './input.field';
 import { TableField } from './table.field';
 import { FormRegistry } from './form.registry';
+import { ValidatorRegistry } from './validators/validator.registry';
 
 @NgModule({
     imports: [
@@ -38,7 +39,8 @@ import { FormRegistry } from './form.registry';
         TableField
     ],
     providers: [
-        FormRegistry
+        FormRegistry,
+        ValidatorRegistry
     ],
     entryComponents: [
         ConfirmModal,

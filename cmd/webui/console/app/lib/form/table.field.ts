@@ -16,8 +16,23 @@ import { FormModal } from '../form/form.modal';
 export class TableField implements OnInit {
 
     @Input() field: Field;
-    @Input() data: {};
+    @Input() get data(): any {
+        return this._data;
+    };
+
+    set data(value: any) {
+        this._data = value;
+        if (this._data && (this._data['id'] || this._data['ID'])) {
+            this.load();
+        }
+    }
+
     model: {};
+    private _data: any;
+
+    get requried(): boolean {
+        return this.field.validators ? this.field.validators['table_required'] : false;
+    }
 
     constructor(
         private formRegistry: FormRegistry,
@@ -27,9 +42,7 @@ export class TableField implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        if (this.data && (this.data['id'] || this.data['ID'])) {
-            this.load();
-        }
+
     }
 
     onAdd() {
@@ -105,7 +118,10 @@ export class TableField implements OnInit {
         const type = this.field.type;
         const conditions = this.field.condition;
         this.resty.find(type, { conditions: conditions, values: [this.data['id'] || this.data['ID'],] }, order, offset, limit)
-            .then(response => this.data = response)
+            .then(response => {
+                this.model = response
+                this.data[this.field.name] = response.data;
+            })
             .catch((error) => this.error('加载错误', `加载列表${type}失败\r\n${error}`));
     }
 
@@ -115,6 +131,6 @@ export class TableField implements OnInit {
             items = this.data[this.field.name] = [];
         }
         items.push(item);
-        this.model = { data: items };               
+        this.model = { data: items };
     }
 }
