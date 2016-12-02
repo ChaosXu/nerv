@@ -67,7 +67,7 @@ const opForm: Form = {
         {
             name: "name", label: "名称", control: "select", type: "string", validators: { 'required': { message: '不能为空' } },
             display: {
-                options: [                    
+                options: [
                     { label: 'Create', value: 'Create', default: true },
                     { label: 'Delete', value: 'Delete' },
                     { label: 'Setup', value: 'Setup' },
@@ -79,7 +79,7 @@ const opForm: Form = {
         {
             name: "type", label: "类型", control: "select", type: "string", validators: { 'required': { message: '不能为空' } },
             display: {
-                options: [                    
+                options: [
                     { label: 'Shell', value: 'shell', default: true },
                     { label: 'GO', value: 'go' }
                 ]
@@ -87,6 +87,30 @@ const opForm: Form = {
         },
         {
             name: "implementor", label: "实现", control: "text", type: "text", validators: { 'required': { message: '不能为空' } }
+        }
+    ]
+};
+
+const scriptForm: Form = {
+    name: "script_form",
+    fields: [
+        {
+            name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
+        },
+        {
+            name: "type", label: "类型", control: "select", type: "string", validators: { 'required': { message: '不能为空' } },
+            display: {
+                options: [
+                    { label: 'Shell', value: 'shell', default: true },
+                    { label: 'GO', value: 'go' }
+                ]
+            }
+        },
+        {
+            name: "path", label: "路径", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
+        },
+        {
+            name: "file", label: "实现", control: "file", type: "file", validators: { 'required': { message: '不能为空' } }
         }
     ]
 };
@@ -115,19 +139,26 @@ export class OrchestrationModule {
         formRegistry.put('orchestration.rt.op.edit', opForm);
         formRegistry.put('orchestration.rt.op.detail', opForm);
 
+        formRegistry.put('orchestration.script.add', scriptForm);
+        formRegistry.put('orchestration.script.edit', scriptForm);
+        formRegistry.put('orchestration.script.detail', scriptForm);
+
         configService.put('orchestration',
             {
                 title: '资源编排',
                 menus: [
                     {
-                        name: "模板管理",
-                        url: "/orchestration/ServiceTemplate"
-                    }, {
                         name: "拓扑管理",
                         url: "/orchestration/Topology"
                     }, {
+                        name: "模板管理",
+                        url: "/orchestration/ServiceTemplate"
+                    }, {
                         name: "资源类",
                         url: "/orchestration/ResourceType"
+                    },{
+                        name: "脚本",
+                        url: "/orchestration/Script"
                     }
                 ],
                 ServiceTemplate: {
@@ -165,6 +196,17 @@ export class OrchestrationModule {
                     add: { title: '添加资源类', form: 'orchestration.rt.add' },
                     edit: { title: '编辑资源类', form: 'orchestration.rt.edit' },
                     detail: { title: '查看资源类', form: 'orchestration.rt.detail' }
+                },                
+                Script: {
+                    list: {
+                        title: '脚本列表', columns: [
+                            { label: '名称', name: 'name' },
+                            { label: '操作' }
+                        ]
+                    },
+                    add: { title: '添加脚本', form: 'orchestration.script.add' },
+                    edit: { title: '编辑脚本', form: 'orchestration.script.edit' },
+                    detail: { title: '查看删除', form: 'orchestration.script.detail' }
                 }
             });
     }
