@@ -1,21 +1,22 @@
+
 # Nerv  [![Build Status](https://travis-ci.org/ChaosXu/nerv.svg?branch=master)](https://travis-ci.org/ChaosXu/nerv)
 
-## 概述
+## Overview
 
 TBD
 
-## 快速启动
+## Quick Start
 
 TBD
 
-## 工作机制
+## How Nerv Works
 
 TBD
 
-## 部署与配置
+## Configuring Nerv
 
 TBD
 
-## 从源码构建
+## Building Nerv from the Source
 
 TBD
