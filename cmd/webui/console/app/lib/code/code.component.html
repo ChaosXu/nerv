@@ -1,1 +1,35 @@
-code component
+<div style="height: 100%" class="ng-scope">
+    <div class="project-list">
+        <div class="title">
+            <button class="console-btn base-btn" (click)="addFile()">添加</button>
+            <button class="console-btn base-btn" (click)="removeFile()">删除</button>
+            <button class="console-btn base-btn" (click)="renameFile()">重命名</button>
+        </div>
+        <Tree [nodes]="nodes"></Tree>
+    </div>
+    <div class="project-detail">
+        <div>
+            <div class="role-perate pl20 pt10 pb10 title">
+                <a>
+                    <button class="console-btn base-btn" (click)="saveFile()">保存</button>
+                </a>
+            </div>
+
+            <div class="uc-f-t">
+                <div class="page-padding-height" style="height: 100%; position: relative;">
+                    <nerv-ace 
+                        [text]="text" 
+                        [mode]="'javascript'" 
+                        [theme]="'monokai'" 
+                        [options]="options" 
+                        [readOnly]="false" 
+                        (textChanged)="onTextChanged($event)"
+                        style="display:block; height: 100%; width:100%">
+                    </nerv-ace>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

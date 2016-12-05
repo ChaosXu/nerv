@@ -24,9 +24,12 @@
       '@angular/upgrade': 'npm:@angular/upgrade/bundles/upgrade.umd.js',
       // other libraries
       'rxjs': 'npm:rxjs',
-      '@ng-bootstrap/ng-bootstrap': 'npm:@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
-      'angular2-datatable':'npm:angular2-datatable',
-      'lodash':'npm:lodash/lodash.js'      
+      '@ng-bootstrap/ng-bootstrap': 'npm:@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',      
+      'angular2-tree-component':'npm:angular2-tree-component',
+      'lodash':'npm:lodash',
+      'brace':'npm:brace',
+      'w3c-blob':'npm:w3c-blob',
+      'buffer':'npm:buffer-shims'   
     },
     // packages tells the System loader how to load when no filename and/or no extension
     packages: {
@@ -37,10 +40,26 @@
       rxjs: {
         defaultExtension: 'js'
       },
-      'angular2-datatable':{
+      'angular2-tree-component': {
+        main: 'dist/angular2-tree-component.js',
+        defaultExtension: 'js'
+      },
+      lodash: {
+        main: 'lodash.js',
+        defaultExtension: 'js'
+      },
+      brace: {
         main:'index.js',
         defaultExtension:'js'
-      }
+      }, 
+      'w3c-blob':{
+        main:'index.js',
+        defaultExtension:'js'
+      },
+      'buffer':{
+        main:'index.js',
+        defaultExtension:'js'
+      }   
     }
   });
 })(this);

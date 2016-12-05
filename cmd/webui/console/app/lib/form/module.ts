@@ -12,6 +12,7 @@ import { TableField } from './fields/table.field';
 import { SelectField } from './fields/select.field';
 import { FormRegistry } from './form.registry';
 import { ValidatorRegistry } from './validators/validator.registry';
+import { AceDirective } from './ace/ace.directive';
 
 @NgModule({
     imports: [
@@ -24,6 +25,7 @@ import { ValidatorRegistry } from './validators/validator.registry';
         ConfirmModal,
         FormModal,
         FormComponent,
+        AceDirective,
         TableComponent,
         PaginationComponent,
         InputField,
@@ -34,6 +36,7 @@ import { ValidatorRegistry } from './validators/validator.registry';
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
+        AceDirective,
         FormComponent,
         TableComponent,
         PaginationComponent,

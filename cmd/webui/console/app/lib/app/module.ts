@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DataTableModule } from 'angular2-datatable';
 import { RestyModule } from '../resty/module';
 import { ConfigModule } from '../config/module';
 import { FormModule } from '../form/module';
@@ -14,8 +13,7 @@ import { routes } from './routes';
 @NgModule({
     imports: [
         RestyModule,
-        FormModule,
-        DataTableModule,
+        FormModule, 
         RouterModule    
     ],
     declarations: [
