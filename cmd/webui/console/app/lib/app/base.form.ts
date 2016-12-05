@@ -1,5 +1,5 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
 import 'rxjs/add/operator/toPromise';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { FormConfig } from '../config/form.config';
@@ -30,6 +30,12 @@ export abstract class FormBaseComponent implements OnInit {
         this.route.parent.parent.parent.params.forEach((params: Params) => {
             this.app = params['app']
         });
+
+        if (!this.app) {
+            this.route.parent.parent.parent.url.forEach((segment: UrlSegment[]) => {
+                this.app = segment[0].path;
+            });
+        }
         this.route.params.forEach((params: Params) => {
             this.type = params['type']
             this.id = +params['id'];

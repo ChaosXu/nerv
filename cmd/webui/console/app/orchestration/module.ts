@@ -3,6 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { Form } from '../lib/form/model';
 import { FormConfig } from '../lib/config/form.config';
 import { FormRegistry } from '../lib/form/form.registry';
+import { AppModule } from '../lib/app/module';
+import { routes } from './routes';
+import { CodeModule } from '../lib/code/module';
 
 const stForm: Form = {
     name: "service_template_form",
@@ -116,6 +119,11 @@ const scriptForm: Form = {
 };
 
 @NgModule({
+    imports:[        
+        AppModule,
+        CodeModule,
+        RouterModule.forChild(routes)        
+    ]    
 })
 export class OrchestrationModule {
 

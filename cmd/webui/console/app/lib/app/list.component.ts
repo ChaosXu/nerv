@@ -1,5 +1,5 @@
 import { Component, ViewContainerRef, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormConfig } from '../config/form.config';
 import { RestyService } from '../resty/resty.service';
@@ -31,15 +31,21 @@ export class ListComponent {
 
     ngOnInit() {
         this.route.parent.parent.params.subscribe((params: Params) => {
-            this.app = params['app'];            
+            this.app = params['app'];
         });
+
+        if (!this.app) {
+            this.route.parent.parent.parent.url.forEach((segment: UrlSegment[]) => {
+                this.app = segment[0].path;
+            });
+        }
         this.route.params.subscribe((params: Params) => {
-            this.type = params['type'];            
+            this.type = params['type'];
             const config = this.configService.get(this.app)[this.type]['list'];
             this.title = config.title;
             this.columns = config.columns;
             this.load();
-        });        
+        });
     }
 
     onAdd() {

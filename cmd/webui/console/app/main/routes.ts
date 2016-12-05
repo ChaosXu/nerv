@@ -1,10 +1,12 @@
 import { Routes } from '@angular/router';
 import { AuthGuard } from '../lib/security/auth.guard';
-import { ListApp } from '../lib/app/list.app';
+import { routes } from '../lib/app/routes';
 
-export const routes: Routes = [
+export const rootRoutes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'dashboard', loadChildren: 'app/dashboard/module#DashboardModule', canActivate: [AuthGuard] },
   { path: 'monitor', loadChildren: 'app/monitor/module#MonitorModule', canActivate: [AuthGuard] },
-  { path: ':app', loadChildren: 'app/lib/app/module#AppModule', canActivate: [AuthGuard] }
+  { path: 'orchestration', loadChildren: 'app/orchestration/module#OrchestrationModule', canActivate: [AuthGuard] },
+  { path: 'user', loadChildren: 'app/user/module#UserModule', canActivate: [AuthGuard] },
+  { path: 'infrastructure', loadChildren: 'app/infrastructure/module#InfrastructureModule', canActivate: [AuthGuard] } 
 ];

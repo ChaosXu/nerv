@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
 import { FormConfig } from '../config/form.config';
 
 export interface Menu {
@@ -11,20 +11,35 @@ export interface Menu {
     selector: 'nerv-list-app',
     templateUrl: 'app/lib/app/list.app.html',
 })
-export class ListApp {
+export class ListApp implements OnInit {
     title: string;
     menus: Menu[];
 
     constructor(
-        configService: FormConfig,
+        private configService: FormConfig,
         router: Router,
-        route: ActivatedRoute,
+        private route: ActivatedRoute,
     ) {
-        route.params.subscribe((params: Params) => {
-            const app = params['app'];
-            const config = configService.get(app);
+
+    }
+
+    ngOnInit(): void {
+        let app;
+        this.route.params.subscribe((params: Params) => {
+            app = params['app'];
+            if (!app) return;
+            const config = this.configService.get(app);
             this.title = config['title'];
             this.menus = config['menus'];
         });
+
+        if (!app) {
+            this.route.parent.url.forEach((segment: UrlSegment[]) => {
+                app = segment[0].path;
+                const config = this.configService.get(app);
+                this.title = config['title'];
+                this.menus = config['menus'];
+            });
+        }
     }
 }

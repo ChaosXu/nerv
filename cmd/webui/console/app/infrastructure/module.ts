@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { Form } from '../lib/form/model';
 import { FormConfig } from '../lib/config/form.config';
 import { FormRegistry } from '../lib/form/form.registry';
+import { routes } from '../lib/app/routes';
+import { AppModule } from '../lib/app/module';
 
 const hostForm: Form = {
     name: "host_form",
@@ -17,6 +19,10 @@ const hostForm: Form = {
 };
 
 @NgModule({
+    imports:[
+        AppModule,
+        RouterModule.forChild(routes)
+    ]
 })
 export class InfrastructureModule {
 

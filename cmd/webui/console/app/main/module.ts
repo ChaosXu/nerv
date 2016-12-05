@@ -7,22 +7,16 @@ import { Application } from './application';
 import { StartMenu } from './startmenu';
 import { Dock } from './dock';
 import { CatalogConfig } from '../lib/config/catalog.config';
-import { routes } from './routes';
-import { UserModule } from '../user/module';
+import { rootRoutes } from './routes';
 import { SecurityModule } from '../lib/security/module';
-import { OrchestrationModule } from '../orchestration/module';
-import { InfrastructureModule } from '../infrastructure/module';
 
 @NgModule({
   imports: [
     BrowserModule,
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(rootRoutes),
     NgbModule.forRoot(),
     ConfigModule,
-    UserModule,
-    SecurityModule,
-    OrchestrationModule,
-    InfrastructureModule
+    SecurityModule
   ],
   declarations: [
     Application,

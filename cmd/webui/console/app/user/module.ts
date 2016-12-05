@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { Form } from '../lib/form/model';
 import { FormConfig } from '../lib/config/form.config';
 import { FormRegistry } from '../lib/form/form.registry';
+import { AppModule } from '../lib/app/module';
+import { routes } from '../lib/app/routes';
 
 const form: Form = {
     name: "user_form",
@@ -20,6 +22,10 @@ const form: Form = {
 };
 
 @NgModule({
+    imports: [
+        AppModule,
+        RouterModule.forChild(routes)
+    ]
 })
 export class UserModule {
 

@@ -16,9 +16,16 @@ import { routes } from './routes';
         RestyModule,
         FormModule,
         DataTableModule,
-        RouterModule.forChild(routes)
+        RouterModule    
     ],
     declarations: [
+        ListApp,
+        ListComponent,
+        AddComponent,
+        EditComponent,
+        DetailComponent
+    ],
+    exports: [
         ListApp,
         ListComponent,
         AddComponent,
