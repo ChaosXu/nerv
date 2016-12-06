@@ -1,0 +1,38 @@
+<div style="height: 100%" class="ng-scope">
+    <div class="project-list">
+        <div class="title">
+            {{selectedNode ? selectedNode.title: ''}}
+        </div>
+        <div>
+            <Tree [nodes]="nodes" (onActivate)="onActive($event)"></Tree>
+        </div>
+    </div>
+    <div class="project-detail">
+        <div>
+            <div class="role-perate pl20 pt10 pb10 title">
+                <a>
+                    <button class="console-btn base-btn" (click)="onAddFile()" [disabled]="!canAddFile">添加文件</button>
+                    <button class="console-btn base-btn" (click)="onAddDir()" [disabled]="!canAddDir">添加文件夹</button>
+                    <button class="console-btn base-btn" (click)="onRemove()" [disabled]="!canRemove">删除</button>
+                    <button class="console-btn base-btn" (click)="onRename()" [disabled]="!canRename">重命名</button>
+                    <button class="console-btn base-btn" (click)="saveFile()" [disabled]="!canSave">保存</button>
+                </a>
+            </div>
+
+            <div class="uc-f-t">
+                <div class="page-padding-height" style="height: 100%; position: relative;">
+                    <nerv-ace                          
+                        [mode]="mode" 
+                        [theme]="'monokai'" 
+                        [options]="options" 
+                        [readOnly]="false" 
+                        (textChanged)="onTextChanged($event)"
+                        style="display:block;top:5px;height: 100%; width:100%">
+                    </nerv-ace>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

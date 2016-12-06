@@ -4,7 +4,7 @@ import { ListComponent } from '../lib/app/list.component';
 import { AddComponent } from '../lib/app/add.form';
 import { EditComponent } from '../lib/app/edit.form';
 import { DetailComponent } from '../lib/app/detail.form';
-import { CodeComponent } from '../lib/code/code.component';
+import { ExplorerComponent } from '../lib/explorer/explorer.component';
 
 export const routes: Routes = [
     {
@@ -13,7 +13,7 @@ export const routes: Routes = [
             {
                 path: 'Script',
                 children: [
-                    { path: '', component: CodeComponent }
+                    { path: '', component: ExplorerComponent }
                 ]
             },
             {

@@ -1,6 +1,10 @@
 import { Directive, Input, Output, ElementRef, EventEmitter, OnInit } from '@angular/core';
 import * as ace from 'brace';
 import 'brace/mode/javascript';
+import 'brace/mode/json';
+import 'brace/mode/sh';
+import 'brace/mode/ruby';
+import 'brace/mode/python';
 import 'brace/theme/monokai';
 
 @Directive({

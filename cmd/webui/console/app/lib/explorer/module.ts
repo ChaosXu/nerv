@@ -4,7 +4,7 @@ import { TreeModule } from 'angular2-tree-component';
 import { RestyModule } from '../resty/module';
 import { ConfigModule } from '../config/module';
 import { FormModule } from '../form/module';
-import { CodeComponent } from './code.component';
+import { ExplorerComponent } from './explorer.component';
 
 @NgModule({
     imports: [
@@ -13,11 +13,11 @@ import { CodeComponent } from './code.component';
         FormModule,
     ],
     declarations: [
-        CodeComponent
+        ExplorerComponent
     ],
     exports: [
-        CodeComponent
+        ExplorerComponent
     ]
 })
-export class CodeModule {
+export class ExplorerModule {
 }
