@@ -1,7 +1,7 @@
 <div style="height: 100%" class="ng-scope">
     <div class="project-list">
         <div class="title">
-            {{selectedNode ? selectedNode.title: ''}}
+            {{selectedNode ? selectedNode.name: ''}}
         </div>
         <div>
             <Tree [nodes]="nodes" (onActivate)="onActive($event)"></Tree>

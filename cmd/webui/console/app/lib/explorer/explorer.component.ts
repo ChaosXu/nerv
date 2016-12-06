@@ -45,6 +45,15 @@ const ADD_FILE_FORM = {
     ]
 };
 
+const RENAME_FORM = {
+    name: "explorer_rename_form",
+    fields: [
+        {
+            name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
+        }
+    ]
+};
+
 @Component({
     selector: 'nerv-explorer',
     templateUrl: 'app/lib/explorer/explorer.component.html',
@@ -138,8 +147,17 @@ export class ExplorerComponent implements OnInit {
 
 
 
-    renameFile(file: {}) {
-
+    onRename(file: {}) {
+        let newItem = {};
+        const modalRef = this.modalService.open(FormModal);
+        modalRef.componentInstance.title = '重命名';
+        modalRef.componentInstance.form = RENAME_FORM;
+        modalRef.componentInstance.data = newItem;
+        modalRef.result.then((result) => {
+            if (result == 'ok') {
+                this.rename(newItem['name']);
+            }
+        });
     }
 
     saveFile(file: {}) {
@@ -159,6 +177,12 @@ export class ExplorerComponent implements OnInit {
         }
     }
 
+    private rename(name: string): void {
+        this.selectedNode.name = name;
+        this.selectedNode.title = name;
+        this.tree.treeModel.update();
+    }
+
     private remove(file: File): void {
         const activeNode = this.tree.treeModel.activeNodes[0];
         const index = activeNode.parent.data.children.indexOf(activeNode.data);
@@ -166,52 +190,47 @@ export class ExplorerComponent implements OnInit {
         this.tree.treeModel.update();
         this.ace.text = '';
     }
-    
+
     private addFile(parent: File, node: {}): void {
         const selectedNode = this.selectedNode;
+        const name = node['name'];
         if (selectedNode) {
             if (selectedNode.type == 'dir') {
-                const name = node['name'];
                 let children = selectedNode.children;
                 if (!children) {
                     this.selectedNode.children = children = new Array<File>();
                 }
-                children.push({ name: name, type: 'file', title: `${name}.${node['fileType']}`, extension: node['fileType'] });
+                const title = `${name}.${node['fileType']}`;
+                children.push({ name: title, type: 'file', title: name, extension: node['fileType'] });
                 this.tree.treeModel.update();
-        //        this.tree.treeModel.activeNodes[0].children[children.length-1].focus();
             } else {
                 let children = this.tree.treeModel.activeNodes[0].parent.data.children;
-                children.push({ name: name, type: 'file', title: `${name}.${node['fileType']}`, extension: node['fileType'] });
+                const title = `${name}.${node['fileType']}`;
+                children.push({ name: title, type: 'file', title: title, extension: node['fileType'] });
                 this.tree.treeModel.update();
-      //          this.tree.treeModel.activeNodes[0].parent.children[children.length-1].focus();
             }
-
-            
         }
     }
 
     private addDir(parent: File, node: {}): void {
         const name = node['name'];
         const selectedNode = this.selectedNode;
+        let nodes;
         if (selectedNode) {
-            if (node['dirType'] == 'child') {
-                let children = selectedNode.children;
-                if (!children) {
-                    selectedNode.children = children = new Array<File>();
+            if (selectedNode['type'] == 'file') {
+                nodes = this.tree.treeModel.activeNodes[0].parent.data.children;
+            } else if (node['dirType'] == 'child') {
+                nodes = selectedNode.children;
+                if (!nodes) {
+                    selectedNode.children = nodes = new Array<File>();
                 }
-                children.push({ name: name, type: 'dir', title: name });
-                this.tree.treeModel.update();
-    //            this.tree.treeModel.activeNodes[0].children[children.length-1].focus();
             } else {
-                this.nodes.push({ name: name, type: 'dir', title: name });
-                this.tree.treeModel.update();
-  //              this.tree.treeModel.nodes[this.tree.treeModel.nodes.length-1].focus();
+                nodes = this.nodes;
             }
         } else {
-            this.nodes.push({ name: name, type: 'dir', title: name });
-            this.tree.treeModel.update();
-//this.tree.treeModel.nodes[this.tree.treeModel.nodes.length-1].focus();
+            nodes = this.nodes;
         }
-        
+        nodes.push({ name: name, type: 'dir', title: name });
+        this.tree.treeModel.update();
     }
 }
