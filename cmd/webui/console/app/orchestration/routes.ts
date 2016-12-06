@@ -9,7 +9,13 @@ import { ExplorerComponent } from '../lib/explorer/explorer.component';
 export const routes: Routes = [
     {
         path: '', component: ListApp,
-        children: [            
+        children: [
+            {
+                path: 'ServiceTemplate',
+                children: [
+                    { path: '', component: ExplorerComponent }
+                ]
+            },            
             {
                 path: 'Script',
                 children: [
