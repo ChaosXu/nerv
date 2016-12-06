@@ -12,10 +12,10 @@
             <div class="role-perate pl20 pt10 pb10 title">
                 <a>
                     <button class="console-btn base-btn" (click)="onAddFile()" [disabled]="!canAddFile">添加文件</button>
-                    <button class="console-btn base-btn" (click)="onAddDir()" [disabled]="!canAddDir">添加文件夹</button>
+                    <button class="console-btn base-btn" (click)="onAddDir()" >添加文件夹</button>
                     <button class="console-btn base-btn" (click)="onRemove()" [disabled]="!canRemove">删除</button>
                     <button class="console-btn base-btn" (click)="onRename()" [disabled]="!canRename">重命名</button>
-                    <button class="console-btn base-btn" (click)="saveFile()" [disabled]="!canSave">保存</button>
+                    <button class="console-btn base-btn" (click)="onSave()" [disabled]="!canSave">保存</button>
                 </a>
             </div>
 
