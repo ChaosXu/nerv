@@ -69,14 +69,14 @@ export abstract class FormBaseComponent implements OnInit {
     }
 
     private error(title: string, error: any): void {
-        const modalRef = this.modalService.open(ConfirmModal);
+        const modalRef = this.modalService.open(ConfirmModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = error;
         modalRef.componentInstance.buttons = { ok: true, cancel: false };
     }
 
     private info(title: string, message: string): void {
-        const modalRef = this.modalService.open(ConfirmModal);
+        const modalRef = this.modalService.open(ConfirmModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = message;
         modalRef.componentInstance.buttons = { ok: true, cancel: false };

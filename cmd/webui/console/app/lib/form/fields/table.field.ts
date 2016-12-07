@@ -47,7 +47,7 @@ export class TableField implements OnInit {
 
     onAdd() {
         let newItem = {};
-        const modalRef = this.modalService.open(FormModal);
+        const modalRef = this.modalService.open(FormModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = '添加';
         modalRef.componentInstance.form = this.formRegistry.get(this.field.forms.add);
         modalRef.componentInstance.data = newItem;
@@ -60,7 +60,7 @@ export class TableField implements OnInit {
 
     onShow(item: {}) {
         let newItem = {};
-        const modalRef = this.modalService.open(FormModal);
+        const modalRef = this.modalService.open(FormModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = '查看';
         modalRef.componentInstance.enableReadonly = true;
         modalRef.componentInstance.form = this.formRegistry.get(this.field.forms.detail);
@@ -70,7 +70,7 @@ export class TableField implements OnInit {
 
     onEdit(item: {}) {
         let newItem = {};
-        const modalRef = this.modalService.open(FormModal);
+        const modalRef = this.modalService.open(FormModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = '编辑';
         modalRef.componentInstance.enableReadonly = false;
         modalRef.componentInstance.form = this.formRegistry.get(this.field.forms.detail);
@@ -78,7 +78,7 @@ export class TableField implements OnInit {
     }
 
     onRemove(item: {}) {
-        const modalRef = this.modalService.open(ConfirmModal);
+        const modalRef = this.modalService.open(ConfirmModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = '删除';
         modalRef.componentInstance.message = `删除${item['Name'] || item['name']}?`;
         modalRef.result.then((result) => {
@@ -119,7 +119,7 @@ export class TableField implements OnInit {
     }
 
     private error(title: string, error: any): void {
-        const modalRef = this.modalService.open(ConfirmModal);
+        const modalRef = this.modalService.open(ConfirmModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = error.toString();
         modalRef.componentInstance.buttons = { ok: true, cancel: false };

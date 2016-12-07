@@ -69,14 +69,16 @@ export class ExplorerComponent implements OnInit {
     @ViewChild(AceDirective)
     private ace: AceDirective;
 
-    get selectedNode(): File {
-        const nodes = this.tree.treeModel.activeNodes;
-        if (nodes && nodes.length > 0)
-            return nodes[0].data;
-        else
-            return null;
+    // get selectedNode(): File {
+    //     const nodes = this.tree.treeModel.activeNodes;
+    //     if (nodes && nodes.length > 0)
+    //         return nodes[0].data;
+    //     else
+    //         return null;
+    // }
 
-    }
+    selectedNode: File
+
     get canRemove(): boolean {
         return this.selectedNode != null;
     }
@@ -107,9 +109,8 @@ export class ExplorerComponent implements OnInit {
     }
 
     onAddFile() {
-
         let newItem = {};
-        const modalRef = this.modalService.open(FormModal);
+        const modalRef = this.modalService.open(FormModal, { backdrop: 'static' });
         modalRef.componentInstance.title = '添加文件';
         modalRef.componentInstance.form = ADD_FILE_FORM;
         modalRef.componentInstance.data = newItem;
@@ -122,7 +123,7 @@ export class ExplorerComponent implements OnInit {
 
     onAddDir() {
         let newItem = {};
-        const modalRef = this.modalService.open(FormModal);
+        const modalRef = this.modalService.open(FormModal, { backdrop: 'static' });
         modalRef.componentInstance.title = '添加文件夹';
         modalRef.componentInstance.form = ADD_DIR_FORM;
         modalRef.componentInstance.data = newItem;
@@ -135,7 +136,7 @@ export class ExplorerComponent implements OnInit {
 
     onRemove() {
         if (!this.canRemove) return;
-        const modalRef = this.modalService.open(ConfirmModal);
+        const modalRef = this.modalService.open(ConfirmModal, { backdrop: 'static' });
         modalRef.componentInstance.title = '删除';
         modalRef.componentInstance.message = `删除${this.selectedNode.title}?`;
         modalRef.result.then((result) => {
@@ -149,7 +150,7 @@ export class ExplorerComponent implements OnInit {
 
     onRename(file: {}) {
         let newItem = {};
-        const modalRef = this.modalService.open(FormModal);
+        const modalRef = this.modalService.open(FormModal, { backdrop: 'static' });
         modalRef.componentInstance.title = '重命名';
         modalRef.componentInstance.form = RENAME_FORM;
         modalRef.componentInstance.data = newItem;
@@ -165,16 +166,27 @@ export class ExplorerComponent implements OnInit {
     }
 
     onTextChanged(text: string) {
-        if (this.selectedNode && this.selectedNode.type == 'file') {
-            this.selectedNode.content = text;
+        const file = this.selectedNode;
+        if (file && file.type == 'file') {
+            file.dirty = true;
+            file.content = this.getAceContent();
         }
     }
 
     onActive(event: {}) {
-        const selectedNode = this.selectedNode;
-        if (selectedNode && selectedNode.type == 'file') {
-            this.ace.text = selectedNode.content || '';
+        const node = event['node'];
+        const file = this.selectedNode = node['data'];
+        if (file && file.type == 'file') {
+            this.loadContent(file);
         }
+    }
+
+    private getAceContent(): string {
+        return this.ace.text;
+    }
+    private loadContent(file: File): void {
+        const content = file.content;
+        this.ace.text = content || '';
     }
 
     private rename(name: string): void {

@@ -61,7 +61,7 @@ export class ListComponent {
     }
 
     onRemove(item: {}) {
-        const modalRef = this.modalService.open(ConfirmModal);
+        const modalRef = this.modalService.open(ConfirmModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = '删除';
         modalRef.componentInstance.message = `删除${item['Name'] || item['name']}?`;
         modalRef.result.then((result) => {
@@ -95,7 +95,7 @@ export class ListComponent {
     }
 
     private error(title: string, error: any): void {
-        const modalRef = this.modalService.open(ConfirmModal);
+        const modalRef = this.modalService.open(ConfirmModal,{ backdrop: 'static' });
         modalRef.componentInstance.title = title;
         modalRef.componentInstance.message = error.toString();
         modalRef.componentInstance.buttons = { ok: true, cancel: false };

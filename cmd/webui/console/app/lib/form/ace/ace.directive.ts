@@ -17,6 +17,11 @@ export class AceDirective {
         this.editor.clearSelection();
         this.editor.focus();
     }
+
+    get text(): string {
+        return this.editor.getValue();
+    }
+    
     @Input() set mode(value) {
         this._mode = value;
         this.editor.getSession().setMode(`ace/mode/${value}`);
@@ -37,7 +42,7 @@ export class AceDirective {
 
     @Output() textChanged = new EventEmitter();
     @Output() editorRef = new EventEmitter();
-    
+
     private editor: ace.Editor;
     private oldVal: string;
     private newVal: string;
