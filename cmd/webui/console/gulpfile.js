@@ -82,7 +82,7 @@ gulp.task('connect', function () {
                     changeOrigin: true,
                     ws: true
                 }),
-                proxy('/api/files', {
+                proxy('/api/scripts', {
                     target: 'http://localhost:3332',
                     changeOrigin: true,
                     ws: true

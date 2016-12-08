@@ -17,16 +17,9 @@ export class FileService {
 
     constructor(private http: Http) { }
 
-    list(path:string):Promise<any> {
-        const url = `api/files/index/${path}`;
-        return this.http.get(url, { headers: this.headers })
-            .toPromise()
-            .then(response => response.json())
-            .catch(this.error);
-    }
 
     get(path: string): Promise<any> {
-        const url = `api/files/obj/${path}`;
+        const url = `api/scripts/${path}`;
         return this.http.get(url, { headers: this.headers })
             .toPromise()
             .then(response => response.json())

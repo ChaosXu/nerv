@@ -83,10 +83,6 @@ export class ExplorerComponent implements OnInit {
         return this.selectedNode != null;
     }
 
-    // get canAddDir(): boolean {
-    //     return !this.selectedNode || this.selectedNode.type == 'dir';
-    // }
-
     get canSave(): boolean {
         return this.selectedNode && this.selectedNode.type == 'file';
     }
@@ -99,8 +95,11 @@ export class ExplorerComponent implements OnInit {
         private modalService: NgbModal,
         private fileService: FileService
     ) { }
-    ngOnInit(): void {
 
+    ngOnInit(): void {
+        this.fileService.get('')
+            .then((data) => this.nodes = data)
+            .catch((error) => this.error('加载错误', `加载目录失败\r\n${error}`));
     }
 
     onAddFile() {
@@ -181,7 +180,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     private saveFile(file: File): void {
-        
+
     }
 
     private getAceContent(): string {
@@ -247,5 +246,12 @@ export class ExplorerComponent implements OnInit {
         }
         nodes.push({ name: name, type: 'dir' });
         this.tree.treeModel.update();
+    }
+
+    private error(title: string, error: any): void {
+        const modalRef = this.modalService.open(ConfirmModal, { backdrop: 'static' });
+        modalRef.componentInstance.title = title;
+        modalRef.componentInstance.message = error.toString();
+        modalRef.componentInstance.buttons = { ok: true, cancel: false };
     }
 }

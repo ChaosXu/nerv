@@ -3,7 +3,7 @@
     "port": "3332"
   },
   "files": {
-    "/scripts": "resources/scripts",
+    "/api/scripts": "resources/scripts",
     "/pkg": "pkg"
   }
 }
