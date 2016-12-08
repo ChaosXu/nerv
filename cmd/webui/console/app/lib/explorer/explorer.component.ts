@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { FormModal } from '../form/form.modal';
-import { ConfirmModal } from '../form/confirm.modal';
-import { File } from './file.service';
 import { TreeComponent } from 'angular2-tree-component';
 import { AceDirective } from '../form/ace/ace.directive';
+import { FormModal } from '../form/form.modal';
+import { ConfirmModal } from '../form/confirm.modal';
+import { File, FileService } from './file.service';
 
 const ADD_DIR_FORM = {
     name: "explorer_add_form",
@@ -69,14 +69,6 @@ export class ExplorerComponent implements OnInit {
     @ViewChild(AceDirective)
     private ace: AceDirective;
 
-    // get selectedNode(): File {
-    //     const nodes = this.tree.treeModel.activeNodes;
-    //     if (nodes && nodes.length > 0)
-    //         return nodes[0].data;
-    //     else
-    //         return null;
-    // }
-
     selectedNode: File
 
     get canRemove(): boolean {
@@ -103,7 +95,10 @@ export class ExplorerComponent implements OnInit {
         return this.selectedNode ? this.selectedNode.extension : 'json';
     }
 
-    constructor(private modalService: NgbModal) { }
+    constructor(
+        private modalService: NgbModal,
+        private fileService: FileService
+    ) { }
     ngOnInit(): void {
 
     }
@@ -138,7 +133,7 @@ export class ExplorerComponent implements OnInit {
         if (!this.canRemove) return;
         const modalRef = this.modalService.open(ConfirmModal, { backdrop: 'static' });
         modalRef.componentInstance.title = '删除';
-        modalRef.componentInstance.message = `删除${this.selectedNode.title}?`;
+        modalRef.componentInstance.message = `删除${this.selectedNode.name}?`;
         modalRef.result.then((result) => {
             if (result == 'ok') {
                 this.remove(this.selectedNode);
@@ -148,7 +143,7 @@ export class ExplorerComponent implements OnInit {
 
 
 
-    onRename(file: {}) {
+    onRename() {
         let newItem = {};
         const modalRef = this.modalService.open(FormModal, { backdrop: 'static' });
         modalRef.componentInstance.title = '重命名';
@@ -161,8 +156,11 @@ export class ExplorerComponent implements OnInit {
         });
     }
 
-    saveFile(file: {}) {
-
+    onSave() {
+        const file = this.selectedNode;
+        if (file && file.type == 'file') {
+            this.saveFile(file);
+        }
     }
 
     onTextChanged(text: string) {
@@ -170,6 +168,7 @@ export class ExplorerComponent implements OnInit {
         if (file && file.type == 'file') {
             file.dirty = true;
             file.content = this.getAceContent();
+            this.tree.treeModel.update();
         }
     }
 
@@ -181,9 +180,14 @@ export class ExplorerComponent implements OnInit {
         }
     }
 
+    private saveFile(file: File): void {
+        
+    }
+
     private getAceContent(): string {
         return this.ace.text;
     }
+
     private loadContent(file: File): void {
         const content = file.content;
         this.ace.text = content || '';
@@ -191,7 +195,6 @@ export class ExplorerComponent implements OnInit {
 
     private rename(name: string): void {
         this.selectedNode.name = name;
-        this.selectedNode.title = name;
         this.tree.treeModel.update();
     }
 
@@ -212,8 +215,8 @@ export class ExplorerComponent implements OnInit {
                 if (!children) {
                     this.selectedNode.children = children = new Array<File>();
                 }
-                const title = `${name}.${node['fileType']}`;
-                children.push({ name: title, type: 'file', title: name, extension: node['fileType'] });
+
+                children.push({ name: name, type: 'file', extension: node['fileType'] });
                 this.tree.treeModel.update();
             } else {
                 let children = this.tree.treeModel.activeNodes[0].parent.data.children;
@@ -242,7 +245,7 @@ export class ExplorerComponent implements OnInit {
         } else {
             nodes = this.nodes;
         }
-        nodes.push({ name: name, type: 'dir', title: name });
+        nodes.push({ name: name, type: 'dir' });
         this.tree.treeModel.update();
     }
 }

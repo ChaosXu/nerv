@@ -77,8 +77,13 @@ gulp.task('connect', function () {
         middleware: function (connect, o) {
             var proxy = require('http-proxy-middleware');
             return [
-                proxy('/api', {
+                proxy('/api/objs', {
                     target: 'http://localhost:3333',
+                    changeOrigin: true,
+                    ws: true
+                }),
+                proxy('/api/files', {
+                    target: 'http://localhost:3332',
                     changeOrigin: true,
                     ws: true
                 })

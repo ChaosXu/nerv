@@ -4,7 +4,11 @@
             {{selectedNode ? selectedNode.name: ''}}
         </div>
         <div>
-            <Tree [nodes]="nodes" (onActivate)="onActive($event)"></Tree>
+            <Tree [nodes]="nodes" (onActivate)="onActive($event)">
+                <template #treeNodeTemplate let-node>
+                   <span>{{node.data.name}}</span><span *ngIf="node.data.dirty">*</span> 
+                </template>                
+            </Tree>
         </div>
     </div>
     <div class="project-detail">

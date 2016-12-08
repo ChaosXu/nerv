@@ -5,6 +5,7 @@ import { RestyModule } from '../resty/module';
 import { ConfigModule } from '../config/module';
 import { FormModule } from '../form/module';
 import { ExplorerComponent } from './explorer.component';
+import { FileService } from './file.service';
 
 @NgModule({
     imports: [
@@ -17,6 +18,9 @@ import { ExplorerComponent } from './explorer.component';
     ],
     exports: [
         ExplorerComponent
+    ],
+    providers: [
+        FileService
     ]
 })
 export class ExplorerModule {
