@@ -63,7 +63,13 @@ export class ExplorerComponent implements OnInit {
         idField: 'name',
         displayField: 'title',
         getChildren: (node: TreeNode) => {
-            return this.fileService.get(node.data.name);
+            let name = node.data.name;
+            let parent = node.parent;
+            while (parent && parent.data && parent.data['type']) {
+                name = parent.data.name + "/" + name;
+                parent = parent.parent;
+            }
+            return this.fileService.get(name);
         }
     };
 
@@ -108,12 +114,6 @@ export class ExplorerComponent implements OnInit {
 
         this.fileService.get('')
             .then((data) => {
-                for (let item of data) {
-                    if (item['type'] == 'dir') {
-                        item['hasChildren'] = true;
-                        item['childern'] = new Array<File>();
-                    }
-                }
                 this.nodes = data;
             })
             .catch((error) => this.error('加载错误', `加载目录失败\r\n${error}`));

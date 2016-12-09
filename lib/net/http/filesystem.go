@@ -92,6 +92,9 @@ func dirList(f http.File) ([]File, error) {
 	files := []File{}
 	for _, d := range dirs {
 		name := d.Name()
+		if name[0]=='.' {
+			continue
+		}
 		ftype := "file"
 		if d.IsDir() {
 			ftype = "dir"

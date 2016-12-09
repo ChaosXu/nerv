@@ -22,7 +22,16 @@ export class FileService {
         const url = `api/scripts/${path}`;
         return this.http.get(url, { headers: this.headers })
             .toPromise()
-            .then(response => response.json())
+            .then(response => {
+                let data = response.json();
+                for (let item of data) {
+                    if (item['type'] == 'dir') {
+                        item['hasChildren'] = true;
+                        item['childern'] = new Array<File>();
+                    }
+                }
+                return data;
+            })
             .catch(this.error);
     }
 
