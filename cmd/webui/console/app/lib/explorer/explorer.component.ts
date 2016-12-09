@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params, UrlSegment } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TreeComponent } from 'angular2-tree-component';
+import { TreeComponent, TreeNode, ITreeOptions } from 'angular2-tree-component';
 import { AceDirective } from '../form/ace/ace.directive';
 import { FormModal } from '../form/form.modal';
 import { ConfirmModal } from '../form/confirm.modal';
@@ -59,7 +59,13 @@ const RENAME_FORM = {
     templateUrl: 'app/lib/explorer/explorer.component.html',
 })
 export class ExplorerComponent implements OnInit {
-    options: { idField: 'name', displayField: 'title' };
+    options = {
+        idField: 'name',
+        displayField: 'title',
+        getChildren: (node: TreeNode) => {
+            return this.fileService.get(node.data.name);
+        }
+    };
 
     nodes = [];
 
@@ -94,11 +100,22 @@ export class ExplorerComponent implements OnInit {
     constructor(
         private modalService: NgbModal,
         private fileService: FileService
-    ) { }
+    ) {
+    }
 
     ngOnInit(): void {
+
+
         this.fileService.get('')
-            .then((data) => this.nodes = data)
+            .then((data) => {
+                for (let item of data) {
+                    if (item['type'] == 'dir') {
+                        item['hasChildren'] = true;
+                        item['childern'] = new Array<File>();
+                    }
+                }
+                this.nodes = data;
+            })
             .catch((error) => this.error('加载错误', `加载目录失败\r\n${error}`));
     }
 

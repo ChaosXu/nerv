@@ -4,10 +4,11 @@
             {{selectedNode ? selectedNode.name: ''}}
         </div>
         <div>
-            <Tree [nodes]="nodes" (onActivate)="onActive($event)">
+            <Tree [nodes]="nodes" (onActivate)="onActive($event)" [options]="options">
                 <template #treeNodeTemplate let-node>
                    <span>{{node.data.name}}</span><span *ngIf="node.data.dirty">*</span> 
-                </template>                
+                </template>    
+                <template #loadingTemplate>Loading....</template>            
             </Tree>
         </div>
     </div>

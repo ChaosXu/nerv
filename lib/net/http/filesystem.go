@@ -17,7 +17,7 @@ import (
 	"strings"
 	"time"
 	"net/http"
-	"log"
+	"k8s.io/kubernetes/pkg/util/json"
 )
 
 const sniffLen = 512
@@ -32,6 +32,11 @@ var htmlReplacer = strings.NewReplacer(
 	"'", "&#39;",
 )
 
+type File struct {
+	Url  string        `json:"url"`
+	Name string     `json:"name"`
+	Type string        `json:"type"`
+}
 // A Dir implements FileSystem using the native file system restricted to a
 // specific directory tree.
 //
@@ -77,43 +82,26 @@ func (d Dir) Open(name string) (http.File, error) {
 //	Stat() (os.FileInfo, error)
 //}
 
-func dirList(w http.ResponseWriter, f http.File) {
+func dirList(f http.File) ([]File, error) {
 	dirs, err := f.Readdir(-1)
 	if err != nil {
-		// TODO: log err.Error() to the Server.ErrorLog, once it's possible
-		// for a handler to get at its Server via the ResponseWriter. See
-		// Issue 12438.
-		http.Error(w, "Error reading directory", http.StatusInternalServerError)
-		return
+		return nil, err
 	}
-	sort.Sort(byName(dirs))
 
-	//w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	w.Header().Set("Content-Type", "text/json; charset=utf-8")
-	//fmt.Fprintf(w, "<pre>\n")
-	fmt.Fprintf(w, "[")
-	i := 0;
-	last := len(dirs) - 1;
+	sort.Sort(byName(dirs))
+	files := []File{}
 	for _, d := range dirs {
 		name := d.Name()
 		ftype := "file"
 		if d.IsDir() {
 			ftype = "dir"
 		}
-		// name may contain '?' or '#', which must be escaped to remain
-		// part of the URL path, and not indicate the start of a query
-		// string or fragment.
-		url := url.URL{Path: name}
-		//fmt.Fprintf(w, "<a href=\"%s\">%s</a>\n", url.String(), htmlReplacer.Replace(name))
-		fmt.Fprintf(w, "{\"url\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", url.String(), name, ftype)
-		if i < last {
-			i++;
-			fmt.Fprintf(w, ",")
-		}
-	}
 
-	//fmt.Fprintf(w, "</pre>\n")
-	fmt.Fprintf(w, "]")
+		url := url.URL{Path: name}
+		file := File{Url:url.String(), Name:name, Type: ftype}
+		files = append(files, file)
+	}
+	return files, nil
 }
 
 // ServeContent replies to the request using the content in the
@@ -372,17 +360,6 @@ func checkETag(w http.ResponseWriter, r *http.Request, modtime time.Time) (range
 
 // name is '/'-separated, not filepath.Separator.
 func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name string, redirect bool) {
-	log.Printf("%s",name);
-	//const indexPage = "/index.html"
-	//
-	//// redirect .../index.html to .../
-	//// can't use Redirect() because that would make the path absolute,
-	//// which would be a problem running under StripPrefix
-	//if strings.HasSuffix(r.URL.Path, indexPage) {
-	//	localRedirect(w, r, "./")
-	//	return
-	//}
-
 	f, err := fs.Open(name)
 	if err != nil {
 		msg, code := toHTTPError(err)
@@ -398,54 +375,27 @@ func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name 
 		return
 	}
 
-	if redirect {
-		// redirect to canonical path: / at end of directory url
-		// r.URL.Path always begins with /
-		url := r.URL.Path
-		if d.IsDir() {
-			if url[len(url) - 1] != '/' {
-				localRedirect(w, r, path.Base(url) + "/")
-				return
-			}
-		} else {
-			if url[len(url) - 1] == '/' {
-				localRedirect(w, r, "../" + path.Base(url))
-				return
-			}
-		}
-	}
-
-	// redirect if the directory name doesn't end in a slash
-	if d.IsDir() {
-		url := r.URL.Path
-		if url[len(url) - 1] != '/' {
-			localRedirect(w, r, path.Base(url) + "/")
-			return
-		}
-	}
-
-	// use contents of index.html for directory, if present
-	//if d.IsDir() {
-	//	index := strings.TrimSuffix(name, "/") + indexPage
-	//	ff, err := fs.Open(index)
-	//	if err == nil {
-	//		defer ff.Close()
-	//		dd, err := ff.Stat()
-	//		if err == nil {
-	//			name = index
-	//			d = dd
-	//			f = ff
-	//		}
-	//	}
-	//}
-
 	// Still a directory? (we didn't find an index.html file)
 	if d.IsDir() {
-		if checkLastModified(w, r, d.ModTime()) {
-			return
-		}
-		dirList(w, f)
+		files, err := dirList(f)
+		if err != nil {
+			w.Header().Set("Content-Type", "text/json; charset=utf-8")
+			w.Header().Set("X-Content-Type-Options", "nosniff")
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, "Error reading directory")
+		} else {
+			buf, err := json.Marshal(files)
+			if err != nil {
+				w.Header().Set("Content-Type", "text/json; charset=utf-8")
+				w.Header().Set("X-Content-Type-Options", "nosniff")
+				w.WriteHeader(http.StatusInternalServerError)
+				fmt.Fprintln(w, "Error json marshal")
+			} else {
+				w.Header().Set("Content-Type", "text/json; charset=utf-8")
+				w.Write(buf)
+			}
 
+		}
 		return
 	}
 
