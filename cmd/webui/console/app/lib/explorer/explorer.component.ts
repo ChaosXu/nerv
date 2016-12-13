@@ -60,7 +60,7 @@ const RENAME_FORM = {
 })
 export class ExplorerComponent implements OnInit {
     options = {
-        idField: 'name',
+        idField:'url',        
         displayField: 'title',
         getChildren: (node: TreeNode) => {
             let file = node.data;
@@ -135,7 +135,7 @@ export class ExplorerComponent implements OnInit {
         modalRef.componentInstance.form = ADD_DIR_FORM;
         modalRef.componentInstance.data = newItem;
         modalRef.result.then((result) => {
-            if (result == 'ok') {
+            if (result == 'ok') {                
                 this.addDir(this.selectedNode, newItem);
             }
         });
@@ -210,7 +210,7 @@ export class ExplorerComponent implements OnInit {
             return 'json';
         }
     }
-    
+
     private getAceContent(): string {
         return this.ace.text;
     }
@@ -271,10 +271,13 @@ export class ExplorerComponent implements OnInit {
         const name = node['name'];
         const selectedNode = this.selectedNode;
         let nodes;
+        let parentNode;
         if (selectedNode) {
             if (selectedNode['type'] == 'file') {
-                nodes = this.tree.treeModel.activeNodes[0].parent.data.children;
+                parentNode = this.tree.treeModel.activeNodes[0].parent;
+                nodes = parentNode.data.children;                
             } else if (node['dirType'] == 'child') {
+                parentNode = this.tree.treeModel.activeNodes[0];
                 nodes = selectedNode.children;
                 if (!nodes) {
                     selectedNode.children = nodes = new Array<File>();
@@ -285,8 +288,20 @@ export class ExplorerComponent implements OnInit {
         } else {
             nodes = this.nodes;
         }
-        nodes.push({ name: name, type: 'dir' });
-        this.tree.treeModel.update();
+        let path = parentNode.data['url'];
+        if (path==('/')){
+            path = `${path}${name}`;
+        }else{
+            path = `${path}/${name}`;
+        }
+        this.fileService.create(path)
+        .then((dir)=> {
+            nodes.push(dir);
+            this.tree.treeModel.update();
+        })
+        .catch((error) => this.error('添加目录错误', `添加目录失败\r\n${error}`));
+        
+        
     }
 
     private error(title: string, error: any): void {

@@ -45,18 +45,23 @@ export class FileService {
             .catch(this.error);
     }
 
-    create(path: string, file: File): Promise<any> {
-        const url = `api/files/obj/${path}`;
-        var body = JSON.stringify(file);
-        console.log(body)
-        return this.http.post(url, body, { headers: this.headers })
+    create(path: string): Promise<any> {
+        const url = `api/scripts${path}`;
+        return this.http.post(url, '', { headers: this.headers })
             .toPromise()
-            .then(response => response.json())
+            .then(response => {
+                let item = response.json()
+                // if (item['type'] == 'dir') {
+                //     item['hasChildren'] = true;
+                //     item['childern'] = new Array<File>();
+                // }
+                return item;
+            })
             .catch(this.error);
     }
 
     update(path: string, file: File): Promise<any> {
-        const url = `api/files/obj/${path}`;
+        const url = `api/scripts${path}`;
         var body = JSON.stringify(file);
         console.log(body)
         return this.http.put(url, body, { headers: this.headers })
@@ -66,7 +71,7 @@ export class FileService {
     }
 
     remove(path: string): Promise<any> {
-        const url = `api/files/obj/${path}`;
+        const url = `api/scripts${path}`;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(response => response.json())

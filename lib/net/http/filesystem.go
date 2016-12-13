@@ -38,6 +38,13 @@ type File struct {
 	Name string     `json:"name"`
 	Type string        `json:"type"`
 }
+
+type FileSystem interface {
+	Open(name string) (http.File, error)
+	Create(name string) (http.File, error)
+	Mkdir(name string) (http.File, error)
+}
+
 // A Dir implements FileSystem using the native file system restricted to a
 // specific directory tree.
 //
@@ -58,6 +65,40 @@ func (d Dir) Open(name string) (http.File, error) {
 		dir = "."
 	}
 	f, err := os.Open(filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name))))
+	if err != nil {
+		return nil, err
+	}
+	return f, nil
+}
+
+func (d Dir) Mkdir(name string) (http.File, error) {
+	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
+			strings.Contains(name, "\x00") {
+		return nil, errors.New("http: invalid character in file path")
+	}
+	dir := string(d)
+	if dir == "" {
+		dir = "."
+	}
+	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
+	err := os.Mkdir(path, os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+
+	return d.Open(name)
+}
+
+func (d Dir) Create(name string) (http.File, error) {
+	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
+			strings.Contains(name, "\x00") {
+		return nil, errors.New("http: invalid character in file path")
+	}
+	dir := string(d)
+	if dir == "" {
+		dir = "."
+	}
+	f, err := os.Create(filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name))))
 	if err != nil {
 		return nil, err
 	}
@@ -101,7 +142,7 @@ func dirList(f http.File, path string) ([]File, error) {
 			ftype = "dir"
 		}
 
-		url := url.URL{Path: path + "/" + name}
+		url := url.URL{Path: path + name}
 		file := File{Url:url.String(), Name:name, Type: ftype}
 		files = append(files, file)
 	}
@@ -363,7 +404,7 @@ func checkETag(w http.ResponseWriter, r *http.Request, modtime time.Time) (range
 }
 
 // name is '/'-separated, not filepath.Separator.
-func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name string) {
+func serveFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name string) {
 	log.Println(name)
 	f, err := fs.Open(name)
 	if err != nil {
@@ -382,7 +423,11 @@ func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name 
 
 	// Still a directory? (we didn't find an index.html file)
 	if d.IsDir() {
-		files, err := dirList(f, name)
+		path := name
+		if path != "/" {
+			path = path + "/"
+		}
+		files, err := dirList(f, path)
 		if err != nil {
 			w.Header().Set("Content-Type", "text/json; charset=utf-8")
 			w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -409,6 +454,62 @@ func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name 
 		return d.Size(), nil
 	}
 	serveContent(w, r, d.Name(), d.ModTime(), sizeFunc, f)
+}
+
+func createFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name string) {
+	index := strings.LastIndex(name, "/")
+	fname := name[index + 1:]
+	path := name
+	if path != "/" {
+		path = path + "/"
+	}
+
+	if strings.LastIndex(name, ".") > 0 {
+		f, err := fs.Create(name)
+		if err != nil {
+			msg, code := toHTTPError(err)
+			http.Error(w, msg, code)
+			return
+		}
+		defer f.Close()
+
+		file := File{Url:name, Name:fname, Type: "file"}
+
+		w.Header().Set("Content-Type", "text/json; charset=utf-8")
+		buf, err := json.Marshal(file)
+		if err != nil {
+			w.Header().Set("Content-Type", "text/json; charset=utf-8")
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, "Error json marshal")
+		} else {
+			w.Header().Set("Content-Type", "text/json; charset=utf-8")
+			w.Write(buf)
+		}
+
+	} else {
+		f, err := fs.Mkdir(name)
+		if err != nil {
+			w.Header().Set("Content-Type", "text/json; charset=utf-8")
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, err.Error())
+			return
+		}
+		defer f.Close()
+
+		file := File{Url:name, Name:fname, Type: "dir"}
+
+		w.Header().Set("Content-Type", "text/json; charset=utf-8")
+		buf, err := json.Marshal(file)
+		if err != nil {
+			w.Header().Set("Content-Type", "text/json; charset=utf-8")
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, "Error json marshal")
+		} else {
+			w.Header().Set("Content-Type", "text/json; charset=utf-8")
+			w.Write(buf)
+		}
+	}
+
 }
 
 // toHTTPError returns a non-specific HTTP error message and status code
@@ -480,8 +581,8 @@ func isSlashRune(r rune) bool {
 	return r == '/' || r == '\\'
 }
 
-type fileHandler struct {
-	root http.FileSystem
+type FileHandler struct {
+	root FileSystem
 }
 
 // FileServer returns a handler that serves HTTP requests
@@ -495,17 +596,44 @@ type fileHandler struct {
 // As a special case, the returned file server redirects any request
 // ending in "/index.html" to the same path, without the final
 // "index.html".
-func FileServer(root http.FileSystem) http.Handler {
-	return &fileHandler{root}
+func FileServer(root FileSystem) *FileHandler {
+	return &FileHandler{root}
 }
 
-func (f *fileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (f *FileHandler) Get(w http.ResponseWriter, r *http.Request) {
 	upath := r.URL.Path
 	if !strings.HasPrefix(upath, "/") {
 		upath = "/" + upath
 		r.URL.Path = upath
 	}
 	serveFile(w, r, f.root, path.Clean(upath))
+}
+
+func (f *FileHandler) Post(w http.ResponseWriter, r *http.Request) {
+	upath := r.URL.Path
+	if !strings.HasPrefix(upath, "/") {
+		upath = "/" + upath
+		r.URL.Path = upath
+	}
+	createFile(w, r, f.root, path.Clean(upath))
+}
+
+func (f *FileHandler) Put(w http.ResponseWriter, r *http.Request) {
+	//upath := r.URL.Path
+	//if !strings.HasPrefix(upath, "/") {
+	//	upath = "/" + upath
+	//	r.URL.Path = upath
+	//}
+	//updateFile(w, r, f.root, path.Clean(upath))
+}
+
+func (f *FileHandler) Delte(w http.ResponseWriter, r *http.Request) {
+	//upath := r.URL.Path
+	//if !strings.HasPrefix(upath, "/") {
+	//	upath = "/" + upath
+	//	r.URL.Path = upath
+	//}
+	//deleteFile(w, r, f.root, path.Clean(upath))
 }
 
 // httpRange specifies the byte range to be sent to the client.

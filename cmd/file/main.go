@@ -30,6 +30,5 @@ func main() {
 		FileServer(r, url, chttp.Dir(file.(string)))
 	}
 
-	InitDir(r)
 	log.Fatalln(http.ListenAndServe(":" + port, r))
 }
