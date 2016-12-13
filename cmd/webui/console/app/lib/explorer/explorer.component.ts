@@ -288,7 +288,7 @@ export class ExplorerComponent implements OnInit {
         } else {
             nodes = this.nodes;
         }
-        let path = parentNode.data['url'];
+        let path = parentNode ? parentNode.data['url'] : '/';
         if (path==('/')){
             path = `${path}${name}`;
         }else{

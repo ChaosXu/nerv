@@ -467,8 +467,9 @@ func createFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name stri
 	if strings.LastIndex(name, ".") > 0 {
 		f, err := fs.Create(name)
 		if err != nil {
-			msg, code := toHTTPError(err)
-			http.Error(w, msg, code)
+			w.Header().Set("Content-Type", "text/json; charset=utf-8")
+			w.WriteHeader(http.StatusInternalServerError)
+			fmt.Fprintln(w, err.Error())
 			return
 		}
 		defer f.Close()
