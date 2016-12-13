@@ -63,17 +63,13 @@ export class ExplorerComponent implements OnInit {
         idField: 'name',
         displayField: 'title',
         getChildren: (node: TreeNode) => {
-            let name = node.data.name;
-            let parent = node.parent;
-            while (parent && parent.data && parent.data['type']) {
-                name = parent.data.name + "/" + name;
-                parent = parent.parent;
-            }
-            return this.fileService.get(name);
+            let file = node.data;
+            return this.fileService.get(file.url);
         }
     };
 
     nodes = [];
+    private contentLoading = false;
 
     @ViewChild(TreeComponent)
     private tree: TreeComponent;
@@ -100,7 +96,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     get mode(): string {
-        return this.selectedNode ? this.selectedNode.extension : 'json';
+        return this.selectedNode && this.selectedNode.type == 'file' ? this.getExt(this.selectedNode.name) : 'json';
     }
 
     constructor(
@@ -180,19 +176,25 @@ export class ExplorerComponent implements OnInit {
     }
 
     onTextChanged(text: string) {
+        if (this.contentLoading) return;
         const file = this.selectedNode;
         if (file && file.type == 'file') {
             file.dirty = true;
             file.content = this.getAceContent();
-            this.tree.treeModel.update();
         }
     }
 
-    onActive(event: {}) {
+    onNodeSelected(event: {}) {
         const node = event['node'];
         const file = this.selectedNode = node['data'];
         if (file && file.type == 'file') {
-            this.loadContent(file);
+            if (file.dirty) {
+                this.contentLoading = true;
+                this.ace.text = file.content;
+                this.contentLoading = false;
+            } else {
+                this.loadContent(file);
+            }
         }
     }
 
@@ -200,13 +202,35 @@ export class ExplorerComponent implements OnInit {
 
     }
 
+    private getExt(name: string): string {
+        let index = name.lastIndexOf('.');
+        if (index > 0) {
+            return name.substr(index + 1);
+        }else{
+            return 'json';
+        }
+    }
+    
     private getAceContent(): string {
         return this.ace.text;
     }
 
     private loadContent(file: File): void {
-        const content = file.content;
-        this.ace.text = content || '';
+        if (file.dirty) {
+            const content = file.content;
+            this.ace.text = content || '';
+        } else {
+            this.contentLoading = true;
+            this.fileService.get(file.url)
+                .then((content) => {
+                    this.ace.text = content;
+                    this.contentLoading = false;
+                })
+                .catch((error) => {
+                    this.contentLoading = false;
+                    this.error('加载错误', `加载文件失败\r\n${error}`)
+                });
+        }
     }
 
     private rename(name: string): void {
@@ -232,7 +256,7 @@ export class ExplorerComponent implements OnInit {
                     this.selectedNode.children = children = new Array<File>();
                 }
 
-                children.push({ name: name, type: 'file', extension: node['fileType'] });
+                children.push({ url: name, name: name, type: 'file', extension: node['fileType'] });
                 this.tree.treeModel.update();
             } else {
                 let children = this.tree.treeModel.activeNodes[0].parent.data.children;

@@ -3,8 +3,10 @@ import { Http, Response, Headers } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 export class File {
+    url: string;
     name: string;
     type: string;
+    path?: string;
     content?: string;
     dirty?: boolean = false;
     extension?: string = '';
@@ -19,18 +21,26 @@ export class FileService {
 
 
     get(path: string): Promise<any> {
-        const url = `api/scripts/${path}`;
+        const url = `api/scripts${path}`;
         return this.http.get(url, { headers: this.headers })
             .toPromise()
             .then(response => {
-                let data = response.json();
-                for (let item of data) {
-                    if (item['type'] == 'dir') {
-                        item['hasChildren'] = true;
-                        item['childern'] = new Array<File>();
-                    }
+                if (response.text() == '') {
+                    return '';
                 }
-                return data;
+                let contentType = response.headers.get('content-type');
+                if (contentType.indexOf('/json') > 0) {
+                    let data = response.json();
+                    for (let item of data) {
+                        if (item['type'] == 'dir') {
+                            item['hasChildren'] = true;
+                            item['childern'] = new Array<File>();
+                        }
+                    }
+                    return data;
+                } else {
+                    return response.text();
+                }
             })
             .catch(this.error);
     }

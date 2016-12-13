@@ -18,6 +18,7 @@ import (
 	"time"
 	"net/http"
 	"k8s.io/kubernetes/pkg/util/json"
+	"log"
 )
 
 const sniffLen = 512
@@ -82,7 +83,7 @@ func (d Dir) Open(name string) (http.File, error) {
 //	Stat() (os.FileInfo, error)
 //}
 
-func dirList(f http.File) ([]File, error) {
+func dirList(f http.File, path string) ([]File, error) {
 	dirs, err := f.Readdir(-1)
 	if err != nil {
 		return nil, err
@@ -92,7 +93,7 @@ func dirList(f http.File) ([]File, error) {
 	files := []File{}
 	for _, d := range dirs {
 		name := d.Name()
-		if name[0]=='.' {
+		if name[0] == '.' {
 			continue
 		}
 		ftype := "file"
@@ -100,7 +101,7 @@ func dirList(f http.File) ([]File, error) {
 			ftype = "dir"
 		}
 
-		url := url.URL{Path: name}
+		url := url.URL{Path: path + "/" + name}
 		file := File{Url:url.String(), Name:name, Type: ftype}
 		files = append(files, file)
 	}
@@ -362,7 +363,8 @@ func checkETag(w http.ResponseWriter, r *http.Request, modtime time.Time) (range
 }
 
 // name is '/'-separated, not filepath.Separator.
-func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name string, redirect bool) {
+func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name string) {
+	log.Println(name)
 	f, err := fs.Open(name)
 	if err != nil {
 		msg, code := toHTTPError(err)
@@ -380,7 +382,7 @@ func serveFile(w http.ResponseWriter, r *http.Request, fs http.FileSystem, name 
 
 	// Still a directory? (we didn't find an index.html file)
 	if d.IsDir() {
-		files, err := dirList(f)
+		files, err := dirList(f, name)
 		if err != nil {
 			w.Header().Set("Content-Type", "text/json; charset=utf-8")
 			w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -448,19 +450,19 @@ func localRedirect(w http.ResponseWriter, r *http.Request, newPath string) {
 // ends in "/index.html" to the same path, without the final
 // "index.html". To avoid such redirects either modify the path or
 // use ServeContent.
-func ServeFile(w http.ResponseWriter, r *http.Request, name string) {
-	if containsDotDot(r.URL.Path) {
-		// Too many programs use r.URL.Path to construct the argument to
-		// serveFile. Reject the request under the assumption that happened
-		// here and ".." may not be wanted.
-		// Note that name might not contain "..", for example if code (still
-		// incorrectly) used filepath.Join(myDir, r.URL.Path).
-		http.Error(w, "invalid URL path", http.StatusBadRequest)
-		return
-	}
-	dir, file := filepath.Split(name)
-	serveFile(w, r, Dir(dir), file, false)
-}
+//func ServeFile(w http.ResponseWriter, r *http.Request, name string) {
+//	if containsDotDot(r.URL.Path) {
+//		// Too many programs use r.URL.Path to construct the argument to
+//		// serveFile. Reject the request under the assumption that happened
+//		// here and ".." may not be wanted.
+//		// Note that name might not contain "..", for example if code (still
+//		// incorrectly) used filepath.Join(myDir, r.URL.Path).
+//		http.Error(w, "invalid URL path", http.StatusBadRequest)
+//		return
+//	}
+//	dir, file := filepath.Split(name)
+//	serveFile(w, r, Dir(dir), file)
+//}
 
 func containsDotDot(v string) bool {
 	if !strings.Contains(v, "..") {
@@ -503,7 +505,7 @@ func (f *fileHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		upath = "/" + upath
 		r.URL.Path = upath
 	}
-	serveFile(w, r, f.root, path.Clean(upath), true)
+	serveFile(w, r, f.root, path.Clean(upath))
 }
 
 // httpRange specifies the byte range to be sent to the client.
