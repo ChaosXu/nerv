@@ -26,7 +26,7 @@ func FileServer(mx *chi.Mux, path string, root chttp.FileSystem) {
 		fs.Put(w, r)
 	}))
 	mx.Delete(path, exec(prefix, func(w http.ResponseWriter, r *http.Request) {
-		//fs.Delete(w, r)
+		fs.Delete(w, r)
 	}))
 }
 

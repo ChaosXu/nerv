@@ -43,6 +43,7 @@ type FileSystem interface {
 	Open(name string) (http.File, error)
 	Create(name string) (http.File, error)
 	Mkdir(name string) (http.File, error)
+	Delete(name string) error
 }
 
 // A Dir implements FileSystem using the native file system restricted to a
@@ -103,6 +104,22 @@ func (d Dir) Create(name string) (http.File, error) {
 		return nil, err
 	}
 	return f, nil
+}
+
+func (d Dir) Delete(name string) error {
+	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
+			strings.Contains(name, "\x00") {
+		return errors.New("http: invalid character in file path")
+	}
+	dir := string(d)
+	if dir == "" {
+		dir = "."
+	}
+	err := os.RemoveAll(filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name))))
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 //// A FileSystem implements access to a collection of named files.
@@ -510,7 +527,17 @@ func createFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name stri
 			w.Write(buf)
 		}
 	}
+}
 
+func deleteFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name string) {
+	if err := fs.Delete(name); err != nil {
+		w.Header().Set("Content-Type", "text/json; charset=utf-8")
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, err.Error())
+	} else {
+		w.Header().Set("Content-Type", "text/json; charset=utf-8")
+		fmt.Fprintf(w, "{\"url\":\"%s\"}", name)
+	}
 }
 
 // toHTTPError returns a non-specific HTTP error message and status code
@@ -628,13 +655,13 @@ func (f *FileHandler) Put(w http.ResponseWriter, r *http.Request) {
 	//updateFile(w, r, f.root, path.Clean(upath))
 }
 
-func (f *FileHandler) Delte(w http.ResponseWriter, r *http.Request) {
-	//upath := r.URL.Path
-	//if !strings.HasPrefix(upath, "/") {
-	//	upath = "/" + upath
-	//	r.URL.Path = upath
-	//}
-	//deleteFile(w, r, f.root, path.Clean(upath))
+func (f *FileHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	upath := r.URL.Path
+	if !strings.HasPrefix(upath, "/") {
+		upath = "/" + upath
+		r.URL.Path = upath
+	}
+	deleteFile(w, r, f.root, path.Clean(upath))
 }
 
 // httpRange specifies the byte range to be sent to the client.

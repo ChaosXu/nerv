@@ -60,7 +60,7 @@ const RENAME_FORM = {
 })
 export class ExplorerComponent implements OnInit {
     options = {
-        idField:'url',        
+        idField: 'url',
         displayField: 'title',
         getChildren: (node: TreeNode) => {
             let file = node.data;
@@ -135,7 +135,7 @@ export class ExplorerComponent implements OnInit {
         modalRef.componentInstance.form = ADD_DIR_FORM;
         modalRef.componentInstance.data = newItem;
         modalRef.result.then((result) => {
-            if (result == 'ok') {                
+            if (result == 'ok') {
                 this.addDir(this.selectedNode, newItem);
             }
         });
@@ -206,7 +206,7 @@ export class ExplorerComponent implements OnInit {
         let index = name.lastIndexOf('.');
         if (index > 0) {
             return name.substr(index + 1);
-        }else{
+        } else {
             return 'json';
         }
     }
@@ -239,11 +239,19 @@ export class ExplorerComponent implements OnInit {
     }
 
     private remove(file: File): void {
-        const activeNode = this.tree.treeModel.activeNodes[0];
-        const index = activeNode.parent.data.children.indexOf(activeNode.data);
-        activeNode.parent.data.children.splice(index, 1);
-        this.tree.treeModel.update();
-        this.ace.text = '';
+        this.fileService.remove(file.url)
+            .then((remvoed) => {
+                const activeNode = this.tree.treeModel.activeNodes[0];
+                const index = activeNode.parent.data.children.indexOf(activeNode.data);
+                activeNode.parent.data.children.splice(index, 1);
+                this.tree.treeModel.update();
+                this.selectedNode = null;
+                this.ace.text = '';
+            })
+            .catch((error) => {
+                this.contentLoading = false;
+                this.error('删除错误', `删除对象失败\r\n${error}`)
+            });
     }
 
     private addFile(parent: File, node: {}): void {
@@ -275,7 +283,7 @@ export class ExplorerComponent implements OnInit {
         if (selectedNode) {
             if (selectedNode['type'] == 'file') {
                 parentNode = this.tree.treeModel.activeNodes[0].parent;
-                nodes = parentNode.data.children;                
+                nodes = parentNode.data.children;
             } else if (node['dirType'] == 'child') {
                 parentNode = this.tree.treeModel.activeNodes[0];
                 nodes = selectedNode.children;
@@ -289,19 +297,19 @@ export class ExplorerComponent implements OnInit {
             nodes = this.nodes;
         }
         let path = parentNode ? parentNode.data['url'] : '/';
-        if (path==('/')){
+        if (path == ('/')) {
             path = `${path}${name}`;
-        }else{
+        } else {
             path = `${path}/${name}`;
         }
         this.fileService.create(path)
-        .then((dir)=> {
-            nodes.push(dir);
-            this.tree.treeModel.update();
-        })
-        .catch((error) => this.error('添加目录错误', `添加目录失败\r\n${error}`));
-        
-        
+            .then((dir) => {
+                nodes.push(dir);
+                this.tree.treeModel.update();
+            })
+            .catch((error) => this.error('添加目录错误', `添加目录失败\r\n${error}`));
+
+
     }
 
     private error(title: string, error: any): void {
