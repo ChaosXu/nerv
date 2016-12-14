@@ -1,5 +1,5 @@
 .explorer {
-    width: 250px;
+    width: 220px;
     position:absolute;
     left: 0;
     top: 0;
@@ -26,7 +26,7 @@
 
 
 .workspace {
-    margin-left: 250px;
+    margin-left: 220px;
     height: 100%;
 }
 
