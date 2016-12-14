@@ -57,6 +57,9 @@ const RENAME_FORM = {
 @Component({
     selector: 'nerv-explorer',
     templateUrl: 'app/lib/explorer/explorer.component.html',
+    styleUrls:[
+        'app/lib/explorer/explorer.component.css'
+    ]
 })
 export class ExplorerComponent implements OnInit {
     options = {

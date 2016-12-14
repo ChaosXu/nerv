@@ -1,9 +1,9 @@
 <div style="height: 100%" class="ng-scope">
-    <div class="project-list">
-        <div class="title">
+    <div class="explorer">
+        <div class="explorer__toolbar">
             {{selectedNode ? selectedNode.name: ''}}
         </div>
-        <div>
+        <div class="explorer__tree">
             <Tree [nodes]="nodes" (onActivate)="onNodeSelected($event)" [options]="options">
                 <template #treeNodeTemplate let-node>
                    <span>{{node.data.name}}</span><span *ngIf="node.data.dirty">*</span> 
@@ -12,7 +12,7 @@
             </Tree>
         </div>
     </div>
-    <div class="project-detail">
+    <div class="workspace">
         <div>
             <div class="role-perate pl20 pt10 pb10 title">
                 <a>
