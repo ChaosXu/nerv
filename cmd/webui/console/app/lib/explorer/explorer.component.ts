@@ -280,22 +280,31 @@ export class ExplorerComponent implements OnInit {
     private addFile(parent: File, node: {}): void {
         const selectedNode = this.selectedNode;
         const name = node['name'];
+        let file;
+        let children;
         if (selectedNode) {
             if (selectedNode.type == 'dir') {
-                let children = selectedNode.children;
+                children = selectedNode.children;
                 if (!children) {
                     this.selectedNode.children = children = new Array<File>();
                 }
-
-                children.push({ url: name, name: name, type: 'file', extension: node['fileType'] });
-                this.tree.treeModel.update();
+                file = { url: selectedNode.url+'/'+name, name: name, type: 'file', extension: node['fileType'] };                
             } else {
-                let children = this.tree.treeModel.activeNodes[0].parent.data.children;
-                const title = `${name}.${node['fileType']}`;
-                children.push({ name: title, type: 'file', title: title, extension: node['fileType'] });
-                this.tree.treeModel.update();
+                const parent = this.tree.treeModel.activeNodes[0].parent.data;
+                children = parent.children;                
+                file = { url: parent.url+'/'+name, name: name, type: 'file', extension: node['fileType'] };                                
             }
         }
+
+        this.fileService.create(file.url)
+            .then((response) => {                                
+                children.push(file);
+                this.tree.treeModel.update();
+            })
+            .catch((error) => {
+                this.contentLoading = false;
+                this.error('保存错误', `保存对象失败\r\n${error}`)
+            });
     }
 
     private addDir(parent: File, node: {}): void {
