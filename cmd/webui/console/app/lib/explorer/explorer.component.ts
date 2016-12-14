@@ -234,8 +234,31 @@ export class ExplorerComponent implements OnInit {
     }
 
     private rename(name: string): void {
-        this.selectedNode.name = name;
-        this.tree.treeModel.update();
+        const node = this.selectedNode;
+        let newUrl = node.url;
+        let index = newUrl.lastIndexOf(node.name);
+        newUrl = newUrl.substring(0,index) + name;
+        let updateFile = { url: newUrl, name: name, type: node.type }
+        this.fileService.update(node.url, updateFile)
+            .then((response) => {                
+                let children = node.children;
+                this.updateChildrenUrl(children,newUrl);
+                node.name = name;
+                node.url = newUrl;
+                this.tree.treeModel.update();
+            })
+            .catch((error) => {
+                this.contentLoading = false;
+                this.error('重命名错误', `重命名对象失败\r\n${error}`)
+            });
+    }
+
+    private updateChildrenUrl(children:File[],parentUrl:string) {
+        if (!children) return;
+        for(let c of children) {
+            c.url = parentUrl+"/"+c.name;
+            this.updateChildrenUrl(c.children,c.url);            
+        }
     }
 
     private remove(file: File): void {

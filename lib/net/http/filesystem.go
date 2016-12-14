@@ -17,8 +17,9 @@ import (
 	"strings"
 	"time"
 	"net/http"
-	"k8s.io/kubernetes/pkg/util/json"
-	"log"
+	"github.com/pressly/chi/render"
+	"encoding/json"
+//	"log"
 )
 
 const sniffLen = 512
@@ -33,17 +34,24 @@ var htmlReplacer = strings.NewReplacer(
 	"'", "&#39;",
 )
 
+type PutRequest struct {
+	Cmd  string `json:"cmd"`
+	Data *json.RawMessage    `json:"data"`
+}
+
 type File struct {
 	Url  string        `json:"url"`
-	Name string     `json:"name"`
+	Name string        `json:"name"`
 	Type string        `json:"type"`
 }
 
 type FileSystem interface {
+	Mkdir(name string) (http.File, error)
 	Open(name string) (http.File, error)
 	Create(name string) (http.File, error)
-	Mkdir(name string) (http.File, error)
 	Delete(name string) error
+	Rename(old string, new string) error
+	Update(name string, content string) error
 }
 
 // A Dir implements FileSystem using the native file system restricted to a
@@ -122,6 +130,44 @@ func (d Dir) Delete(name string) error {
 	return nil
 }
 
+func (d Dir) Rename(name string, new string) error {
+	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
+			strings.Contains(name, "\x00") {
+		return errors.New("http: invalid character in file path")
+	}
+	dir := string(d)
+	if dir == "" {
+		dir = "."
+	}
+	oldPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
+	newPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + new)))
+	//log.Println(oldPath)
+	//log.Println(newPath)
+	err := os.Rename(oldPath, newPath)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (d Dir) Update(name string, content string) error {
+	//if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
+	//		strings.Contains(name, "\x00") {
+	//	return errors.New("http: invalid character in file path")
+	//}
+	//dir := string(d)
+	//if dir == "" {
+	//	dir = "."
+	//}
+	//oldPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
+	//newPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + new)))
+	//err := os.(oldPath, newPath)
+	//if err != nil {
+	//	return err
+	//}
+	return nil
+}
+
 //// A FileSystem implements access to a collection of named files.
 //// The elements in a file path are separated by slash ('/', U+002F)
 //// characters, regardless of host operating system convention.
@@ -166,50 +212,6 @@ func dirList(f http.File, path string) ([]File, error) {
 	return files, nil
 }
 
-// ServeContent replies to the request using the content in the
-// provided ReadSeeker. The main benefit of ServeContent over io.Copy
-// is that it handles Range requests properly, sets the MIME type, and
-// handles If-Modified-Since requests.
-//
-// If the response's Content-Type header is not set, ServeContent
-// first tries to deduce the type from name's file extension and,
-// if that fails, falls back to reading the first block of the content
-// and passing it to DetectContentType.
-// The name is otherwise unused; in particular it can be empty and is
-// never sent in the response.
-//
-// If modtime is not the zero time or Unix epoch, ServeContent
-// includes it in a Last-Modified header in the response. If the
-// request includes an If-Modified-Since header, ServeContent uses
-// modtime to decide whether the content needs to be sent at all.
-//
-// The content's Seek method must work: ServeContent uses
-// a seek to the end of the content to determine its size.
-//
-// If the caller has set w's ETag header, ServeContent uses it to
-// handle requests using If-Range and If-None-Match.
-//
-// Note that *os.File implements the io.ReadSeeker interface.
-func ServeContent(w http.ResponseWriter, req *http.Request, name string, modtime time.Time, content io.ReadSeeker) {
-	sizeFunc := func() (int64, error) {
-		size, err := content.Seek(0, io.SeekEnd)
-		if err != nil {
-			return 0, errSeeker
-		}
-		_, err = content.Seek(0, io.SeekStart)
-		if err != nil {
-			return 0, errSeeker
-		}
-		return size, nil
-	}
-	serveContent(w, req, name, modtime, sizeFunc, content)
-}
-
-// errSeeker is returned by ServeContent's sizeFunc when the content
-// doesn't seek properly. The underlying Seeker's error text isn't
-// included in the sizeFunc reply so it's not sent over HTTP to end
-// users.
-var errSeeker = errors.New("seeker can't seek")
 
 // if name is empty, filename is unknown. (used for mime type, before sniffing)
 // if modtime.IsZero(), modtime is unknown.
@@ -422,7 +424,6 @@ func checkETag(w http.ResponseWriter, r *http.Request, modtime time.Time) (range
 
 // name is '/'-separated, not filepath.Separator.
 func serveFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name string) {
-	log.Println(name)
 	f, err := fs.Open(name)
 	if err != nil {
 		msg, code := toHTTPError(err)
@@ -540,6 +541,40 @@ func deleteFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name stri
 	}
 }
 
+func renameFile(w http.ResponseWriter, r *http.Request, fs FileSystem, old string, new string) {
+	if err := fs.Rename(old, new); err != nil {
+		w.Header().Set("Content-Type", "text/json; charset=utf-8")
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintln(w, err.Error())
+	} else {
+		w.Header().Set("Content-Type", "text/json; charset=utf-8")
+		fmt.Fprintf(w, "{\"url\":\"%s\"}", new)
+	}
+}
+
+func updateFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name string, file *File) {
+	if name != file.Name {
+		//update name
+		if err := fs.Rename(name, file.Url); err != nil {
+			render.Status(r, 500)
+			render.JSON(w, r, err.Error())
+		} else {
+			render.Status(r, 200)
+			render.JSON(w, r, file)
+		}
+	} else {
+		//update file
+	}
+	//if err := fs.Update(name, content); err != nil {
+	//	w.Header().Set("Content-Type", "text/json; charset=utf-8")
+	//	w.WriteHeader(http.StatusInternalServerError)
+	//	fmt.Fprintln(w, err.Error())
+	//} else {
+	//	w.Header().Set("Content-Type", "text/json; charset=utf-8")
+	//	fmt.Fprintf(w, "{\"url\":\"%s\"}", new)
+	//}
+}
+
 // toHTTPError returns a non-specific HTTP error message and status code
 // for a given non-nil error value. It's important that toHTTPError does not
 // actually return err.Error(), since msg and httpStatus are returned to users,
@@ -554,59 +589,6 @@ func toHTTPError(err error) (msg string, httpStatus int) {
 	}
 	// Default:
 	return "500 Internal Server Error", http.StatusInternalServerError
-}
-
-// localRedirect gives a Moved Permanently response.
-// It does not convert relative paths to absolute paths like Redirect does.
-func localRedirect(w http.ResponseWriter, r *http.Request, newPath string) {
-	if q := r.URL.RawQuery; q != "" {
-		newPath += "?" + q
-	}
-	w.Header().Set("Location", newPath)
-	w.WriteHeader(http.StatusMovedPermanently)
-}
-
-// ServeFile replies to the request with the contents of the named
-// file or directory.
-//
-// If the provided file or directory name is a relative path, it is
-// interpreted relative to the current directory and may ascend to parent
-// directories. If the provided name is constructed from user input, it
-// should be sanitized before calling ServeFile. As a precaution, ServeFile
-// will reject requests where r.URL.Path contains a ".." path element.
-//
-// As a special case, ServeFile redirects any request where r.URL.Path
-// ends in "/index.html" to the same path, without the final
-// "index.html". To avoid such redirects either modify the path or
-// use ServeContent.
-//func ServeFile(w http.ResponseWriter, r *http.Request, name string) {
-//	if containsDotDot(r.URL.Path) {
-//		// Too many programs use r.URL.Path to construct the argument to
-//		// serveFile. Reject the request under the assumption that happened
-//		// here and ".." may not be wanted.
-//		// Note that name might not contain "..", for example if code (still
-//		// incorrectly) used filepath.Join(myDir, r.URL.Path).
-//		http.Error(w, "invalid URL path", http.StatusBadRequest)
-//		return
-//	}
-//	dir, file := filepath.Split(name)
-//	serveFile(w, r, Dir(dir), file)
-//}
-
-func containsDotDot(v string) bool {
-	if !strings.Contains(v, "..") {
-		return false
-	}
-	for _, ent := range strings.FieldsFunc(v, isSlashRune) {
-		if ent == ".." {
-			return true
-		}
-	}
-	return false
-}
-
-func isSlashRune(r rune) bool {
-	return r == '/' || r == '\\'
 }
 
 type FileHandler struct {
@@ -647,12 +629,18 @@ func (f *FileHandler) Post(w http.ResponseWriter, r *http.Request) {
 }
 
 func (f *FileHandler) Put(w http.ResponseWriter, r *http.Request) {
-	//upath := r.URL.Path
-	//if !strings.HasPrefix(upath, "/") {
-	//	upath = "/" + upath
-	//	r.URL.Path = upath
-	//}
-	//updateFile(w, r, f.root, path.Clean(upath))
+	upath := r.URL.Path
+	if !strings.HasPrefix(upath, "/") {
+		upath = "/" + upath
+		r.URL.Path = upath
+	}
+	file := &File{}
+	if err := render.Bind(r.Body, file); err != nil {
+		render.Status(r, 400)
+		render.JSON(w, r, err.Error())
+		return
+	}
+	updateFile(w, r, f.root, path.Clean(upath), file)
 }
 
 func (f *FileHandler) Delete(w http.ResponseWriter, r *http.Request) {
