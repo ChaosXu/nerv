@@ -92,7 +92,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     get canSave(): boolean {
-        return this.selectedNode && this.selectedNode.type == 'file';
+        return this.selectedNode && this.selectedNode.type == 'file' && this.selectedNode.dirty;
     }
 
     get mode(): string {
@@ -199,7 +199,16 @@ export class ExplorerComponent implements OnInit {
     }
 
     private saveFile(file: File): void {
-
+        this.fileService.update(file.url, file)
+            .then((response) => {                
+                file.dirty = false;
+                file.content = null;
+                this.tree.treeModel.update();
+            })
+            .catch((error) => {
+                this.contentLoading = false;
+                this.error('保存错误', `保存对象失败\r\n${error}`)
+            });    
     }
 
     private getExt(name: string): string {

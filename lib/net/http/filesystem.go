@@ -19,7 +19,9 @@ import (
 	"net/http"
 	"github.com/pressly/chi/render"
 	"encoding/json"
-//	"log"
+	//	"log"
+	"io/ioutil"
+	"log"
 )
 
 const sniffLen = 512
@@ -43,6 +45,7 @@ type File struct {
 	Url  string        `json:"url"`
 	Name string        `json:"name"`
 	Type string        `json:"type"`
+	Content string		`json:"content"`
 }
 
 type FileSystem interface {
@@ -151,20 +154,18 @@ func (d Dir) Rename(name string, new string) error {
 }
 
 func (d Dir) Update(name string, content string) error {
-	//if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
-	//		strings.Contains(name, "\x00") {
-	//	return errors.New("http: invalid character in file path")
-	//}
-	//dir := string(d)
-	//if dir == "" {
-	//	dir = "."
-	//}
-	//oldPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
-	//newPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + new)))
-	//err := os.(oldPath, newPath)
-	//if err != nil {
-	//	return err
-	//}
+	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
+			strings.Contains(name, "\x00") {
+		return errors.New("http: invalid character in file path")
+	}
+	dir := string(d)
+	if dir == "" {
+		dir = "."
+	}
+	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
+	if err := ioutil.WriteFile(path, []byte(content), os.ModePerm); err != nil {
+		return err;
+	}
 	return nil
 }
 
@@ -553,7 +554,7 @@ func renameFile(w http.ResponseWriter, r *http.Request, fs FileSystem, old strin
 }
 
 func updateFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name string, file *File) {
-	if name != file.Name {
+	if name != file.Url {
 		//update name
 		if err := fs.Rename(name, file.Url); err != nil {
 			render.Status(r, 500)
@@ -563,16 +564,14 @@ func updateFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name stri
 			render.JSON(w, r, file)
 		}
 	} else {
-		//update file
+		if err := fs.Update(name, file.Content); err != nil {
+			render.Status(r, 500)
+			render.JSON(w, r, err.Error())
+		} else {
+			render.Status(r, 200)
+			render.JSON(w, r, file.Url)
+		}
 	}
-	//if err := fs.Update(name, content); err != nil {
-	//	w.Header().Set("Content-Type", "text/json; charset=utf-8")
-	//	w.WriteHeader(http.StatusInternalServerError)
-	//	fmt.Fprintln(w, err.Error())
-	//} else {
-	//	w.Header().Set("Content-Type", "text/json; charset=utf-8")
-	//	fmt.Fprintf(w, "{\"url\":\"%s\"}", new)
-	//}
 }
 
 // toHTTPError returns a non-specific HTTP error message and status code
