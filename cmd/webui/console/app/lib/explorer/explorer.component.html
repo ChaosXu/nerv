@@ -6,38 +6,29 @@
         <div class="explorer__tree">
             <Tree [nodes]="nodes" (onActivate)="onNodeSelected($event)" [options]="options">
                 <template #treeNodeTemplate let-node>
-                   <span>{{node.data.name}}</span><span *ngIf="node.data.dirty">*</span> 
-                </template>    
-                <template #loadingTemplate>Loading....</template>            
+                    <span>{{node.data.name}}</span><span *ngIf="node.data.dirty">*</span>
+                </template>
+                <template #loadingTemplate>Loading....</template>
             </Tree>
         </div>
     </div>
     <div class="workspace">
-        <div>
-            <div class="role-perate pl20 pt10 pb10 title">
-                <a>
-                    <button class="console-btn base-btn" (click)="onAddFile()" [disabled]="!canAddFile">添加文件</button>
-                    <button class="console-btn base-btn" (click)="onAddDir()" >添加文件夹</button>
-                    <button class="console-btn base-btn" (click)="onRemove()" [disabled]="!canRemove">删除</button>
-                    <button class="console-btn base-btn" (click)="onRename()" [disabled]="!canRename">重命名</button>
-                    <button class="console-btn base-btn" (click)="onSave()" [disabled]="!canSave">保存</button>
-                </a>
-            </div>
-
-            <div class="uc-f-t">
-                <div class="page-padding-height" style="height: 100%; position: relative;">
-                    <nerv-ace                          
-                        [mode]="mode" 
-                        [theme]="'monokai'" 
-                        [options]="options" 
-                        [readOnly]="false" 
-                        (textChanged)="onTextChanged($event)"
-                        style="display:block;top:5px;height: 100%; width:100%">
-                    </nerv-ace>
-                </div>
-
-            </div>
-
+        <div class="workspace__toolbar">
+            <!--class="role-perate pl20 pt10 pb10 title"-->
+            <a>
+                <button class="console-btn base-btn" (click)="onAddFile()" [disabled]="!canAddFile">添加文件</button>
+                <button class="console-btn base-btn" (click)="onAddDir()">添加文件夹</button>
+                <button class="console-btn base-btn" (click)="onRemove()" [disabled]="!canRemove">删除</button>
+                <button class="console-btn base-btn" (click)="onRename()" [disabled]="!canRename">重命名</button>
+                <button class="console-btn base-btn" (click)="onSave()" [disabled]="!canSave">保存</button>
+            </a>
         </div>
+
+        <div class="workspace__editor">
+            <nerv-ace [mode]="mode" [theme]="'monokai'" [options]="options" [readOnly]="false" (textChanged)="onTextChanged($event)"
+                style="display:block;top:5px;height: 100%; width:100%">
+            </nerv-ace>
+        </div>
+
     </div>
 </div>

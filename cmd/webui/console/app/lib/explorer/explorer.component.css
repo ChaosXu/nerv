@@ -12,7 +12,6 @@
 .explorer__toolbar {    
     background-color: #fff;
     height: 50px;
-    border: 1px solid green;
     font-size: 15px;
     font-weight: 700
 }
@@ -20,7 +19,6 @@
 .explorer__tree {
     position:absolute;            
     width:100%;
-    border:1px solid red;
     overflow: auto;
     bottom: 0;
     top: 50;
@@ -33,54 +31,16 @@
 }
 
 .workspace__toolbar {
-    height: 28px;
+    height: 24px;
     line-height: 28px;
     padding: 11px 15px;
     font-size: 15px;
     font-weight: 700
 }
 
-.project-detail .title a {
-    font-size: 12px;
-    font-weight: 400
-}
-
-.project-detail .no-content {
-    margin: 6% auto
-}
-
-.project-detail .data-operate .cell {
-    float: left;
-    height: 40px;
-    line-height: 40px;
-    padding: 0 15px;
-    border-right: 1px solid #dbdcdf
-}
-
-.project-detail .data-operate .cell:last-of-type {
-    border-right: none
-}
-
-.project-detail .table {
-    margin-bottom: 0
-}
-
-.project-detail .table tbody td,.project-detail .table thead th {
-    padding: 15px 10px
-}
-
-.project-detail .question-text-info .console-dropdown {
-    left: -18px;
-    right: auto
-}
-
-.project-detail .question-text-info .console-dropdown .console-angle {
-    left: 10px
-}
-
-.project-detail .question-text-info .role-tips {
-    color: #666;
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 18px
+.workspace__editor {
+    position:relative;
+    height:100%;
+    box-sizing: border-box;
+    padding-bottom: 50px
 }
