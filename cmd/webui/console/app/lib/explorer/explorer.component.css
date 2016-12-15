@@ -11,7 +11,9 @@
 
 .explorer__toolbar {    
     background-color: #fff;
-    height: 50px;
+    height: 30px;
+    padding-top:20px;
+    padding-left:10px;
     font-size: 15px;
     font-weight: 700
 }

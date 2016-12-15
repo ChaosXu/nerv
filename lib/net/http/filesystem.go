@@ -19,9 +19,7 @@ import (
 	"net/http"
 	"github.com/pressly/chi/render"
 	"encoding/json"
-	//	"log"
 	"io/ioutil"
-	"log"
 )
 
 const sniffLen = 512
@@ -42,10 +40,10 @@ type PutRequest struct {
 }
 
 type File struct {
-	Url  string        `json:"url"`
-	Name string        `json:"name"`
-	Type string        `json:"type"`
-	Content string		`json:"content"`
+	Url     string        `json:"url"`
+	Name    string        `json:"name"`
+	Type    string        `json:"type"`
+	Content string        `json:"content"`
 }
 
 type FileSystem interface {
@@ -110,7 +108,8 @@ func (d Dir) Create(name string) (http.File, error) {
 	if dir == "" {
 		dir = "."
 	}
-	f, err := os.Create(filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name))))
+	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
+	f, err := os.OpenFile(path, os.O_RDWR | os.O_CREATE | os.O_EXCL, 0666)
 	if err != nil {
 		return nil, err
 	}

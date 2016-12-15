@@ -30,17 +30,6 @@ const ADD_FILE_FORM = {
     fields: [
         {
             name: "name", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
-        },
-        {
-            name: "fileType", label: "类型", control: "select", type: "string",
-            display: {
-                options: [
-                    { label: 'JSON', value: 'json', default: true },
-                    { label: 'Shell', value: 'sh' },
-                    { label: 'Ruby', value: 'ruby' },
-                    { label: 'Python', value: 'python' }
-                ]
-            }
         }
     ]
 };
@@ -300,11 +289,11 @@ export class ExplorerComponent implements OnInit {
                 if (!children) {
                     this.selectedNode.children = children = new Array<File>();
                 }
-                file = { url: selectedNode.url+'/'+name, name: name, type: 'file', extension: node['fileType'] };                
+                file = { url: selectedNode.url+'/'+name, name: name, type: 'file', extension: this.getExt(name) };                
             } else {
                 const parent = this.tree.treeModel.activeNodes[0].parent.data;
                 children = parent.children;                
-                file = { url: parent.url+'/'+name, name: name, type: 'file', extension: node['fileType'] };                                
+                file = { url: parent.url+'/'+name, name: name, type: 'file', extension: this.getExt(name) };                                
             }
         }
 
@@ -318,6 +307,7 @@ export class ExplorerComponent implements OnInit {
                 this.error('保存错误', `保存对象失败\r\n${error}`)
             });
     }
+
 
     private addDir(parent: File, node: {}): void {
         const name = node['name'];
