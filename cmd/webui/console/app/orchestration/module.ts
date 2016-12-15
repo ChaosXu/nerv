@@ -145,24 +145,24 @@ export class OrchestrationModule {
                         url: "/orchestration/Topology"
                     }, {
                         name: "模板管理",
-                        url: "/orchestration/ServiceTemplate"
+                        url: "/orchestration/templates"
                     },{
                         name: "资源模型",
-                        url: "/orchestration/Script"
+                        url: "/orchestration/scripts"
                     }
                 ],
-                ServiceTemplate: {
-                    list: {
-                        title: '模板列表', columns: [
-                            { label: '名称', name: 'name' },
-                            { label: '版本', name: 'version' },
-                            { label: '操作' }
-                        ]
-                    },
-                    add: { title: '添加模板', form: 'orchestration.st.add' },
-                    edit: { title: '编辑模板', form: 'orchestration.st.edit' },
-                    detail: { title: '查看模板', form: 'orchestration.st.detail' }
-                },
+                // ServiceTemplate: {
+                //     list: {
+                //         title: '模板列表', columns: [
+                //             { label: '名称', name: 'name' },
+                //             { label: '版本', name: 'version' },
+                //             { label: '操作' }
+                //         ]
+                //     },
+                //     add: { title: '添加模板', form: 'orchestration.st.add' },
+                //     edit: { title: '编辑模板', form: 'orchestration.st.edit' },
+                //     detail: { title: '查看模板', form: 'orchestration.st.detail' }
+                // },
                 Topology: {
                     list: {
                         title: '拓扑列表', columns: [
@@ -187,17 +187,17 @@ export class OrchestrationModule {
                 //     edit: { title: '编辑资源类', form: 'orchestration.rt.edit' },
                 //     detail: { title: '查看资源类', form: 'orchestration.rt.detail' }
                 // },                
-                Script: {
-                    list: {
-                        title: '脚本列表', columns: [
-                            { label: '名称', name: 'name' },
-                            { label: '操作' }
-                        ]
-                    },
-                    add: { title: '添加脚本', form: 'orchestration.script.add' },
-                    edit: { title: '编辑脚本', form: 'orchestration.script.edit' },
-                    detail: { title: '查看删除', form: 'orchestration.script.detail' }
-                }
+                // Script: {
+                //     list: {
+                //         title: '脚本列表', columns: [
+                //             { label: '名称', name: 'name' },
+                //             { label: '操作' }
+                //         ]
+                //     },
+                //     add: { title: '添加脚本', form: 'orchestration.script.add' },
+                //     edit: { title: '编辑脚本', form: 'orchestration.script.edit' },
+                //     detail: { title: '查看删除', form: 'orchestration.script.detail' }
+                // }
             });
     }
 }

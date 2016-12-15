@@ -20,8 +20,8 @@ export class FileService {
     constructor(private http: Http) { }
 
 
-    get(path: string): Promise<any> {
-        const url = `api/scripts${path}`;
+    get(root: string, path: string): Promise<any> {
+        const url = `api/${root}${path}`;
         return this.http.get(url, { headers: this.headers })
             .toPromise()
             .then(response => {
@@ -45,8 +45,8 @@ export class FileService {
             .catch(this.error);
     }
 
-    create(path: string): Promise<any> {
-        const url = `api/scripts${path}`;
+    create(root: string, path: string): Promise<any> {
+        const url = `api/${root}${path}`;
         return this.http.post(url, '', { headers: this.headers })
             .toPromise()
             .then(response => {
@@ -60,8 +60,8 @@ export class FileService {
             .catch(this.error);
     }
 
-    update(path: string, file: File): Promise<any> {
-        const url = `api/scripts${path}`;
+    update(root: string, path: string, file: File): Promise<any> {
+        const url = `api/${root}${path}`;
         var body = JSON.stringify(file);
         console.log(body)
         return this.http.put(url, body, { headers: this.headers })
@@ -70,8 +70,8 @@ export class FileService {
             .catch(this.error);
     }
 
-    remove(path: string): Promise<any> {
-        const url = `api/scripts${path}`;
+    remove(root: string, path: string): Promise<any> {
+        const url = `api/${root}${path}`;
         return this.http.delete(url, { headers: this.headers })
             .toPromise()
             .then(response => response.json())

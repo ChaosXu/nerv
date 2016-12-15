@@ -86,6 +86,11 @@ gulp.task('connect', function () {
                     target: 'http://localhost:3332',
                     changeOrigin: true,
                     ws: true
+                }),
+                proxy('/api/templates', {
+                    target: 'http://localhost:3332',
+                    changeOrigin: true,
+                    ws: true
                 })
             ];
         }

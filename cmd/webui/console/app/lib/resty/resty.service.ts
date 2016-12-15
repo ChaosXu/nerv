@@ -47,7 +47,7 @@ export class RestyService {
     create(type: string, instance: any): Promise<any> {
         const url = `api/objs/${type}`;
         var body = JSON.stringify(instance);
-        console.log(body)
+        
         return this.http.post(url, body, { headers: this.headers })
             .toPromise()
             .then(response => response.json())
@@ -57,7 +57,7 @@ export class RestyService {
     update(type: string, instance: any): Promise<any> {
         const url = `api/objs/${type}`;
         var body = JSON.stringify(instance);
-        console.log(body)
+        
         return this.http.put(url, body, { headers: this.headers })
             .toPromise()
             .then(response => response.json())

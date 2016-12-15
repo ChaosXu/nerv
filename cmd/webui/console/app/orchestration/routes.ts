@@ -11,13 +11,13 @@ export const routes: Routes = [
         path: '', component: ListApp,
         children: [
             {
-                path: 'ServiceTemplate',
+                path: 'templates',
                 children: [
                     { path: '', component: ExplorerComponent }
                 ]
             },            
             {
-                path: 'Script',
+                path: 'scripts',
                 children: [
                     { path: '', component: ExplorerComponent }
                 ]

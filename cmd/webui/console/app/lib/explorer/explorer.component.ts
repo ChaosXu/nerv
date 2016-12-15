@@ -56,7 +56,7 @@ export class ExplorerComponent implements OnInit {
         displayField: 'title',
         getChildren: (node: TreeNode) => {
             let file = node.data;
-            return this.fileService.get(file.url);
+            return this.fileService.get(this.type,file.url);
         }
     };
 
@@ -70,6 +70,8 @@ export class ExplorerComponent implements OnInit {
     private ace: AceDirective;
 
     selectedNode: File
+
+    private type:string;
 
     get canRemove(): boolean {
         return this.selectedNode != null;
@@ -93,14 +95,16 @@ export class ExplorerComponent implements OnInit {
 
     constructor(
         private modalService: NgbModal,
-        private fileService: FileService
+        private fileService: FileService,
+        private route: ActivatedRoute
     ) {
     }
 
     ngOnInit(): void {
-
-
-        this.fileService.get('')
+        this.route.parent.url.forEach((segment: UrlSegment[]) => {
+                this.type = segment[0].path;                
+            });                             
+        this.fileService.get(this.type,'')
             .then((data) => {
                 this.nodes = data;
             })
@@ -191,7 +195,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     private saveFile(file: File): void {
-        this.fileService.update(file.url, file)
+        this.fileService.update(this.type,file.url, file)
             .then((response) => {                
                 file.dirty = false;
                 file.content = null;
@@ -222,7 +226,7 @@ export class ExplorerComponent implements OnInit {
             this.ace.text = content || '';
         } else {
             this.contentLoading = true;
-            this.fileService.get(file.url)
+            this.fileService.get(this.type,file.url)
                 .then((content) => {
                     this.ace.text = content;
                     this.contentLoading = false;
@@ -240,7 +244,7 @@ export class ExplorerComponent implements OnInit {
         let index = newUrl.lastIndexOf(node.name);
         newUrl = newUrl.substring(0,index) + name;
         let updateFile = { url: newUrl, name: name, type: node.type }
-        this.fileService.update(node.url, updateFile)
+        this.fileService.update(this.type,node.url, updateFile)
             .then((response) => {                
                 let children = node.children;
                 this.updateChildrenUrl(children,newUrl);
@@ -263,7 +267,7 @@ export class ExplorerComponent implements OnInit {
     }
 
     private remove(file: File): void {
-        this.fileService.remove(file.url)
+        this.fileService.remove(this.type,file.url)
             .then((remvoed) => {
                 const activeNode = this.tree.treeModel.activeNodes[0];
                 const index = activeNode.parent.data.children.indexOf(activeNode.data);
@@ -297,7 +301,7 @@ export class ExplorerComponent implements OnInit {
             }
         }
 
-        this.fileService.create(file.url)
+        this.fileService.create(this.type,file.url)
             .then((response) => {                                
                 children.push(file);
                 this.tree.treeModel.update();
@@ -336,7 +340,7 @@ export class ExplorerComponent implements OnInit {
         } else {
             path = `${path}/${name}`;
         }
-        this.fileService.create(path)
+        this.fileService.create(this.type,path)
             .then((dir) => {
                 nodes.push(dir);
                 this.tree.treeModel.update();

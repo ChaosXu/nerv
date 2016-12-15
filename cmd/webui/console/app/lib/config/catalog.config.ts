@@ -17,7 +17,7 @@ const Catalogs = [{
     items: [{
         name: '资源编排',
         icon: 'icon__ucdn',
-        url: '/orchestration/ServiceTemplate'
+        url: '/orchestration/Topology'
     }, {
         name: '监控',
         icon: 'icon__umon',
