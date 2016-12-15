@@ -230,9 +230,10 @@ func serveContent(w http.ResponseWriter, r *http.Request, name string, modtime t
 
 	// If Content-Type isn't set, use the file's extension to find it, but
 	// if the Content-Type is unset explicitly, do not sniff the type.
-	ctypes, haveType := w.Header()["Content-Type"]
+	//ctypes, haveType := w.Header()["Content-Type"]
 	var ctype string
-	if !haveType {
+	//if !haveType {
+		//log.Println(haveType)
 		ctype = mime.TypeByExtension(filepath.Ext(name))
 		if ctype == "" {
 			// read a chunk to decide between utf-8 text and binary
@@ -245,10 +246,13 @@ func serveContent(w http.ResponseWriter, r *http.Request, name string, modtime t
 				return
 			}
 		}
+		if strings.Index(ctype, "json") >= 0 {
+			ctype = "text"
+		}
 		w.Header().Set("Content-Type", ctype)
-	} else if len(ctypes) > 0 {
-		ctype = ctypes[0]
-	}
+	//} else if len(ctypes) > 0 {
+	//	ctype = ctypes[0]
+	//}
 
 	size, err := sizeFunc()
 	if err != nil {
