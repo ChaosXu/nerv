@@ -30,10 +30,10 @@ type traverseCallback func(node *Node, template *ServiceTemplate) (<-chan error,
 type Topology struct {
 	gorm.Model
 	Status
-	Name     string //topology name
-	Template string //service template name
-	Version  int32  //service template version
-	Nodes    []*Node
+	Name     string 	`json:"name"`     //topology name
+	Template string 	`json:"tempalte"` //service template name
+	Version  int32  	`json:"version"`  //service template version
+	Nodes    []*Node 	`json:"nodes"`
 }
 
 //Install the topology and start to serve
