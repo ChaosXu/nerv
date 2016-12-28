@@ -1,4 +1,4 @@
-package model
+package topology
 
 import (
 	"github.com/jinzhu/gorm"

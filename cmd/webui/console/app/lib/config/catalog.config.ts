@@ -26,7 +26,7 @@ const Catalogs = [{
 }, {
     name: '基础设施',
     items: [{
-        name: '物理主机',
+        name: '主机管理',
         icon:'icon__uphost',
         url: '/infrastructure/Host'
     }]

@@ -1,4 +1,4 @@
-package model
+package topology
 
 //RunStatus of the topology or node
 type RunStatus int

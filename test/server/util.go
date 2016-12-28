@@ -84,6 +84,35 @@ func update(t *testing.T, class string, data interface{}) interface{} {
 	return data
 }
 
+func createObj(t *testing.T, class string, obj interface{}) interface{} {
+	logCodeLine()
+	var (
+		body []byte
+		err error
+		res *resty.Response
+	)
+	if body, err = json.Marshal(obj); err != nil {
+		assert.NotNil(t, err, err.Error())
+	}
+
+	res, err = resty.R().
+			SetHeader("Content-Type", "application/json").
+			SetBody(body).
+			Post(fmt.Sprintf("%s/objs/%s", ServerUrl, class))
+
+	if err != nil {
+		assert.Nil(t, err, err.Error())
+	}
+	assert.Equal(t, 200, res.StatusCode(), string(res.Body()))
+	b := res.Body();
+	//fmt.Printf("body\n %s\n", string(b))
+	md := db.Models[class]
+	data := md.New()
+	err = json.Unmarshal(b, data)
+	assert.Nil(t, err)
+	return data
+}
+
 func create(t *testing.T, class string, dataPath string) interface{} {
 	logCodeLine()
 	var (

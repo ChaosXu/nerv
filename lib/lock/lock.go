@@ -1,4 +1,4 @@
-package model
+package lock
 
 import (
 	"github.com/ChaosXu/nerv/lib/db"

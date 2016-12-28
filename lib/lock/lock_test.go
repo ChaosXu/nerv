@@ -1,20 +1,20 @@
-package model_test
+package lock_test
 
 import (
 	"testing"
-	"github.com/ChaosXu/nerv/lib/deploy"
 	"github.com/stretchr/testify/assert"
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/ChaosXu/nerv/lib/lock"
 )
 
 func TestLock_TryLock(t *testing.T) {
 
 	initDB()
 
-	lock1 := deploy.GetLock("obj", 1)
-	lock2 := deploy.GetLock("obj", 1)
+	lock1 := lock.GetLock("obj", 1)
+	lock2 := lock.GetLock("obj", 1)
 	defer lock1.Unlock()
 	defer lock2.Unlock()
 

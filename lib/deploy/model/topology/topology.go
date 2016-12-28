@@ -1,4 +1,4 @@
-package model
+package topology
 
 import (
 	"github.com/jinzhu/gorm"
@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 	"github.com/ChaosXu/nerv/lib/log"
+	"github.com/ChaosXu/nerv/lib/lock"
 )
 
 func init() {
@@ -66,7 +67,7 @@ func (p *Topology) Stop() error {
 }
 
 func (p *Topology) preTraverse(depType string, operation string) error {
-	lock := GetLock("Topology", p.ID)
+	lock := lock.GetLock("Topology", p.ID)
 	if !lock.TryLock() {
 		return fmt.Errorf("topology is doing. ID=%d", p.ID)
 	}
@@ -112,7 +113,7 @@ func (p *Topology) preTraverse(depType string, operation string) error {
 }
 
 func (p *Topology) postTraverse(depType string, operation string) error {
-	lock := GetLock("Topology", p.ID)
+	lock := lock.GetLock("Topology", p.ID)
 	if !lock.TryLock() {
 		return fmt.Errorf("topology is doing. ID=%d", p.ID)
 	}
@@ -122,8 +123,8 @@ func (p *Topology) postTraverse(depType string, operation string) error {
 	db.DB.Where("topology_id =?", p.ID).Preload("Links").Find(&tnodes)
 	p.Nodes = tnodes
 
-	template := ServiceTemplate{}
-	if err := db.DB.Where("name=? and version=?", p.Template, p.Version).Preload("Nodes").Preload("Nodes.Parameters").First(&template).Error; err != nil {
+	template, err:=GetTemplate(p.Template)
+	if err!=nil{
 		return err
 	}
 
@@ -131,12 +132,11 @@ func (p *Topology) postTraverse(depType string, operation string) error {
 	timeouts := []<-chan bool{}
 
 	for _, node := range p.Nodes {
-		done, timeout := p.postTraverseNode(depType, node, &template, operation)
+		done, timeout := p.postTraverseNode(depType, node, template, operation)
 		dones = append(dones, done)
 		timeouts = append(timeouts, timeout)
 	}
 
-	var err error = nil
 	for i, done := range dones {
 		select {
 		case e := <-done:

@@ -39,7 +39,7 @@ export class InfrastructureModule {
                 title: '基础设施',
                 menus: [
                     {
-                        name: "物理主机",
+                        name: "主机管理",
                         url: "/infrastructure/Host"
                     }
                 ],

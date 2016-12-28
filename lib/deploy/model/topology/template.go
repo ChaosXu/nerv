@@ -1,68 +1,9 @@
-package model
+package topology
 
-import (
-	"github.com/jinzhu/gorm"
-	"github.com/ChaosXu/nerv/lib/db"
-)
-
-func init() {
-	db.Models["ServiceTemplate"] = templateDesc()
-	db.Models["NodeTemplate"] = nodeTemplateDesc()
-	db.Models["Dependency"] = dependencyDesc()
-	db.Models["Parameter"] = parameterDesc()
-}
-
-func templateDesc() *db.ModelDescriptor {
-	return &db.ModelDescriptor{
-		Type: &ServiceTemplate{},
-		New: func() interface{} {
-			return &ServiceTemplate{}
-		},
-		NewSlice:func() interface{} {
-			return &[]ServiceTemplate{}
-		},
-	}
-}
-
-func nodeTemplateDesc() *db.ModelDescriptor {
-	return &db.ModelDescriptor{
-		Type: &NodeTemplate{},
-		New: func() interface{} {
-			return &NodeTemplate{}
-		},
-		NewSlice:func() interface{} {
-			return &[]NodeTemplate{}
-		},
-	}
-}
-
-func parameterDesc() *db.ModelDescriptor {
-	return &db.ModelDescriptor{
-		Type: &Parameter{},
-		New: func() interface{} {
-			return &Parameter{}
-		},
-		NewSlice:func() interface{} {
-			return &[]Parameter{}
-		},
-	}
-}
-
-func dependencyDesc() *db.ModelDescriptor {
-	return &db.ModelDescriptor{
-		Type: &Dependency{},
-		New: func() interface{} {
-			return &Dependency{}
-		},
-		NewSlice:func() interface{} {
-			return &[]Dependency{}
-		},
-	}
-}
 
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
-	gorm.Model
+	//	gorm.Model
 	Name    string           `json:"name";gorm:"unique"`
 	Version int32            `json:"version"`
 	Nodes   []NodeTemplate   `json:"nodes"`
@@ -70,8 +11,8 @@ type ServiceTemplate struct {
 
 // NodeTemplate is a prototype of service node.
 type NodeTemplate struct {
-	gorm.Model
-	ServiceTemplateID int           `gorm:"index"`       //Foreign key of the service template
+														 //	gorm.Model
+	ServiceTemplateID int                                //`gorm:"index"`       //Foreign key of the service template
 	Name              string        `json:"name"`        //Node name
 	Type              string        `json:"type"`        //The name of NodeType
 	Parameters        []Parameter `json:parameters`      //parameters of NodeTemplate
@@ -89,7 +30,7 @@ func (p *NodeTemplate) getParameterValue(name string) string {
 
 // Dependency is relationship  between two node
 type Dependency struct {
-	gorm.Model
+											 //	gorm.Model
 	NodeTemplateID int                       //`gorm:"index"`  //Foreign key of the node template
 	Type           string    `json:"type"`   //The type of dependency: connect;contained
 	Target         string    `json:"target"` //The name of target node
@@ -97,30 +38,26 @@ type Dependency struct {
 
 // Parameter is used to generate the node of template
 type Parameter struct {
-	gorm.Model
-	NodeTemplateID int       `gorm:"index"` //Foreign key of the node template
+					   //	gorm.Model
+	NodeTemplateID int //`gorm:"index"` //Foreign key of the node template
 	Name           string    `json:"name"`
 	Value          string    `json:"value"`
 }
 
 
 // CreateTopology create a topology by the service template.
-func (p *ServiceTemplate) CreateTopology(name string) (*Topology, error) {
-	nodeTemplates := []NodeTemplate{}
-	db.DB.Where("service_template_id =? ", p.ID).Preload("Dependencies").Preload("Parameters").Find(&nodeTemplates)
-	p.Nodes = nodeTemplates
+func (p *ServiceTemplate) NewTopology(name string) (*Topology, error) {
+	//nodeTemplates := []NodeTemplate{}
+	//db.DB.Where("service_template_id =? ", p.ID).Preload("Dependencies").Preload("Parameters").Find(&nodeTemplates)
+	//p.Nodes = nodeTemplates
 
-	topology := &Topology{Name:name, Template:p.Name, Version:p.Version, Nodes:[]*Node{}}
+	topology := &Topology{Name:name, Template:p.Name + ".json", Version:p.Version, Nodes:[]*Node{}}
 
 	for _, template := range p.Nodes {
 		p.createNode(&template, topology)
 	}
 
-	if err := db.DB.Create(topology).Error; err != nil {
-		return nil, err
-	} else {
-		return topology, nil
-	}
+	return topology, nil;
 }
 
 func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topology) []*Node {

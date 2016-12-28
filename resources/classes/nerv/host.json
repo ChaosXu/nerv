@@ -1,6 +1,16 @@
 {
   "name": "/nerv/Host",
   "base": "/Resource",
+  "properties": [
+    {
+      "name":"address",
+      "type":"ip"
+    },
+    {
+      "name":"credential",
+      "type":"map"
+    }
+  ],
   "operations": [
     {
       "name": "Create",
