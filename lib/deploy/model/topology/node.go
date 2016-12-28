@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/log"
+	"fmt"
 )
 
 
@@ -57,11 +58,17 @@ func (p *Node) FindLinksByType(depType string) []*Link {
 }
 
 // Execute operation
-func (p *Node) Execute(operation string, nodeTemplate *NodeTemplate) error {
+func (p *Node) Execute(operation string, template *ServiceTemplate) error {
 	log.LogCodeLine()
 
-	p.RunStatus = RunStatusGreen
+	nodeTemplate := template.findTemplate(p.Template)
 
+	if nodeTemplate == nil {
+		p.RunStatus = RunStatusRed
+		err := fmt.Errorf("template %s of node %s isn't exist", p.Template, p.Name)
+		return err
+	}
+	p.RunStatus = RunStatusGreen
 
 	args := map[string]string{}
 	for _, param := range nodeTemplate.Parameters {

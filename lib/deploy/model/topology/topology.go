@@ -31,10 +31,10 @@ type traverseCallback func(node *Node, template *ServiceTemplate) (<-chan error,
 type Topology struct {
 	gorm.Model
 	Status
-	Name     string 	`json:"name"`     //topology name
-	Template string 	`json:"tempalte"` //service template name
-	Version  int32  	`json:"version"`  //service template version
-	Nodes    []*Node 	`json:"nodes"`
+	Name     string    `json:"name"`     //topology name
+	Template string    `json:"tempalte"` //service template name
+	Version  int32    `json:"version"`   //service template version
+	Nodes    []*Node    `json:"nodes"`
 }
 
 //Install the topology and start to serve
@@ -123,8 +123,8 @@ func (p *Topology) postTraverse(depType string, operation string) error {
 	db.DB.Where("topology_id =?", p.ID).Preload("Links").Find(&tnodes)
 	p.Nodes = tnodes
 
-	template, err:=GetTemplate(p.Template)
-	if err!=nil{
+	template, err := GetTemplate(p.Template)
+	if err != nil {
 		return err
 	}
 
@@ -167,19 +167,10 @@ func (p *Topology) executeNode(operation string, node *Node, template *ServiceTe
 	}()
 
 	go func() {
-		nodeTemplate := template.findTemplate(node.Template)
-		if nodeTemplate != nil {
-			if err := node.Execute(operation, nodeTemplate); err != nil {
-				done <- err
-			} else {
-				done <- nil
-			}
-		} else {
-			node.RunStatus = RunStatusRed
-			err := fmt.Errorf("template %s of node %s isn't exist", node.Template, node.Name)
-			node.Error = err.Error()
-			db.DB.Save(node)
+		if err := node.Execute(operation, template); err != nil {
 			done <- err
+		} else {
+			done <- nil
 		}
 	}()
 
