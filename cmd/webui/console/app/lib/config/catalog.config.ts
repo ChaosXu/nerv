@@ -24,11 +24,49 @@ const Catalogs = [{
         url: '/monitor'
     }]
 }, {
-    name: '基础设施',
+    name: '中间件',
     items: [{
-        name: '主机管理',
-        icon:'icon__uphost',
+        name: '分布式数据',
+        icon: 'icon__uphost',
         url: '/infrastructure/Host'
+    }, {
+        name: '消息队列',
+        icon: 'icon__uphost',
+        url: '/infrastructure/Host'
+    }, {
+        name: '数据传输',
+        icon: 'icon__uphost',
+        url: '/infrastructure/Host'
+    }, {
+        name: 'MySQL HA',
+        icon: 'icon__uphost',
+        url: '/infrastructure/Host'
+    }, {
+        name: '分布式服务框架',
+        icon: 'icon__uphost',
+        url: '/infrastructure/Host'
+    }, {
+        name: 'Nginx',
+        icon: 'icon__uphost',
+        url: '/infrastructure/Host'
+    }]
+}, {
+    name: '数据库',
+    items: [{
+        name: 'MySQL',
+        icon: 'icon__company',
+        url: '/user/Account'
+    }, {
+        name: 'Redis',
+        icon: 'icon__company',
+        url: '/user/Account'
+    }]
+}, {
+    name: '存储',
+    items: [{
+        name: '对象存储',
+        icon: 'icon__company',
+        url: '/user/Account'
     }]
 }, {
     name: '系统',
