@@ -1,0 +1,31 @@
+{
+  "name": "/nerv/Agent",  //资源类Path
+
+  "operations": [         //资源操作
+    {
+      "name": "Create",   //创建资源
+      "type": "ssh",      //资源操作类型，ssh | go
+      "implementor": "/nerv/Agent/create.sh"  //资源操作实现,ssh脚本存储路径，或者go代码路径
+    },
+    {
+      "name": "Delete",   //删除资源
+      "type": "ssh",
+      "implementor": "/nerv/Agent/delete.sh"
+    },
+    {
+      "name": "Setup",   //配置资源
+      "type": "ssh",
+      "implementor": "/nerv/Agent/setup.sh"
+    },
+    {
+      "name": "Start",  //启动资源
+      "type": "ssh",
+      "implementor": "/nerv/Agent/start.sh"
+    },
+    {
+      "name": "Stop",  //停止资源
+      "type": "ssh",
+      "implementor": "/nerv/Agent/stop.sh"
+    }
+  ]
+}

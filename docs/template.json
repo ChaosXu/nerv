@@ -1,0 +1,28 @@
+{
+  "name": "/nerv/host_template", //模板Path
+  "version": 1, //版本号，数值
+  "inputs": [  //输入参数数组
+    {
+      "name": "输入参数名",
+      "type": "输入参数类型：string"
+    }
+  ],
+  "nodes": [                      //节点数组
+    {
+      "name": "agent",            //节点名称
+      "type": "/nerv/Agent",      //节点Path
+      "parameters": [             //节点参数
+        {
+          "name": "参数名",
+          "value": "参数值"        //支持${XXXX},从inputs取值
+        }
+      ],
+      "dependencies": [         //节点依赖项，数组
+        {
+          "type": "contained",  //依赖类型
+          "target": "host"      //依赖目标
+        }
+      ]
+    }
+  ]
+}
