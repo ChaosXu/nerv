@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/env"
 	"k8s.io/kubernetes/pkg/util/json"
+	"github.com/toolkits/file"
 )
 
 func GetTemplate(path string) (*ServiceTemplate, error) {
@@ -21,6 +22,19 @@ func GetTemplate(path string) (*ServiceTemplate, error) {
 	}
 	template := &ServiceTemplate{}
 	if err = json.Unmarshal(res.Body(), template); err != nil {
+		return nil, err
+	}
+	return template, nil
+}
+
+func GetLocalTemplate(path string) (*ServiceTemplate, error) {
+	content, err := file.ToBytes(path)
+	if err != nil {
+		return nil, err
+	}
+
+	template := &ServiceTemplate{}
+	if err = json.Unmarshal(content, template); err != nil {
 		return nil, err
 	}
 	return template, nil

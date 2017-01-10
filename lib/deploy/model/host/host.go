@@ -39,10 +39,7 @@ func (p *Host) Install() error {
 		return err
 	}
 
-	topology, err := template.NewTopology(p.Name)
-	if err != nil {
-		return err
-	}
+	topology := template.NewTopology(p.Name)
 
 	if err = db.DB.Create(topology).Error; err != nil {
 		return err

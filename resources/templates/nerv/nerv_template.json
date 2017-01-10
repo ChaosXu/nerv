@@ -1,6 +1,16 @@
 {
   "name": "nerv_template",
   "version": 1,
+  "inputs": [
+    {
+      "name":"user",
+      "type":"string"
+    },
+    {
+      "name":"pwd",
+      "type":"string"
+    }
+  ],
   "nodes": [
     {
       "name": "server",
@@ -34,15 +44,19 @@
     },
     {
       "name": "host",
-      "type": "/nerv/Host",
+      "type": "/nerv/Agent",
       "parameters": [
         {
           "name": "addresses",
           "value": "localhost"
         },
         {
-          "name": "credential",
-          "value": "SSH,pwd"
+          "name": "user",
+          "value": "${user}"
+        },
+        {
+          "name": "pwd",
+          "value": "${pwd}"
         }
       ]
     }

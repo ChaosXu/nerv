@@ -46,7 +46,7 @@ type Parameter struct {
 
 
 // CreateTopology create a topology by the service template.
-func (p *ServiceTemplate) NewTopology(name string) (*Topology, error) {
+func (p *ServiceTemplate) NewTopology(name string) *Topology {
 	//nodeTemplates := []NodeTemplate{}
 	//db.DB.Where("service_template_id =? ", p.ID).Preload("Dependencies").Preload("Parameters").Find(&nodeTemplates)
 	//p.Nodes = nodeTemplates
@@ -57,7 +57,7 @@ func (p *ServiceTemplate) NewTopology(name string) (*Topology, error) {
 		p.createNode(&template, topology)
 	}
 
-	return topology, nil;
+	return topology;
 }
 
 func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topology) []*Node {

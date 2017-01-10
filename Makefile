@@ -9,9 +9,13 @@ all : build
 	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----package complete----"
 
-build : server file  store pkg resources bin
+build : cli server file  store pkg resources bin
 	@echo "----build complete----"
 
+
+cli :
+	@echo "----build cli----"
+	cd $(CMD_DIR)/cli && make
 
 server :
 	@echo "----build server----"
