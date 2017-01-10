@@ -1,0 +1,50 @@
+{
+  "name": "nerv_template",
+  "version": 1,
+  "nodes": [
+    {
+      "name": "server",
+      "type": "/nerv/Server",
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "file",
+      "type": "/nerv/File",
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "webui",
+      "type": "/nerv/WebUI",
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "host",
+      "type": "/nerv/Host",
+      "parameters": [
+        {
+          "name": "addresses",
+          "value": "localhost"
+        },
+        {
+          "name": "credential",
+          "value": "SSH,pwd"
+        }
+      ]
+    }
+  ]
+}

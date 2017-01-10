@@ -1,0 +1,31 @@
+{
+  "name": "/nerv/WebUI",
+  "base": "/Resource",
+  "operations": [
+    {
+      "name": "Create",
+      "type": "shell",
+      "implementor": "/nerv/WebUI/create.sh"
+    },
+    {
+      "name": "Delete",
+      "type": "shell",
+      "implementor": "/nerv/WebUI/delete.sh"
+    },
+    {
+      "name": "Setup",
+      "type": "shell",
+      "implementor": "/nerv/WebUI/setup.sh"
+    },
+    {
+      "name": "Start",
+      "type": "shell",
+      "implementor": "/nerv/WebUI/start.sh"
+    },
+    {
+      "name": "Stop",
+      "type": "shell",
+      "implementor": "/nerv/WebUI/stop.sh"
+    }
+  ]
+}

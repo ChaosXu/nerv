@@ -1,0 +1,31 @@
+{
+  "name": "/nerv/File",
+  "base": "/Resource",
+  "operations": [
+    {
+      "name": "Create",
+      "type": "shell",
+      "implementor": "/nerv/File/create.sh"
+    },
+    {
+      "name": "Delete",
+      "type": "shell",
+      "implementor": "/nerv/File/delete.sh"
+    },
+    {
+      "name": "Setup",
+      "type": "shell",
+      "implementor": "/nerv/File/setup.sh"
+    },
+    {
+      "name": "Start",
+      "type": "shell",
+      "implementor": "/nerv/File/start.sh"
+    },
+    {
+      "name": "Stop",
+      "type": "shell",
+      "implementor": "/nerv/File/stop.sh"
+    }
+  ]
+}
