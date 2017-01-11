@@ -42,3 +42,12 @@ func Init() {
 		log.Printf("%+v\n", config)
 	}
 }
+
+func InitByConfig(path string) error {
+	if c, err := LoadConfig(path); err != nil {
+		return err
+	} else {
+		config = c
+		return nil
+	}
+}

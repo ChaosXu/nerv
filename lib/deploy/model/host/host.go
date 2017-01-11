@@ -4,7 +4,6 @@ import (
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/jinzhu/gorm"
 	"fmt"
-	"github.com/ChaosXu/nerv/lib/deploy/model/topology"
 )
 
 func init() {
@@ -34,23 +33,24 @@ type Host struct {
 
 // Install an agent in the host
 func (p *Host) Install() error {
-	template, err := topology.GetTemplate(p.Template)
-	if err != nil {
-		return err
-	}
-
-	topology := template.NewTopology(p.Name)
-
-	if err = db.DB.Create(topology).Error; err != nil {
-		return err
-	}
-
-	if err = topology.Install(); err != nil {
-		return err
-	} else {
-		p.TopologyID = topology.ID
-		return db.DB.Save(p).Error
-	}
+	//template, err := topology.GetTemplate(p.Template)
+	//if err != nil {
+	//	return err
+	//}
+	//
+	//topology := template.NewTopology(p.Name)
+	//
+	//if err = db.DB.Create(topology).Error; err != nil {
+	//	return err
+	//}
+	//
+	//if err = topology.Install(); err != nil {
+	//	return err
+	//} else {
+	//	p.TopologyID = topology.ID
+	//	return db.DB.Save(p).Error
+	//}
+	return nil
 }
 
 // Uninstall an agent from host

@@ -4,6 +4,7 @@ package topology
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
 	//	gorm.Model
+	Path    string
 	Name    string           `json:"name";gorm:"unique"`
 	Version int32            `json:"version"`
 	Nodes   []NodeTemplate   `json:"nodes"`
@@ -51,7 +52,7 @@ func (p *ServiceTemplate) NewTopology(name string) *Topology {
 	//db.DB.Where("service_template_id =? ", p.ID).Preload("Dependencies").Preload("Parameters").Find(&nodeTemplates)
 	//p.Nodes = nodeTemplates
 
-	topology := &Topology{Name:name, Template:p.Name + ".json", Version:p.Version, Nodes:[]*Node{}}
+	topology := &Topology{Name:name, Template:p.Path, Version:p.Version, Nodes:[]*Node{}}
 
 	for _, template := range p.Nodes {
 		p.createNode(&template, topology)
@@ -65,7 +66,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 
 	targetNodes := []*Node{}
 	if deps == nil || len(deps) == 0 {
-		targetNodes = topology.getNodes(nodeTemplate.Name)
+		targetNodes = topology.GetNodes(nodeTemplate.Name)
 		if len(targetNodes) == 0 {
 			//TBD: optimize
 			if nodeTemplate.Type == "/nerv/Host" {
@@ -76,7 +77,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 				targetNodes = append(targetNodes, newNodeByTemplate(nodeTemplate))
 			}
 			for _, targetNode := range targetNodes {
-				topology.addNode(targetNode)
+				topology.AddNode(targetNode)
 			}
 		}
 		return targetNodes
@@ -100,7 +101,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 				}
 				sourceNode.Link(dep.Type, targetNode.Name)
 				sourceNodes = append(sourceNodes, sourceNode)
-				topology.addNode(sourceNode)
+				topology.AddNode(sourceNode)
 			}
 			return sourceNodes
 		}

@@ -11,6 +11,8 @@ CONF_DIR=$(RELEASE_DIR)/config
 
 cli : clean
 	go build $(LDFLAGS) -o $(BIN_DIR)/$(MODULE)
+	mkdir $(CONF_DIR)
+	cp config/config.json $(CONF_DIR)/config.json
 	rm -rf $(RELEASE_DIR).tar.gz
 	cd $(RELEASE_ROOT) && tar -zcvf $(PKG) $(MODULE)
 
