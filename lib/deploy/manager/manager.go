@@ -24,6 +24,7 @@ func (p *Manager) Install(topoName string, templatePath string) error {
 		return err
 	}
 	topo := template.NewTopology(topoName)
+	p.DBService.GetDB().Save(topo)
 	return p.postTraverse(topo, "contained", "Create")
 }
 

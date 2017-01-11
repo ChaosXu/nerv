@@ -1,5 +1,7 @@
 package topology
 
+import "fmt"
+
 
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
@@ -53,7 +55,7 @@ func (p *ServiceTemplate) NewTopology(name string) *Topology {
 	//p.Nodes = nodeTemplates
 
 	topology := &Topology{Name:name, Template:p.Path, Version:p.Version, Nodes:[]*Node{}}
-
+	fmt.Printf("nodes len: %d\n",len(p.Nodes))
 	for _, template := range p.Nodes {
 		p.createNode(&template, topology)
 	}
