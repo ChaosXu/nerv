@@ -11,6 +11,8 @@ import (
 	"github.com/facebookgo/inject"
 	"github.com/ChaosXu/nerv/lib/deploy/repository"
 	"github.com/ChaosXu/nerv/lib/deploy/manager"
+	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
+	"github.com/ChaosXu/nerv/lib/resource/executor"
 )
 
 var init_flag_template string
@@ -49,13 +51,17 @@ func install(cmd *cobra.Command, args []string) error {
 	defer db.DB.Close()
 
 	var g inject.Graph
-	var manager manager.Manager
+	var manager manager.Deployer
 	var templateRep repository.LocalTemplateRepository
 	var dbService db.DBService
+	classRep := classrep.NewLocalClassRepository("../../resources/scripts")
+	var Executor executor.ExecutorImpl
 	err := g.Provide(
 		&inject.Object{Value: &manager},
 		&inject.Object{Value: &templateRep},
 		&inject.Object{Value: &dbService},
+		&inject.Object{Value: classRep},
+		&inject.Object{Value: &Executor},
 	)
 	if err != nil {
 		return err

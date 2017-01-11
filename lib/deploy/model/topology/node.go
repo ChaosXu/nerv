@@ -3,8 +3,6 @@ package topology
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
-	"github.com/ChaosXu/nerv/lib/log"
-	"fmt"
 )
 
 
@@ -55,33 +53,4 @@ func (p *Node) FindLinksByType(depType string) []*Link {
 		}
 	}
 	return links
-}
-
-// Execute operation
-func (p *Node) Execute(operation string, template *ServiceTemplate) error {
-	log.LogCodeLine()
-
-	nodeTemplate := template.findTemplate(p.Template)
-
-	if nodeTemplate == nil {
-		p.RunStatus = RunStatusRed
-		err := fmt.Errorf("template %s of node %s isn't exist", p.Template, p.Name)
-		return err
-	}
-	p.RunStatus = RunStatusGreen
-
-	args := map[string]string{}
-	for _, param := range nodeTemplate.Parameters {
-		args[param.Name] = param.Value
-	}
-
-	//if err := class.Invoke(class.Operations[0], p.Address, p.Credential, args); err != nil {
-	//	re := fmt.Errorf("%s execute %s error:%s", p.Name, operation, err.Error())
-	//	p.RunStatus = RunStatusRed
-	//	p.Error = re.Error()
-	//	db.DB.Save(p)
-	//	return re
-	//}
-
-	return nil
 }

@@ -1,26 +1,30 @@
 package manager
 
 import (
-	"github.com/ChaosXu/nerv/lib/deploy/repository"
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/log"
 	"github.com/ChaosXu/nerv/lib/lock"
 	"github.com/ChaosXu/nerv/lib/deploy/model/topology"
 	"time"
 	"github.com/ChaosXu/nerv/lib/db"
+	templaterep "github.com/ChaosXu/nerv/lib/deploy/repository"
+	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
+	"github.com/ChaosXu/nerv/lib/resource/executor"
 )
 
-// Manager execute the deployment task.
-type Manager struct {
-	TemplateRep repository.TemplateRepository `inject:""`
+// Deployer execute the deployment task.
+type Deployer struct {
 	DBService   *db.DBService `inject:""`
+	TemplateRep templaterep.TemplateRepository `inject:""`
+	ClassRep    classrep.ClassRepository `inject:""`
+	Executor    executor.Executor `inject:""`
 }
 
 //Install the topology and start to serve
-func (p *Manager) Install(topoName string, templatePath string) error {
+func (p *Deployer) Install(topoName string, templatePath string) error {
 	log.LogCodeLine()
-	template,err := p.TemplateRep.GetTemplate(templatePath)
-	if err!=nil{
+	template, err := p.TemplateRep.GetTemplate(templatePath)
+	if err != nil {
 		return err
 	}
 	topo := template.NewTopology(topoName)
@@ -29,29 +33,29 @@ func (p *Manager) Install(topoName string, templatePath string) error {
 }
 
 //Uninstall the topology
-func (p *Manager) Uninstall(topology *topology.Topology) error {
+func (p *Deployer) Uninstall(topology *topology.Topology) error {
 	log.LogCodeLine()
 	return p.preTraverse(topology, "contained", "Delete")
 }
 
 //Configure the topology for start
-func (p *Manager) Configure(topology *topology.Topology) error {
+func (p *Deployer) Configure(topology *topology.Topology) error {
 	return fmt.Errorf("TBD")
 }
 
 //Start the Topology
-func (p *Manager) Start(topology *topology.Topology) error {
+func (p *Deployer) Start(topology *topology.Topology) error {
 	log.LogCodeLine()
 	return p.postTraverse(topology, "contained", "Start")
 }
 
 //Stop the Topology
-func (p *Manager) Stop(topology *topology.Topology) error {
+func (p *Deployer) Stop(topology *topology.Topology) error {
 	log.LogCodeLine()
 	return p.preTraverse(topology, "contained", "Stop")
 }
 
-func (p *Manager) preTraverse(topo *topology.Topology, depType string, operation string) error {
+func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operation string) error {
 	lock := lock.GetLock("Topology", topo.ID)
 	if !lock.TryLock() {
 		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
@@ -97,7 +101,7 @@ func (p *Manager) preTraverse(topo *topology.Topology, depType string, operation
 	return err
 }
 
-func (p *Manager) postTraverse(topo *topology.Topology, depType string, operation string) error {
+func (p *Deployer) postTraverse(topo *topology.Topology, depType string, operation string) error {
 	lock := lock.GetLock("Topology", topo.ID)
 	if !lock.TryLock() {
 		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
@@ -142,27 +146,7 @@ func (p *Manager) postTraverse(topo *topology.Topology, depType string, operatio
 	return err
 }
 
-func (p *Manager) executeNode(operation string, node *topology.Node, template *topology.ServiceTemplate) (<-chan error, <-chan bool) {
-	done := make(chan error, 1)
-	timeout := make(chan bool, 1)
-
-	go func() {
-		time.Sleep(30 * time.Second)
-		timeout <- true
-	}()
-
-	go func() {
-		if err := node.Execute(operation, template); err != nil {
-			done <- err
-		} else {
-			done <- nil
-		}
-	}()
-
-	return done, timeout
-}
-
-func (p *Manager) preTraverseNode(topo *topology.Topology, depType string, parent *topology.Node, template *topology.ServiceTemplate, operation string) (<-chan error, <-chan bool) {
+func (p *Deployer) preTraverseNode(topo *topology.Topology, depType string, parent *topology.Node, template *topology.ServiceTemplate, operation string) (<-chan error, <-chan bool) {
 	err, timeout := p.executeNode(operation, parent, template)
 	select {
 	case e := <-err:
@@ -212,7 +196,7 @@ func (p *Manager) preTraverseNode(topo *topology.Topology, depType string, paren
 	return dc, tc
 }
 
-func (p *Manager) postTraverseNode(topo *topology.Topology, depType string, parent *topology.Node, template *topology.ServiceTemplate, operation string) (<-chan error, <-chan bool) {
+func (p *Deployer) postTraverseNode(topo *topology.Topology, depType string, parent *topology.Node, template *topology.ServiceTemplate, operation string) (<-chan error, <-chan bool) {
 	links := parent.FindLinksByType(depType)
 	if links != nil && len(links) > 0 {
 		dones := []<-chan error{}
@@ -246,5 +230,62 @@ func (p *Manager) postTraverseNode(topo *topology.Topology, depType string, pare
 	} else {
 		return p.executeNode(operation, parent, template)
 	}
+}
+
+func (p *Deployer) executeNode(operation string, node *topology.Node, template *topology.ServiceTemplate) (<-chan error, <-chan bool) {
+	done := make(chan error, 1)
+	timeout := make(chan bool, 1)
+
+	go func() {
+		time.Sleep(30 * time.Second)
+		timeout <- true
+	}()
+
+	go func() {
+		if err := p.invoke(node, operation, template); err != nil {
+			done <- err
+			return
+		}
+
+		done <- nil
+	}()
+
+	return done, timeout
+}
+
+// invoke the operation
+func (p *Deployer) invoke(node *topology.Node, operation string, template *topology.ServiceTemplate) error {
+	log.LogCodeLine()
+
+	nodeTemplate := template.FindTemplate(node.Template)
+
+	if nodeTemplate == nil {
+		node.RunStatus = topology.RunStatusRed
+		err := fmt.Errorf("template %s of node %s isn't exist", node.Template, node.Name)
+		return err
+	}
+	node.RunStatus = topology.RunStatusGreen
+
+	args := map[string]string{}
+	for _, param := range nodeTemplate.Parameters {
+		args[param.Name] = param.Value
+	}
+
+	class, err := p.ClassRep.Get(nodeTemplate.Type)
+	if err != nil {
+		return err
+	}
+
+	err = p.Executor.Perform(class, operation, args)
+	if err != nil {
+		node.RunStatus = topology.RunStatusRed
+		node.Error = fmt.Errorf("%s execute %s error:%s", node.Name, operation, err.Error()).Error()
+
+	} else {
+		node.RunStatus = topology.RunStatusGreen
+	}
+
+	p.DBService.GetDB().Save(node)
+	return err
 }
 

@@ -50,9 +50,6 @@ type Parameter struct {
 
 // CreateTopology create a topology by the service template.
 func (p *ServiceTemplate) NewTopology(name string) *Topology {
-	//nodeTemplates := []NodeTemplate{}
-	//db.DB.Where("service_template_id =? ", p.ID).Preload("Dependencies").Preload("Parameters").Find(&nodeTemplates)
-	//p.Nodes = nodeTemplates
 
 	topology := &Topology{Name:name, Template:p.Path, Version:p.Version, Nodes:[]*Node{}}
 	fmt.Printf("nodes len: %d\n",len(p.Nodes))
@@ -88,7 +85,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 	sourceNodes := []*Node{}
 	for _, dep := range deps {
 		if dep.Type == "contained" {
-			targetTemplate := p.findTemplate(dep.Target)
+			targetTemplate := p.FindTemplate(dep.Target)
 			targetNodes = p.createNode(targetTemplate, topology)
 			for _, targetNode := range targetNodes {
 				sourceNode := &Node{
@@ -112,7 +109,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 }
 
 // FindNode return the node
-func (p *ServiceTemplate) findTemplate(name string) *NodeTemplate {
+func (p *ServiceTemplate) FindTemplate(name string) *NodeTemplate {
 	for _, node := range p.Nodes {
 		if node.Name == name {
 			return &node
