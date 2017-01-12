@@ -1,0 +1,44 @@
+{
+  "name": "/nerv/env_local",
+  "version": 1,
+  "nodes": [
+    {
+      "name": "agent",
+      "type": "/nerv/Agent",
+      "parameters": [
+        {
+          "name": "pkg",
+          "value": "file"
+        },
+        {
+          "name": "pkg_root",
+          "value": "../../pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/agent.tar.gz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "host",
+      "type": "/nerv/Host",
+      "parameters": [
+        {
+          "name": "address",
+          "value": "127.0.0.1"
+        }
+      ]
+    }
+  ]
+}

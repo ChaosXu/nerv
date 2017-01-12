@@ -15,8 +15,10 @@ function create() {
 
 if [ "$PKG_URL" == "" ]; then
     echo {\"error\":\"PKG_URL is empty\"}
+    exit 1
 elif [ "$ROOT" == ""  ]; then
     echo {\"error\":\"ROOT is empty\"}
+    exit 1
 else
     PKG=${PKG_URL##*/}
     PKG_FILE=$ROOT/$PKG
@@ -24,6 +26,6 @@ else
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
     cd $ROOT
-    create    
+    create
 fi
 

@@ -13,6 +13,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/deploy/manager"
 	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
 	"github.com/ChaosXu/nerv/lib/resource/executor"
+	"github.com/ChaosXu/nerv/lib/resource/executor/local"
 )
 
 var init_flag_template string
@@ -21,17 +22,17 @@ var init_flag_config string
 
 func init() {
 	var topo = &cobra.Command{
-		Use:   	"topo [command] [flags]",
-		Short: 	"Manage the topology resource",
-		Long:	"Manage the topology resource",
+		Use:    "topo [command] [flags]",
+		Short:    "Manage the topology resource",
+		Long:    "Manage the topology resource",
 		RunE: topo,
 	}
 	RootCmd.AddCommand(topo)
 
 	var create = &cobra.Command{
-		Use:   	"create",
-		Short: 	"Create a topology",
-		Long:	"Create a topology",
+		Use:    "create",
+		Short:    "Create a topology",
+		Long:    "Create a topology",
 		RunE: create,
 	}
 	create.Flags().StringVarP(&init_flag_template, "template", "t", "", "required. The path of template that used to install nerv")
@@ -41,7 +42,7 @@ func init() {
 
 }
 
-func topo(cmd *cobra.Command,args []string) error {
+func topo(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
@@ -64,13 +65,15 @@ func create(cmd *cobra.Command, args []string) error {
 	var templateRep repository.LocalTemplateRepository
 	var dbService db.DBService
 	classRep := classrep.NewLocalClassRepository("../../resources/scripts")
-	var Executor executor.ExecutorImpl
+	var executor executor.ExecutorImpl
+	var localExe local.LocalExecutor
 	err := g.Provide(
 		&inject.Object{Value: &manager},
 		&inject.Object{Value: &templateRep},
 		&inject.Object{Value: &dbService},
 		&inject.Object{Value: classRep},
-		&inject.Object{Value: &Executor},
+		&inject.Object{Value: &executor},
+		&inject.Object{Value: &localExe, Name:"local"},
 	)
 	if err != nil {
 		return err

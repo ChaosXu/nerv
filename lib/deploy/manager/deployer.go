@@ -9,8 +9,8 @@ import (
 	"github.com/ChaosXu/nerv/lib/db"
 	templaterep "github.com/ChaosXu/nerv/lib/deploy/repository"
 	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
-	"github.com/ChaosXu/nerv/lib/resource/executor"
 	"k8s.io/kubernetes/pkg/util/json"
+	"github.com/ChaosXu/nerv/lib/resource/executor"
 )
 
 // PerformStatus trace the status of node executing

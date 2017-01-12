@@ -8,6 +8,16 @@ type Class struct {
 	Operations []Operation //Operation of type
 }
 
+func (p *Class) GetOperation(name string) *Operation {
+	for _, op := range p.Operations {
+		if op.Name == name {
+			return &op
+		}
+	}
+
+	return nil
+}
+
 // Operation is action of type
 type Operation struct {
 	Name        string //Operation name

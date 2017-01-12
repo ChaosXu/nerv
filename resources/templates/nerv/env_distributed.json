@@ -7,12 +7,16 @@
       "type": "/nerv/Agent",
       "parameters": [
         {
-          "name":"pkg",
-          "value":"file"
+          "name": "provider",
+          "value": "local"
         },
         {
-          "name":"pkgRoot",
-          "value":"../../pkg"
+          "name": "pkg",
+          "value": "file"
+        },
+        {
+          "name": "pkgRoot",
+          "value": "../../pkg"
         },
         {
           "name": "pkgUrl",
