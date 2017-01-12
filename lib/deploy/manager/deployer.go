@@ -10,6 +10,7 @@ import (
 	templaterep "github.com/ChaosXu/nerv/lib/deploy/repository"
 	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
 	"github.com/ChaosXu/nerv/lib/resource/executor"
+	"k8s.io/kubernetes/pkg/util/json"
 )
 
 // Deployer execute the deployment task.
@@ -28,8 +29,21 @@ func (p *Deployer) Install(topoName string, templatePath string) error {
 		return err
 	}
 	topo := template.NewTopology(topoName)
+	if err := p.dump(topo); err != nil {
+		return err
+	}
 	p.DBService.GetDB().Save(topo)
 	return p.postTraverse(topo, "contained", "Create")
+}
+
+func (p *Deployer) dump(topo *topology.Topology) error {
+	data, err := json.Marshal(topo)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(data))
+	return nil
 }
 
 //Uninstall the topology
@@ -88,6 +102,7 @@ func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operatio
 				err = e
 			}
 		case <-timeouts[i]:
+			fmt.Println("timeout")
 		}
 	}
 
@@ -133,6 +148,7 @@ func (p *Deployer) postTraverse(topo *topology.Topology, depType string, operati
 				err = e
 			}
 		case <-timeouts[i]:
+			fmt.Println("timeout")
 		}
 	}
 
@@ -154,6 +170,7 @@ func (p *Deployer) preTraverseNode(topo *topology.Topology, depType string, pare
 		ec <- e
 		return ec, timeout
 	case <-timeout:
+		fmt.Println("timeout")
 	}
 
 	var childErr error = nil
@@ -179,6 +196,7 @@ func (p *Deployer) preTraverseNode(topo *topology.Topology, depType string, pare
 			case t := <-timeouts[i]:
 				if t {
 					childTimeout = t
+					fmt.Println("timeout")
 				}
 			}
 		}
@@ -216,6 +234,7 @@ func (p *Deployer) postTraverseNode(topo *topology.Topology, depType string, par
 					err = e
 				}
 			case <-timeouts[i]:
+				fmt.Println("timeout")
 			}
 		}
 
@@ -233,24 +252,31 @@ func (p *Deployer) postTraverseNode(topo *topology.Topology, depType string, par
 }
 
 func (p *Deployer) executeNode(operation string, node *topology.Node, template *topology.ServiceTemplate) (<-chan error, <-chan bool) {
-	done := make(chan error, 1)
-	timeout := make(chan bool, 1)
 
-	go func() {
-		time.Sleep(30 * time.Second)
-		timeout <- true
-	}()
+	if node.Done == nil {
+		node.Done = make(chan error, 1)
+		node.Timeout = make(chan bool, 1)
 
-	go func() {
-		if err := p.invoke(node, operation, template); err != nil {
-			done <- err
-			return
-		}
+		go func() {
+			time.Sleep(30 * time.Second)
+			node.Timeout <- true
+			close(node.Timeout)
+		}()
 
-		done <- nil
-	}()
+		go func() {
+			if err := p.invoke(node, operation, template); err != nil {
+				node.Done <- err
 
-	return done, timeout
+			} else {
+				node.Done <- nil
+			}
+			close(node.Done)
+		}()
+	} else {
+		fmt.Println("doing")
+	}
+
+	return node.Done, node.Timeout
 }
 
 // invoke the operation

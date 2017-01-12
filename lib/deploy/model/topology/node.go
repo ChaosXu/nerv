@@ -10,7 +10,7 @@ import (
 type Node struct {
 	gorm.Model
 	Status
-	TopologyID int        `gorm:"index"` //Foreign key of the topology
+	TopologyID int        	`gorm:"index"` //Foreign key of the topology
 	Name       string                    //node name
 	Template   string                    //template name
 	Class      string                    //the name of resource class
@@ -18,6 +18,9 @@ type Node struct {
 	Credential string                    //credential key
 	Links      []*Link                   //dependencies of node
 	Properties []*Property               //the configuration of a node
+
+	Done       chan error 	`gorm:"-" json:"-"`
+	Timeout    chan bool    `gorm:"-" json:"-"`
 }
 
 func init() {

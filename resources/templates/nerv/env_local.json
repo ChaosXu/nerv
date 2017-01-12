@@ -33,7 +33,7 @@
     {
       "name": "host",
       "type": "/nerv/Host",
-      "properties": [
+      "parameters": [
         {
           "name": "address",
           "value": "127.0.0.1"
