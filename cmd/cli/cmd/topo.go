@@ -20,23 +20,32 @@ var init_flag_topology_name string
 var init_flag_config string
 
 func init() {
-	var initCmd = &cobra.Command{
-		Use:   "init",
-		Short: "Install nerv in one host",
-		Long:
-		`
-		Use the init command to install all components of nerv in one host
-		`,
-		RunE: install,
+	var topo = &cobra.Command{
+		Use:   	"topo [command] [flags]",
+		Short: 	"Manage the topology resource",
+		Long:	"Manage the topology resource",
+		RunE: topo,
 	}
-	initCmd.Flags().StringVarP(&init_flag_template, "template", "t", "", "required. The path of template that used to install nerv")
-	initCmd.Flags().StringVarP(&init_flag_topology_name, "topolgoy", "o", "", "required. Topology name")
-	initCmd.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	RootCmd.AddCommand(topo)
 
-	RootCmd.AddCommand(initCmd)
+	var create = &cobra.Command{
+		Use:   	"create",
+		Short: 	"Create a topology",
+		Long:	"Create a topology",
+		RunE: create,
+	}
+	create.Flags().StringVarP(&init_flag_template, "template", "t", "", "required. The path of template that used to install nerv")
+	create.Flags().StringVarP(&init_flag_topology_name, "topolgoy", "o", "", "required. Topology name")
+	create.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	topo.AddCommand(create)
+
 }
 
-func install(cmd *cobra.Command, args []string) error {
+func topo(cmd *cobra.Command,args []string) error {
+	return nil
+}
+
+func create(cmd *cobra.Command, args []string) error {
 	if init_flag_template == "" {
 		return errors.New("--template -t is null")
 	}

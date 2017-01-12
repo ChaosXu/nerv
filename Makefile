@@ -3,13 +3,13 @@ CMD_DIR=cmd
 RELEASE_ROOT=release/nerv
 PKG_AGENT=agent.tar.gz
 
-all : build
+all : build config pkg
 	@echo "----package----"
 	rm -rf release/nerv.tar.gz
 	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----package complete----"
 
-build : cli server file  store pkg resources bin
+build : cli server file  store resources bin agent
 	@echo "----build complete----"
 
 
@@ -29,12 +29,6 @@ agent :
 	@echo "----build agent----"
 	cd $(CMD_DIR)/agent && make
 
-pkg : agent
-	@echo "----build pkg----"
-	rm -rf $(RELEASE_ROOT)/pkg
-	mkdir $(RELEASE_ROOT)/pkg
-	mv $(RELEASE_ROOT)/agent.tar.gz $(RELEASE_ROOT)/pkg
-
 store :
 	@echo "----build store----"
 	cd $(CMD_DIR)/store && make
@@ -44,10 +38,27 @@ webui :
 	@echo "----build webui----"
 	cd $(CMD_DIR)/webui && make
 
-profile : all
-	@echo "----profile $(ENV)----"
+
+.PHONY : config
+config :
+	@echo "----config $(ENV)----"
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)
-	@echo "----profile complete----"
+	@echo "----config complete----"
+
+.PHONY : pkg
+pkg :
+	@echo "----build pkg----"
+	rm -rf $(RELEASE_ROOT)/pkg
+	mkdir $(RELEASE_ROOT)/pkg
+	mv $(RELEASE_ROOT)/agent.tar.gz $(RELEASE_ROOT)/pkg
+	mv $(RELEASE_ROOT)/file.tar.gz $(RELEASE_ROOT)/pkg
+	mv $(RELEASE_ROOT)/server.tar.gz $(RELEASE_ROOT)/pkg
+	mv $(RELEASE_ROOT)/nerv-cli.tar.gz $(RELEASE_ROOT)/pkg
+	rm -rf $(RELEASE_ROOT)/file
+	rm -rf $(RELEASE_ROOT)/server
+	rm -rf $(RELEASE_ROOT)/agent
+	@echo "----pkg complete----"
+
 
 .PHONY : resources
 resources :

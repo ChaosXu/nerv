@@ -16,6 +16,7 @@ type ExecutorImpl struct {
 }
 
 func (p *ExecutorImpl) Perform(class *model.Class, operation string, args map[string]string) error {
-	fmt.Println(class.Name + "." + operation)
+	fmt.Println("Perform "+class.Name + "." + operation)
+	fmt.Printf("%+v\n",args)
 	return nil
 }
