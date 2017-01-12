@@ -13,6 +13,13 @@ import (
 	"k8s.io/kubernetes/pkg/util/json"
 )
 
+// PerformStatus trace the status of node executing
+type PerformStatus struct {
+	Node    *topology.Node
+	Done    <-chan error
+	Timeout <-chan bool
+}
+
 // Deployer execute the deployment task.
 type Deployer struct {
 	DBService   *db.DBService `inject:""`
@@ -217,23 +224,21 @@ func (p *Deployer) preTraverseNode(topo *topology.Topology, depType string, pare
 func (p *Deployer) postTraverseNode(topo *topology.Topology, depType string, parent *topology.Node, template *topology.ServiceTemplate, operation string) (<-chan error, <-chan bool) {
 	links := parent.FindLinksByType(depType)
 	if links != nil && len(links) > 0 {
-		dones := []<-chan error{}
-		timeouts := []<-chan bool{}
+		dones := []PerformStatus{}
 		for _, link := range links {
 			node := topo.GetNode(link.Target)
 			done, timeout := p.postTraverseNode(topo, depType, node, template, operation)
-			dones = append(dones, done)
-			timeouts = append(timeouts, timeout)
+			dones = append(dones, PerformStatus{Node:node, Done:done, Timeout:timeout})
 		}
 
 		var err error = nil
-		for i, done := range dones {
+		for _, status := range dones {
 			select {
-			case e := <-done:
-				if e != nil {
-					err = e
+			case <-status.Done:
+				if status.Node.Error != "" {
+					err = fmt.Errorf(status.Node.Error)
 				}
-			case <-timeouts[i]:
+			case <-status.Timeout:
 				fmt.Println("timeout")
 			}
 		}
