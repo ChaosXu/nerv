@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 
 function create() {
+    echo $(pwd)
     if [ -f $APP_PID ]; then
-        $APP stop  || return $?
+        $APP stop  || return 1
     fi
-    echo $PKG_FILE
-    tar -xf $PKG_FILE -C ../../
-    if [ $? -ne "0" ]; then
-        echo {\"error\":\"tar -xf ${PKG_FILE}\"}
+    if [ -f $PKG_FILE ]; then
+        rm -rf $PKG_FILE
     fi
-    #$APP start
+    tar -xf $PKG_FILE || return 1
+    $APP start
 }
 
 if [ "$pkg_root" == "" ]; then
@@ -24,10 +24,10 @@ elif [ "$root" == ""  ]; then
 else
     #PKG=${PKG_URL##*/}
     PKG_FILE=${pkg_root}${pkg_url}
-    APP_ROOT=$root/${PKG%%.*}
+    APP_ROOT=$ROOT/${PKG%%.*}
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
-    #cd $ROOT
+    cd $ROOT
     create
 fi
 

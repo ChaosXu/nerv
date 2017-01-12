@@ -52,6 +52,8 @@ func (p *LocalExecutor) exec(script *Script) error {
 
 	out, err := exec.Command("/bin/bash", "-c", shell).Output()
 	if err != nil {
+		res := string(out)
+		fmt.Println(res)
 		return err
 	}
 	res := string(out)
