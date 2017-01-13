@@ -6,7 +6,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"reflect"
 	"sort"
-	"github.com/ChaosXu/nerv/lib/log"
+	//"github.com/ChaosXu/nerv/lib/log"
 )
 
 type OrderIDs []uint64
@@ -38,7 +38,7 @@ func init() {
 
 // assignUpdatingAttributesCallback assign updating attributes to model
 func assignUpdatingAttributesCallback(scope *gorm.Scope) {
-	////logCodeLine() 
+	////logCodeLine()
 	if attrs, ok := scope.InstanceGet("gorm:update_interface"); ok {
 		if updateMaps, hasUpdate := updatedAttrsWithValues(scope, attrs); hasUpdate {
 			scope.InstanceSet("gorm:update_attrs", updateMaps)
@@ -71,7 +71,7 @@ func updateTimeStampForUpdateCallback(scope *gorm.Scope) {
 
 // updateCallback the callback used to update data to database
 func updateCallback(scope *gorm.Scope) {
-	log.LogCodeLine()
+	//log.LogCodeLine()
 	if !scope.HasError() {
 		var sqls []string
 
@@ -151,7 +151,7 @@ func saveBeforeAssociationsCallback(scope *gorm.Scope) {
 }
 
 func saveAfterAssociationsCallback(scope *gorm.Scope) {
-	log.LogCodeLine()
+	//log.LogCodeLine()
 	if !shouldSaveAssociations(scope) {
 		return
 	}
@@ -287,7 +287,7 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 }
 
 func updatedAttrsWithValues(scope *gorm.Scope, value interface{}) (results map[string]interface{}, hasUpdate bool) {
-	log.LogCodeLine()
+	//log.LogCodeLine()
 	if scope.IndirectValue().Kind() != reflect.Struct {
 		return convertInterfaceToMap(value, false), true
 	}

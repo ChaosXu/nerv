@@ -14,7 +14,7 @@ func NewStandaloneScriptRepository(root string) *StandaloneRepository {
 }
 
 func (p *StandaloneRepository) Get(path string) (*model.Script, error) {
-	if content, err := file.ToString(p.Root + "/scripts" + path); err != nil {
+	if content, err := file.ToString(p.Root + path); err != nil {
 		return nil, err
 	} else {
 		return &model.Script{Content:content}, nil

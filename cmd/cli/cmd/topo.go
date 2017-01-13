@@ -97,7 +97,7 @@ func initDB() {
 		panic(err)
 	}
 	db.DB = gdb
-	db.DB.LogMode(true)
+	//db.DB.LogMode(true)
 	for _, v := range db.Models {
 		db.DB.AutoMigrate(v.Type)
 	}

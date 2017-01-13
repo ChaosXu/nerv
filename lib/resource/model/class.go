@@ -9,6 +9,7 @@ type Class struct {
 }
 
 func (p *Class) GetOperation(name string) *Operation {
+
 	for _, op := range p.Operations {
 		if op.Name == name {
 			return &op

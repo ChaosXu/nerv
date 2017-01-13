@@ -1,0 +1,4 @@
+{
+  "name": "/nerv/standalone/Server",
+  "base": "/nerv/standalone/Process"
+}

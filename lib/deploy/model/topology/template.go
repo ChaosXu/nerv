@@ -3,21 +3,19 @@ package topology
 
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
-	//	gorm.Model
-	Path    string
-	Name    string           `json:"name";gorm:"unique"`
-	Version int32            `json:"version"`
-	Nodes   []NodeTemplate   `json:"nodes"`
+	Path        string
+	Name        string           	`json:"name"`
+	Version     int32            	`json:"version"`
+	Environment string         		`json:"environment"` //standalone|distributed
+	Nodes       []NodeTemplate   	`json:"nodes"`
 }
 
 // NodeTemplate is a prototype of service node.
 type NodeTemplate struct {
-														 //	gorm.Model
-	ServiceTemplateID int                                //`gorm:"index"`       //Foreign key of the service template
-	Name              string        `json:"name"`        //Node name
-	Type              string        `json:"type"`        //The name of NodeType
-	Parameters        []Parameter `json:parameters`      //parameters of NodeTemplate
-	Dependencies      []Dependency `json:"dependencies"` //The dependencies of node
+	Name         string        `json:"name"`        //Node name
+	Type         string        `json:"type"`        //The name of NodeType
+	Parameters   []Parameter `json:parameters`      //parameters of NodeTemplate
+	Dependencies []Dependency `json:"dependencies"` //The dependencies of node
 }
 
 func (p *NodeTemplate) getParameterValue(name string) string {

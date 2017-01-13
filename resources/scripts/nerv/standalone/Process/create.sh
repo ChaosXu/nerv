@@ -5,7 +5,7 @@ function create() {
         $APP stop  || return $?
     fi
     echo $PKG_FILE
-    tar -xf $PKG_FILE -C ../../
+    tar -xf $PKG_FILE -C $root
     if [ $? -ne "0" ]; then
         echo {\"error\":\"tar -xf ${PKG_FILE}\"}
     fi
@@ -23,11 +23,13 @@ elif [ "$root" == ""  ]; then
     exit 1
 else
     #PKG=${PKG_URL##*/}
-    PKG_FILE=${pkg_root}${pkg_url}
+    #cd $ROOT
+
     APP_ROOT=$root/${PKG%%.*}
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
-    #cd $ROOT
+    PKG_FILE=${pkg_root}${pkg_url}
+
     create
 fi
 

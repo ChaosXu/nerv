@@ -5,7 +5,7 @@ import (
 	"reflect"
 
 	"github.com/jinzhu/gorm"
-	"github.com/ChaosXu/nerv/lib/log"
+	//"github.com/ChaosXu/nerv/lib/log"
 )
 
 // Define callbacks for deleting,support cascade deleting
@@ -32,7 +32,7 @@ func beforeDeleteCallback(scope *gorm.Scope) {
 
 // deleteCallback used to delete data from database or set deleted_at to current time (when using with soft delete)
 func deleteCallback(scope *gorm.Scope) {
-	log.LogCodeLine()
+	//log.LogCodeLine()
 
 	if !scope.HasError() {
 		var extraOption string
@@ -72,7 +72,7 @@ func commitOrRollbackTransactionCallback(scope *gorm.Scope) {
 
 //cascade deleting
 func beforeDeleteAssociationsCallback(scope *gorm.Scope) {
-	log.LogCodeLine()
+	//log.LogCodeLine()
 	//TBD config  gorm:delete_associations
 	//if !scope.shouldDeleteAssociations() {
 	//	return
@@ -91,7 +91,7 @@ func beforeDeleteAssociationsCallback(scope *gorm.Scope) {
 				class = elem.Name()
 			}
 			if err := DB.Unscoped().Delete(Models[class].Type, sql, foreignValue).Error; err != nil {
-				log.LogCodeLine()
+				//log.LogCodeLine()
 				scope.Err(err)
 			}
 		}
@@ -99,5 +99,5 @@ func beforeDeleteAssociationsCallback(scope *gorm.Scope) {
 }
 
 func afterDeleteAssociationsCallback(scope *gorm.Scope) {
-	log.LogCodeLine()
+	//log.LogCodeLine()
 }

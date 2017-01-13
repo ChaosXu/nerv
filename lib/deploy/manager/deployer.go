@@ -307,7 +307,7 @@ func (p *Deployer) invoke(node *topology.Node, operation string, template *topol
 		return err
 	}
 
-	err = p.Executor.Perform(class, operation, args)
+	err = p.Executor.Perform(template.Environment, class, operation, args)
 	if err != nil {
 		node.RunStatus = topology.RunStatusRed
 		node.Error = fmt.Errorf("%s execute %s error:%s", node.Name, operation, err.Error()).Error()

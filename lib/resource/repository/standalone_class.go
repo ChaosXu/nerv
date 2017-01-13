@@ -51,7 +51,7 @@ func (p *StandaloneClassRepository) GetOperation(class *model.Class, name string
 	if op != nil {
 		return op, nil
 	}
-	base := class.Name
+	base := class.Base
 	if base == "" {
 		return nil, fmt.Errorf("operation isn't exists.class=%s,operation=%s", class.Name, name)
 	}

@@ -1,15 +1,12 @@
 {
-  "name": "/nerv/env_local",
+  "name": "/nerv/env_standalone",
   "version": 1,
+  "environment": "standalone",
   "nodes": [
     {
       "name": "agent",
-      "type": "/nerv/Agent",
+      "type": "/nerv/standalone/Agent",
       "parameters": [
-        {
-          "name": "pkg",
-          "value": "file"
-        },
         {
           "name": "pkg_root",
           "value": "../../pkg"
@@ -17,6 +14,54 @@
         {
           "name": "pkg_url",
           "value": "/agent.tar.gz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "server",
+      "type": "/nerv/standalone/Server",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "../../pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/server.tar.gz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "file",
+      "type": "/nerv/standalone/File",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "../../pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/file.tar.gz"
         },
         {
           "name": "root",

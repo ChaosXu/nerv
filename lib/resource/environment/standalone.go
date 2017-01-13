@@ -14,7 +14,7 @@ type StandaloneEnvironment struct {
 }
 
 func (p *StandaloneEnvironment) Exec(class *model.Class, operation *model.Operation, args map[string]string) error {
-	fmt.Println("Perform " + class.Name + "." + operation.Name)
+	fmt.Println("Standalone.Exec " + class.Name + "." + operation.Name)
 
 	script, err := p.ScriptRepository.Get(operation.Implementor)
 	if err != nil {

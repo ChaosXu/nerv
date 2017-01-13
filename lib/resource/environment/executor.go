@@ -3,12 +3,13 @@ package environment
 import (
 	"github.com/ChaosXu/nerv/lib/resource/model"
 	"github.com/ChaosXu/nerv/lib/resource/repository"
+	"fmt"
 )
 
 // Executor perform an operation of class.
 type Executor interface {
 	// Perform an operation of class.
-	Perform(class *model.Class, operation string, args map[string]string) error
+	Perform(env string, class *model.Class, operation string, args map[string]string) error
 }
 
 // ExecutorImpl select the environment by class and invoke it
@@ -17,8 +18,9 @@ type ExecutorImpl struct {
 	ClassRep   repository.ClassRepository `inject:""`
 }
 
-func (p *ExecutorImpl) Perform(class *model.Class, operation string, args map[string]string) error {
-	env, err := p.findEnvironment(class)
+func (p *ExecutorImpl) Perform(envType string, class *model.Class, operation string, args map[string]string) error {
+	fmt.Println("Executor.Perform " + class.Name + "." + operation)
+	env, err := p.findEnvironment(envType)
 	if err != nil {
 		return err
 	}
@@ -31,10 +33,10 @@ func (p *ExecutorImpl) Perform(class *model.Class, operation string, args map[st
 	return env.Exec(class, op, args)
 }
 
-func (p *ExecutorImpl)findEnvironment(class *model.Class) (Environment, error) {
-	if _, err := p.ClassRep.InheritFrom(class, "/nerv/StandaloneProcess"); err != nil {
-		return nil, err
-	} else {
+func (p *ExecutorImpl)findEnvironment(envType string) (Environment, error) {
+	if envType == "standalone" {
 		return p.Standalone, nil
+	} else {
+		return nil, fmt.Errorf("unsupported environment")
 	}
 }
