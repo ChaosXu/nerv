@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/cmd/cli/lib"
+	"fmt"
+	"github.com/ChaosXu/nerv/lib/deploy/model/topology"
 )
 
 var init_flag_template string
@@ -21,6 +23,7 @@ func init() {
 	}
 	RootCmd.AddCommand(topo)
 
+	//create
 	var create = &cobra.Command{
 		Use:    "create",
 		Short:    "Create a topology",
@@ -32,12 +35,23 @@ func init() {
 	create.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(create)
 
+	//list
+	var list = &cobra.Command{
+		Use:    "list",
+		Short:    "List all topologies",
+		Long:    "List all topologies",
+		RunE: list,
+	}
+	list.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	topo.AddCommand(list)
+
 }
 
 func topo(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+// create a topology
 func create(cmd *cobra.Command, args []string) error {
 	if init_flag_template == "" {
 		return errors.New("--template -t is null")
@@ -57,6 +71,25 @@ func create(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	return deployer.Install(init_flag_topology_name, init_flag_template)
+}
+
+// list all topologies
+func list(cmd *cobra.Command, args []string) error {
+	//init
+	env.InitByConfig(init_flag_config)
+	gdb := lib.InitDB()
+	defer gdb.Close()
+
+	topos := []topology.Topology{}
+	if err := gdb.Find(&topos).Error; err != nil {
+		return err
+	}
+
+	fmt.Println("ID\tName\tRunStatus\tCreateAt\tTemplate")
+	for _, topo := range topos {
+		fmt.Printf("%d\t%s\t%d\t%s\t%s\n", topo.ID, topo.Name, topo.RunStatus,topo.CreatedAt.Format("2006-01-02 15:04:05"), topo.Template)
+	}
+	return nil
 }
 
 
