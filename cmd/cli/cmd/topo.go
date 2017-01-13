@@ -8,6 +8,7 @@ import (
 	"github.com/ChaosXu/nerv/cmd/cli/lib"
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/deploy/model/topology"
+	"encoding/json"
 )
 
 var init_flag_template string
@@ -33,6 +34,17 @@ func init() {
 	}
 	list.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(list)
+
+	//get
+	var get = &cobra.Command{
+		Use:    "get",
+		Short:    "Get a topology",
+		Long:    "Get all topology",
+		RunE: get,
+	}
+	get.Flags().UintVarP(&init_flag_id, "id", "i", 0, "Topology id")
+	get.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	topo.AddCommand(get)
 
 
 	//create
@@ -76,6 +88,45 @@ func topo(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+// list all topologies
+func list(cmd *cobra.Command, args []string) error {
+	//init
+	env.InitByConfig(init_flag_config)
+	gdb := lib.InitDB()
+	defer gdb.Close()
+
+	topos := []topology.Topology{}
+	if err := gdb.Find(&topos).Error; err != nil {
+		return err
+	}
+
+	fmt.Println("ID\tName\tRunStatus\tCreateAt\tTemplate")
+	for _, topo := range topos {
+		fmt.Printf("%d\t%s\t%d\t%s\t%s\n", topo.ID, topo.Name, topo.RunStatus, topo.CreatedAt.Format("2006-01-02 15:04:05"), topo.Template)
+	}
+	return nil
+}
+
+// get a topologies
+func get(cmd *cobra.Command, args []string) error {
+	//init
+	env.InitByConfig(init_flag_config)
+	gdb := lib.InitDB()
+	defer gdb.Close()
+
+	id := init_flag_id
+	data := topology.Topology{}
+	if err := gdb.Preload("Nodes").Preload("Nodes.Links").Preload("Nodes.Properties").First(&data, id).Error; err != nil {
+		return err
+	}
+	buf, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(buf))
+	return nil
+}
 // create a topology
 func create(cmd *cobra.Command, args []string) error {
 	if init_flag_template == "" {
@@ -101,25 +152,6 @@ func create(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Printf("Topology has been created. id=%d\n", id)
-	return nil
-}
-
-// list all topologies
-func list(cmd *cobra.Command, args []string) error {
-	//init
-	env.InitByConfig(init_flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	topos := []topology.Topology{}
-	if err := gdb.Find(&topos).Error; err != nil {
-		return err
-	}
-
-	fmt.Println("ID\tName\tRunStatus\tCreateAt\tTemplate")
-	for _, topo := range topos {
-		fmt.Printf("%d\t%s\t%d\t%s\t%s\n", topo.ID, topo.Name, topo.RunStatus, topo.CreatedAt.Format("2006-01-02 15:04:05"), topo.Template)
-	}
 	return nil
 }
 
