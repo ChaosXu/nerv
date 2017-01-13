@@ -2,17 +2,10 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/ChaosXu/nerv/lib/env"
-	"github.com/ChaosXu/nerv/lib/db"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/facebookgo/inject"
-	"github.com/ChaosXu/nerv/lib/deploy/repository"
-	"github.com/ChaosXu/nerv/lib/deploy/manager"
-	resrep "github.com/ChaosXu/nerv/lib/resource/repository"
-	"github.com/ChaosXu/nerv/lib/resource/environment"
+	"github.com/ChaosXu/nerv/cmd/cli/lib"
 )
 
 var init_flag_template string
@@ -56,51 +49,16 @@ func create(cmd *cobra.Command, args []string) error {
 
 	//init
 	env.InitByConfig(init_flag_config)
-	initDB()
-	defer db.DB.Close()
+	db := lib.InitDB()
+	defer db.Close()
 
-	var g inject.Graph
-	var manager manager.Deployer
-	var templateRep repository.LocalTemplateRepository
-	var dbService db.DBService
-	var executor environment.ExecutorImpl
-	classRep := resrep.NewStandaloneClassRepository("../../resources/scripts")
-	standaloneEnv := environment.StandaloneEnvironment{ScriptRepository:resrep.NewStandaloneScriptRepository("../../resources/scripts")}
-	err := g.Provide(
-		&inject.Object{Value: &manager},
-		&inject.Object{Value: &templateRep},
-		&inject.Object{Value: &dbService},
-		&inject.Object{Value: &executor},
-		&inject.Object{Value: &standaloneEnv, Name:"env_standalone"},
-		&inject.Object{Value: classRep},
-	)
+	deployer, err := lib.NewDeployer()
 	if err != nil {
 		return err
 	}
-
-	err = g.Populate()
-	if err != nil {
-		return err
-	}
-	return manager.Install(init_flag_topology_name, init_flag_template)
+	return deployer.Install(init_flag_topology_name, init_flag_template)
 }
 
-func initDB() {
-	url := fmt.Sprintf(
-		"%s:%s@%s",
-		env.Config().GetMapString("db", "user", "root"),
-		env.Config().GetMapString("db", "password", "root"),
-		env.Config().GetMapString("db", "url"),
-	)
-	gdb, err := gorm.Open("mysql", url)
-	if err != nil {
-		panic(err)
-	}
-	db.DB = gdb
-	//db.DB.LogMode(true)
-	for _, v := range db.Models {
-		db.DB.AutoMigrate(v.Type)
-	}
-}
+
 
 
