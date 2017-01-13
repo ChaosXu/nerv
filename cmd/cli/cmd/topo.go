@@ -11,9 +11,8 @@ import (
 	"github.com/facebookgo/inject"
 	"github.com/ChaosXu/nerv/lib/deploy/repository"
 	"github.com/ChaosXu/nerv/lib/deploy/manager"
-	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
-	"github.com/ChaosXu/nerv/lib/resource/executor"
-	"github.com/ChaosXu/nerv/lib/resource/executor/local"
+	resrep "github.com/ChaosXu/nerv/lib/resource/repository"
+	"github.com/ChaosXu/nerv/lib/resource/environment"
 )
 
 var init_flag_template string
@@ -64,16 +63,16 @@ func create(cmd *cobra.Command, args []string) error {
 	var manager manager.Deployer
 	var templateRep repository.LocalTemplateRepository
 	var dbService db.DBService
-	classRep := classrep.NewLocalClassRepository("../../resources/scripts")
-	var executor executor.ExecutorImpl
-	var localExe local.LocalExecutor
+	var executor environment.ExecutorImpl
+	classRep := resrep.NewStandaloneClassRepository("../../resources/scripts")
+	standaloneEnv := environment.StandaloneEnvironment{ScriptRepository:resrep.NewStandaloneScriptRepository("../../resources/scripts")}
 	err := g.Provide(
 		&inject.Object{Value: &manager},
 		&inject.Object{Value: &templateRep},
 		&inject.Object{Value: &dbService},
-		&inject.Object{Value: classRep},
 		&inject.Object{Value: &executor},
-		&inject.Object{Value: &localExe, Name:"local"},
+		&inject.Object{Value: &standaloneEnv, Name:"env_standalone"},
+		&inject.Object{Value: classRep},
 	)
 	if err != nil {
 		return err

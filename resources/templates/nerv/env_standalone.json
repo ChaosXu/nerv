@@ -32,7 +32,7 @@
     },
     {
       "name": "host",
-      "type": "/nerv/Host",
+      "type": "/nerv/standalone/Host",
       "parameters": [
         {
           "name": "address",

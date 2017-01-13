@@ -10,7 +10,7 @@ import (
 	templaterep "github.com/ChaosXu/nerv/lib/deploy/repository"
 	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
 	"k8s.io/kubernetes/pkg/util/json"
-	"github.com/ChaosXu/nerv/lib/resource/executor"
+	"github.com/ChaosXu/nerv/lib/resource/environment"
 )
 
 // PerformStatus trace the status of node executing
@@ -25,7 +25,7 @@ type Deployer struct {
 	DBService   *db.DBService `inject:""`
 	TemplateRep templaterep.TemplateRepository `inject:""`
 	ClassRep    classrep.ClassRepository `inject:""`
-	Executor    executor.Executor `inject:""`
+	Executor    environment.Executor `inject:""`
 }
 
 //Install the topology and start to serve

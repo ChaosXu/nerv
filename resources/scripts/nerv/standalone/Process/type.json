@@ -1,0 +1,30 @@
+{
+  "name": "/nerv/StandaloneProcess",
+  "operations": [
+    {
+      "name": "Create",
+      "type": "shell",
+      "implementor": "/nerv/StandaloneProcess/create.sh"
+    },
+    {
+      "name": "Delete",
+      "type": "shell",
+      "implementor": "/nerv/StandaloneProcess/delete.sh"
+    },
+    {
+      "name": "Setup",
+      "type": "shell",
+      "implementor": "/nerv/StandaloneProcess/setup.sh"
+    },
+    {
+      "name": "Start",
+      "type": "shell",
+      "implementor": "/nerv/StandaloneProcess/start.sh"
+    },
+    {
+      "name": "Stop",
+      "type": "shell",
+      "implementor": "/nerv/StandaloneProcess/stop.sh"
+    }
+  ]
+}
