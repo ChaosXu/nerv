@@ -28,19 +28,17 @@ type Deployer struct {
 	Executor    environment.Executor `inject:""`
 }
 
-//Install the topology and start to serve
-func (p *Deployer) Install(topoName string, templatePath string) error {
+//Create a topology in db
+func (p *Deployer) Create(topoName string, templatePath string) (uint, error) {
 	log.LogCodeLine()
 	template, err := p.TemplateRep.GetTemplate(templatePath)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	topo := template.NewTopology(topoName)
-	if err := p.dump(topo); err != nil {
-		return err
-	}
+
 	p.DBService.GetDB().Save(topo)
-	return p.postTraverse(topo, "contained", "Create")
+	return topo.ID, nil
 }
 
 func (p *Deployer) dump(topo *topology.Topology) error {
@@ -51,6 +49,15 @@ func (p *Deployer) dump(topo *topology.Topology) error {
 
 	fmt.Println(string(data))
 	return nil
+}
+
+func (p *Deployer) Install(topoId uint) error {
+	topo := &topology.Topology{}
+	if err := db.DB.First(topo, topoId).Error; err != nil {
+		return err
+	}
+
+	return p.postTraverse(topo, "contained", "Create")
 }
 
 //Uninstall the topology
