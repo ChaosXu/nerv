@@ -104,8 +104,8 @@ func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operatio
 	p.DBService.GetDB().Where("topology_id =?", topo.ID).Preload("Links").Find(&tnodes)
 	topo.Nodes = tnodes
 
-	template := topology.ServiceTemplate{}
-	if err := p.DBService.GetDB().Where("name=? and version=?", topo.Template, topo.Version).Preload("Nodes").Preload("Nodes.Parameters").First(&template).Error; err != nil {
+	template, err := p.TemplateRep.GetTemplate(topo.Template)
+	if err != nil {
 		return err
 	}
 
@@ -113,12 +113,12 @@ func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operatio
 	timeouts := []<-chan bool{}
 
 	for _, node := range topo.Nodes {
-		done, timeout := p.preTraverseNode(topo, depType, node, &template, operation)
+		done, timeout := p.preTraverseNode(topo, depType, node, template, operation)
 		dones = append(dones, done)
 		timeouts = append(timeouts, timeout)
 	}
 
-	var err error = nil
+
 	for i, done := range dones {
 		select {
 		case e := <-done:

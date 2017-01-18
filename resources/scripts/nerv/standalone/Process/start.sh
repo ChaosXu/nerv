@@ -19,7 +19,7 @@ else
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
 
-    echo $(pwd)
-    echo $APP
+    #echo $(pwd)
+    #echo $APP
     start
 fi
