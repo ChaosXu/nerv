@@ -1,4 +1,4 @@
 {
-  "name": "/nerv/Agent",
+  "name": "/nerv/standalone/Agent",
   "base": "/nerv/standalone/Process"
 }

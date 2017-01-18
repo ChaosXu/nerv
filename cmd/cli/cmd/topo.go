@@ -82,6 +82,49 @@ func init() {
 	install.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(install)
 
+	//uninstall
+	var uninstall = &cobra.Command{
+		Use:    "uninstall",
+		Short:    "Uninstall a topology from an environment",
+		Long:    "Uninstall a topology from an environment",
+		RunE: uninstall,
+	}
+	uninstall.Flags().UintVarP(&init_flag_id, "id", "i", 0, "Topology id")
+	uninstall.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	topo.AddCommand(uninstall)
+
+	//start
+	var start = &cobra.Command{
+		Use:    "start",
+		Short:    "Start a topology from an environment",
+		Long:    "Start a topology from an environment",
+		RunE: start,
+	}
+	start.Flags().UintVarP(&init_flag_id, "id", "i", 0, "Topology id")
+	start.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	topo.AddCommand(start)
+
+	//stop
+	var stop = &cobra.Command{
+		Use:    "stop",
+		Short:    "Stop a topology from an environment",
+		Long:    "Stop a topology from an environment",
+		RunE: stop,
+	}
+	stop.Flags().UintVarP(&init_flag_id, "id", "i", 0, "Topology id")
+	stop.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	topo.AddCommand(stop)
+
+	//restart
+	var restart = &cobra.Command{
+		Use:    "restart",
+		Short:    "Restart a topology from an environment",
+		Long:    "Restart a topology from an environment",
+		RunE: restart,
+	}
+	restart.Flags().UintVarP(&init_flag_id, "id", "i", 0, "Topology id")
+	restart.Flags().StringVarP(&init_flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	topo.AddCommand(restart)
 }
 
 func topo(cmd *cobra.Command, args []string) error {
@@ -202,6 +245,130 @@ func install(cmd *cobra.Command, args []string) error {
 	}
 
 	err = deployer.Install(topo.ID)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Topology has been installed. id=%d\n", id)
+
+	return nil
+}
+
+// Uninstall a topology
+func uninstall(cmd *cobra.Command, args []string) error {
+	if init_flag_id == 0 {
+		return errors.New("--id -i is null")
+	}
+	//init
+	env.InitByConfig(init_flag_config)
+	gdb := lib.InitDB()
+	defer gdb.Close()
+
+	id := init_flag_id
+	topo := &topology.Topology{}
+	if err := gdb.First(topo, id).Error; err != nil {
+		return err
+	}
+
+	deployer, err := lib.NewDeployer()
+	if err != nil {
+		return err
+	}
+
+	err = deployer.Uninstall(topo.ID)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Topology has been uninstalled. id=%d\n", id)
+
+	return nil
+}
+
+// Start a topology
+func start(cmd *cobra.Command, args []string) error {
+	if init_flag_id == 0 {
+		return errors.New("--id -i is null")
+	}
+	//init
+	env.InitByConfig(init_flag_config)
+	gdb := lib.InitDB()
+	defer gdb.Close()
+
+	id := init_flag_id
+	topo := &topology.Topology{}
+	if err := gdb.First(topo, id).Error; err != nil {
+		return err
+	}
+
+	deployer, err := lib.NewDeployer()
+	if err != nil {
+		return err
+	}
+
+	err = deployer.Start(topo.ID)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Topology has been started. id=%d\n", id)
+
+	return nil
+}
+
+// Stop a topology
+func stop(cmd *cobra.Command, args []string) error {
+	if init_flag_id == 0 {
+		return errors.New("--id -i is null")
+	}
+	//init
+	env.InitByConfig(init_flag_config)
+	gdb := lib.InitDB()
+	defer gdb.Close()
+
+	id := init_flag_id
+	topo := &topology.Topology{}
+	if err := gdb.First(topo, id).Error; err != nil {
+		return err
+	}
+
+	deployer, err := lib.NewDeployer()
+	if err != nil {
+		return err
+	}
+
+	err = deployer.Stop(topo.ID)
+	if err != nil {
+		return err
+	}
+
+	fmt.Printf("Topology has been installed. id=%d\n", id)
+
+	return nil
+}
+
+// Restart a topology
+func restart(cmd *cobra.Command, args []string) error {
+	if init_flag_id == 0 {
+		return errors.New("--id -i is null")
+	}
+	//init
+	env.InitByConfig(init_flag_config)
+	gdb := lib.InitDB()
+	defer gdb.Close()
+
+	id := init_flag_id
+	topo := &topology.Topology{}
+	if err := gdb.First(topo, id).Error; err != nil {
+		return err
+	}
+
+	deployer, err := lib.NewDeployer()
+	if err != nil {
+		return err
+	}
+
+	err = deployer.Stop(topo.ID)
 	if err != nil {
 		return err
 	}

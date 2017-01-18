@@ -14,7 +14,7 @@ type StandaloneEnvironment struct {
 }
 
 func (p *StandaloneEnvironment) Exec(class *model.Class, operation *model.Operation, args map[string]string) error {
-	fmt.Println("Standalone.Exec " + class.Name + "." + operation.Name)
+	//fmt.Println("Standalone.Exec " + class.Name + "." + operation.Name)
 
 	script, err := p.ScriptRepository.Get(operation.Implementor)
 	if err != nil {
@@ -35,7 +35,7 @@ func (p *StandaloneEnvironment) call(script *model.Script, args map[string]strin
 	out, err := exec.Command("/bin/bash", "-c", shell).Output()
 	if err != nil {
 		res := string(out)
-		fmt.Println(res)
+		fmt.Println("err:"+ res)
 		return err
 	}
 	res := string(out)

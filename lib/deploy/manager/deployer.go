@@ -61,9 +61,13 @@ func (p *Deployer) Install(topoId uint) error {
 }
 
 //Uninstall the topology
-func (p *Deployer) Uninstall(topology *topology.Topology) error {
-	log.LogCodeLine()
-	return p.preTraverse(topology, "contained", "Delete")
+func (p *Deployer) Uninstall(topoId uint) error {
+	topo := &topology.Topology{}
+	if err := db.DB.First(topo, topoId).Error; err != nil {
+		return err
+	}
+
+	return p.preTraverse(topo, "contained", "Delete")
 }
 
 //Configure the topology for start
@@ -72,15 +76,21 @@ func (p *Deployer) Configure(topology *topology.Topology) error {
 }
 
 //Start the Topology
-func (p *Deployer) Start(topology *topology.Topology) error {
-	log.LogCodeLine()
-	return p.postTraverse(topology, "contained", "Start")
+func (p *Deployer) Start(topoId uint) error {
+	topo := &topology.Topology{}
+	if err := db.DB.First(topo, topoId).Error; err != nil {
+		return err
+	}
+	return p.postTraverse(topo, "contained", "Start")
 }
 
 //Stop the Topology
-func (p *Deployer) Stop(topology *topology.Topology) error {
-	log.LogCodeLine()
-	return p.preTraverse(topology, "contained", "Stop")
+func (p *Deployer) Stop(topoId uint) error {
+	topo := &topology.Topology{}
+	if err := db.DB.First(topo, topoId).Error; err != nil {
+		return err
+	}
+	return p.preTraverse(topo, "contained", "Stop")
 }
 
 func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operation string) error {
@@ -159,6 +169,7 @@ func (p *Deployer) postTraverse(topo *topology.Topology, depType string, operati
 		select {
 		case e := <-done:
 			if e != nil {
+				fmt.Println("postTra " + e.Error())
 				err = e
 			}
 		case <-timeouts[i]:
@@ -243,6 +254,7 @@ func (p *Deployer) postTraverseNode(topo *topology.Topology, depType string, par
 			select {
 			case <-status.Done:
 				if status.Node.Error != "" {
+					fmt.Println("postTraNode " + status.Node.Error)
 					err = fmt.Errorf(status.Node.Error)
 				}
 			case <-status.Timeout:
@@ -285,7 +297,7 @@ func (p *Deployer) executeNode(operation string, node *topology.Node, template *
 			close(node.Done)
 		}()
 	} else {
-		fmt.Println("doing")
+		fmt.Println("doing " + node.Name)
 	}
 
 	return node.Done, node.Timeout
@@ -316,6 +328,7 @@ func (p *Deployer) invoke(node *topology.Node, operation string, template *topol
 
 	err = p.Executor.Perform(template.Environment, class, operation, args)
 	if err != nil {
+		fmt.Println("invoke " + err.Error())
 		node.RunStatus = topology.RunStatusRed
 		node.Error = fmt.Errorf("%s execute %s error:%s", node.Name, operation, err.Error()).Error()
 
