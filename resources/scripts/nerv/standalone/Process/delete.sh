@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-function create() {
+function delete() {
     if [ -f $APP_PID ]; then
         $APP stop  || return $?
     fi
-    tar -xf $PKG_FILE -C $root
+    rm -rf $APP_ROOT
+
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"tar -xf ${PKG_FILE}\"}
+        echo {\"error\":\"rm -rf ${PKG_FILE}\"}
     fi
 }
 
@@ -26,6 +27,6 @@ else
     APP=$APP_ROOT/bin/app
     PKG_FILE=${pkg_root}${pkg_url}
 
-    create
+    delete
 fi
 
