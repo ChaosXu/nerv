@@ -9,7 +9,7 @@ all : build config pkg
 	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----package complete----"
 
-build : bin cli server file  store resources  agent webui
+build : cli server file  store resources  agent webui
 	@echo "----build complete----"
 
 
@@ -66,8 +66,3 @@ pkg :
 resources :
 	@echo "----build resources----"
 	cd resources && make
-
-.PHONY : bin
-bin :
-	@echo "----build bin----"
-	cd bin && make
