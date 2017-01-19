@@ -28,7 +28,7 @@ type Deployer struct {
 	Executor    environment.Executor `inject:""`
 }
 
-//Create a topology in db
+// Create a topology in db
 func (p *Deployer) Create(topoName string, templatePath string) (uint, error) {
 	log.LogCodeLine()
 	template, err := p.TemplateRep.GetTemplate(templatePath)
@@ -41,16 +41,6 @@ func (p *Deployer) Create(topoName string, templatePath string) (uint, error) {
 	return topo.ID, nil
 }
 
-func (p *Deployer) dump(topo *topology.Topology) error {
-	data, err := json.Marshal(topo)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(string(data))
-	return nil
-}
-
 func (p *Deployer) Install(topoId uint) error {
 	topo := &topology.Topology{}
 	if err := db.DB.First(topo, topoId).Error; err != nil {
@@ -60,7 +50,7 @@ func (p *Deployer) Install(topoId uint) error {
 	return p.postTraverse(topo, "contained", "Create")
 }
 
-//Uninstall the topology
+// Uninstall the topology
 func (p *Deployer) Uninstall(topoId uint) error {
 	topo := &topology.Topology{}
 	if err := db.DB.First(topo, topoId).Error; err != nil {
@@ -70,12 +60,12 @@ func (p *Deployer) Uninstall(topoId uint) error {
 	return p.preTraverse(topo, "contained", "Delete")
 }
 
-//Configure the topology for start
+// Configure the topology for start
 func (p *Deployer) Configure(topology *topology.Topology) error {
 	return fmt.Errorf("TBD")
 }
 
-//Start the Topology
+// Start the topology
 func (p *Deployer) Start(topoId uint) error {
 	topo := &topology.Topology{}
 	if err := db.DB.First(topo, topoId).Error; err != nil {
@@ -84,13 +74,33 @@ func (p *Deployer) Start(topoId uint) error {
 	return p.postTraverse(topo, "contained", "Start")
 }
 
-//Stop the Topology
+// Stop the topology
 func (p *Deployer) Stop(topoId uint) error {
 	topo := &topology.Topology{}
 	if err := db.DB.First(topo, topoId).Error; err != nil {
 		return err
 	}
 	return p.preTraverse(topo, "contained", "Stop")
+}
+
+// Restart the topology
+func (p *Deployer) Restart(topoId uint) error {
+	err := p.Stop(topoId)
+	if err != nil {
+		return err
+	}
+
+	return p.Start(topoId)
+}
+
+func (p *Deployer) dump(topo *topology.Topology) error {
+	data, err := json.Marshal(topo)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(string(data))
+	return nil
 }
 
 func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operation string) error {
@@ -117,7 +127,6 @@ func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operatio
 		dones = append(dones, done)
 		timeouts = append(timeouts, timeout)
 	}
-
 
 	for i, done := range dones {
 		select {
@@ -312,6 +321,7 @@ func (p *Deployer) invoke(node *topology.Node, operation string, template *topol
 	if nodeTemplate == nil {
 		node.RunStatus = topology.RunStatusRed
 		err := fmt.Errorf("template %s of node %s isn't exist", node.Template, node.Name)
+		node.Error = err.Error()
 		return err
 	}
 	node.RunStatus = topology.RunStatusGreen
@@ -323,20 +333,28 @@ func (p *Deployer) invoke(node *topology.Node, operation string, template *topol
 
 	class, err := p.ClassRep.Get(nodeTemplate.Type)
 	if err != nil {
+		node.RunStatus = topology.RunStatusRed
+		err = fmt.Errorf("load class %s by template %s failed. error: %s", node.Name, node.Template, err.Error())
+		node.Error = err.Error()
 		return err
 	}
 
 	err = p.Executor.Perform(template.Environment, class, operation, args)
 	if err != nil {
-		fmt.Println("invoke " + err.Error())
 		node.RunStatus = topology.RunStatusRed
 		node.Error = fmt.Errorf("%s execute %s error:%s", node.Name, operation, err.Error()).Error()
 
 	} else {
 		node.RunStatus = topology.RunStatusGreen
+		node.Error = ""
 	}
 
-	p.DBService.GetDB().Save(node)
+	err = p.DBService.GetDB().Save(node).Error
+	if err != nil {
+		node.RunStatus = topology.RunStatusRed
+		err = fmt.Errorf("save node status %s failed. error: %s", node.Name, err.Error())
+		node.Error = err.Error()
+	}
 	return err
 }
 

@@ -194,7 +194,7 @@ func create(cmd *cobra.Command, args []string) error {
 		return err;
 	}
 
-	fmt.Printf("Topology has been created. id=%d\n", id)
+	fmt.Printf("Create topology success. id=%d\n", id)
 	return nil
 }
 
@@ -218,7 +218,7 @@ func remove(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Printf("Topology has been deleted. id=%d\n", id)
+	fmt.Printf("Delete topology success. id=%d\n", id)
 
 	return nil
 }
@@ -249,7 +249,7 @@ func install(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Printf("Topology has been installed. id=%d\n", id)
+	fmt.Printf("Install topology success. id=%d\n", id)
 
 	return nil
 }
@@ -280,7 +280,7 @@ func uninstall(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Printf("Topology has been uninstalled. id=%d\n", id)
+	fmt.Printf("Uninstall topology success. id=%d\n", id)
 
 	return nil
 }
@@ -311,7 +311,7 @@ func start(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Printf("Topology has been started. id=%d\n", id)
+	fmt.Printf("Start topology success. id=%d\n", id)
 
 	return nil
 }
@@ -342,7 +342,7 @@ func stop(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Printf("Topology has been installed. id=%d\n", id)
+	fmt.Printf("Stop topology success. id=%d\n", id)
 
 	return nil
 }
@@ -368,12 +368,12 @@ func restart(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	err = deployer.Stop(topo.ID)
+	err = deployer.Restart(topo.ID)
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("Topology has been installed. id=%d\n", id)
+	fmt.Printf("Restart topology success. id=%d\n", id)
 
 	return nil
 }
