@@ -42,6 +42,14 @@
         {
           "name": "root",
           "value": "../../"
+        },
+        {
+          "name": "config_root",
+          "value": "../../../../profile/ide"
+        },
+        {
+          "name":"config_url",
+          "value":"/server/config"
         }
       ],
       "dependencies": [

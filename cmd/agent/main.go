@@ -4,7 +4,7 @@ import (
 	"log"
 	"github.com/ChaosXu/nerv/lib/env"
 _	"github.com/ChaosXu/nerv/cmd/agent/deploy"
-	"github.com/ChaosXu/nerv/cmd/agent/monitor"
+	//"github.com/ChaosXu/nerv/cmd/agent/monitor"
 	"github.com/ChaosXu/nerv/cmd/agent/deploy"
 )
 
@@ -16,8 +16,8 @@ func main() {
 	log.Println("Version:" + Version)
 	env.Init()
 
-	monitor := monitor.NewMonitor(env.Config())
-	monitor.Start()
+	//monitor := monitor.NewMonitor(env.Config())
+	//monitor.Start()
 
 	agent, err := deploy.NewAgent(env.Config())
 	if err != nil {

@@ -93,6 +93,15 @@ func (p *Deployer) Restart(topoId uint) error {
 	return p.Start(topoId)
 }
 
+// Setup the topology
+func (p *Deployer) Setup(topoId uint) error {
+	topo := &topology.Topology{}
+	if err := db.DB.First(topo, topoId).Error; err != nil {
+		return err
+	}
+	return p.postTraverse(topo, "contained", "Setup")
+}
+
 func (p *Deployer) dump(topo *topology.Topology) error {
 	data, err := json.Marshal(topo)
 	if err != nil {
