@@ -12,6 +12,14 @@
 			"Rev": "6d212800a42e8ab5c146b8ace3490ee17e5225f9"
 		},
 		{
+			"ImportPath": "github.com/facebookgo/inject",
+			"Rev": "643b7206b487b04fbea325cf6e8d06a66f8db772"
+		},
+		{
+			"ImportPath": "github.com/facebookgo/structtag",
+			"Rev": "217e25fb96916cc60332e399c9aa63f5c422ceed"
+		},
+		{
 			"ImportPath": "github.com/go-resty/resty",
 			"Comment": "v0.8-10-g65d3148",
 			"Rev": "65d31487e2200bd9122c42f9aa011cfcb204e97f"
@@ -20,6 +28,10 @@
 			"ImportPath": "github.com/go-sql-driver/mysql",
 			"Comment": "v1.2-198-g0b58b37",
 			"Rev": "0b58b37b664c21f3010e836f1b931e1d0b0b0685"
+		},
+		{
+			"ImportPath": "github.com/inconshreveable/mousetrap",
+			"Rev": "76626ae9c91c4f2a10f34cad8ce83ea42c93bb75"
 		},
 		{
 			"ImportPath": "github.com/jinzhu/gorm",
@@ -53,6 +65,14 @@
 			"ImportPath": "github.com/pressly/chi/render",
 			"Comment": "v2.0.0rc1-69-g7488f68",
 			"Rev": "7488f685eeba499189011a14ffed7c57dfc8b26b"
+		},
+		{
+			"ImportPath": "github.com/spf13/cobra",
+			"Rev": "1dd5ff2e11b6dca62fdcb275eb804b94607d8b06"
+		},
+		{
+			"ImportPath": "github.com/spf13/pflag",
+			"Rev": "25f8b5b07aece3207895bf19f7ab517eb3b22a40"
 		},
 		{
 			"ImportPath": "github.com/stretchr/testify/assert",
