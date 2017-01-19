@@ -97,6 +97,26 @@ Delete topology success. id=1
 
 ![concept](/docs/img/concept.png)
 
+### Application
+供人直接使用的程序。
+
+### Service
+供其它应用或服务使用的后台程序。
+
+### Template
+定义构成一个应用或服务所需资源（服务器、安装包、配置文件等）及它们之间关系。
+
+### Topology
+使用模板创建的一个应用或服务的拓扑图，通过Install、Setup、Start等操作部署、配置和启动应用或服务。
+
+### Resource Model
+定模板中的元素的类型，适配各种部署环境：物理机、公有云、私有云、容器以及混合云等。
+
+### Work Cluster
+部署应用或服务的集群。
+
+### Agent
+运行与集群中的每台主机上的代理程序，负责执行本机上部署的应用或服务的实例的管理和监控工作。
 
 ## 部署与配置
 
