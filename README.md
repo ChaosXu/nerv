@@ -40,7 +40,7 @@ nerv            nerv.tar.gz
 }
 ```
 
-### 安装与启动
+### 安装与配置
 
 ```shell
 cd release/nerv/nerv-cli/bin
@@ -53,6 +53,11 @@ bin$ ./nerv-cli topo install -i 1
 Install topology success. id=1
 bin$ ./nerv-cli topo setup -i 1
 Setup topology success. id=1
+```
+
+### 启动
+
+```shell
 bin$ ./nerv-cli topo start -i 1
 file: started, pid=30992
 agent: started, pid=30988
@@ -61,13 +66,25 @@ webui: started, pid=33065
 Start topology success. id=1
 ```
 
-### 访问WEB控制台
-
 ### 停止
 
 ```shell
-bin$ ./nerv-cli topo start -i 1
+bin$ ./nerv-cli topo stop -i 1
 Stop topology success. id=1
+```
+
+### 卸载
+
+```shell
+bin$ ./nerv-cli topo uninstall -i 1
+Uninstall topology success. id=1
+```
+
+### 删除
+
+```shell
+bin$ ./nerv-cli topo delete -i 1
+Delete topology success. id=1
 ```
 
 ## 工作机制
