@@ -87,6 +87,13 @@ bin$ ./nerv-cli topo delete -i 1
 Delete topology success. id=1
 ```
 
+### 访问WebUI
+
+浏览器打开：http://localhost:3330
+缺省口令：admin
+![webui_login](/docs/img/webui_login.png)
+
+
 ## 工作机制
 
 TBD

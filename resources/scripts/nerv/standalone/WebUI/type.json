@@ -1,0 +1,4 @@
+{
+  "name": "/nerv/standalone/WebUI",
+  "base": "/nerv/standalone/Process"
+}

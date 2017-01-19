@@ -84,6 +84,30 @@
       ]
     },
     {
+      "name": "webui",
+      "type": "/nerv/standalone/WebUI",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "../../pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/webui.tar.gz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
       "name": "host",
       "type": "/nerv/standalone/Host",
       "parameters": [

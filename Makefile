@@ -9,7 +9,7 @@ all : build config pkg
 	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----package complete----"
 
-build : cli server file  store resources bin agent
+build : bin cli server file  store resources  agent webui
 	@echo "----build complete----"
 
 
@@ -54,9 +54,11 @@ pkg :
 	mv $(RELEASE_ROOT)/file.tar.gz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/server.tar.gz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/nerv-cli.tar.gz $(RELEASE_ROOT)/pkg
+	mv $(RELEASE_ROOT)/webui.tar.gz $(RELEASE_ROOT)/pkg
 	rm -rf $(RELEASE_ROOT)/file
 	rm -rf $(RELEASE_ROOT)/server
 	rm -rf $(RELEASE_ROOT)/agent
+	rm -rf $(RELEASE_ROOT)/webui
 	@echo "----pkg complete----"
 
 

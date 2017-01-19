@@ -3,6 +3,6 @@
     "port": "3330"
   },
   "files": {
-    "/": "console"
+    "/": "../console"
   }
 }
