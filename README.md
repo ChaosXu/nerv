@@ -93,10 +93,10 @@ Delete topology success. id=1
 缺省口令：admin
 ![webui_login](/docs/img/webui_login.png)
 
-
 ## 工作机制
 
-TBD
+![concept](/docs/img/concept.png)
+
 
 ## 部署与配置
 
