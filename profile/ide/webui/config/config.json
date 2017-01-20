@@ -3,7 +3,7 @@
     "port": "3330"
   },
   "files": {
-    "/": "../console"
+    "/": "console"
   },
   "proxies": {
     "/api/objs": "http://localhost:3333",
