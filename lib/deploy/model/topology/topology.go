@@ -28,7 +28,7 @@ type Topology struct {
 	gorm.Model
 	Status
 	Name     string    `json:"name"`     //topology name
-	Template string    `json:"tempalte"` //service template name
+	Template string    `json:"template"` //service template name
 	Version  int32    `json:"version"`   //service template version
 	Nodes    []*Node    `json:"nodes"`
 }

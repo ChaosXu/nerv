@@ -92,6 +92,7 @@ Delete topology success. id=1
 浏览器打开：http://localhost:3330
 缺省口令：admin
 ![webui_login](/docs/img/webui_login.png)
+![topology_list](/docs/img/topology_list.png)
 
 ## 工作机制
 

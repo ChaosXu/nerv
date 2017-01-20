@@ -3,7 +3,8 @@
     "port": "3332"
   },
   "files": {
-    "/scripts": "../resources/scripts",
-    "/pkg": "../pkg"
+    "/api/scripts": "../../resources/scripts",
+    "/api/templates": "../../resources/templates",
+    "/pkg": "../../pkg"
   }
 }

@@ -1,4 +1,11 @@
 {
   "name": "/nerv/standalone/Server",
-  "base": "/nerv/standalone/Process"
+  "base": "/nerv/standalone/Process",
+  "operations": [
+    {
+      "name": "Setup",
+      "type": "shell",
+      "implementor": "/nerv/standalone/Server/setup.sh"
+    }
+  ]
 }

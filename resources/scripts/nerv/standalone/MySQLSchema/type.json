@@ -1,0 +1,31 @@
+{
+  "name": "/nerv/standalone/MySQLSchema",
+  "base": "/nerv/standalone/DBSchema",
+  "operations": [
+    {
+      "name": "Create",
+      "type": "shell",
+      "implementor": "/nerv/standalone/Process/create.sh"
+    },
+    {
+      "name": "Delete",
+      "type": "shell",
+      "implementor": "/nerv/standalone/Process/delete.sh"
+    },
+    {
+      "name": "Setup",
+      "type": "shell",
+      "implementor": "/nerv/standalone/Process/setup.sh"
+    },
+    {
+      "name": "Start",
+      "type": "shell",
+      "implementor": "/nerv/standalone/Process/start.sh"
+    },
+    {
+      "name": "Stop",
+      "type": "shell",
+      "implementor": "/nerv/standalone/Process/stop.sh"
+    }
+  ]
+}

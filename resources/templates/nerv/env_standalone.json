@@ -45,11 +45,11 @@
         },
         {
           "name": "config_root",
-          "value": "../../../../profile/ide"
+          "value": "../../../../profile/debug"
         },
         {
-          "name":"config_url",
-          "value":"/server/config"
+          "name": "config_url",
+          "value": "/server/config"
         }
       ],
       "dependencies": [
@@ -74,6 +74,14 @@
         {
           "name": "root",
           "value": "../../"
+        },
+        {
+          "name": "config_root",
+          "value": "../../../../profile/debug"
+        },
+        {
+          "name": "config_url",
+          "value": "/file/config"
         }
       ],
       "dependencies": [

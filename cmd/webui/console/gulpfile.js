@@ -59,6 +59,7 @@ gulp.task('copy:npm', ['compile'], function () {
 gulp.task('copy:assets', ['compile'], function () {
     return gulp.src([
         'app/**/*.html',
+        'app/**/*.css',
         '*.html',
         'css/**/*.css',
         'images/**/*',
