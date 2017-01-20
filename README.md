@@ -8,14 +8,27 @@
 
 ### 准备
 
-[安装Go](https://golang.org/doc/install)
+#### Go
+
+* [安装Go](https://golang.org/doc/install)
+
+#### WebUI
+
+* [安装Node.js](https://nodejs.org/zh-cn)
+* [安装gulp](http://gulpjs.com)
+* [Angular 2 参考](https://www.angular.cn/docs/ts/latest)
 
 ### 构建
 
 ```shell
 go get github.com/ChaosXu/nerv
+
+cd $GOPATH/src/github.com/ChaosXu/nerv/cmd/webui/console
+console$ npm install
+
 cd $GOPATH/src/github.com/ChaosXu/nerv
-nerv$ make all -e ENV=debug
+nerv$ make build webui pkg -e ENV=debug
+
 nerv$ cd release
 release$ ls
 nerv            nerv.tar.gz
