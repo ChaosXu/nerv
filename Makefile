@@ -3,15 +3,8 @@ CMD_DIR=cmd
 RELEASE_ROOT=release/nerv
 PKG_AGENT=agent.tar.gz
 
-all : build config pkg
-	@echo "----package----"
-	rm -rf release/nerv.tar.gz
-	cd release && tar -zcvf nerv.tar.gz nerv
-	@echo "----package complete----"
-
-build : cli server file  store resources  agent webui
+build : cli server file  store resources  agent config
 	@echo "----build complete----"
-
 
 cli :
 	@echo "----build cli----"
@@ -48,6 +41,7 @@ config :
 .PHONY : pkg
 pkg :
 	@echo "----build pkg----"
+	rm -rf release/nerv.tar.gz
 	rm -rf $(RELEASE_ROOT)/pkg
 	mkdir $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/agent.tar.gz $(RELEASE_ROOT)/pkg
@@ -59,6 +53,7 @@ pkg :
 	rm -rf $(RELEASE_ROOT)/server
 	rm -rf $(RELEASE_ROOT)/agent
 	rm -rf $(RELEASE_ROOT)/webui
+	cd release && tar -zcvf nerv.tar.gz nerv
 	@echo "----pkg complete----"
 
 
