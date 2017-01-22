@@ -38,7 +38,10 @@ nerv            nerv.tar.gz
 
 ## 快速启动（单机版）
 
-### 配置数据库
+### 部署Nerv
+
+#### 配置数据库
+
 创建一个MySQL数据库 nerv
 打开 release/nerv/nerv-cli/config/config.json，配置数据库连接
 
@@ -55,7 +58,7 @@ nerv            nerv.tar.gz
 }
 ```
 
-### 安装与配置
+#### 安装与配置
 
 ```shell
 cd release/nerv/nerv-cli/bin
@@ -70,7 +73,7 @@ bin$ ./nerv-cli topo setup -i 1
 Setup topology success. id=1
 ```
 
-### 启动
+#### 启动
 
 ```shell
 bin$ ./nerv-cli topo start -i 1
@@ -81,28 +84,46 @@ webui: started, pid=33065
 Start topology success. id=1
 ```
 
-### 停止
+#### 停止
 
 ```shell
 bin$ ./nerv-cli topo stop -i 1
 Stop topology success. id=1
 ```
 
-### 卸载
+#### 卸载
 
 ```shell
 bin$ ./nerv-cli topo uninstall -i 1
 Uninstall topology success. id=1
 ```
 
-### 删除
+#### 删除
 
 ```shell
 bin$ ./nerv-cli topo delete -i 1
 Delete topology success. id=1
 ```
 
-### 访问WebUI
+### 添加工作集群
+
+```shell
+#Add credential for worker cluster
+bin$ ./nerv-cli credential create -d Type=ssh,User=usr,Passworkd=pwd
+Create credential success. id=1
+#Add worker cluster
+bin$ ./nerv-cli topo create -t ../../resources/templates/nerv/nerv_cluster.json -o worker-cluster-1
+Create topology success. id=2
+#Install agents in hosts of cluster
+bin$ ./nerv-cli topo install -i 2
+Install topology success. id=2
+#Start agents in hosts of cluster
+bin$ ./nerv-cli topo start -i 2
+Start topology success. id=2
+```
+
+
+### 使用WebUI
 
 浏览器打开：http://localhost:3330
 缺省口令：admin
@@ -114,24 +135,31 @@ Delete topology success. id=1
 ![concept](/docs/img/concept.png)
 
 ### Application
+
 供人直接使用的程序。
 
 ### Service
+
 供其它应用或服务使用的后台程序。
 
 ### Template
+
 定义构成一个应用或服务所需的资源（服务器、安装包、配置文件等）及它们之间关系。
 
 ### Topology
+
 使用模板创建的一个应用或服务的拓扑结构，通过Install、Setup、Start等操作部署、配置和启动应用或服务。
 
 ### Resource Model
+
 定模板中的元素的类型，适配各种部署环境：物理机、公有云、私有云、容器以及混合云等。
 
 ### Work Cluster
+
 部署应用或服务的集群。
 
 ### Agent
+
 运行与集群中的每台主机上的代理程序，负责执行本机上部署的应用或服务的实例的管理和监控工作。
 
 ## 部署与配置
