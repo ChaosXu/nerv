@@ -16,13 +16,16 @@ func NewDeployer() (*manager.Deployer, error) {
 	var dbService db.DBService
 	var executor environment.ExecutorImpl
 	classRep := resrep.NewStandaloneClassRepository("../../resources/scripts")
-	standaloneEnv := environment.StandaloneEnvironment{ScriptRepository:resrep.NewStandaloneScriptRepository("../../resources/scripts")}
+	scriptRep := resrep.NewStandaloneScriptRepository("../../resources/scripts")
+	standaloneEnv := environment.StandaloneEnvironment{ScriptRepository:scriptRep}
+	sshEnv := environment.SshEnvironment{ScriptRepository:scriptRep}
 	err := g.Provide(
 		&inject.Object{Value: &deployer},
 		&inject.Object{Value: &templateRep},
 		&inject.Object{Value: &dbService},
 		&inject.Object{Value: &executor},
 		&inject.Object{Value: &standaloneEnv, Name:"env_standalone"},
+		&inject.Object{Value: &sshEnv, Name:"env_ssh"},
 		&inject.Object{Value: classRep},
 	)
 	if err != nil {

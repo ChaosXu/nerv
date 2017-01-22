@@ -1,31 +1,30 @@
 {
-  "name": "/nerv/ECHost",
-  "base": "/Resource",
+  "name": "/nerv/cluster/Process",
   "operations": [
     {
       "name": "Create",
       "type": "shell",
-      "implementor": "/nerv/ECHost/create.sh"
+      "implementor": "/nerv/cluster/Process/create.sh"
     },
     {
       "name": "Delete",
       "type": "shell",
-      "implementor": "/nerv/ECHost/delete.sh"
+      "implementor": "/nerv/cluster/Process/delete.sh"
     },
     {
       "name": "Setup",
       "type": "shell",
-      "implementor": "setup.sh"
+      "implementor": "/nerv/cluster/Process/setup.sh"
     },
     {
       "name": "Start",
       "type": "shell",
-      "implementor": "start.sh"
+      "implementor": "/nerv/cluster/Process/start.sh"
     },
     {
       "name": "Stop",
       "type": "shell",
-      "implementor": "stop.sh"
+      "implementor": "/nerv/cluster/Process/stop.sh"
     }
   ]
 }

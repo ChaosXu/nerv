@@ -1,5 +1,5 @@
 {
-  "name": "/nerv/standalone/Host",
+  "name": "/nerv/cluster/Host",
   "operations": [
     {
       "name": "Create",

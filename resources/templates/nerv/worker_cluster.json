@@ -5,11 +5,11 @@
   "nodes": [
     {
       "name": "agent",
-      "type": "/nerv/standalone/Agent",
+      "type": "/nerv/cluster/Agent",
       "parameters": [
         {
           "name": "pkg_root",
-          "value": "../../pkg"
+          "value": "http://10.211.55.2:3332/pkg"
         },
         {
           "name": "pkg_url",
@@ -17,7 +17,15 @@
         },
         {
           "name": "root",
-          "value": "../../"
+          "value": "./"
+        },
+        {
+          "name": "config_root",
+          "value": "http://10.211.55.2:3332/config"
+        },
+        {
+          "name": "config_url",
+          "value": "/agent/config.json"
         }
       ],
       "dependencies": [
@@ -29,7 +37,7 @@
     },
     {
       "name": "host",
-      "type": "/nerv/standalone/Host",
+      "type": "/nerv/cluster/Host",
       "parameters": [
         {
           "name": "address",

@@ -128,22 +128,20 @@ func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operatio
 		return err
 	}
 
-	dones := []<-chan error{}
-	timeouts := []<-chan bool{}
-
+	status := []PerformStatus{}
 	for _, node := range topo.Nodes {
 		done, timeout := p.preTraverseNode(topo, depType, node, template, operation)
-		dones = append(dones, done)
-		timeouts = append(timeouts, timeout)
+		status = append(status, PerformStatus{Node:node, Done:done, Timeout:timeout})
 	}
 
-	for i, done := range dones {
+	for _, item := range status {
 		select {
-		case e := <-done:
-			if e != nil {
-				err = e
+		case <-item.Done:
+			if item.Node.Error != "" {
+				//fmt.Println("postTraNode " + item.Node.Error)
+				err = fmt.Errorf(item.Node.Error)
 			}
-		case <-timeouts[i]:
+		case <-item.Timeout:
 			fmt.Println("timeout")
 		}
 	}
@@ -174,23 +172,20 @@ func (p *Deployer) postTraverse(topo *topology.Topology, depType string, operati
 		return err
 	}
 
-	dones := []<-chan error{}
-	timeouts := []<-chan bool{}
-
+	status := []PerformStatus{}
 	for _, node := range topo.Nodes {
 		done, timeout := p.postTraverseNode(topo, depType, node, template, operation)
-		dones = append(dones, done)
-		timeouts = append(timeouts, timeout)
+		status = append(status, PerformStatus{Node:node, Done:done, Timeout:timeout})
 	}
 
-	for i, done := range dones {
+	for _, item := range status {
 		select {
-		case e := <-done:
-			if e != nil {
-				fmt.Println("postTra " + e.Error())
-				err = e
+		case <-item.Done:
+			if item.Node.Error != "" {
+				//fmt.Println("postTraNode " + item.Node.Error)
+				err = fmt.Errorf(item.Node.Error)
 			}
-		case <-timeouts[i]:
+		case <-item.Timeout:
 			fmt.Println("timeout")
 		}
 	}
@@ -221,22 +216,21 @@ func (p *Deployer) preTraverseNode(topo *topology.Topology, depType string, pare
 
 	links := parent.FindLinksByType(depType)
 	if links != nil && len(links) > 0 {
-		dones := []<-chan error{}
-		timeouts := []<-chan bool{}
+		status := []PerformStatus{}
 		for _, link := range links {
 			node := topo.GetNode(link.Target)
 			done, timeout := p.preTraverseNode(topo, depType, node, template, operation)
-			dones = append(dones, done)
-			timeouts = append(timeouts, timeout)
+			status = append(status, PerformStatus{Node:node, Done:done, Timeout:timeout})
 		}
 
-		for i, done := range dones {
+		for _, item := range status {
 			select {
-			case e := <-done:
-				if e != nil {
-					childErr = e
+			case <-item.Done:
+				if item.Node.Error != "" {
+					//fmt.Println("postTraNode " + item.Node.Error)
+					childErr = fmt.Errorf(item.Node.Error)
 				}
-			case t := <-timeouts[i]:
+			case t := <-item.Timeout:
 				if t {
 					childTimeout = t
 					fmt.Println("timeout")
@@ -260,22 +254,22 @@ func (p *Deployer) preTraverseNode(topo *topology.Topology, depType string, pare
 func (p *Deployer) postTraverseNode(topo *topology.Topology, depType string, parent *topology.Node, template *topology.ServiceTemplate, operation string) (<-chan error, <-chan bool) {
 	links := parent.FindLinksByType(depType)
 	if links != nil && len(links) > 0 {
-		dones := []PerformStatus{}
+		status := []PerformStatus{}
 		for _, link := range links {
 			node := topo.GetNode(link.Target)
 			done, timeout := p.postTraverseNode(topo, depType, node, template, operation)
-			dones = append(dones, PerformStatus{Node:node, Done:done, Timeout:timeout})
+			status = append(status, PerformStatus{Node:node, Done:done, Timeout:timeout})
 		}
 
 		var err error = nil
-		for _, status := range dones {
+		for _, item := range status {
 			select {
-			case <-status.Done:
-				if status.Node.Error != "" {
-					fmt.Println("postTraNode " + status.Node.Error)
-					err = fmt.Errorf(status.Node.Error)
+			case <-item.Done:
+				if item.Node.Error != "" {
+					//fmt.Println("postTraNode " + item.Node.Error)
+					err = fmt.Errorf(item.Node.Error)
 				}
-			case <-status.Timeout:
+			case <-item.Timeout:
 				fmt.Println("timeout")
 			}
 		}
@@ -339,6 +333,9 @@ func (p *Deployer) invoke(node *topology.Node, operation string, template *topol
 	for _, param := range nodeTemplate.Parameters {
 		args[param.Name] = param.Value
 	}
+	//TBD:don't hard code
+	args["address"] = node.Address
+	args["credential"] = node.Credential
 
 	class, err := p.ClassRep.Get(nodeTemplate.Type)
 	if err != nil {

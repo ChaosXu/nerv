@@ -3,7 +3,6 @@ package environment
 import (
 	"fmt"
 	"bytes"
-	"log"
 	"strings"
 	"golang.org/x/crypto/ssh"
 	"github.com/ChaosXu/nerv/lib/db"
@@ -18,7 +17,7 @@ type SshEnvironment struct {
 }
 
 func (p *SshEnvironment) Exec(class *model.Class, operation *model.Operation, args map[string]string) error {
-	//fmt.Println("Standalone.Exec " + class.Name + "." + operation.Name)
+	fmt.Printf("SSH.Exec %s.%s %s\n", class.Name, operation.Name, operation.Implementor)
 
 	script, err := p.ScriptRepository.Get(operation.Implementor)
 	if err != nil {
@@ -27,7 +26,7 @@ func (p *SshEnvironment) Exec(class *model.Class, operation *model.Operation, ar
 
 	cres := args["credential"]
 	if cres == "" {
-		return fmt.Errorf("crednetial is empty")
+		return fmt.Errorf("credential is empty")
 	}
 	pairs := strings.Split(cres, ",")
 	if len(pairs) < 2 {
@@ -35,7 +34,7 @@ func (p *SshEnvironment) Exec(class *model.Class, operation *model.Operation, ar
 	}
 	cre := &credential.Credential{}
 	if err := db.DB.Where("type=? and name=?", pairs[0], pairs[1]).First(cre).Error; err != nil {
-		return err
+		return fmt.Errorf("credential %s not found", cres, err.Error())
 	}
 
 	addr := args["address"]
@@ -52,7 +51,7 @@ func (p *SshEnvironment) call(script *model.Script, args map[string]string, addr
 			ssh.Password(cre.Password),
 		},
 	}
-	client, err := ssh.Dial("tcp", addr, config)
+	client, err := ssh.Dial("tcp", addr + ":22", config)
 	if err != nil {
 		return err
 	}
@@ -69,38 +68,32 @@ func (p *SshEnvironment) call(script *model.Script, args map[string]string, addr
 
 	export := ""
 	for k, v := range args {
-		if k=="address" || k=="crendential" {
+		if k == "address" || k == "credential" {
 			continue
 		}
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
 	shell := "export " + export + " && " + script.Content
-	log.Println(shell)
+	fmt.Println(shell)
 
 	stdoutContent := ""
 	stderrContent := ""
 	if err := session.Run(shell); err != nil {
 		stdoutContent = stdout.String()
 		if stdoutContent != "" {
-			log.Println("stdout\n" + stdoutContent)
+			fmt.Println("stdout\n" + stdoutContent)
 		}
 		stderrContent = stderr.String()
 		if stderrContent != "" {
-			log.Println("stderr\n" + stderrContent)
+			fmt.Println("stderr\n" + stderrContent)
 			return fmt.Errorf("%s\n%s", err.Error(), stderrContent)
 		} else {
 			return err
 		}
-	} else {
-		stdoutContent = stdout.String()
-		if stdoutContent != "" {
-			log.Println("stdout\n" + stdoutContent)
-		}
-		stderrContent = stderr.String()
-		if stderrContent != "" {
-			log.Println("stderr\n" + stderrContent)
-			return fmt.Errorf("%s", stderrContent)
-		}
+	}
+	stdoutContent = stdout.String()
+	if stdoutContent != "" {
+		fmt.Println(stdoutContent)
 	}
 
 	return nil

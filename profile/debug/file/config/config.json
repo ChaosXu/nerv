@@ -5,6 +5,7 @@
   "files": {
     "/api/scripts": "../../resources/scripts",
     "/api/templates": "../../resources/templates",
-    "/pkg": "../../pkg"
+    "/pkg": "../../pkg",
+    "/config": "../../resources/config"
   }
 }
