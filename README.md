@@ -58,24 +58,24 @@ nerv            nerv.tar.gz
 }
 ```
 
-#### 安装与配置
+#### 安装与启动
 
 ```shell
+#Use the topolgoy to install system
 cd release/nerv/nerv-cli/bin
 bin$ ./nerv-cli topo create -t ../../resources/templates/nerv/env_standalone.json -o nerv-test
 Create topology success. id=1
+#List all topologies that has been created
 bin$ ./nerv-cli topo list
 ID      Name    RunStatus       CreateAt        Template
 1       nerv-test       0       XXXXX           ../../resources/templates/nerv/env_standalone_test.json
+#Install softwares that used by the topology to the host
 bin$ ./nerv-cli topo install -i 1
 Install topology success. id=1
+#Setup configurations of nodes in the topology
 bin$ ./nerv-cli topo setup -i 1
 Setup topology success. id=1
-```
-
-#### 启动
-
-```shell
+#Start system by the topology
 bin$ ./nerv-cli topo start -i 1
 file: started, pid=30992
 agent: started, pid=30988
@@ -84,28 +84,10 @@ webui: started, pid=33065
 Start topology success. id=1
 ```
 
-#### 停止
-
-```shell
-bin$ ./nerv-cli topo stop -i 1
-Stop topology success. id=1
-```
-
-#### 卸载
-
-```shell
-bin$ ./nerv-cli topo uninstall -i 1
-Uninstall topology success. id=1
-```
-
-#### 删除
-
-```shell
-bin$ ./nerv-cli topo delete -i 1
-Delete topology success. id=1
-```
-
 ### 添加工作集群
+
+通过SSH方式集群并在其中安装Agent，以便后续在集群中部署应用或服务。Nerv不负责部署、启动或者管理其中的主机，它们由基础设施管理平台管理。
+
 
 ```shell
 #Add credential for worker cluster
