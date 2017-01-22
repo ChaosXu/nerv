@@ -38,9 +38,9 @@ config :
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)
 	@echo "----config complete----"
 
-.PHONY : pkg
-pkg :
-	@echo "----build pkg----"
+.PHONY : pkg-service
+pkg-service :
+	@echo "----build pkg-service----"
 	rm -rf release/nerv.tar.gz
 	rm -rf $(RELEASE_ROOT)/pkg
 	mkdir $(RELEASE_ROOT)/pkg
@@ -48,14 +48,23 @@ pkg :
 	mv $(RELEASE_ROOT)/file.tar.gz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/server.tar.gz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/nerv-cli.tar.gz $(RELEASE_ROOT)/pkg
-	mv $(RELEASE_ROOT)/webui.tar.gz $(RELEASE_ROOT)/pkg
 	rm -rf $(RELEASE_ROOT)/file
 	rm -rf $(RELEASE_ROOT)/server
 	rm -rf $(RELEASE_ROOT)/agent
-	rm -rf $(RELEASE_ROOT)/webui
-	cd release && tar -zcvf nerv.tar.gz nerv
-	@echo "----pkg complete----"
+	@echo "----pkg-service complete----"
 
+.PHONY : pkg-webui
+pkg-webui : webui
+	@echo "----build pkg-webui----"
+	mv $(RELEASE_ROOT)/webui.tar.gz $(RELEASE_ROOT)/pkg
+	rm -rf $(RELEASE_ROOT)/webui
+	@echo "----pkg-webui complete----"
+
+.PHONY : pkg-all
+pkg-all :
+	@echo "----build pkg-all----"
+	cd release && tar -zcvf nerv.tar.gz nerv
+	@echo "----build pkg-all----"
 
 .PHONY : resources
 resources :
