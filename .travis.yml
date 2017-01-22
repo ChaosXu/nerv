@@ -1,7 +1,7 @@
 language: go
 go:
 - 1.7
-script: make build pkg-service pkg-webui pkg-all
+script: make build pkg-service pkg-all
 deploy:
   provider: releases
   api_key:
