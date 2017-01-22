@@ -40,6 +40,8 @@ nerv            nerv.tar.gz
 
 ### 部署Nerv
 
+在单台主机上部署Nerv
+
 #### 配置数据库
 
 创建一个MySQL数据库 nerv
@@ -59,6 +61,8 @@ nerv            nerv.tar.gz
 ```
 
 #### 安装与启动
+
+部署并启动Nerv的所有服务
 
 ```shell
 #Use the topolgoy to install system
@@ -104,6 +108,8 @@ Start topology success. id=2
 ```
 
 ### 部署应用
+
+在集群中部署一个示例应用
 
 TBD
 
