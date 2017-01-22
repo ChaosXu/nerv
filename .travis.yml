@@ -1,6 +1,7 @@
 language: go
 go:
 - 1.7
+script: make build pkg -e ENV=debug
 deploy:
   provider: releases
   api_key:
