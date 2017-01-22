@@ -1,0 +1,45 @@
+{
+  "name": "/nerv/worker_cluster",
+  "version": 1,
+  "environment": "ssh",
+  "nodes": [
+    {
+      "name": "agent",
+      "type": "/nerv/standalone/Agent",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "../../pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/agent.tar.gz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "host",
+      "type": "/nerv/standalone/Host",
+      "parameters": [
+        {
+          "name": "address",
+          "value": "centos7.chaosxu.com"
+        },
+        {
+          "name":"credential",
+          "value":"ssh,centos7"
+        }
+      ]
+    }
+  ]
+}

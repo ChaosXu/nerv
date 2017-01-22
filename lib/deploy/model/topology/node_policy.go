@@ -2,6 +2,7 @@ package topology
 
 import "strings"
 
+// newNodesByHostTemplate create host nodes for nerv worker cluster
 func newNodesByHostTemplate(nodeTemplate *NodeTemplate) []*Node {
 	configs:=newConfigs(nodeTemplate)
 	addrs := nodeTemplate.getParameterValue("addresses")

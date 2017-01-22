@@ -1,4 +1,4 @@
-package ssh
+package credential
 
 import (
 	"github.com/jinzhu/gorm"

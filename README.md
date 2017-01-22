@@ -86,8 +86,7 @@ Start topology success. id=1
 
 ### 添加工作集群
 
-通过SSH方式集群并在其中安装Agent，以便后续在集群中部署应用或服务。Nerv不负责部署、启动或者管理其中的主机，它们由基础设施管理平台管理。
-
+添加集群并在其中安装Agent，以便后续在集群中部署应用或服务。Nerv不负责部署、启动或者管理其中的主机，它们由基础设施管理平台管理。
 
 ```shell
 #Add credential for worker cluster
@@ -104,7 +103,6 @@ bin$ ./nerv-cli topo start -i 2
 Start topology success. id=2
 ```
 
-
 ### 使用WebUI
 
 浏览器打开：http://localhost:3330
@@ -116,33 +114,13 @@ Start topology success. id=2
 
 ![concept](/docs/img/concept.png)
 
-### Application
-
-供人直接使用的程序。
-
-### Service
-
-供其它应用或服务使用的后台程序。
-
-### Template
-
-定义构成一个应用或服务所需的资源（服务器、安装包、配置文件等）及它们之间关系。
-
-### Topology
-
-使用模板创建的一个应用或服务的拓扑结构，通过Install、Setup、Start等操作部署、配置和启动应用或服务。
-
-### Resource Model
-
-定模板中的元素的类型，适配各种部署环境：物理机、公有云、私有云、容器以及混合云等。
-
-### Work Cluster
-
-部署应用或服务的集群。
-
-### Agent
-
-运行与集群中的每台主机上的代理程序，负责执行本机上部署的应用或服务的实例的管理和监控工作。
+* Application 供人直接使用的程序。
+* Service 供其它应用或服务使用的后台程序。
+* Template 定义构成一个应用或服务所需的资源（服务器、安装包、配置文件等）及它们之间关系。
+* Topology 使用模板创建的一个应用或服务的拓扑结构，通过Install、Setup、Start等操作部署、配置和启动应用或服务。
+* Resource Model 定模板中的元素的类型，适配各种部署环境：物理机、公有云、私有云、容器以及混合云等。
+* Worker Cluster 部署应用或服务的集群。
+* Agent 运行与集群中的每台主机上的代理程序，负责执行本机上部署的应用或服务的实例的管理和监控工作。
 
 ## 部署与配置
 

@@ -64,7 +64,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 		targetNodes = topology.GetNodes(nodeTemplate.Name)
 		if len(targetNodes) == 0 {
 			//TBD: optimize
-			if nodeTemplate.Type == "/nerv/Host" {
+			if nodeTemplate.Type == "/nerv/cluster/Host" {
 				targetNodes = newNodesByHostTemplate(nodeTemplate)
 			} else if nodeTemplate.Type == "/nerv/ECHost" {
 				targetNodes = newNodesByECHostTemplate(nodeTemplate)
