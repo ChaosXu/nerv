@@ -29,7 +29,7 @@ cd $GOPATH/src/github.com/ChaosXu/nerv/cmd/webui/console
 console$ npm install
 
 cd $GOPATH/src/github.com/ChaosXu/nerv
-nerv$ make build webui pkg -e ENV=debug
+nerv$ make build pkg-service pkg-webui pkg-all -e ENV=debug
 
 nerv$ cd release
 release$ ls
