@@ -111,7 +111,7 @@ Start topology success. id=2
 
 在集群中部署一个示例应用
 
-* [Java应用示例](https://github.com/ChaosXu/nerv-app-java)
+* [Java应用示例](https://github.com/ChaosXu/nerv-demo-java)
 
 ### 使用WebUI
 
