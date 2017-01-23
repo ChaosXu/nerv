@@ -13,7 +13,7 @@
         },
         {
           "name": "pkg_url",
-          "value": "/agent.tar.gz"
+          "value": "/agent.tgz"
         },
         {
           "name": "root",
@@ -37,7 +37,7 @@
         },
         {
           "name": "pkg_url",
-          "value": "/server.tar.gz"
+          "value": "/server.tgz"
         },
         {
           "name": "root",
@@ -69,7 +69,7 @@
         },
         {
           "name": "pkg_url",
-          "value": "/file.tar.gz"
+          "value": "/file.tgz"
         },
         {
           "name": "root",
@@ -101,7 +101,7 @@
         },
         {
           "name": "pkg_url",
-          "value": "/webui.tar.gz"
+          "value": "/webui.tgz"
         },
         {
           "name": "root",

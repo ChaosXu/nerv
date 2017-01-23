@@ -2,7 +2,7 @@ LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
 APP_SCRIPT=app
 MODULE=server
-PKG=$(MODULE).tar.gz
+PKG=$(MODULE).tgz
 RELEASE_ROOT=../../release/nerv
 RELEASE_DIR=$(RELEASE_ROOT)/$(MODULE)
 BIN_DIR=$(RELEASE_DIR)/bin
@@ -17,7 +17,7 @@ server : clean
 	chmod +x $(BIN_DIR)/setup.sh
 	mkdir $(CONF_DIR)
 	cp config/config.json $(CONF_DIR)/config.json
-	rm -rf $(RELEASE_DIR).tar.gz
+	rm -rf $(RELEASE_DIR).tgz
 	cd $(RELEASE_ROOT) && tar -zcvf $(PKG) $(MODULE)
 
 

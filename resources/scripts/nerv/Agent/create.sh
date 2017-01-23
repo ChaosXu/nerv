@@ -24,7 +24,7 @@ elif [ "$root" == ""  ]; then
 else
     #PKG=${PKG_URL##*/}
     PKG_FILE=${pkg_root}${pkg_url}
-    APP_ROOT=$root/${PKG%%.*}
+    APP_ROOT=$root/${PKG%.*}
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
     #cd $ROOT

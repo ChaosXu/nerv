@@ -32,7 +32,7 @@ elif [ "$root" == ""  ]; then
     exit 1
 else
     PKG=${pkg_url##*/}
-    APP_ROOT=$root${PKG%%.*}
+    APP_ROOT=$root${PKG%.*}
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
     SETUP=$APP_ROOT/bin/setup.sh

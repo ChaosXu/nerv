@@ -13,7 +13,7 @@
         },
         {
           "name": "pkg_url",
-          "value": "/agent.tar.gz"
+          "value": "/agent.tgz"
         },
         {
           "name": "root",
