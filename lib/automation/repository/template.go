@@ -3,7 +3,7 @@ package repository
 import (
 	"fmt"
 	"github.com/go-resty/resty"
-	"github.com/ChaosXu/nerv/lib/deploy/model/topology"
+	"github.com/ChaosXu/nerv/lib/automation/model/topology"
 	"github.com/ChaosXu/nerv/lib/env"
 	"encoding/json"
 	"github.com/toolkits/file"

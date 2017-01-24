@@ -1,10 +1,10 @@
 package lib
 
 import (
-	"github.com/ChaosXu/nerv/lib/deploy/manager"
+	"github.com/ChaosXu/nerv/lib/automation/manager"
 	"github.com/facebookgo/inject"
 	"github.com/ChaosXu/nerv/lib/resource/environment"
-	"github.com/ChaosXu/nerv/lib/deploy/repository"
+	"github.com/ChaosXu/nerv/lib/automation/repository"
 	"github.com/ChaosXu/nerv/lib/db"
 	resrep "github.com/ChaosXu/nerv/lib/resource/repository"
 )

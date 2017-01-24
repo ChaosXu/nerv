@@ -7,7 +7,7 @@ import (
 	"fmt"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/ChaosXu/nerv/lib/deploy/driver"
+	"github.com/ChaosXu/nerv/lib/automation/driver"
 )
 
 func TestClassRest(t *testing.T) {

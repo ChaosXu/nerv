@@ -2,7 +2,7 @@ package shell_test
 
 import (
 	"testing"
-	"github.com/ChaosXu/nerv/lib/deploy/driver/ssh"
+	"github.com/ChaosXu/nerv/lib/automation/driver/ssh"
 	"github.com/ChaosXu/nerv/lib/env"
 )
 

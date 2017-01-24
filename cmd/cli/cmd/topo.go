@@ -7,7 +7,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/cmd/cli/lib"
 	"fmt"
-	"github.com/ChaosXu/nerv/lib/deploy/model/topology"
+	"github.com/ChaosXu/nerv/lib/automation/model/topology"
 	"encoding/json"
 )
 

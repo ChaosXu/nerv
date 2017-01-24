@@ -10,7 +10,7 @@ import (
 	"github.com/toolkits/file"
 	"strings"
 	"github.com/ChaosXu/nerv/lib/db"
-	_"github.com/ChaosXu/nerv/lib/deploy/model"
+	_"github.com/ChaosXu/nerv/lib/automation/model"
 	"log"
 )
 

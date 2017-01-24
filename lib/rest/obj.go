@@ -11,7 +11,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/rest/middleware"
 	"github.com/ChaosXu/nerv/lib/db"
 	user "github.com/ChaosXu/nerv/lib/user/model"
-	_ "github.com/ChaosXu/nerv/lib/deploy/model"
+	_ "github.com/ChaosXu/nerv/lib/automation/model"
 	_ "github.com/ChaosXu/nerv/lib/monitor/model"
 	_ "github.com/ChaosXu/nerv/lib/user/model"
 	"reflect"
