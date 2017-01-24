@@ -1,30 +1,34 @@
 {
   "name": "/nerv/cluster/Process",
+  "metrics": [
+    "cpu",
+    "memory"
+  ],
   "operations": [
     {
       "name": "Create",
       "type": "shell",
-      "implementor": "/nerv/cluster/Process/create.sh"
+      "implementor": "create.sh"
     },
     {
       "name": "Delete",
       "type": "shell",
-      "implementor": "/nerv/cluster/Process/delete.sh"
+      "implementor": "delete.sh"
     },
     {
       "name": "Setup",
       "type": "shell",
-      "implementor": "/nerv/cluster/Process/setup.sh"
+      "implementor": "setup.sh"
     },
     {
       "name": "Start",
       "type": "shell",
-      "implementor": "/nerv/cluster/Process/start.sh"
+      "implementor": "start.sh"
     },
     {
       "name": "Stop",
       "type": "shell",
-      "implementor": "/nerv/cluster/Process/stop.sh"
+      "implementor": "stop.sh"
     }
   ]
 }

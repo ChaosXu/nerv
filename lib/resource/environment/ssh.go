@@ -19,7 +19,7 @@ type SshEnvironment struct {
 func (p *SshEnvironment) Exec(class *model.Class, operation *model.Operation, args map[string]string) error {
 	fmt.Printf("SSH.Exec %s.%s %s\n", class.Name, operation.Name, operation.Implementor)
 
-	script, err := p.ScriptRepository.Get(operation.Implementor)
+	script, err := p.ScriptRepository.Get(operation.DefineClass,operation.Implementor)
 	if err != nil {
 		return err;
 	}

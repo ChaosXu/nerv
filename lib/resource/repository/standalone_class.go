@@ -49,6 +49,7 @@ func (p *StandaloneClassRepository) InheritFrom(class *model.Class, base string)
 func (p *StandaloneClassRepository) GetOperation(class *model.Class, name string) (*model.Operation, error) {
 	op := class.GetOperation(name)
 	if op != nil {
+		op.DefineClass = class.Name
 		return op, nil
 	}
 	base := class.Base

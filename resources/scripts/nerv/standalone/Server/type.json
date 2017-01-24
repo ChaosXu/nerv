@@ -5,7 +5,7 @@
     {
       "name": "Setup",
       "type": "shell",
-      "implementor": "/nerv/standalone/Server/setup.sh"
+      "implementor": "setup.sh"
     }
   ]
 }

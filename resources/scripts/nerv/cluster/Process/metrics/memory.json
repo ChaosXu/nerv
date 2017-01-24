@@ -1,0 +1,97 @@
+{
+  "resourceType": "/host/Linux",
+  "type": "struct",
+  "name": "memory",
+  "fields": [
+    {
+      "name": "total",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "used",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "free",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "swapTotal",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "swapUsed",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "swapFree",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "usedRatio",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "freeRatio",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "swapUsedRatio",
+      "sampleType": "gauge",
+      "dataType": "long",
+      "probe": {
+        "type": "shell",
+        "provider": "/host/linux/memory.sh"
+      }
+    },
+    {
+      "name": "swapFreeRatio",
+      "sampleType": "gauge",
+      "dataType": "integer",
+      "probe": {
+        "type": "ssh",
+        "Script": "/host/linux/memory.sh"
+      }
+    }
+  ]
+}

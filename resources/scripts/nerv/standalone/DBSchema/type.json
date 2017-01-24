@@ -4,27 +4,27 @@
     {
       "name": "Create",
       "type": "shell",
-      "implementor": "/nerv/standalone/DBSchema/create.sh"
+      "implementor": "create.sh"
     },
     {
       "name": "Delete",
       "type": "shell",
-      "implementor": "/nerv/standalone/DBSchema/delete.sh"
+      "implementor": "delete.sh"
     },
     {
       "name": "Setup",
       "type": "shell",
-      "implementor": "/nerv/standalone/DBSchema/setup.sh"
+      "implementor": "setup.sh"
     },
     {
       "name": "Start",
       "type": "shell",
-      "implementor": "/nerv/standalone/DBSchema/start.sh"
+      "implementor": "start.sh"
     },
     {
       "name": "Stop",
       "type": "shell",
-      "implementor": "/nerv/standalone/DBSchema/stop.sh"
+      "implementor": "stop.sh"
     }
   ]
 }

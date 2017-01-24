@@ -21,6 +21,7 @@ func (p *Class) GetOperation(name string) *Operation {
 
 // Operation is action of type
 type Operation struct {
+	DefineClass string ""
 	Name        string //Operation name
 	Type        string //Operation type.eg.shell
 	Implementor string //Function implement the operation
