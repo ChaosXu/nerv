@@ -3,7 +3,7 @@ package lib
 import (
 	"github.com/ChaosXu/nerv/lib/automation/manager"
 	"github.com/facebookgo/inject"
-	"github.com/ChaosXu/nerv/lib/resource/environment"
+	"github.com/ChaosXu/nerv/lib/operation"
 	"github.com/ChaosXu/nerv/lib/automation/repository"
 	"github.com/ChaosXu/nerv/lib/db"
 	resrep "github.com/ChaosXu/nerv/lib/resource/repository"
@@ -14,11 +14,11 @@ func NewDeployer() (*manager.Deployer, error) {
 	var deployer manager.Deployer
 	var templateRep repository.LocalTemplateRepository
 	var dbService db.DBService
-	var executor environment.ExecutorImpl
+	var executor operation.ExecutorImpl
 	classRep := resrep.NewStandaloneClassRepository("../../resources/scripts")
 	scriptRep := resrep.NewStandaloneScriptRepository("../../resources/scripts")
-	standaloneEnv := environment.StandaloneEnvironment{ScriptRepository:scriptRep}
-	sshEnv := environment.SshEnvironment{ScriptRepository:scriptRep}
+	standaloneEnv := operation.StandaloneEnvironment{ScriptRepository:scriptRep}
+	sshEnv := operation.SshEnvironment{ScriptRepository:scriptRep}
 	err := g.Provide(
 		&inject.Object{Value: &deployer},
 		&inject.Object{Value: &templateRep},

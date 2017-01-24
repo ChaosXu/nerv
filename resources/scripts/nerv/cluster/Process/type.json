@@ -1,9 +1,5 @@
 {
   "name": "/nerv/cluster/Process",
-  "metrics": [
-    "cpu",
-    "memory"
-  ],
   "operations": [
     {
       "name": "Create",

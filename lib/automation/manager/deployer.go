@@ -9,7 +9,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/db"
 	templaterep "github.com/ChaosXu/nerv/lib/automation/repository"
 	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
-	"github.com/ChaosXu/nerv/lib/resource/environment"
+	"github.com/ChaosXu/nerv/lib/operation"
 	"encoding/json"
 )
 
@@ -25,7 +25,7 @@ type Deployer struct {
 	DBService   *db.DBService `inject:""`
 	TemplateRep templaterep.TemplateRepository `inject:""`
 	ClassRep    classrep.ClassRepository `inject:""`
-	Executor    environment.Executor `inject:""`
+	Executor    operation.Executor `inject:""`
 }
 
 // Create a topology in db
