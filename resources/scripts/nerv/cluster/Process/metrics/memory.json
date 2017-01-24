@@ -1,5 +1,4 @@
 {
-  "resourceType": "/host/Linux",
   "type": "struct",
   "name": "memory",
   "fields": [
@@ -9,7 +8,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -18,7 +17,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -27,7 +26,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -36,7 +35,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -45,7 +44,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -54,7 +53,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -63,7 +62,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -72,7 +71,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -81,7 +80,7 @@
       "dataType": "long",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/memory.sh"
+        "provider": "memory.sh"
       }
     },
     {
@@ -90,7 +89,7 @@
       "dataType": "integer",
       "probe": {
         "type": "ssh",
-        "Script": "/host/linux/memory.sh"
+        "Script": "memory.sh"
       }
     }
   ]

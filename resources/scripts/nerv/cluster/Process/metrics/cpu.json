@@ -8,7 +8,7 @@
       "dataType": "double",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/cpu.sh"
+        "provider": "cpu.sh"
       }
     },
     {
@@ -17,7 +17,7 @@
       "dataType": "double",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/cpu.sh"
+        "provider": "cpu.sh"
       }
     },
     {
@@ -26,7 +26,7 @@
       "dataType": "double",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/cpu.sh"
+        "provider": "cpu.sh"
       }
     },
     {
@@ -35,7 +35,7 @@
       "dataType": "double",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/cpu.sh"
+        "provider": "cpu.sh"
       }
     },
     {
@@ -44,7 +44,7 @@
       "dataType": "double",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/cpu.sh"
+        "provider": "cpu.sh"
       }
     },
     {
@@ -53,7 +53,7 @@
       "dataType": "double",
       "probe": {
         "type": "shell",
-        "provider": "/host/linux/cpu.sh"
+        "provider": "cpu.sh"
       }
     }
   ]
