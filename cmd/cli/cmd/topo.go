@@ -1,19 +1,11 @@
 package cmd
 
-import (
-	"errors"
-
-	"github.com/spf13/cobra"
-	"github.com/ChaosXu/nerv/lib/env"
-	"github.com/ChaosXu/nerv/cmd/cli/lib"
-	"fmt"
-	"github.com/ChaosXu/nerv/lib/automation/model/topology"
-	"encoding/json"
-)
+import "github.com/spf13/cobra"
 
 func init() {
 	var topo = &cobra.Command{
 		Use:    "topo [command] [flags]",
+		Aliases: []string{"Topology"},
 		Short:    "Manage the topology resource",
 		Long:    "Manage the topology resource",
 		RunE: topo,
@@ -25,7 +17,7 @@ func init() {
 		Use:    "list",
 		Short:    "List all topologies",
 		Long:    "List all topologies",
-		RunE: list,
+		RunE: listObjs,
 	}
 	list.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(list)
@@ -35,7 +27,7 @@ func init() {
 		Use:    "get",
 		Short:    "Get a topology",
 		Long:    "Get all topology",
-		RunE: get,
+		RunE: getObjFunc([]string{"Nodes", "Nodes.Links", "Nodes.Properties"}),
 	}
 	get.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	get.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -47,7 +39,7 @@ func init() {
 		Use:    "create",
 		Short:    "Create a topology",
 		Long:    "Create a topology",
-		RunE: create,
+		RunE: createObj,
 	}
 	create.Flags().StringVarP(&flag_template, "template", "t", "", "required. The path of template that used to install nerv")
 	create.Flags().StringVarP(&flag_topology_name, "topolgoy", "o", "", "required. Topology name")
@@ -60,7 +52,7 @@ func init() {
 		Use:    "delete",
 		Short:    "Delete a topology",
 		Long:    "Delete a topology",
-		RunE: remove,
+		RunE: removeObj,
 	}
 	delete.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	delete.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -71,7 +63,7 @@ func init() {
 		Use:    "install",
 		Short:    "Install a topology to an environment",
 		Long:    "Install a topology to an environment",
-		RunE: install,
+		RunE: invokeObjFunc("install"),
 	}
 	install.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	install.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -82,7 +74,7 @@ func init() {
 		Use:    "uninstall",
 		Short:    "Uninstall a topology from an environment",
 		Long:    "Uninstall a topology from an environment",
-		RunE: uninstall,
+		RunE: invokeObjFunc("uninstall"),
 	}
 	uninstall.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	uninstall.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -93,7 +85,7 @@ func init() {
 		Use:    "start",
 		Short:    "Start a topology from an environment",
 		Long:    "Start a topology from an environment",
-		RunE: start,
+		RunE: invokeObjFunc("start"),
 	}
 	start.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	start.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -104,7 +96,7 @@ func init() {
 		Use:    "stop",
 		Short:    "Stop a topology from an environment",
 		Long:    "Stop a topology from an environment",
-		RunE: stop,
+		RunE: invokeObjFunc("stop"),
 	}
 	stop.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	stop.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -115,7 +107,7 @@ func init() {
 		Use:    "restart",
 		Short:    "Restart a topology from an environment",
 		Long:    "Restart a topology from an environment",
-		RunE: restart,
+		RunE: invokeObjFunc("restart"),
 	}
 	restart.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	restart.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -126,7 +118,7 @@ func init() {
 		Use:    "setup",
 		Short:    "Setup configuration",
 		Long:    "Setup configuration of all nodes in topology",
-		RunE: setup,
+		RunE: invokeObjFunc("setup"),
 	}
 	setup.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	setup.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -137,284 +129,7 @@ func topo(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-// list all topologies
-func list(cmd *cobra.Command, args []string) error {
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
 
-	topos := []topology.Topology{}
-	if err := gdb.Find(&topos).Error; err != nil {
-		return err
-	}
-
-	fmt.Println("ID\tName\tRunStatus\tCreateAt\tTemplate")
-	for _, topo := range topos {
-		fmt.Printf("%d\t%s\t%d\t%s\t%s\n", topo.ID, topo.Name, topo.RunStatus, topo.CreatedAt.Format("2006-01-02 15:04:05"), topo.Template)
-	}
-	return nil
-}
-
-// get a topologies
-func get(cmd *cobra.Command, args []string) error {
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	id := flag_id
-	data := topology.Topology{}
-	if err := gdb.Preload("Nodes").Preload("Nodes.Links").Preload("Nodes.Properties").First(&data, id).Error; err != nil {
-		return err
-	}
-	buf, err := json.MarshalIndent(data, "", "  ")
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(string(buf))
-	return nil
-}
-
-// create a topology
-func create(cmd *cobra.Command, args []string) error {
-	if flag_template == "" {
-		return errors.New("--template -t is null")
-	}
-
-	if flag_topology_name == "" {
-		return errors.New("--topology -o is null")
-	}
-
-	//init
-	env.InitByConfig(flag_config)
-	db := lib.InitDB()
-	defer db.Close()
-
-	deployer, err := lib.NewDeployer()
-	if err != nil {
-		return err
-	}
-	id, err := deployer.Create(flag_topology_name, flag_template)
-	if err != nil {
-		return err;
-	}
-
-	fmt.Printf("Create topology success. id=%d\n", id)
-	return nil
-}
-
-// delete a topology
-func remove(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
-		return errors.New("--id -i is null")
-	}
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	id := flag_id
-	data := topology.Topology{}
-	if err := gdb.First(&data, id).Error; err != nil {
-		return err
-	}
-
-	if err := gdb.Unscoped().Delete(data).Error; err != nil {
-		return err
-	}
-
-	fmt.Printf("Delete topology success. id=%d\n", id)
-
-	return nil
-}
-
-// Install a topology
-func install(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
-		return errors.New("--id -i is null")
-	}
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	id := flag_id
-	topo := &topology.Topology{}
-	if err := gdb.First(topo, id).Error; err != nil {
-		return err
-	}
-
-	deployer, err := lib.NewDeployer()
-	if err != nil {
-		return err
-	}
-
-	err = deployer.Install(topo.ID)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Install topology success. id=%d\n", id)
-
-	return nil
-}
-
-// Uninstall a topology
-func uninstall(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
-		return errors.New("--id -i is null")
-	}
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	id := flag_id
-	topo := &topology.Topology{}
-	if err := gdb.First(topo, id).Error; err != nil {
-		return err
-	}
-
-	deployer, err := lib.NewDeployer()
-	if err != nil {
-		return err
-	}
-
-	err = deployer.Uninstall(topo.ID)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Uninstall topology success. id=%d\n", id)
-
-	return nil
-}
-
-// Start a topology
-func start(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
-		return errors.New("--id -i is null")
-	}
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	id := flag_id
-	topo := &topology.Topology{}
-	if err := gdb.First(topo, id).Error; err != nil {
-		return err
-	}
-
-	deployer, err := lib.NewDeployer()
-	if err != nil {
-		return err
-	}
-
-	err = deployer.Start(topo.ID)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Start topology success. id=%d\n", id)
-
-	return nil
-}
-
-// Stop a topology
-func stop(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
-		return errors.New("--id -i is null")
-	}
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	id := flag_id
-	topo := &topology.Topology{}
-	if err := gdb.First(topo, id).Error; err != nil {
-		return err
-	}
-
-	deployer, err := lib.NewDeployer()
-	if err != nil {
-		return err
-	}
-
-	err = deployer.Stop(topo.ID)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Stop topology success. id=%d\n", id)
-
-	return nil
-}
-
-// Restart a topology
-func restart(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
-		return errors.New("--id -i is null")
-	}
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	id := flag_id
-	topo := &topology.Topology{}
-	if err := gdb.First(topo, id).Error; err != nil {
-		return err
-	}
-
-	deployer, err := lib.NewDeployer()
-	if err != nil {
-		return err
-	}
-
-	err = deployer.Restart(topo.ID)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Restart topology success. id=%d\n", id)
-
-	return nil
-}
-
-// Setup a topology
-func setup(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
-		return errors.New("--id -i is null")
-	}
-	//init
-	env.InitByConfig(flag_config)
-	gdb := lib.InitDB()
-	defer gdb.Close()
-
-	id := flag_id
-	topo := &topology.Topology{}
-	if err := gdb.First(topo, id).Error; err != nil {
-		return err
-	}
-
-	deployer, err := lib.NewDeployer()
-	if err != nil {
-		return err
-	}
-
-	err = deployer.Setup(topo.ID)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Setup topology success. id=%d\n", id)
-
-	return nil
-}
 
 
 

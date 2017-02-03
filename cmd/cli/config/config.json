@@ -4,6 +4,9 @@
     "password": "",
     "url": ""
   },
+  "apiServer": {
+    "url":"localhost:3333"
+  },
   "agent": {
     "port": "3334"
   }
