@@ -16,6 +16,7 @@ import (
 	_ "github.com/ChaosXu/nerv/lib/user/model"
 	"reflect"
 	"strconv"
+	"k8s.io/kubernetes/test/e2e_node/services"
 )
 
 type User struct {
@@ -284,8 +285,51 @@ func update(w http.ResponseWriter, req *http.Request) {
 func invokeService(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
-	render.Status(req, 200)
-	render.JSON(w, req, "{}")
+	class := middleware.CurrentParams(req).PathParam("class")
+	id := middleware.CurrentParams(req).PathParam("id")
+	methodName := middleware.CurrentParams(req).PathParam("method")
+
+	svc,err := Services.Get(class)
+	if err!=nil{
+		render.Status(req, 404)
+		render.JSON(w, req, fmt.Sprintf("invoke service failed. %s", err.Error()))
+		return
+	}
+
+	t := reflect.TypeOf(svc)
+	if m, b := t.MethodByName(methodName); b != true {
+		render.Status(req, 404)
+		render.JSON(w, req, fmt.Sprintf("%s/%s/%s isn't exists", class, id, methodName))
+		return
+
+	} else {
+		args := []interface{}{}
+		if err := render.Bind(req.Body, &args); err != nil {
+			render.Status(req, 400)
+			render.JSON(w, req, err.Error())
+			return
+		}
+
+		in := []reflect.Value{reflect.ValueOf(svc)}
+		for _, arg := range args {
+			in = append(in, reflect.ValueOf(arg))
+		}
+		values := m.Func.Call(in)
+		ret := []interface{}{}
+		httpCode := 200
+		for _, value := range values {
+			rawValue := value.Interface()
+			if e, ok := rawValue.(error); ok {
+				httpCode = 500
+				ret = append(ret, e.Error())
+			} else {
+				ret = append(ret, rawValue)
+			}
+
+		}
+		render.Status(req, httpCode)
+		render.JSON(w, req, ret)
+	}
 }
 
 func invokeObj(w http.ResponseWriter, req *http.Request) {
