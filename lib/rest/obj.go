@@ -29,13 +29,17 @@ func RouteObj(r *chi.Mux) {
 
 	r.Route("/api/objs/:class", func(r chi.Router) {
 		r.Get("/", list)
+		r.Get("/:id", get)
 		r.Post("/", create)
 		r.Put("/", update)
-		r.Route("/:id", func(r chi.Router) {
-			r.Get("/", get)
-			r.Delete("/", remove)
-			r.Post("/:method", invoke)
-		})
+		r.Delete("/:id", remove)
+		r.Post("/:method", invokeService)
+		r.Post("/:id/:method", invokeObj)
+		//r.Route("/:id", func(r chi.Router) {
+		//	r.Get("/", get)
+		//	r.Delete("/", remove)
+		//	r.Post("/:method", invoke)
+		//})
 	})
 }
 
@@ -277,7 +281,14 @@ func update(w http.ResponseWriter, req *http.Request) {
 	render.JSON(w, req, data)
 }
 
-func invoke(w http.ResponseWriter, req *http.Request) {
+func invokeService(w http.ResponseWriter, req *http.Request) {
+	defer handlePanic(w, req)
+
+	render.Status(req, 200)
+	render.JSON(w, req, "{}")
+}
+
+func invokeObj(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")

@@ -125,6 +125,32 @@ func removeObj(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
+func invokeSvcFunc(method string, argTypes []ArgType) func(cmd *cobra.Command, args []string) error {
+	return func(cmd *cobra.Command, args []string) error {
+		params := []interface{}{}
+		for _, argType := range argTypes {
+			switch argType.Type {
+			case "string":
+				if v, err := cmd.Flags().GetString(argType.Flag); err != nil {
+					return err
+				} else {
+					params = append(params, v)
+				}
+			case "uint":
+				if v, err := cmd.Flags().GetUint(argType.Flag); err != nil {
+					return err
+				} else {
+					params = append(params, v)
+				}
+			default:
+				fmt.Errorf("unsupported arg type %s", argType.Type)
+
+			}
+		}
+		return invokeSvc(cmd, method, params)
+	}
+}
+
 func invokeObjFunc(method string, argTypes []ArgType) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		params := []interface{}{}
@@ -171,6 +197,34 @@ func invokeObj(cmd *cobra.Command, method string, args []interface{}) error {
 			SetHeader("Content-Type", "application/json").
 			SetBody(body).
 			Post(fmt.Sprintf("%s/objs/%s/%d/%s", rootUrl, class, flag_id, method))
+	if err != nil {
+		return err
+	}
+	resBody := res.Body()
+	if res.StatusCode() != 200 {
+		return fmt.Errorf("%s is failed. %s", method, resBody)
+	}
+	fmt.Println(string(resBody))
+	return nil
+}
+
+func invokeSvc(cmd *cobra.Command, method string, args []interface{}) error {
+	env.InitByConfig(flag_config)
+
+	rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
+	class := cmd.Parent().Aliases[0]
+
+	b, err := json.Marshal(args)
+	if err != nil {
+		return err
+	}
+	body := string(b)
+	fmt.Println(body)
+
+	res, err := resty.R().
+			SetHeader("Content-Type", "application/json").
+			SetBody(body).
+			Post(fmt.Sprintf("%s/objs/%s/%s", rootUrl, class, method))
 	if err != nil {
 		return err
 	}
