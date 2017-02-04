@@ -28,8 +28,11 @@ func listObjs(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	body := res.Body()
-	fmt.Println(string(body))
+	resBody := string(res.Body())
+	if res.StatusCode() != 200 {
+		return fmt.Errorf("command is failed. %s", resBody)
+	}
+	fmt.Println(resBody)
 	return nil
 }
 
@@ -61,8 +64,11 @@ func getObj(cmd *cobra.Command, assoc []string) error {
 	if err != nil {
 		return err
 	}
-	body := res.Body()
-	fmt.Println(string(body))
+	resBody := string(res.Body())
+	if res.StatusCode() != 200 {
+		return fmt.Errorf("command is failed. %s", resBody)
+	}
+	fmt.Println(resBody)
 	return nil
 }
 
@@ -87,9 +93,11 @@ func createObj(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	resBody := res.Body()
-
-	fmt.Println(string(resBody))
+	resBody := string(res.Body())
+	if res.StatusCode() != 200 {
+		return fmt.Errorf("command is failed. %s", resBody)
+	}
+	fmt.Println(resBody)
 	return nil
 }
 
@@ -109,9 +117,11 @@ func removeObj(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	body := res.Body()
-	fmt.Println(string(body))
-	return nil
+	resBody := string(res.Body())
+	if res.StatusCode() != 200 {
+		return fmt.Errorf("command is failed. %s", resBody)
+	}
+	fmt.Println(resBody)
 	return nil
 }
 
@@ -165,6 +175,9 @@ func invokeObj(cmd *cobra.Command, method string, args []interface{}) error {
 		return err
 	}
 	resBody := res.Body()
+	if res.StatusCode() != 200 {
+		return fmt.Errorf("%s is failed. %s", method, resBody)
+	}
 	fmt.Println(string(resBody))
 	return nil
 }
