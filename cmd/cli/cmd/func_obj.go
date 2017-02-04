@@ -11,6 +11,11 @@ import (
 	"encoding/json"
 )
 
+type ArgType struct {
+	Flag string
+	Type string
+}
+
 func listObjs(cmd *cobra.Command, args []string) error {
 	env.InitByConfig(flag_config)
 	rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
@@ -110,14 +115,33 @@ func removeObj(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func invokeObjFunc(method string, args ...string) func(cmd *cobra.Command, args []string) error {
+func invokeObjFunc(method string, argTypes []ArgType) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		cmd.Flags().Get
-		return invokeObj(cmd, method, args)
+		params := []interface{}{}
+		for _, argType := range argTypes {
+			switch argType.Type {
+			case "string":
+				if v, err := cmd.Flags().GetString(argType.Flag); err != nil {
+					return err
+				} else {
+					params = append(params, v)
+				}
+			case "uint":
+				if v, err := cmd.Flags().GetUint(argType.Flag); err != nil {
+					return err
+				} else {
+					params = append(params, v)
+				}
+			default:
+				fmt.Errorf("unsupported arg type %s", argType.Type)
+
+			}
+		}
+		return invokeObj(cmd, method, params)
 	}
 }
 
-func invokeObj(cmd *cobra.Command, method string, args ...interface{}) error {
+func invokeObj(cmd *cobra.Command, method string, args []interface{}) error {
 	if flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
@@ -131,11 +155,15 @@ func invokeObj(cmd *cobra.Command, method string, args ...interface{}) error {
 		return err
 	}
 	body := string(b)
+	fmt.Println(body)
 
 	res, err := resty.R().
 			SetHeader("Content-Type", "application/json").
 			SetBody(body).
 			Post(fmt.Sprintf("%s/objs/%s/%d/%s", rootUrl, class, flag_id, method))
+	if err != nil {
+		return err
+	}
 	resBody := res.Body()
 	fmt.Println(string(resBody))
 	return nil
