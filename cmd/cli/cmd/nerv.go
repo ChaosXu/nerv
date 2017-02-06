@@ -49,8 +49,8 @@ func init() {
 		Long:    "Create a platform",
 		RunE: createNerv,
 	}
-	create.Flags().StringVarP(&flag_template, "template", "t", "", "required. The path of template that used to install nerv")
-	create.Flags().StringVarP(&flag_topology_name, "nervlgoy", "o", "", "required. Topology name")
+	create.Flags().StringVarP(&flag_template, "template", "t", "../../resource/nev_standalone", "required. The path of template that used to install nerv")
+	create.Flags().StringVarP(&flag_topology_name, "nervlgoy", "o", "nerv-standalone", "required. Topology name")
 	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	nerv.AddCommand(create)
 
@@ -177,14 +177,6 @@ func getNerv(cmd *cobra.Command, args []string) error {
 
 
 func createNerv(cmd *cobra.Command, args []string) error {
-	if flag_template == "" {
-		return errors.New("--template -t is null")
-	}
-
-	if flag_topology_name == "" {
-		return errors.New("--platform -o is null")
-	}
-
 	//init
 	env.InitByConfig(flag_config)
 	db := lib.InitDB()
