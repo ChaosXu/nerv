@@ -17,6 +17,7 @@ import (
 	_ "github.com/ChaosXu/nerv/lib/monitor/model"
 	_ "github.com/ChaosXu/nerv/lib/user/model"
 	"github.com/ChaosXu/nerv/lib/service"
+	"encoding/json"
 )
 
 type User struct {
@@ -302,7 +303,7 @@ func invokeService(w http.ResponseWriter, req *http.Request) {
 		return
 
 	} else {
-		args := []interface{}{}
+		args := []json.RawMessage{}
 		if err := render.Bind(req.Body, &args); err != nil {
 			render.Status(req, 400)
 			render.JSON(w, req, err.Error())
@@ -310,9 +311,20 @@ func invokeService(w http.ResponseWriter, req *http.Request) {
 		}
 
 		in := []reflect.Value{reflect.ValueOf(svc)}
-		for _, arg := range args {
-			in = append(in, reflect.ValueOf(arg))
+		funcType := m.Func.Type()
+
+		for i, arg := range args {
+			argType := funcType.In(i + 1)
+			argValue := reflect.New(argType)
+			if err := json.Unmarshal(arg, argValue.Interface()); err == nil {
+				in = append(in, argValue.Elem())
+			} else {
+				render.Status(req, 500)
+				render.JSON(w, req, err.Error())
+				return
+			}
 		}
+
 		values := m.Func.Call(in)
 		ret := []interface{}{}
 		httpCode := 200
