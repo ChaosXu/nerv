@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"fmt"
 	"strings"
+	"reflect"
+	"strconv"
 
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/render"
@@ -14,9 +16,7 @@ import (
 	_ "github.com/ChaosXu/nerv/lib/automation/model"
 	_ "github.com/ChaosXu/nerv/lib/monitor/model"
 	_ "github.com/ChaosXu/nerv/lib/user/model"
-	"reflect"
-	"strconv"
-	"k8s.io/kubernetes/test/e2e_node/services"
+	"github.com/ChaosXu/nerv/lib/service"
 )
 
 type User struct {
@@ -34,7 +34,7 @@ func RouteObj(r *chi.Mux) {
 		r.Post("/", create)
 		r.Put("/", update)
 		r.Delete("/:id", remove)
-		r.Post("/:method", invokeService)
+		r.Post("/:id", invokeService)
 		r.Post("/:id/:method", invokeObj)
 		//r.Route("/:id", func(r chi.Router) {
 		//	r.Get("/", get)
@@ -286,20 +286,19 @@ func invokeService(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
-	id := middleware.CurrentParams(req).PathParam("id")
-	methodName := middleware.CurrentParams(req).PathParam("method")
+	methodName := middleware.CurrentParams(req).PathParam("id")
 
-	svc := Services.Get(class)
-	if svc==nil{
+	svc, err := service.Registry.Get(class)
+	if err != nil {
 		render.Status(req, 404)
-		render.JSON(w, req, fmt.Sprintf("class %s isn't exists", class))
+		render.JSON(w, req, fmt.Sprintf("service %s isn't exists", class))
 		return
 	}
 
 	t := reflect.TypeOf(svc)
 	if m, b := t.MethodByName(methodName); b != true {
 		render.Status(req, 404)
-		render.JSON(w, req, fmt.Sprintf("%s/%s/%s isn't exists", class, id, methodName))
+		render.JSON(w, req, fmt.Sprintf("method %s.%s isn't exists.from %v", class, methodName, t))
 		return
 
 	} else {

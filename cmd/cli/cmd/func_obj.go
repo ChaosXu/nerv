@@ -200,7 +200,7 @@ func invokeObj(cmd *cobra.Command, method string, args []interface{}) error {
 	if err != nil {
 		return err
 	}
-	resBody := res.Body()
+	resBody := string(res.Body())
 	if res.StatusCode() != 200 {
 		return fmt.Errorf("%s is failed. %s", method, resBody)
 	}
@@ -220,15 +220,16 @@ func invokeSvc(cmd *cobra.Command, method string, args []interface{}) error {
 	}
 	body := string(b)
 	fmt.Println(body)
-
+	url := fmt.Sprintf("%s/objs/%s/%s", rootUrl, class, method)
+	fmt.Println(url)
 	res, err := resty.R().
 			SetHeader("Content-Type", "application/json").
 			SetBody(body).
-			Post(fmt.Sprintf("%s/objs/%s/%s", rootUrl, class, method))
+			Post(url)
 	if err != nil {
 		return err
 	}
-	resBody := res.Body()
+	resBody := string(res.Body())
 	if res.StatusCode() != 200 {
 		return fmt.Errorf("%s is failed. %s", method, resBody)
 	}

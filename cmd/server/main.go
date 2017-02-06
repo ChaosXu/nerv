@@ -12,6 +12,8 @@ import (
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/env"
 	"os"
+	"github.com/ChaosXu/nerv/lib/service"
+	_ "github.com/ChaosXu/nerv/cmd/server/service"
 )
 
 var (
@@ -32,13 +34,12 @@ func main() {
 		initDB()
 		defer db.DB.Close()
 
+		initServices()
 		r := initRouter()
 		port := env.Config().GetMapString("http", "port", "3333")
 		log.Fatal(http.ListenAndServe(":" + port, r))
 	}
 }
-
-
 
 func initRouter() *chi.Mux {
 	r := chi.NewRouter()
@@ -47,6 +48,14 @@ func initRouter() *chi.Mux {
 
 	rest.RouteObj(r)
 	return r
+}
+
+func initServices() {
+	for _, service := range service.Registry.Services {
+		if err := service.Init(); err != nil {
+			log.Fatal(err.Error())
+		}
+	}
 }
 
 
