@@ -24,11 +24,20 @@ func main() {
 	}
 
 	r := chi.NewRouter()
+	routing(r)
+
+	log.Fatalln(http.ListenAndServe(":" + port, r))
+}
+
+func routing(r *chi.Mux) {
 
 	for url, file := range env.Config().GetMap("files") {
 		log.Printf("file router: %s -> %s", url, file)
 		FileServer(r, url, chttp.Dir(file.(string)))
 	}
 
-	log.Fatalln(http.ListenAndServe(":" + port, r))
+	for url, file := range env.Config().GetMap("uploads") {
+		log.Printf("upload router: %s -> %s", url, file)
+		chttp.UploadServer(r, url, file.(string))
+	}
 }

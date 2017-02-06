@@ -5,5 +5,8 @@
   "files": {
     "/api/scripts": "../scripts",
     "/pkg": "../pkg"
+  },
+  "uploads":{
+    "upload/templates": "../resource/templates"
   }
 }

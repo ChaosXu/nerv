@@ -1,5 +1,5 @@
 // HTTP file system request handler
-package http
+package file
 
 import (
 	"errors"

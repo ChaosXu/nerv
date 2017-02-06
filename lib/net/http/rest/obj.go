@@ -7,7 +7,6 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/pressly/chi"
 	"github.com/pressly/chi/render"
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
@@ -24,27 +23,6 @@ type User struct {
 	Name string
 }
 
-func RouteObj(r *chi.Mux) {
-	r.Route("/api/objs/Login", func(r chi.Router) {
-		r.Post("/", login)
-	})
-
-	r.Route("/api/objs/:class", func(r chi.Router) {
-		r.Get("/", list)
-		r.Get("/:id", get)
-		r.Post("/", create)
-		r.Put("/", update)
-		r.Delete("/:id", remove)
-		r.Post("/:id", invokeService)
-		r.Post("/:id/:method", invokeObj)
-		//r.Route("/:id", func(r chi.Router) {
-		//	r.Get("/", get)
-		//	r.Delete("/", remove)
-		//	r.Post("/:method", invoke)
-		//})
-	})
-}
-
 func handlePanic(w http.ResponseWriter, req *http.Request) {
 	//if r := recover(); r != nil {
 	//	fmt.Println(r)
@@ -53,7 +31,7 @@ func handlePanic(w http.ResponseWriter, req *http.Request) {
 	//}
 }
 
-func login(w http.ResponseWriter, req *http.Request) {
+func Login(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	account := &user.Account{}
@@ -81,7 +59,7 @@ func login(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func list(w http.ResponseWriter, req *http.Request) {
+func List(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
@@ -165,7 +143,7 @@ func list(w http.ResponseWriter, req *http.Request) {
 }
 
 // get one obj. query params: assocations=a,b...
-func get(w http.ResponseWriter, req *http.Request) {
+func Get(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
@@ -198,7 +176,7 @@ func get(w http.ResponseWriter, req *http.Request) {
 	render.JSON(w, req, data)
 }
 
-func create(w http.ResponseWriter, req *http.Request) {
+func Create(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
@@ -226,7 +204,7 @@ func create(w http.ResponseWriter, req *http.Request) {
 	render.JSON(w, req, data)
 }
 
-func remove(w http.ResponseWriter, req *http.Request) {
+func Remove(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
@@ -255,7 +233,7 @@ func remove(w http.ResponseWriter, req *http.Request) {
 	render.Status(req, 200)
 }
 
-func update(w http.ResponseWriter, req *http.Request) {
+func Update(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
@@ -283,7 +261,7 @@ func update(w http.ResponseWriter, req *http.Request) {
 	render.JSON(w, req, data)
 }
 
-func invokeService(w http.ResponseWriter, req *http.Request) {
+func InvokeService(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
@@ -343,7 +321,7 @@ func invokeService(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func invokeObj(w http.ResponseWriter, req *http.Request) {
+func InvokeObj(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")

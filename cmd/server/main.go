@@ -46,8 +46,24 @@ func initRouter() *chi.Mux {
 	r.Use(chim.Logger)
 	r.Use(middleware.ParamsParser)
 
-	rest.RouteObj(r)
+	routing(r)
 	return r
+}
+
+func routing(r *chi.Mux) {
+	r.Route("/api/objs/Login", func(r chi.Router) {
+		r.Post("/", rest.Login)
+	})
+
+	r.Route("/api/objs/:class", func(r chi.Router) {
+		r.Get("/", rest.List)
+		r.Get("/:id", rest.Get)
+		r.Post("/", rest.Create)
+		r.Put("/", rest.Update)
+		r.Delete("/:id", rest.Remove)
+		r.Post("/:id", rest.InvokeService)
+		r.Post("/:id/:method", rest.InvokeObj)
+	})
 }
 
 func initServices() {
