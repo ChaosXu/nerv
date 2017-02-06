@@ -4,15 +4,15 @@ import (
 	"github.com/pressly/chi"
 	"net/http"
 	"strings"
-	chttp "github.com/ChaosXu/nerv/lib/net/http"
+	httpf "github.com/ChaosXu/nerv/lib/net/http/file"
 )
 
-func FileServer(mx *chi.Mux, path string, root chttp.FileSystem) {
+func FileServer(mx *chi.Mux, path string, root httpf.FileSystem) {
 	if strings.ContainsAny(path, ":*") {
 		panic("chi: FileServer does not permit URL parameters.")
 	}
 
-	fs := chttp.FileServer(root)
+	fs := httpf.FileServer(root)
 	prefix := path
 	path += "*"
 	mx.Get(path, exec(prefix, func(w http.ResponseWriter, r *http.Request) {

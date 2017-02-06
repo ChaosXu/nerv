@@ -6,7 +6,7 @@ import (
 	"os"
 	"github.com/pressly/chi"
 	"github.com/ChaosXu/nerv/lib/env"
-	chttp "github.com/ChaosXu/nerv/lib/net/http"
+	chttp "github.com/ChaosXu/nerv/lib/net/http/file"
 )
 
 var (

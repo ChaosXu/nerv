@@ -10,7 +10,7 @@ import (
 	"github.com/pressly/chi"
 	"github.com/pressly/chi/render"
 	"github.com/jinzhu/gorm"
-	"github.com/ChaosXu/nerv/lib/rest/middleware"
+	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
 	"github.com/ChaosXu/nerv/lib/db"
 	user "github.com/ChaosXu/nerv/lib/user/model"
 	_ "github.com/ChaosXu/nerv/lib/automation/model"
