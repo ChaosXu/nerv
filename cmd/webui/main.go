@@ -6,7 +6,7 @@ import (
 	"os"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/pressly/chi"
-	"github.com/ChaosXu/nerv/cmd/webui/proxy"
+	"github.com/ChaosXu/nerv/lib/net/http/proxy"
 )
 
 var (

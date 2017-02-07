@@ -1,9 +1,9 @@
 package proxy
 
 import (
-	"net/url"
-	"net/http"
-	"net/http/httputil"
+"net/url"
+"net/http"
+"net/http/httputil"
 )
 
 // Proxy config
@@ -22,4 +22,5 @@ func NewProxy(remoteUrl string) (*Proxy, error) {
 func (p *Proxy)Handle(w http.ResponseWriter, r *http.Request) {
 	p.rp.ServeHTTP(w, r)
 }
+
 
