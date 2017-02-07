@@ -12,11 +12,11 @@ import (
 func NewDeployer() (*manager.Deployer, error) {
 	var g inject.Graph
 	var deployer manager.Deployer
-	var templateRep repository.LocalTemplateRepository
+	var templateRep repository.FileTemplateRepository
 	var dbService db.DBService
 	var executor operation.ExecutorImpl
-	classRep := resrep.NewStandaloneClassRepository("../../resources/scripts")
-	scriptRep := resrep.NewStandaloneScriptRepository("../../resources/scripts")
+	classRep := resrep.NewFileClassRepository("../../resources/scripts")
+	scriptRep := resrep.NewFileScriptRepository("../../resources/scripts")
 	standaloneEnv := operation.StandaloneEnvironment{ScriptRepository:scriptRep}
 	sshEnv := operation.SshEnvironment{ScriptRepository:scriptRep}
 	err := g.Provide(

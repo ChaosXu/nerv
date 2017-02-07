@@ -5,15 +5,15 @@ import (
 	"github.com/ChaosXu/nerv/lib/resource/model"
 )
 
-type StandaloneRepository struct {
+type HttpScriptRepository struct {
 	Root string
 }
 
-func NewStandaloneScriptRepository(root string) *StandaloneRepository {
-	return &StandaloneRepository{root}
+func NewHttpScriptRepository(root string) *HttpScriptRepository {
+	return &HttpScriptRepository{root}
 }
 
-func (p *StandaloneRepository) Get(class string, path string) (*model.Script, error) {
+func (p *HttpScriptRepository) Get(class string, path string) (*model.Script, error) {
 	if content, err := file.ToString(p.Root + class + "/" + path); err != nil {
 		return nil, err
 	} else {

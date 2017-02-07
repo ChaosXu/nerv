@@ -38,11 +38,11 @@ func (p *TopologyServiceFactory) Get() (interface{}, error) {
 func (p *TopologyServiceFactory) newDeployer() (*manager.Deployer, error) {
 	var g inject.Graph
 	var deployer manager.Deployer
-	var templateRep repository.LocalTemplateRepository
+	var templateRep repository.HttpTemplateRepository
 	var dbService db.DBService
 	var executor operation.ExecutorImpl
-	classRep := resrep.NewStandaloneClassRepository("../../resources/scripts")
-	scriptRep := resrep.NewStandaloneScriptRepository("../../resources/scripts")
+	classRep := resrep.NewHttpClassRepository("../../resources/scripts")
+	scriptRep := resrep.NewHttpScriptRepository("../../resources/scripts")
 	standaloneEnv := operation.StandaloneEnvironment{ScriptRepository:scriptRep}
 	sshEnv := operation.SshEnvironment{ScriptRepository:scriptRep}
 	err := g.Provide(

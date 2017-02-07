@@ -49,8 +49,8 @@ func init() {
 		Long:    "Create a platform",
 		RunE: createNerv,
 	}
-	create.Flags().StringVarP(&flag_template, "template", "t", "../../resource/nev_standalone", "required. The path of template that used to install nerv")
-	create.Flags().StringVarP(&flag_topology_name, "nervlgoy", "o", "nerv-standalone", "required. Topology name")
+	create.Flags().StringVarP(&flag_template, "template", "t", "../../resources/templates/nerv/env_standalone.json", "required. The path of template that used to install nerv")
+	create.Flags().StringVarP(&flag_topology_name, "topologoy", "o", "nerv-standalone", "required. Topology name")
 	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	nerv.AddCommand(create)
 

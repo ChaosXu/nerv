@@ -7,15 +7,15 @@ import (
 	"encoding/json"
 )
 
-type StandaloneClassRepository struct {
+type HttpClassRepository struct {
 	root string
 }
 
-func NewStandaloneClassRepository(rootPath string) *StandaloneClassRepository {
-	return &StandaloneClassRepository{root:rootPath}
+func NewHttpClassRepository(rootPath string) *HttpClassRepository {
+	return &HttpClassRepository{root:rootPath}
 }
 
-func (p *StandaloneClassRepository) Get(path string) (*model.Class, error) {
+func (p *HttpClassRepository) Get(path string) (*model.Class, error) {
 	content, err := file.ToBytes(p.root + path + "/type.json")
 	if err != nil {
 		return nil, err
@@ -29,7 +29,7 @@ func (p *StandaloneClassRepository) Get(path string) (*model.Class, error) {
 	return class, nil
 }
 
-func (p *StandaloneClassRepository) InheritFrom(class *model.Class, base string) (*model.Class, error) {
+func (p *HttpClassRepository) InheritFrom(class *model.Class, base string) (*model.Class, error) {
 	if class.Base == "" {
 		return nil, fmt.Errorf("class.Base is empty.class=%s", class.Name)
 	}
@@ -46,7 +46,7 @@ func (p *StandaloneClassRepository) InheritFrom(class *model.Class, base string)
 	}
 }
 
-func (p *StandaloneClassRepository) GetOperation(class *model.Class, name string) (*model.Operation, error) {
+func (p *HttpClassRepository) GetOperation(class *model.Class, name string) (*model.Operation, error) {
 	op := class.GetOperation(name)
 	if op != nil {
 		op.DefineClass = class.Name
