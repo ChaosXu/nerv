@@ -16,7 +16,7 @@ type Page struct {
 	Columns []Column
 }
 
-func (p Page) Head() string {
+func (p *Page) Head() string {
 	heads := []string{}
 	for _, col := range p.Columns {
 		if col.Label == "" {
@@ -28,7 +28,7 @@ func (p Page) Head() string {
 	return strings.Join(heads, "\t")
 }
 
-func (p Page) Row() string {
+func (p *Page) Row() string {
 	cells := []string{}
 	for _, col := range p.Columns {
 		cells = append(cells, col.Format)
@@ -36,7 +36,7 @@ func (p Page) Row() string {
 	return strings.Join(cells, "\t")
 }
 
-func (p Page) Print(page map[string]interface{}) {
+func (p *Page) Print(page map[string]interface{}) {
 	data := page[p.List]
 	if data == nil {
 		fmt.Println("could not find filed %s in page", p.List)
