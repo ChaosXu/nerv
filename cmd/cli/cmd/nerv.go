@@ -11,14 +11,16 @@ import (
 	"encoding/json"
 )
 
+var NervCmd = &cobra.Command{
+	Use:    "nerv [command] [flags]",
+	Short:    "Manage the platform",
+	Long:    "Manage the platform",
+	RunE: nervCmd,
+}
+
 func init() {
-	var nerv = &cobra.Command{
-		Use:    "nerv [command] [flags]",
-		Short:    "Manage the platform",
-		Long:    "Manage the platform",
-		RunE: nerv,
-	}
-	RootCmd.AddCommand(nerv)
+
+	RootCmd.AddCommand(NervCmd)
 
 	//list
 	var list = &cobra.Command{
@@ -28,7 +30,7 @@ func init() {
 		RunE: listNerv,
 	}
 	list.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(list)
+	NervCmd.AddCommand(list)
 
 	//get
 	var get = &cobra.Command{
@@ -39,7 +41,7 @@ func init() {
 	}
 	get.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	get.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(get)
+	NervCmd.AddCommand(get)
 
 
 	//create
@@ -52,7 +54,7 @@ func init() {
 	create.Flags().StringVarP(&flag_template, "template", "t", "../../resources/templates/nerv/env_standalone.json", "required. The path of template that used to install nerv")
 	create.Flags().StringVarP(&flag_topology_name, "topologoy", "o", "nerv-standalone", "required. Topology name")
 	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(create)
+	NervCmd.AddCommand(create)
 
 
 	//delete
@@ -64,7 +66,7 @@ func init() {
 	}
 	delete.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	delete.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(delete)
+	NervCmd.AddCommand(delete)
 
 	//install
 	var install = &cobra.Command{
@@ -75,7 +77,7 @@ func init() {
 	}
 	install.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	install.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(install)
+	NervCmd.AddCommand(install)
 
 	//uninstall
 	var uninstall = &cobra.Command{
@@ -86,7 +88,7 @@ func init() {
 	}
 	uninstall.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	uninstall.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(uninstall)
+	NervCmd.AddCommand(uninstall)
 
 	//start
 	var start = &cobra.Command{
@@ -97,7 +99,7 @@ func init() {
 	}
 	start.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	start.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(start)
+	NervCmd.AddCommand(start)
 
 	//stop
 	var stop = &cobra.Command{
@@ -108,7 +110,7 @@ func init() {
 	}
 	stop.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	stop.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(stop)
+	NervCmd.AddCommand(stop)
 
 	//restart
 	var restart = &cobra.Command{
@@ -119,7 +121,7 @@ func init() {
 	}
 	restart.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	restart.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(restart)
+	NervCmd.AddCommand(restart)
 
 	//setup
 	var setup = &cobra.Command{
@@ -130,10 +132,10 @@ func init() {
 	}
 	setup.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	setup.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
-	nerv.AddCommand(setup)
+	NervCmd.AddCommand(setup)
 }
 
-func nerv(cmd *cobra.Command, args []string) error {
+func nervCmd(cmd *cobra.Command, args []string) error {
 	return nil
 }
 

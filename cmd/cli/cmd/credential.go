@@ -11,13 +11,14 @@ import (
 )
 
 func init() {
+
 	var credential = &cobra.Command{
 		Use:    "credential [command] [flags]",
 		Short:    "Manage credential",
 		Long:    "Manage credential",
 		RunE: credentialFn,
 	}
-	RootCmd.AddCommand(credential)
+	NervCmd.AddCommand(credential)
 
 	//list
 	var list = &cobra.Command{
