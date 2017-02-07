@@ -9,6 +9,7 @@ import (
 	"github.com/toolkits/file"
 	"strings"
 	"encoding/json"
+	"github.com/ChaosXu/nerv/lib/cli/format"
 )
 
 type ArgType struct {
@@ -32,7 +33,19 @@ func listObjs(cmd *cobra.Command, args []string) error {
 	if res.StatusCode() != 200 {
 		return fmt.Errorf("command is failed. %s", resBody)
 	}
-	fmt.Println(resBody)
+
+	data := map[string]interface{}{}
+	if err := json.Unmarshal(res.Body(), &data); err != nil {
+		return err
+	}
+	format.Page{List:"data", Columns:[]format.Column{
+		{Name:"ID", Format:"%v"},
+		{Name:"name", Label:"Name", Format:"%s"},
+		{Name:"RunStatus", Format:"%v"},
+		{Name:"Error", Format:"%s"},
+		{Name:"template", Label:"Template", Format:"%s"},
+	}}.Print(data)
+
 	return nil
 }
 
