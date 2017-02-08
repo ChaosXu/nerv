@@ -1,52 +1,42 @@
 {
-  "name": "/nerv/worker_cluster",
+  "name": "/demo/mysql_cluster_lb",
   "version": 1,
   "nodes": [
     {
-      "name": "lvs_ds",
-      "type": "nerv/lvs/DirectServer",
+      "name": "lvs_ds_config",
+      "type": "nerv/lvs/DirectServerConfig",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "http://10.211.55.2:3332/pkg"
-        },
-        {
-          "name": "pkg_url",
-          "value": "/ipvsadm.rpm"
-        },
-        {
-          "name": "root",
-          "value": "./"
-        },
-        {
-          "name": "config_root",
+          "name": "config_server_root",
           "value": "http://10.211.55.2:3332/config"
         },
         {
           "name": "config_url",
-          "value": "/agent/config.json"
-        }
-      ],
-      "dependencies": [
+          "value": "/biz-1/lvs/lvs.config"
+        },
         {
-          "type": "contained",
-          "target": "lvs_host"
+          "name":"lvs_cluster",
+          "value":"biz-1_lvs_cluster"
         }
       ]
     },
     {
-      "name": "lvs_host",
+      "name": "mysql_proxy",
+      "type": "/nerv/db/mysql/Proxy"
+    },
+    {
+      "name": "mysql_proxy_host",
       "type": "/nerv/cluster/Host",
       "parameters": [
         {
           "name": "address",
-          "value": "${lvs_ip_list}"
+          "value": "${mysql_proxy_ip_list}"
         }
       ]
     },
     {
       "name": "mysql",
-      "type": "/nerv/db/MySQL",
+      "type": "/nerv/db/mysql/Server",
       "parameters": [
         {
           "name": "pkg_root",

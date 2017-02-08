@@ -1,0 +1,88 @@
+{
+  "name": "/demo/web_cluster_lb",
+  "version": 1,
+  "nodes": [
+    {
+      "name": "nginx_config",
+      "type": "/nerv/nginx/NginxConfig",
+      "parameters": [
+        {
+          "name": "config_server_root",
+          "value": "http://10.211.55.2:3332/config"
+        },
+        {
+          "name": "config_url",
+          "value": "/biz-1/nginx/nginx.config"
+        },
+        {
+          "name":"server",
+          "value":"biz-1_nginx_cluster"
+        }
+      ]
+    },
+    {
+      "name": "web_server",
+      "type": "/nerv/cluster/Process",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "http://10.211.55.2:3332/pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/demo_web_app.tgz"
+        },
+        {
+          "name": "root",
+          "value": "./"
+        },
+        {
+          "name": "config_root",
+          "value": "http://10.211.55.2:3332/config"
+        },
+        {
+          "name": "config_url",
+          "value": "/demo_web_app/config.json"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "web_host",
+      "type": "/nerv/cluster/Host",
+      "parameters": [
+        {
+          "name": "address",
+          "value": "${web_ip_list}"
+        }
+      ]
+    },
+    {
+      "name":"dbschema",
+      "type":"/nerv/db/mysql/MySQLSchema",
+      "parameters":[
+        {
+          "name": "schema_root",
+          "value": "http://10.211.55.2:3332/db/schema"
+        },
+        {
+          "name": "schema_url",
+          "value": "/demo_web_app"
+        },
+        {
+          "name": "config_root",
+          "value": "http://10.211.55.2:3332/config"
+        },
+        {
+          "name": "config_url",
+          "value": "/demo_web_app/db/db.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "/demo/nginx_cluster_ha",
+  "version": 1,
+  "nodes": [
+    {
+      "name": "nginx",
+      "type": "nerv/nginx/Server",
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "nginx_host"
+        }
+      ]
+    },
+    {
+      "name": "nginx_host",
+      "type": "/nerv/cluster/Host",
+      "parameters": [
+        {
+          "name": "address",
+          "value": "${nginx_ip_list}"
+        }
+      ]
+    }
+  ]
+}
