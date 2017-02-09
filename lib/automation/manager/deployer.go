@@ -29,13 +29,14 @@ type Deployer struct {
 }
 
 // Create a topology in db
-func (p *Deployer) Create(topoName string, templatePath string) (uint, error) {
+func (p *Deployer) Create(topoName string, templatePath string, inputs map[string]interface{}) (uint, error) {
 	log.LogCodeLine()
 	template, err := p.TemplateRep.GetTemplate(templatePath)
 	if err != nil {
 		return 0, err
 	}
-	topo := template.NewTopology(topoName)
+	ctx := topology.NewContext(template.Inputs, inputs)
+	topo := template.NewTopology(topoName, ctx)
 
 	p.DBService.GetDB().Save(topo)
 	return topo.ID, nil

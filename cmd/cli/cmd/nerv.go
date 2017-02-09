@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/automation/model/topology"
 	"encoding/json"
+	"github.com/niean/gotools/file"
 )
 
 var NervCmd = &cobra.Command{
@@ -53,6 +54,7 @@ func init() {
 	}
 	create.Flags().StringVarP(&flag_template, "template", "t", "../../resources/templates/nerv/env_standalone.json", "required. The path of template that used to install nerv")
 	create.Flags().StringVarP(&flag_topology_name, "topologoy", "o", "nerv-standalone", "required. Topology name")
+	create.Flags().StringVarP(&flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
 	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(create)
 
@@ -177,8 +179,17 @@ func getNerv(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-
 func createNerv(cmd *cobra.Command, args []string) error {
+	var inputs map[string]interface{}
+	if flag_input_path != "" {
+		buf, err := file.ToBytes(flag_input_path)
+		if err != nil {
+			return err
+		}
+		if err := json.Unmarshal(buf, &inputs); err != nil {
+			return err
+		}
+	}
 	//init
 	env.InitByConfig(flag_config)
 	db := lib.InitDB()
@@ -188,7 +199,7 @@ func createNerv(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	id, err := deployer.Create(flag_topology_name, flag_template)
+	id, err := deployer.Create(flag_topology_name, flag_template, inputs)
 	if err != nil {
 		return err;
 	}
@@ -196,7 +207,6 @@ func createNerv(cmd *cobra.Command, args []string) error {
 	fmt.Printf("Create platform success. id=%d\n", id)
 	return nil
 }
-
 
 func removeNerv(cmd *cobra.Command, args []string) error {
 	if flag_id == 0 {
@@ -221,7 +231,6 @@ func removeNerv(cmd *cobra.Command, args []string) error {
 
 	return nil
 }
-
 
 func installNerv(cmd *cobra.Command, args []string) error {
 	if flag_id == 0 {
@@ -253,7 +262,6 @@ func installNerv(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-
 func uninstallNerv(cmd *cobra.Command, args []string) error {
 	if flag_id == 0 {
 		return errors.New("--id -i is null")
@@ -283,7 +291,6 @@ func uninstallNerv(cmd *cobra.Command, args []string) error {
 
 	return nil
 }
-
 
 func startNerv(cmd *cobra.Command, args []string) error {
 	if flag_id == 0 {
@@ -315,7 +322,6 @@ func startNerv(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-
 func stopNerv(cmd *cobra.Command, args []string) error {
 	if flag_id == 0 {
 		return errors.New("--id -i is null")
@@ -346,7 +352,6 @@ func stopNerv(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-
 func restartNerv(cmd *cobra.Command, args []string) error {
 	if flag_id == 0 {
 		return errors.New("--id -i is null")
@@ -376,7 +381,6 @@ func restartNerv(cmd *cobra.Command, args []string) error {
 
 	return nil
 }
-
 
 func setupNerv(cmd *cobra.Command, args []string) error {
 	if flag_id == 0 {

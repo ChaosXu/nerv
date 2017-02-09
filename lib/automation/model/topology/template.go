@@ -1,13 +1,22 @@
 package topology
 
+import "strings"
+
 
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
 	Path        string
-	Name        string           	`json:"name"`
-	Version     int32            	`json:"version"`
-	Environment string         		`json:"environment"` //standalone|distributed
-	Nodes       []NodeTemplate   	`json:"nodes"`
+	Name        string             `json:"name"`
+	Version     int32              `json:"version"`
+	Environment string             `json:"environment"` //standalone|distributed
+	Inputs      []Input            `json:"inputs"`
+	Nodes       []NodeTemplate     `json:"nodes"`
+}
+
+// Input define arguments that used by nodes
+type Input struct {
+	Name string
+	Type string
 }
 
 // NodeTemplate is a prototype of service node.
@@ -18,13 +27,26 @@ type NodeTemplate struct {
 	Dependencies []Dependency `json:"dependencies"` //The dependencies of node
 }
 
-func (p *NodeTemplate) getParameterValue(name string) string {
+func (p *NodeTemplate) getParameterValue(name string, ctx *Context) interface{} {
+	var pv string
 	for _, param := range p.Parameters {
 		if param.Name == name {
-			return param.Value
+			pv = param.Value
+			break
 		}
 	}
-	return ""
+	if pv == "" {
+		return ""
+	}
+	if p.isVar(pv) {
+		return ctx.GetValue(pv)
+	} else {
+		return pv
+	}
+}
+
+func (p *NodeTemplate) isVar(pv string) bool {
+	return strings.Index(pv, "${") >= 0 && strings.LastIndex(pv, "}") > 0
 }
 
 // Dependency is relationship  between two node
@@ -45,18 +67,18 @@ type Parameter struct {
 
 
 // CreateTopology create a topology by the service template.
-func (p *ServiceTemplate) NewTopology(name string) *Topology {
+func (p *ServiceTemplate) NewTopology(name string, ctx *Context) *Topology {
 
 	topology := &Topology{Name:name, Template:p.Path, Version:p.Version, Nodes:[]*Node{}}
 
 	for _, template := range p.Nodes {
-		p.createNode(&template, topology)
+		p.createNode(&template, topology, ctx)
 	}
 
 	return topology;
 }
 
-func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topology) []*Node {
+func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topology, ctx *Context) []*Node {
 	deps := nodeTemplate.Dependencies
 
 	targetNodes := []*Node{}
@@ -65,9 +87,9 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 		if len(targetNodes) == 0 {
 			//TBD: optimize
 			if nodeTemplate.Type == "/nerv/cluster/Host" {
-				targetNodes = newNodesByHostTemplate(nodeTemplate)
-			} else if nodeTemplate.Type == "/nerv/ECHost" {
-				targetNodes = newNodesByECHostTemplate(nodeTemplate)
+				targetNodes = newNodesByHostTemplate(nodeTemplate, ctx)
+			//} else if nodeTemplate.Type == "/nerv/ECHost" {
+			//	targetNodes = newNodesByECHostTemplate(nodeTemplate)
 			} else {
 				targetNodes = append(targetNodes, newNodeByTemplate(nodeTemplate))
 			}
@@ -82,7 +104,7 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 	for _, dep := range deps {
 		if dep.Type == "contained" {
 			targetTemplate := p.FindTemplate(dep.Target)
-			targetNodes = p.createNode(targetTemplate, topology)
+			targetNodes = p.createNode(targetTemplate, topology, ctx)
 			for _, targetNode := range targetNodes {
 				sourceNode := &Node{
 					Name:nodeTemplate.Name,

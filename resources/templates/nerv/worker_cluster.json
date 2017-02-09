@@ -2,6 +2,12 @@
   "name": "/nerv/worker_cluster",
   "version": 1,
   "environment": "ssh",
+  "inputs": [
+    {
+      "name": "host_ip_list",
+      "type": "string[]"
+    }
+  ],
   "nodes": [
     {
       "name": "agent",
@@ -41,11 +47,11 @@
       "parameters": [
         {
           "name": "address",
-          "value": "centos7.chaosxu.com"
+          "value": "${host_ip_list}"
         },
         {
-          "name":"credential",
-          "value":"ssh,centos7"
+          "name": "credential",
+          "value": "ssh,centos7"
         }
       ]
     }

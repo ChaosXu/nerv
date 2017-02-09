@@ -49,10 +49,11 @@ func init() {
 		Use:    "create",
 		Short:    "Create a topology",
 		Long:    "Create a topology",
-		RunE: invokeSvcFunc("Topology", "Create", []ArgType{{Flag:"topology", Type:"string"}, {Flag:"template", Type:"string"}}),
+		RunE: invokeSvcFunc("Topology", "Create", []ArgType{{Flag:"topology", Type:"string"}, {Flag:"template", Type:"string"},{Flag:"input", Type:"ref"}}),
 	}
 	create.Flags().StringVarP(&flag_topology_name, "topology", "o", "", "required. Topology name")
 	create.Flags().StringVarP(&flag_template, "template", "t", "", "required. The path of template that used to install nerv")
+	create.Flags().StringVarP(&flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
 	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(create)
 

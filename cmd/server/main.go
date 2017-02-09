@@ -57,12 +57,14 @@ func routing(r *chi.Mux) {
 
 	r.Route("/api/objs/:class", func(r chi.Router) {
 		r.Get("/", rest.List)
-		r.Get("/:id", rest.Get)
 		r.Post("/", rest.Create)
 		r.Put("/", rest.Update)
-		r.Delete("/:id", rest.Remove)
-		r.Post("/:id", rest.InvokeService)
-		r.Post("/:id/:method", rest.InvokeObj)
+		r.Route("/:id",func(r chi.Router){
+			r.Get("/", rest.Get)
+			r.Delete("/", rest.Remove)
+			r.Post("/", rest.InvokeService)
+			r.Post("/:method", rest.InvokeObj)
+		})
 	})
 }
 

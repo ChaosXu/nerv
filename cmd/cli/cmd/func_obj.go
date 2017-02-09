@@ -17,7 +17,7 @@ type ArgType struct {
 	Type string
 }
 
-func listObjsFunc(class string,format *format.Page) func(cmd *cobra.Command, args []string) error {
+func listObjsFunc(class string, format *format.Page) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		env.InitByConfig(flag_config)
 		rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
@@ -153,9 +153,23 @@ func invokeSvcFunc(class string, method string, argTypes []ArgType) func(cmd *co
 				} else {
 					params = append(params, v)
 				}
+			case "ref":
+				if v, err := cmd.Flags().GetString(argType.Flag); err != nil {
+					return err
+				} else {
+					buf, err := file.ToBytes(v)
+					if err != nil {
+						return err
+					}
+					data := map[string]interface{}{}
+					if err := json.Unmarshal(buf, &data); err != nil {
+						return err
+					} else {
+						params = append(params, data)
+					}
+				}
 			default:
 				fmt.Errorf("unsupported arg type %s", argType.Type)
-
 			}
 		}
 		return invokeSvc(class, cmd, method, params)
@@ -230,6 +244,7 @@ func invokeSvc(class string, cmd *cobra.Command, method string, args []interface
 	fmt.Println(body)
 	url := fmt.Sprintf("%s/objs/%s/%s", rootUrl, class, method)
 	fmt.Println(url)
+	fmt.Println(body)
 	res, err := resty.R().
 			SetHeader("Content-Type", "application/json").
 			SetBody(body).
