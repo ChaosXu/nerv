@@ -23,8 +23,12 @@ func NewContext(def []Input, inputs map[string]interface{}) *Context {
 
 func (p *Context) GetValue(name string) interface{} {
 	reg := regexp.MustCompile(`^\$\{(.+)\}$`)
-	key := reg.FindStringSubmatch(name)[1]
-	fmt.Printf("GetValue %s\n", key)
+	match := reg.FindStringSubmatch(name)
+	if len(match) < 1 {
+		return nil
+	}
+	key := match[1]
+	//fmt.Printf("GetValue %s\n", key)
 	if key == "" {
 		return nil
 	} else {

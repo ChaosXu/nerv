@@ -6,6 +6,10 @@
     {
       "name": "host_ip_list",
       "type": "string[]"
+    },
+    {
+      "name":"host_credential",
+      "type":"string"
     }
   ],
   "nodes": [
@@ -51,7 +55,7 @@
         },
         {
           "name": "credential",
-          "value": "ssh,centos7"
+          "value": "${host_credential}"
         }
       ]
     }

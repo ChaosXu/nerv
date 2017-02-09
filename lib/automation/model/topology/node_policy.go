@@ -2,7 +2,7 @@ package topology
 
 // newNodesByHostTemplate create host nodes for nerv worker cluster
 func newNodesByHostTemplate(nodeTemplate *NodeTemplate, ctx *Context) []*Node {
-	configs := newConfigs(nodeTemplate)
+	configs := newConfigs(nodeTemplate, ctx)
 	addrs := nodeTemplate.getParameterValue("address", ctx)
 	credential := nodeTemplate.getParameterValue("credential", ctx)
 
@@ -14,7 +14,7 @@ func newNodesByHostTemplate(nodeTemplate *NodeTemplate, ctx *Context) []*Node {
 	if !ok {
 		return nodes
 	}
-	cre,ok:=credential.(string)
+	cre, ok := credential.(string)
 	if !ok {
 		return nodes
 	}
@@ -57,20 +57,26 @@ func newNodesByHostTemplate(nodeTemplate *NodeTemplate, ctx *Context) []*Node {
 //	return nodes
 //}
 
-func newNodeByTemplate(nodeTemplate *NodeTemplate) *Node {
-	configs := newConfigs(nodeTemplate)
+func newNodeByTemplate(nodeTemplate *NodeTemplate, ctx *Context) *Node {
+	configs := newConfigs(nodeTemplate, ctx)
 	return &Node{Name:nodeTemplate.Name, Template:nodeTemplate.Name, Class:nodeTemplate.Type, Links:[]*Link{}, Properties:configs, Status:Status{RunStatus:RunStatusNone}}
 }
 
-func newConfigs(nodeTempalte *NodeTemplate) []*Property {
+func newConfigs(nodeTempalte *NodeTemplate, ctx *Context) []*Property {
 	var configs []*Property
 	if nodeTempalte.Parameters == nil {
 		return configs
 	}
 
 	for _, param := range nodeTempalte.Parameters {
-		config := &Property{Key:param.Name, Value:param.Value}
-		configs = append(configs, config)
+		v := nodeTempalte.getParameterValue(param.Name, ctx)
+		if v != nil {
+			value, ok := v.(string)
+			if ok {
+				config := &Property{Key:param.Name, Value:value}
+				configs = append(configs, config)
+			}
+		}
 	}
 
 	return configs;
