@@ -103,13 +103,19 @@ func (p *Deployer) Setup(topoId uint) error {
 	return p.postTraverse(topo, "contained", "Setup")
 }
 
-//
+// Reload configuration after setup when the topology has been started.
 func (p *Deployer) Reload(topoId uint) error {
 	topo := &topology.Topology{}
 	if err := db.DB.First(topo, topoId).Error; err != nil {
 		return err
 	}
 	return p.postTraverse(topo, "contained", "Reload")
+}
+
+// Update topology by inputs with new host list. Next call install that can scale out or scale in the topology
+func (p *Deployer) Update(topoId uint,inputs map[string]interface{}) error {
+	//TBD
+	return nil
 }
 
 func (p *Deployer) dump(topo *topology.Topology) error {
