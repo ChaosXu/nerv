@@ -164,7 +164,7 @@ func (p *Deployer) Migrate(topoId uint, inputs map[string]interface{}) (uint, er
 func (p *Deployer) create(topoName string, templatePath string, inputs map[string]interface{}, version int) (uint, error) {
 	template, err := p.TemplateRep.GetTemplate(templatePath)
 	if err != nil {
-		return 0, err
+		return 0, fmt.Errorf("could not found template %s. %s", templatePath, err)
 	}
 	ctx := topology.NewContext(template.Inputs, inputs)
 	topo := template.NewTopology(topoName, version, ctx)
