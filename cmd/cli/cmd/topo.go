@@ -23,7 +23,7 @@ func init() {
 		RunE: listObjsFunc("Topology",
 			&format.Page{List:"data", Columns:[]format.Column{
 				{Name:"ID", Format:"%v"},
-				{Name:"name", Label:"Name",    Format:"%s"},
+				{Name:"name", Label:"Name", Format:"%s"},
 				{Name:"version", Label:"Version", Format:"%v"},
 				{Name:"RunStatus", Format:"%v"},
 				{Name:"Error", Format:"%s"},
@@ -50,7 +50,7 @@ func init() {
 		Use:    "create",
 		Short:    "Create a topology",
 		Long:    "Create a topology",
-		RunE: invokeSvcFunc("Topology", "Create", []ArgType{{Flag:"topology", Type:"string"}, {Flag:"template", Type:"string"},{Flag:"input", Type:"ref"}}),
+		RunE: invokeSvcFunc("Topology", "Create", []ArgType{{Flag:"topology", Type:"string"}, {Flag:"template", Type:"string"}, {Flag:"input", Type:"ref"}}),
 	}
 	create.Flags().StringVarP(&flag_topology_name, "topology", "o", "", "required. Topology name")
 	create.Flags().StringVarP(&flag_template, "template", "t", "", "required. The path of template that used to install nerv")
@@ -63,7 +63,7 @@ func init() {
 		Use:    "migrate",
 		Short:    "Migrate a topology",
 		Long:    "Migreate a topology for scaling out of scaling in a service",
-		RunE: invokeSvcFunc("Topology", "Migrate", []ArgType{{Flag:"id", Type:"uint"},{Flag:"input", Type:"ref"}}),
+		RunE: invokeSvcFunc("Topology", "Migrate", []ArgType{{Flag:"id", Type:"uint"}, {Flag:"input", Type:"ref"}}),
 	}
 	migrate.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	migrate.Flags().StringVarP(&flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
@@ -104,12 +104,12 @@ func init() {
 	uninstall.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(uninstall)
 
-	//start
+	//reload
 	var start = &cobra.Command{
-		Use:    "start",
-		Short:    "Start a topology from an environment",
-		Long:    "Start a topology from an environment",
-		RunE: invokeSvcFunc("Topology", "Start", []ArgType{{Flag:"id", Type:"uint"}}),
+		Use:    "reload",
+		Short:    "Reload a topology that activate new config",
+		Long:    "Reload a topology that activate new config",
+		RunE: invokeSvcFunc("Topology", "Reload", []ArgType{{Flag:"id", Type:"uint"}}),
 	}
 	start.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	start.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
