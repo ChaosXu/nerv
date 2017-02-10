@@ -58,6 +58,18 @@ func init() {
 	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(create)
 
+	//migrate
+	var migrate = &cobra.Command{
+		Use:    "migrate",
+		Short:    "Migrate a topology",
+		Long:    "Migreate a topology for scaling out of scaling in a service",
+		RunE: invokeSvcFunc("Topology", "Migrate", []ArgType{{Flag:"id", Type:"uint"},{Flag:"input", Type:"ref"}}),
+	}
+	migrate.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
+	migrate.Flags().StringVarP(&flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
+	migrate.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	topo.AddCommand(migrate)
+
 
 	//delete
 	var delete = &cobra.Command{
