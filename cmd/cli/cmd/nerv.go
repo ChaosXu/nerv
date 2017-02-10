@@ -152,9 +152,9 @@ func listNerv(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	fmt.Println("ID\tName\tRunStatus\tCreateAt\tTemplate")
+	fmt.Println("ID\tName\tVersion\tRunStatus\tCreateAt\tTemplate")
 	for _, nerv := range nervs {
-		fmt.Printf("%d\t%s\t%d\t%s\t%s\n", nerv.ID, nerv.Name, nerv.RunStatus, nerv.CreatedAt.Format("2006-01-02 15:04:05"), nerv.Template)
+		fmt.Printf("%d\t%s\t%d\t%d\t%s\t%s\n", nerv.ID, nerv.Name, nerv.Version, nerv.RunStatus, nerv.CreatedAt.Format("2006-01-02 15:04:05"), nerv.Template)
 	}
 	return nil
 }

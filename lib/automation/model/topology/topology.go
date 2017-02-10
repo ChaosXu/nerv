@@ -29,7 +29,7 @@ type Topology struct {
 	Status
 	Name     string    `json:"name"`     //topology name
 	Template string    `json:"template"` //service template name
-	Version  int32    `json:"version"`   //service template version
+	Version  int    `json:"version"`   //service template version
 	Nodes    []*Node    `json:"nodes"`
 }
 

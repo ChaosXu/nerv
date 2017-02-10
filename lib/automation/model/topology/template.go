@@ -67,9 +67,9 @@ type Parameter struct {
 
 
 // CreateTopology create a topology by the service template.
-func (p *ServiceTemplate) NewTopology(name string, ctx *Context) *Topology {
+func (p *ServiceTemplate) NewTopology(name string, version int, ctx *Context) *Topology {
 
-	topology := &Topology{Name:name, Template:p.Path, Version:p.Version, Nodes:[]*Node{}}
+	topology := &Topology{Name:name, Template:p.Path, Version:version, Nodes:[]*Node{}}
 
 	for _, template := range p.Nodes {
 		p.createNode(&template, topology, ctx)

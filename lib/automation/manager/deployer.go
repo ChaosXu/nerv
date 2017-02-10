@@ -30,16 +30,7 @@ type Deployer struct {
 
 // Create a topology in db
 func (p *Deployer) Create(topoName string, templatePath string, inputs map[string]interface{}) (uint, error) {
-	log.LogCodeLine()
-	template, err := p.TemplateRep.GetTemplate(templatePath)
-	if err != nil {
-		return 0, err
-	}
-	ctx := topology.NewContext(template.Inputs, inputs)
-	topo := template.NewTopology(topoName, ctx)
-
-	p.DBService.GetDB().Save(topo)
-	return topo.ID, nil
+	return p.create(topoName, templatePath, inputs, 1)
 }
 
 func (p *Deployer) Install(topoId uint) error {
@@ -47,6 +38,12 @@ func (p *Deployer) Install(topoId uint) error {
 	if err := db.DB.First(topo, topoId).Error; err != nil {
 		return err
 	}
+
+	lock := lock.GetLock("Topology", topo.ID)
+	if !lock.TryLock() {
+		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
+	}
+	defer lock.Unlock()
 
 	return p.postTraverse(topo, "contained", "Create")
 }
@@ -58,12 +55,13 @@ func (p *Deployer) Uninstall(topoId uint) error {
 		return err
 	}
 
-	return p.preTraverse(topo, "contained", "Delete")
-}
+	lock := lock.GetLock("Topology", topo.ID)
+	if !lock.TryLock() {
+		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
+	}
+	defer lock.Unlock()
 
-// Configure the topology for start
-func (p *Deployer) Configure(topology *topology.Topology) error {
-	return fmt.Errorf("TBD")
+	return p.preTraverse(topo, "contained", "Delete")
 }
 
 // Start the topology
@@ -72,6 +70,13 @@ func (p *Deployer) Start(topoId uint) error {
 	if err := db.DB.First(topo, topoId).Error; err != nil {
 		return err
 	}
+
+	lock := lock.GetLock("Topology", topo.ID)
+	if !lock.TryLock() {
+		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
+	}
+	defer lock.Unlock()
+
 	return p.postTraverse(topo, "contained", "Start")
 }
 
@@ -81,6 +86,13 @@ func (p *Deployer) Stop(topoId uint) error {
 	if err := db.DB.First(topo, topoId).Error; err != nil {
 		return err
 	}
+
+	lock := lock.GetLock("Topology", topo.ID)
+	if !lock.TryLock() {
+		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
+	}
+	defer lock.Unlock()
+
 	return p.preTraverse(topo, "contained", "Stop")
 }
 
@@ -91,6 +103,12 @@ func (p *Deployer) Restart(topoId uint) error {
 		return err
 	}
 
+	lock := lock.GetLock("Topology", topoId)
+	if !lock.TryLock() {
+		return fmt.Errorf("topology is doing. ID=%d", topoId)
+	}
+	defer lock.Unlock()
+
 	return p.Start(topoId)
 }
 
@@ -100,6 +118,13 @@ func (p *Deployer) Setup(topoId uint) error {
 	if err := db.DB.First(topo, topoId).Error; err != nil {
 		return err
 	}
+
+	lock := lock.GetLock("Topology", topo.ID)
+	if !lock.TryLock() {
+		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
+	}
+	defer lock.Unlock()
+
 	return p.postTraverse(topo, "contained", "Setup")
 }
 
@@ -109,13 +134,43 @@ func (p *Deployer) Reload(topoId uint) error {
 	if err := db.DB.First(topo, topoId).Error; err != nil {
 		return err
 	}
+
+	lock := lock.GetLock("Topology", topo.ID)
+	if !lock.TryLock() {
+		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
+	}
+	defer lock.Unlock()
+
 	return p.postTraverse(topo, "contained", "Reload")
 }
 
-// Update topology by inputs with new host list. Next call install that can scale out or scale in the topology
-func (p *Deployer) Update(topoId uint,inputs map[string]interface{}) error {
-	//TBD
-	return nil
+// Migrate a topology with topoId to a new topology.
+// Update all inputs but continue to have the template of source topology.
+func (p *Deployer) Migrate(topoId uint, inputs map[string]interface{}) (uint, error) {
+	topo := &topology.Topology{}
+	if err := db.DB.First(topo, topoId).Error; err != nil {
+		return 0, err
+	}
+
+	lock := lock.GetLock("Topology", topo.ID)
+	if !lock.TryLock() {
+		return 0, fmt.Errorf("topology is doing. ID=%d", topo.ID)
+	}
+	defer lock.Unlock()
+
+	return p.create(topo.Name, topo.Template, inputs, topo.Version + 1)
+}
+
+func (p *Deployer) create(topoName string, templatePath string, inputs map[string]interface{}, version int) (uint, error) {
+	template, err := p.TemplateRep.GetTemplate(templatePath)
+	if err != nil {
+		return 0, err
+	}
+	ctx := topology.NewContext(template.Inputs, inputs)
+	topo := template.NewTopology(topoName, version, ctx)
+
+	p.DBService.GetDB().Save(topo)
+	return topo.ID, nil
 }
 
 func (p *Deployer) dump(topo *topology.Topology) error {
@@ -129,12 +184,6 @@ func (p *Deployer) dump(topo *topology.Topology) error {
 }
 
 func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operation string) error {
-	lock := lock.GetLock("Topology", topo.ID)
-	if !lock.TryLock() {
-		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
-	}
-	defer lock.Unlock()
-
 	tnodes := []*topology.Node{}
 	p.DBService.GetDB().Where("topology_id =?", topo.ID).Preload("Links").Find(&tnodes)
 	topo.Nodes = tnodes
@@ -173,12 +222,6 @@ func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operatio
 }
 
 func (p *Deployer) postTraverse(topo *topology.Topology, depType string, operation string) error {
-	lock := lock.GetLock("Topology", topo.ID)
-	if !lock.TryLock() {
-		return fmt.Errorf("topology is doing. ID=%d", topo.ID)
-	}
-	defer lock.Unlock()
-
 	tnodes := []*topology.Node{}
 	p.DBService.GetDB().Where("topology_id =?", topo.ID).Preload("Links").Find(&tnodes)
 	topo.Nodes = tnodes

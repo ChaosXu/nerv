@@ -23,7 +23,8 @@ func init() {
 		RunE: listObjsFunc("Topology",
 			&format.Page{List:"data", Columns:[]format.Column{
 				{Name:"ID", Format:"%v"},
-				{Name:"name", Label:"Name", Format:"%s"},
+				{Name:"name", Label:"Name",    Format:"%s"},
+				{Name:"version", Label:"Version", Format:"%v"},
 				{Name:"RunStatus", Format:"%v"},
 				{Name:"Error", Format:"%s"},
 				{Name:"template", Label:"Template", Format:"%s"},
