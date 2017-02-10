@@ -1,6 +1,7 @@
 {
   "host_ip_list": [
     "centos7.chaosxu.com"
+
   ],
   "host_credential": "ssh,centos7"
 }
