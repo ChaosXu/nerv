@@ -1,9 +1,9 @@
 package topology
 
 import (
-	"k8s.io/kubernetes/pkg/util/json"
 	"fmt"
 	"regexp"
+	"encoding/json"
 )
 
 type Context struct {
