@@ -172,6 +172,30 @@
       ]
     },
     {
+      "name": "kibana",
+      "type": "/nerv/standalone/Kibana",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "../../pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/kibana.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
       "name": "host",
       "type": "/nerv/standalone/Host",
       "parameters": [

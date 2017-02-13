@@ -1,0 +1,4 @@
+{
+  "name": "/nerv/standalone/Kibana",
+  "base": "/nerv/standalone/Process"
+}
