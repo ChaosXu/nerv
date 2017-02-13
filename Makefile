@@ -37,6 +37,7 @@ webui :
 config :
 	@echo "----config $(ENV)----"
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)
+	cp -R profile/$(ENV)/ $(RELEASE_ROOT)/resources/config/nerv
 	@echo "----config complete----"
 
 .PHONY : pkg-service

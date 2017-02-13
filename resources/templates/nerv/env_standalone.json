@@ -45,11 +45,11 @@
         },
         {
           "name": "config_root",
-          "value": "../../../../profile/debug"
+          "value": "../../resources/config/nerv"
         },
         {
           "name": "config_url",
-          "value": "/server/config"
+          "value": "/server"
         }
       ],
       "dependencies": [
@@ -77,11 +77,11 @@
         },
         {
           "name": "config_root",
-          "value": "../../../../profile/debug"
+          "value": "../../resources/config/nerv"
         },
         {
           "name": "config_url",
-          "value": "/file/config"
+          "value": "/file"
         }
       ],
       "dependencies": [
