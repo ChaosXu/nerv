@@ -1,0 +1,4 @@
+{
+  "name": "/elastic/filebeat/Agent",
+  "base": "/nerv/standalone/Process"
+}

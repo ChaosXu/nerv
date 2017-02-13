@@ -1,8 +1,0 @@
-{
-  "rpc": {
-    "port": "3334"
-  },
-  "deploy": {
-    "root": "appagent"
-  }
-}
