@@ -30,7 +30,7 @@ function start() {
         return 1
     fi
 
-    nohup $APP -e -c ../config/filebeat.yml -d "publish" &> $LOG_FILE &
+    nohup $APP -e -c ../config/filebeat.yml -path.logs ../log -d "publish" &> $LOG_FILE &
     sleep 1
     running=`ps -p $! | grep -v "PID TTY" | wc -l`
     if [ $running -gt 0 ];then
