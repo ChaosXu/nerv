@@ -116,6 +116,38 @@
       ]
     },
     {
+      "name": "log",
+      "type": "/nerv/standalone/Log",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "../../pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/log.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        },
+        {
+          "name": "config_root",
+          "value": "../../resources/config/nerv"
+        },
+        {
+          "name": "config_url",
+          "value": "/log"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
       "name": "host",
       "type": "/nerv/standalone/Host",
       "parameters": [

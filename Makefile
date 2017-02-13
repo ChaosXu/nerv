@@ -3,7 +3,7 @@ CMD_DIR=cmd
 RELEASE_ROOT=release/nerv
 PKG_AGENT=agent.tgz
 
-build : cli server file resources  agent config
+build : cli server file resources  agent log config
 	@echo "----build complete----"
 
 cli :
@@ -22,6 +22,10 @@ agent :
 	@echo "----build agent----"
 	cd $(CMD_DIR)/agent && make
 
+log :
+	@echo "----build log----"
+	cd $(CMD_DIR)/log && make
+
 .PHONY : store
 store :
 	@echo "----build store----"
@@ -36,6 +40,7 @@ webui :
 .PHONY : config
 config :
 	@echo "----config $(ENV)----"
+	mkdir $(RELEASE_ROOT)/resources/config
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)/resources/config/nerv
 	@echo "----config complete----"
@@ -50,9 +55,12 @@ pkg-service :
 	mv $(RELEASE_ROOT)/file.tgz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/server.tgz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/nerv-cli.tgz $(RELEASE_ROOT)/pkg
+	mv $(RELEASE_ROOT)/log.tgz $(RELEASE_ROOT)/pkg
+	cp -R pkg/ $(RELEASE_ROOT)/pkg
 	rm -rf $(RELEASE_ROOT)/file
 	rm -rf $(RELEASE_ROOT)/server
 	rm -rf $(RELEASE_ROOT)/agent
+	rm -rf $(RELEASE_ROOT)/log
 	@echo "----pkg-service complete----"
 
 .PHONY : pkg-webui

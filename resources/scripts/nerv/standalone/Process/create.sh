@@ -8,6 +8,9 @@ function create() {
     if [ $? -ne "0" ]; then
         echo {\"error\":\"tar -xf ${PKG_FILE}\"}
     fi
+    if [ -f $APP_ROOT/bin/create.sh ]; then
+        $APP_ROOT/bin/create.sh || return $?
+    fi
 }
 
 if [ "$pkg_root" == "" ]; then

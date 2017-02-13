@@ -1,4 +1,16 @@
 {
   "name": "/elastic/filebeat/Agent",
-  "base": "/nerv/standalone/Process"
+  "base": "/nerv/standalone/Process",
+  "operations": [
+    {
+      "name": "Start",
+      "type": "shell",
+      "implementor": "start.sh"
+    },
+    {
+      "name": "Stop",
+      "type": "shell",
+      "implementor": "stop.sh"
+    }
+  ]
 }

@@ -1,0 +1,10 @@
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - ../../server/log/*.log
+    - ../../file/log/*.log
+    - ../../webuil/log/*.log
+    - ../../agent/log/*.log
+    - ../../log/log/*.log
+output.elasticsearch:
+  hosts: ["localhost:9200"]
