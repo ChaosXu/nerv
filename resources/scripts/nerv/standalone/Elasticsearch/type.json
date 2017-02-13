@@ -1,0 +1,4 @@
+{
+  "name": "/nerv/standalone/Elasticsearch",
+  "base": "/nerv/standalone/Process"
+}

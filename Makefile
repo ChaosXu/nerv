@@ -3,7 +3,7 @@ CMD_DIR=cmd
 RELEASE_ROOT=release/nerv
 PKG_AGENT=agent.tgz
 
-build : cli server file resources  agent log config
+build : cli server file resources  agent log elasticsearch config
 	@echo "----build complete----"
 
 cli :
@@ -25,6 +25,10 @@ agent :
 log :
 	@echo "----build log----"
 	cd $(CMD_DIR)/log && make
+
+elasticsearch :
+	@echo "----build elasticsearch----"
+	cd $(CMD_DIR)/elasticsearch && make
 
 .PHONY : store
 store :
@@ -56,11 +60,13 @@ pkg-service :
 	mv $(RELEASE_ROOT)/server.tgz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/nerv-cli.tgz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/log.tgz $(RELEASE_ROOT)/pkg
+	mv $(RELEASE_ROOT)/elasticsearch.tgz $(RELEASE_ROOT)/pkg
 	cp -R pkg/ $(RELEASE_ROOT)/pkg
 	rm -rf $(RELEASE_ROOT)/file
 	rm -rf $(RELEASE_ROOT)/server
 	rm -rf $(RELEASE_ROOT)/agent
 	rm -rf $(RELEASE_ROOT)/log
+	rm -rf $(RELEASE_ROOT)/elasticsearch
 	@echo "----pkg-service complete----"
 
 .PHONY : pkg-webui

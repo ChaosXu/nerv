@@ -148,6 +148,30 @@
       ]
     },
     {
+      "name": "elasticsearch",
+      "type": "/nerv/standalone/Elasticsearch",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "../../pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/elasticsearch.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
       "name": "host",
       "type": "/nerv/standalone/Host",
       "parameters": [
