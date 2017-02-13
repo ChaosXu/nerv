@@ -14,7 +14,7 @@ function config() {
         exit 0
     fi
 
-    cp -r $config_root$config_url/ $APP_ROOT/config
+    cp -r $config_root$config_url/ $APP_ROOT
     if [ $? -ne "0" ]; then
         echo {\"error\":\"cp -r $config_root$config_url/ $APP_ROOT/config\"}
         return 1

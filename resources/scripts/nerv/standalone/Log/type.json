@@ -1,0 +1,4 @@
+{
+  "name": "/nerv/standalone/Log",
+  "base": "/nerv/standalone/Process"
+}
