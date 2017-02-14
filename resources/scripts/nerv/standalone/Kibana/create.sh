@@ -7,9 +7,14 @@ function create() {
     tar -xf $PKG_FILE -C $root
     if [ $? -ne "0" ]; then
         echo {\"error\":\"tar -xf ${PKG_FILE}\"}
+        return 1
     fi
-    if [ -f $APP_ROOT/bin/create.sh ]; then
-        source $APP_ROOT/bin/create.sh || return $?
+
+    local os=$(uname)
+    tar -xf $pkg_root/kibana-5.2.0-$os-x86_64.tar.gz -C $APP_ROOT
+    if [ $? -ne "0" ]; then
+        echo {\"error\":\"tar tar -xf $pkg_root/kibana-5.2.0-$os-x86_64.tar.gz -C $APP_ROOT\"}
+        return 1
     fi
 }
 

@@ -1,4 +1,11 @@
 {
   "name": "/nerv/standalone/Kibana",
-  "base": "/nerv/standalone/Process"
+  "base": "/nerv/standalone/Process",
+  "operations": [
+    {
+      "name": "Create",
+      "type": "shell",
+      "implementor": "create.sh"
+    }
+  ]
 }

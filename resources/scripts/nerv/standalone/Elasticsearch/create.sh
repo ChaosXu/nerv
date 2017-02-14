@@ -7,9 +7,14 @@ function create() {
     tar -xf $PKG_FILE -C $root
     if [ $? -ne "0" ]; then
         echo {\"error\":\"tar -xf ${PKG_FILE}\"}
+        return 1
     fi
-    if [ -f $APP_ROOT/bin/create.sh ]; then
-        source $APP_ROOT/bin/create.sh || return $?
+
+
+    unzip $pkg_root/elasticsearch-5.2.0.zip -d $APP_ROOT
+    if [ $? -ne "0" ]; then
+        echo {\"error\":\"tar tar -xf unzip $pkg_root/elasticsearch-5.2.0.zip -d $APP_ROOT\"}
+        return 1
     fi
 }
 
