@@ -4,6 +4,11 @@ function create() {
     if [ -f $APP_PID ]; then
         $APP stop  || return $?
     fi
+    curl -L -O $pkg_root/$pkg_url
+    if [ $? -ne "0" ]; then
+        echo {\"error\":\"curl -L -O $pkg_root/$pkg_url\"}
+    fi
+
     tar -xf $PKG_FILE -C $root
     if [ $? -ne "0" ]; then
         echo {\"error\":\"tar -xf ${PKG_FILE}\"}
@@ -11,9 +16,14 @@ function create() {
     fi
 
     local os=$(uname)
-    tar -xf $pkg_root/kibana-5.2.0-$os-x86_64.tar.gz -C $APP_ROOT
+    local lib=filebeat-5.2.0-$os-x86_64.tar.gz
+    curl -L -O $pkg_root/$lib
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"tar -xf $pkg_root/kibana-5.2.0-$os-x86_64.tar.gz -C $APP_ROOT\"}
+        echo {\"error\":\"curl -L -O $pkg_root/$lib\"}
+    fi
+    tar -xf $lib -C $APP_ROOT
+    if [ $? -ne "0" ]; then
+        echo {\"error\":\"tar -xf $APP_ROOT/$lib -C $APP_ROOT\"}
         return 1
     fi
 }
@@ -32,7 +42,7 @@ else
     APP_ROOT=$root${PKG%.*}
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
-    PKG_FILE=${pkg_root}${pkg_url}
+    PKG_FILE=$PKG
 
     create
 fi

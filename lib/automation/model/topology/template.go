@@ -27,6 +27,17 @@ type NodeTemplate struct {
 	Dependencies []Dependency `json:"dependencies"` //The dependencies of node
 }
 
+func (p *NodeTemplate) formatParameterValue(name string,ctx *Context) interface{} {
+	var pv string
+	for _, param := range p.Parameters {
+		if param.Name == name {
+			pv = param.Value
+			break
+		}
+	}
+	return ctx.FormatValue(pv)
+}
+
 func (p *NodeTemplate) getParameterValue(name string, ctx *Context) interface{} {
 	var pv string
 	for _, param := range p.Parameters {

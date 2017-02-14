@@ -69,7 +69,11 @@ func newConfigs(nodeTempalte *NodeTemplate, ctx *Context) []*Property {
 	}
 
 	for _, param := range nodeTempalte.Parameters {
-		v := nodeTempalte.getParameterValue(param.Name, ctx)
+		//TBD: don't hard code
+		if param.Name=="address" {
+			continue
+		}
+		v := nodeTempalte.formatParameterValue(param.Name, ctx)
 		if v != nil {
 			value, ok := v.(string)
 			if ok {

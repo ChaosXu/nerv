@@ -23,7 +23,7 @@
         },
         {
           "name": "pkg_url",
-          "value": "/agent.tgz"
+          "value": "/agent-linux-x86_64.tgz"
         },
         {
           "name": "root",

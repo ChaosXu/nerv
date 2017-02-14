@@ -11,7 +11,7 @@ func TestNervCmd(t *testing.T) {
 	cmd := &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/env_standalone.json", "-o", "nerv-test"},
+		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/env_standalone.json", "-o", "nerv-test","-n", "../../../../test/cli/nerv_standalone_inputs.json"},
 	}
 
 	var id string
@@ -83,32 +83,32 @@ func TestNervCmd(t *testing.T) {
 		t.Log(string(out))
 	}
 
-	//uninstall
-	cmd = &Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "stop", "-i", id},
-	}
-
-	if out, err := cmd.Run(t); err != nil {
-		t.Log(string(out))
-		t.Errorf("%s", err.Error())
-	} else {
-		t.Log(string(out))
-	}
-
-
-	//delete
-	cmd = &Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "delete", "-i", id},
-	}
-
-	if out, err := cmd.Run(t); err != nil {
-		t.Log(string(out))
-		t.Errorf("%s", err.Error())
-	} else {
-		t.Log(string(out))
-	}
+	////uninstall
+	//cmd = &Cmd{
+	//	Dir: "../../release/nerv/nerv-cli/bin",
+	//	Cli:"./nerv-cli",
+	//	Items:[]string{"nerv", "stop", "-i", id},
+	//}
+	//
+	//if out, err := cmd.Run(t); err != nil {
+	//	t.Log(string(out))
+	//	t.Errorf("%s", err.Error())
+	//} else {
+	//	t.Log(string(out))
+	//}
+	//
+	//
+	////delete
+	//cmd = &Cmd{
+	//	Dir: "../../release/nerv/nerv-cli/bin",
+	//	Cli:"./nerv-cli",
+	//	Items:[]string{"nerv", "delete", "-i", id},
+	//}
+	//
+	//if out, err := cmd.Run(t); err != nil {
+	//	t.Log(string(out))
+	//	t.Errorf("%s", err.Error())
+	//} else {
+	//	t.Log(string(out))
+	//}
 }

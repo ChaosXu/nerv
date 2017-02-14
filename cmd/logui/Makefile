@@ -1,6 +1,6 @@
 APP_SCRIPT=app
-MODULE=elasticsearch
-PKG=$(MODULE).tgz
+MODULE=logui
+PKG=$(MODULE)-$(PLATFORM).tgz
 RELEASE_ROOT=../../release/nerv
 RELEASE_DIR=$(RELEASE_ROOT)/$(MODULE)
 BIN_DIR=$(RELEASE_DIR)/bin

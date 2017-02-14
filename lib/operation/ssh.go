@@ -74,7 +74,7 @@ func (p *SshEnvironment) call(script *model.Script, args map[string]string, addr
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
 	shell := "export " + export + " && " + script.Content
-	fmt.Println(shell)
+	fmt.Println(export)
 
 	stdoutContent := ""
 	stderrContent := ""

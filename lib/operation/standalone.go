@@ -30,7 +30,7 @@ func (p *StandaloneEnvironment) call(script *model.Script, args map[string]strin
 	}
 
 	shell := "export " + export + " && " + script.Content
-	fmt.Println(shell)
+	fmt.Println(export)
 
 	out, err := exec.Command("/bin/bash", "-c", shell).Output()
 	if err != nil {

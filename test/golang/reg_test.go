@@ -8,8 +8,12 @@ import (
 
 func TestReg(t *testing.T) {
 
-	reg := regexp.MustCompile(`^\$\{(.+)\}$`)
-	fmt.Println(reg.FindStringSubmatch("${a_b+c}")[1])
+	reg := regexp.MustCompile(`\$\{(.+)\}`)
+	//fmt.Println(reg.FindStringSubmatch("aa${a_b+c}bb")[1])
+	fmt.Println(reg.ReplaceAllStringFunc("aa${a_b+c}bb",func(name string) string{
+		fmt.Println(name[2:len(name)-1])
+		return "-"
+	}))
 
 	regex := regexp.MustCompile(`.*\t([0-9]+).*`)
 	id := regex.FindStringSubmatch(`

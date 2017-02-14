@@ -2,7 +2,7 @@ LDFLAGS=-ldflags "-X main.Version=$(VERSION)"
 
 APP_SCRIPT=app
 MODULE=server
-PKG=$(MODULE).tgz
+PKG=$(MODULE)-$(PLATFORM).tgz
 RELEASE_ROOT=../../release/nerv
 RELEASE_DIR=$(RELEASE_ROOT)/$(MODULE)
 BIN_DIR=$(RELEASE_DIR)/bin

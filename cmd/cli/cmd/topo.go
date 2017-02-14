@@ -126,12 +126,12 @@ func init() {
 	stop.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(stop)
 
-	//restart
+	//start
 	var restart = &cobra.Command{
-		Use:    "restart",
-		Short:    "Restart a topology from an environment",
-		Long:    "Restart a topology from an environment",
-		RunE: invokeSvcFunc("Topology", "Restart", []ArgType{{Flag:"id", Type:"uint"}}),
+		Use:    "start",
+		Short:    "Start a topology from an environment",
+		Long:    "Start a topology from an environment",
+		RunE: invokeSvcFunc("Topology", "Start", []ArgType{{Flag:"id", Type:"uint"}}),
 	}
 	restart.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
 	restart.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")

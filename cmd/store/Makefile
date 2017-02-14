@@ -1,22 +1,17 @@
 APP_SCRIPT=app
-SETUP_SCRIPT=setup.sh
 MODULE=store
+PKG=$(MODULE)-$(PLATFORM).tgz
 RELEASE_ROOT=../../release/nerv
 RELEASE_DIR=$(RELEASE_ROOT)/$(MODULE)
 BIN_DIR=$(RELEASE_DIR)/bin
-ELASTICSEARCH=elasticsearch-5.0.0.tgz
 
-store : clean
+log : clean
 	mkdir $(RELEASE_DIR)
-	find . -name '*.sh' | xargs tar -czf $(MODULE).tgz
-	tar -xzf $(MODULE).tgz -C $(RELEASE_DIR)
-	rm -f $(MODULE).tgz
-	find $(RELEASE_DIR) -name '*.sh' | xargs chmod +x
-	cp bin/$(APP_SCRIPT) $(BIN_DIR)/$(APP_SCRIPT)
-	chmod +x $(BIN_DIR)/$(APP_SCRIPT)
-ifeq ($(ENV) , debug)
-	cp bin/$(ELASTICSEARCH)  $(BIN_DIR)/$(ELASTICSEARCH)
-endif
+	mkdir $(BIN_DIR)
+	cp -R bin/ $(BIN_DIR)
+	chmod +x $(BIN_DIR)/*
+	rm -rf $(RELEASE_DIR).tgz
+	cd $(RELEASE_ROOT) && tar -zcvf $(PKG) $(MODULE)
 
 .PHONY : clean
 clean :

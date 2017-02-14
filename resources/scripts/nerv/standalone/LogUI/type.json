@@ -1,5 +1,5 @@
 {
-  "name": "/nerv/standalone/Elasticsearch",
+  "name": "/nerv/standalone/LogUI",
   "base": "/nerv/standalone/Process",
   "operations": [
     {

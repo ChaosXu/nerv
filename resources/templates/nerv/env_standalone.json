@@ -2,18 +2,20 @@
   "name": "/nerv/env_standalone",
   "version": 1,
   "environment": "standalone",
+  "inputs":[
+    {
+      "name":"os",
+      "type":"string"
+    }
+  ],
   "nodes": [
     {
       "name": "agent",
       "type": "/nerv/standalone/Agent",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "../../pkg"
-        },
-        {
           "name": "pkg_url",
-          "value": "/agent.tgz"
+          "value": "../../pkg/agent-${os}.tgz"
         },
         {
           "name": "root",
@@ -32,12 +34,8 @@
       "type": "/nerv/standalone/Server",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "../../pkg"
-        },
-        {
           "name": "pkg_url",
-          "value": "/server.tgz"
+          "value": "../../pkg/server-${os}.tgz"
         },
         {
           "name": "root",
@@ -64,12 +62,8 @@
       "type": "/nerv/standalone/File",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "../../pkg"
-        },
-        {
           "name": "pkg_url",
-          "value": "/file.tgz"
+          "value": "../../pkg/file-${os}.tgz"
         },
         {
           "name": "root",
@@ -96,12 +90,8 @@
       "type": "/nerv/standalone/WebUI",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "../../pkg"
-        },
-        {
           "name": "pkg_url",
-          "value": "/webui.tgz"
+          "value": "../../pkg/webui-${os}.tgz"
         },
         {
           "name": "root",
@@ -120,12 +110,8 @@
       "type": "/nerv/standalone/Log",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "../../pkg"
-        },
-        {
           "name": "pkg_url",
-          "value": "/log.tgz"
+          "value": "../../pkg/log-${os}.tgz"
         },
         {
           "name": "root",
@@ -148,16 +134,12 @@
       ]
     },
     {
-      "name": "elasticsearch",
-      "type": "/nerv/standalone/Elasticsearch",
+      "name": "stroe",
+      "type": "/nerv/standalone/Store",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "../../pkg"
-        },
-        {
           "name": "pkg_url",
-          "value": "/elasticsearch.tgz"
+          "value": "../../pkg/store-${os}.tgz"
         },
         {
           "name": "root",
@@ -172,16 +154,12 @@
       ]
     },
     {
-      "name": "kibana",
-      "type": "/nerv/standalone/Kibana",
+      "name": "logui",
+      "type": "/nerv/standalone/LogUI",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "../../pkg"
-        },
-        {
           "name": "pkg_url",
-          "value": "/kibana.tgz"
+          "value": "../../pkg/logui-${os}.tgz"
         },
         {
           "name": "root",

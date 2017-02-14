@@ -21,6 +21,23 @@ func NewContext(def []Input, inputs map[string]interface{}) *Context {
 	return &Context{inputsDef:def, inputs:inputs}
 }
 
+func (p *Context) FormatValue(value string) interface{} {
+	reg := regexp.MustCompile(`\$\{(.+)\}`)
+	return reg.ReplaceAllStringFunc(value, func(name string) string {
+		v := p.inputs[name[2:len(name) - 1]]
+		if v == nil {
+			return ""
+		} else {
+			text, ok := v.(string)
+			if ok {
+				return text
+			} else {
+				return ""
+			}
+		}
+	})
+}
+
 func (p *Context) GetValue(name string) interface{} {
 	reg := regexp.MustCompile(`^\$\{(.+)\}$`)
 	match := reg.FindStringSubmatch(name)

@@ -223,7 +223,7 @@ func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operatio
 
 func (p *Deployer) postTraverse(topo *topology.Topology, depType string, operation string) error {
 	tnodes := []*topology.Node{}
-	p.DBService.GetDB().Where("topology_id =?", topo.ID).Preload("Links").Find(&tnodes)
+	p.DBService.GetDB().Where("topology_id =?", topo.ID).Preload("Links").Preload("Properties").Find(&tnodes)
 	topo.Nodes = tnodes
 
 	template, err := p.TemplateRep.GetTemplate(topo.Template)
@@ -389,8 +389,10 @@ func (p *Deployer) invoke(node *topology.Node, operation string, template *topol
 	node.RunStatus = topology.RunStatusGreen
 
 	args := map[string]string{}
-	for _, param := range nodeTemplate.Parameters {
-		args[param.Name] = param.Value
+	args["node_name"] = node.Name
+
+	for _, param := range node.Properties {
+		args[param.Key] = param.Value
 	}
 	//TBD:don't hard code
 	args["address"] = node.Address

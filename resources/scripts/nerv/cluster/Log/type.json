@@ -1,6 +1,6 @@
 {
-  "name": "/nerv/standalone/Kibana",
-  "base": "/nerv/standalone/Process",
+  "name": "/nerv/cluster/Log",
+  "base": "/nerv/cluster/Process",
   "operations": [
     {
       "name": "Create",

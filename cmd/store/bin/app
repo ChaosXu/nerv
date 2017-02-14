@@ -3,7 +3,7 @@
 WORKSPACE=$(cd $(dirname $0)/; pwd)
 cd $WORKSPACE
 
-APP=elasticsearch
+APP=../elasticsearch-5.2.0/bin/elasticsearch
 LOG_PATH=../log
 PID_FILE=$LOG_PATH/app.pid
 LOG_FILE=$LOG_PATH/app.log
@@ -30,7 +30,7 @@ function start() {
         return 1
     fi
 
-    nohup ../elasticsearch-5.0.0/bin/$APP &> $LOG_FILE &
+    nohup $APP &> $LOG_FILE &
     sleep 1
     running=`ps -p $! | grep -v "PID TTY" | wc -l`
     if [ $running -gt 0 ];then
@@ -45,7 +45,6 @@ function start() {
 function stop() {
     pid=`cat $PID_FILE`
     kill -SIGTERM $pid
-    sleep 3
     rm -f $PID_FILE
     echo "$APP: stopped"
 }
