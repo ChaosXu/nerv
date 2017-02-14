@@ -35,7 +35,39 @@
         },
         {
           "name": "config_url",
-          "value": "/agent/config.json"
+          "value": "/nerv/agent"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "log",
+      "type": "/nerv/cluster/Log",
+      "parameters": [
+        {
+          "name": "pkg_root",
+          "value": "http://10.211.55.2:3332/pkg"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/log.tgz"
+        },
+        {
+          "name": "root",
+          "value": "./"
+        },
+        {
+          "name": "config_root",
+          "value": "http://10.211.55.2:3332/config"
+        },
+        {
+          "name": "config_url",
+          "value": "/nerv/log"
         }
       ],
       "dependencies": [

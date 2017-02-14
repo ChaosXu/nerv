@@ -66,7 +66,7 @@ pkg-service :
 	mv $(RELEASE_ROOT)/log.tgz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/elasticsearch.tgz $(RELEASE_ROOT)/pkg
 	mv $(RELEASE_ROOT)/kibana.tgz $(RELEASE_ROOT)/pkg
-ifeq (pkg, $(wildcard $(pkg)))
+ifeq (pkg, $(wildcard pkg))
 	cp -R pkg/ $(RELEASE_ROOT)/pkg
 endif
 	rm -rf $(RELEASE_ROOT)/file

@@ -13,7 +13,7 @@ function create() {
 
     unzip $pkg_root/elasticsearch-5.2.0.zip -d $APP_ROOT
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"tar tar -xf unzip $pkg_root/elasticsearch-5.2.0.zip -d $APP_ROOT\"}
+        echo {\"error\":\"unzip $pkg_root/elasticsearch-5.2.0.zip -d $APP_ROOT\"}
         return 1
     fi
 }
