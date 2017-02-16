@@ -27,5 +27,7 @@ else
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
 
-    config
+    SETUP=$APP_ROOT/bin/setup.sh
+    config || return 1
+    $SETUP
 fi
