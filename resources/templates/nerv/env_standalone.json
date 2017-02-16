@@ -134,7 +134,7 @@
       ]
     },
     {
-      "name": "stroe",
+      "name": "store",
       "type": "/nerv/standalone/Store",
       "parameters": [
         {

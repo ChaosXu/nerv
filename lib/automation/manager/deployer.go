@@ -185,7 +185,7 @@ func (p *Deployer) dump(topo *topology.Topology) error {
 
 func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operation string) error {
 	tnodes := []*topology.Node{}
-	p.DBService.GetDB().Where("topology_id =?", topo.ID).Preload("Links").Find(&tnodes)
+	p.DBService.GetDB().Where("topology_id =?", topo.ID).Preload("Links").Preload("Properties").Find(&tnodes)
 	topo.Nodes = tnodes
 
 	template, err := p.TemplateRep.GetTemplate(topo.Template)
