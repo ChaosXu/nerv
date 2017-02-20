@@ -60,7 +60,7 @@ func init() {
 		Use:    "delete",
 		Short:    "Delete a credential",
 		Long:    "Delete a credential",
-		RunE: removeObjFunc("Topology"),
+		RunE: removeObjFunc("Credential"),
 	}
 	delete.Flags().UintVarP(&flag_id, "id", "i", 0, "Credential id")
 	delete.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")

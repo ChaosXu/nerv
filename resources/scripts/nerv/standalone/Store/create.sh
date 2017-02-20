@@ -10,7 +10,9 @@ function create() {
         return 1
     fi
 
-
+    if [ -d $APP_ROOT/elasticsearch-5.2.0 ]; then
+        return 0
+    fi
     unzip ../../pkg/elasticsearch-5.2.0.zip -d $APP_ROOT
     if [ $? -ne "0" ]; then
         echo {\"error\":\"unzip ../../pkg/elasticsearch-5.2.0.zip -d $APP_ROOT\"}

@@ -7,7 +7,7 @@ function delete() {
     rm -rf $APP_ROOT
 
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"rm -rf ${PKG_FILE}\"}
+        echo {\"error\":\"rm -rf ${APP}\"}
     fi
 }
 

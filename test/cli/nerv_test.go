@@ -69,20 +69,20 @@ func TestNervCmd(t *testing.T) {
 		t.Log(string(out))
 	}
 
-	//stop
-	cmd = &Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "stop", "-i", id},
-	}
-
-	if out, err := cmd.Run(t); err != nil {
-		t.Log(string(out))
-		t.Errorf("%s", err.Error())
-	} else {
-		t.Log(string(out))
-	}
-
+	////stop
+	//cmd = &Cmd{
+	//	Dir: "../../release/nerv/nerv-cli/bin",
+	//	Cli:"./nerv-cli",
+	//	Items:[]string{"nerv", "stop", "-i", id},
+	//}
+	//
+	//if out, err := cmd.Run(t); err != nil {
+	//	t.Log(string(out))
+	//	t.Errorf("%s", err.Error())
+	//} else {
+	//	t.Log(string(out))
+	//}
+	//
 	////uninstall
 	//cmd = &Cmd{
 	//	Dir: "../../release/nerv/nerv-cli/bin",

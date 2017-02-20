@@ -8,8 +8,12 @@
       "type": "string[]"
     },
     {
-      "name":"host_credential",
-      "type":"string"
+      "name": "host_credential",
+      "type": "string"
+    },
+    {
+      "name": "os",
+      "type": "string"
     }
   ],
   "nodes": [
@@ -18,56 +22,12 @@
       "type": "/nerv/cluster/Agent",
       "parameters": [
         {
-          "name": "pkg_root",
-          "value": "http://10.211.55.2:3332/pkg"
-        },
-        {
           "name": "pkg_url",
-          "value": "/agent-linux-x86_64.tgz"
+          "value": "http://10.211.55.2:3332/pkg/nerv/agent-${os}.tgz"
         },
         {
           "name": "root",
-          "value": "./"
-        },
-        {
-          "name": "config_root",
-          "value": "http://10.211.55.2:3332/config"
-        },
-        {
-          "name": "config_url",
-          "value": "/nerv/agent"
-        }
-      ],
-      "dependencies": [
-        {
-          "type": "contained",
-          "target": "host"
-        }
-      ]
-    },
-    {
-      "name": "log",
-      "type": "/nerv/cluster/Log",
-      "parameters": [
-        {
-          "name": "pkg_root",
-          "value": "http://10.211.55.2:3332/pkg"
-        },
-        {
-          "name": "pkg_url",
-          "value": "/log.tgz"
-        },
-        {
-          "name": "root",
-          "value": "./"
-        },
-        {
-          "name": "config_root",
-          "value": "http://10.211.55.2:3332/config"
-        },
-        {
-          "name": "config_url",
-          "value": "/nerv/log"
+          "value": "nerv/"
         }
       ],
       "dependencies": [
@@ -81,6 +41,30 @@
       "name": "host",
       "type": "/nerv/cluster/Host",
       "parameters": [
+        {
+          "name": "agent",
+          "type": "/nerv/standalone/Agent",
+          "parameters": [
+            {
+              "name": "pkg_url",
+              "value": "../../pkg/nerv/agent-${os}.tgz"
+            },
+            {
+              "name": "root",
+              "value": "nerv/"
+            }
+          ],
+          "dependencies": [
+            {
+              "type": "contained",
+              "target": "host"
+            }
+          ]
+        },
+        {
+          "name": "root",
+          "value": "nerv"
+        },
         {
           "name": "address",
           "value": "${host_ip_list}"
