@@ -2,7 +2,7 @@
 
 APP_PID=../log/app.pid
 APP=./app
-PKG_FILE=../elasticsearch-5.2.0.zip
+PKG_FILE=../elasticsearch-5.2.1.zip
 
 WORKSPACE=$(cd $(dirname $0)/; pwd)
 cd $WORKSPACE

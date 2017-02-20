@@ -3,7 +3,7 @@
 WORKSPACE=$(cd $(dirname $0)/; pwd)
 cd $WORKSPACE
 
-APP=../elasticsearch-5.2.0/bin/elasticsearch
+APP=../elasticsearch-5.2.1/bin/elasticsearch
 LOG_PATH=../log
 PID_FILE=$LOG_PATH/app.pid
 LOG_FILE=$LOG_PATH/app.log

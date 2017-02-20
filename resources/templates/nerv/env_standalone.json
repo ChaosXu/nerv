@@ -2,10 +2,15 @@
   "name": "/nerv/env_standalone",
   "version": 1,
   "environment": "standalone",
-  "inputs":[
+  "inputs": [
     {
-      "name":"os",
-      "type":"string"
+      "name": "os",
+      "type": "string"
+    },
+    {
+      "name": "elk_version",
+      "type": "string",
+      "value": "5.2.1"
     }
   ],
   "nodes": [
@@ -110,6 +115,10 @@
       "type": "/nerv/standalone/Log",
       "parameters": [
         {
+          "name":"elk_version",
+          "value":"${elk_version}"
+        },
+        {
           "name": "pkg_url",
           "value": "../../pkg/log-${os}.tgz"
         },
@@ -138,6 +147,10 @@
       "type": "/nerv/standalone/Store",
       "parameters": [
         {
+          "name":"elk_version",
+          "value":"${elk_version}"
+        },
+        {
           "name": "pkg_url",
           "value": "../../pkg/store-${os}.tgz"
         },
@@ -157,6 +170,10 @@
       "name": "logui",
       "type": "/nerv/standalone/LogUI",
       "parameters": [
+        {
+          "name":"elk_version",
+          "value":"${elk_version}"
+        },
         {
           "name": "pkg_url",
           "value": "../../pkg/logui-${os}.tgz"

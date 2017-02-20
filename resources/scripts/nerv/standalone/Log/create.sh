@@ -11,9 +11,9 @@ function create() {
     fi
 
     local os=$(uname)
-    tar -xf ../../pkg/filebeat-5.2.0-$os-x86_64.tar.gz -C $APP_ROOT
+    tar -xf ../../pkg/filebeat-$elk_version-$os-x86_64.tar.gz -C $APP_ROOT
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"tar tar -xf $pkg_root/filebeat-5.2.0-$os-x86_64.tar.gz -C $APP_ROOT\"}
+        echo {\"error\":\"tar tar -xf $pkg_root/filebeat-$elk_version-$os-x86_64.tar.gz -C $APP_ROOT\"}
         return 1
     fi
 }

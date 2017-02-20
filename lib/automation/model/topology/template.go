@@ -15,8 +15,9 @@ type ServiceTemplate struct {
 
 // Input define arguments that used by nodes
 type Input struct {
-	Name string
-	Type string
+	Name  string
+	Type  string
+	Value string
 }
 
 // NodeTemplate is a prototype of service node.
@@ -27,7 +28,7 @@ type NodeTemplate struct {
 	Dependencies []Dependency `json:"dependencies"` //The dependencies of node
 }
 
-func (p *NodeTemplate) formatParameterValue(name string,ctx *Context) interface{} {
+func (p *NodeTemplate) formatParameterValue(name string, ctx *Context) interface{} {
 	var pv string
 	for _, param := range p.Parameters {
 		if param.Name == name {

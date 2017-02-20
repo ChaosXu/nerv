@@ -10,12 +10,12 @@ function create() {
         return 1
     fi
 
-    if [ -d $APP_ROOT/elasticsearch-5.2.0 ]; then
+    if [ -d $APP_ROOT/elasticsearch-$elk_version ]; then
         return 0
     fi
-    unzip ../../pkg/elasticsearch-5.2.0.zip -d $APP_ROOT
+    unzip ../../pkg/elasticsearch-$elk_version.zip -d $APP_ROOT
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"unzip ../../pkg/elasticsearch-5.2.0.zip -d $APP_ROOT\"}
+        echo {\"error\":\"unzip ../../pkg/elasticsearch-$elk_version.zip -d $APP_ROOT\"}
         return 1
     fi
 }

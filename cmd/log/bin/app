@@ -2,8 +2,8 @@
 
 WORKSPACE=$(cd $(dirname $0)/; pwd)
 cd $WORKSPACE
-
-APP=../filebeat-5.2.0-darwin-x86_64/filebeat
+os=$(uname)
+APP=../filebeat-5.2.1-$os-x86_64/filebeat
 LOG_PATH=../log
 PID_FILE=$LOG_PATH/app.pid
 LOG_FILE=$LOG_PATH/app.log
