@@ -1,22 +1,25 @@
 #!/usr/bin/env bash
 
 function setup() {
-    if [ "$config_root" == ""  ]; then
-        echo {\"info\":\"config_root is empty\"}
-        exit 0
-    elif [ "$config_url" == ""  ]; then
+    if [ "$config_url" == ""  ]; then
         echo {\"info\":\"config_url is empty\"}
         exit 0
     fi
 
-    cp -r $config_root$config_url/ $APP_ROOT
+    if [ ! -d $APP_ROOT/config ]; then
+        mkdir $APP_ROOT/config
+    fi
+    cd $APP_ROOT/config
+    curl -L -O $file_repository$config_url
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"cp -r $config_root$config_url/ $APP_ROOT/config\"}
+        echo {\"error\":\"curl -L -O $file_repository$config_url $APP_ROOT\"}
         return 1
     fi
 }
-
-if [ "$pkg_url" == "" ]; then
+if [ "$file_repository" == "" ]; then
+    echo {\"error\":\"file_repository is empty\"}
+    exit 1
+elif [ "$pkg_url" == "" ]; then
     echo {\"error\":\"pkg_url is empty\"}
     exit 1
 elif [ "$root" == ""  ]; then

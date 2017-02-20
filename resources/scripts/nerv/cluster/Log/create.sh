@@ -16,15 +16,15 @@ function create() {
     fi
     chmod +x $APP
 
-    local os=$(uname)
-    local lib=filebeat-5.2.0-$os-x86_64.tar.gz
-    curl -L -O $pkg_repository/$lib
+    #local os=$(uname)
+    local lib=filebeat-$elk_version-$os.tar.gz
+    curl -L -O $file_repository/pkg/$lib
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"curl -L -O $pkg_root/$lib\"}
+        echo {\"error\":\"curl -L -O $file_repository/pkg/$lib\"}
     fi
     tar -xf $lib -C $APP_ROOT
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"tar -xf $APP_ROOT/$lib -C $APP_ROOT\"}
+        echo {\"error\":\"tar -xf $lib -C $APP_ROOT\"}
         return 1
     fi
 }

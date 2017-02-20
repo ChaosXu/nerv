@@ -115,6 +115,10 @@
       "type": "/nerv/standalone/Log",
       "parameters": [
         {
+          "name":"os",
+          "value":"${os}"
+        },
+        {
           "name":"elk_version",
           "value":"${elk_version}"
         },
@@ -146,6 +150,10 @@
       "name": "store",
       "type": "/nerv/standalone/Store",
       "parameters": [
+        {
+          "name":"os",
+          "value":"${os}"
+        },
         {
           "name":"elk_version",
           "value":"${elk_version}"

@@ -16,7 +16,7 @@
       "type": "string"
     },
     {
-      "name": "elk-version",
+      "name": "elk_version",
       "type": "string",
       "value": "5.2.1"
     }
@@ -37,6 +37,42 @@
         {
           "name": "root",
           "value": "nerv/"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "log",
+      "type": "/nerv/cluster/Log",
+      "parameters": [
+        {
+          "name":"os",
+          "value":"${os}"
+        },
+        {
+          "name":"elk_version",
+          "value":"${elk_version}"
+        },
+        {
+          "name":"file_repository",
+          "value":"http://10.211.55.2:3332"
+        },
+        {
+          "name": "pkg_url",
+          "value": "/pkg/log-${os}.tgz"
+        },
+        {
+          "name": "root",
+          "value": "nerv/"
+        },
+        {
+          "name": "config_url",
+          "value": "/config/nerv/cluster/log/config/filebeat.yml"
         }
       ],
       "dependencies": [
