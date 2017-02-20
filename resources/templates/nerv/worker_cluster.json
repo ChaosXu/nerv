@@ -27,8 +27,12 @@
       "type": "/nerv/cluster/Agent",
       "parameters": [
         {
+          "name":"file_repository",
+          "value":"http://10.211.55.2:3332"
+        },
+        {
           "name": "pkg_url",
-          "value": "http://10.211.55.2:3332/pkg/nerv/agent-${os}.tgz"
+          "value": "/pkg/nerv/agent-${os}.tgz"
         },
         {
           "name": "root",

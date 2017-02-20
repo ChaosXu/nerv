@@ -9,15 +9,18 @@ function create() {
     if [ $? -ne "0" ]; then
         echo {\"error\":\"curl -L -O $PKG_FILE\"}
     fi
-    tar -xf $root$PKG_LOCAL_FILE -C $root
+    tar -xf $PKG_LOCAL_FILE -C $root
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"tar -xf $root$PKG_LOCAL_FILE -C $root\"}
+        echo {\"error\":\"tar -xf $PKG_LOCAL_FILE -C $root\"}
     fi
 
     chmod +x $APP
 }
 
-if [ "$pkg_url" == "" ]; then
+if [ "$file_repository" == "" ]; then
+    echo {\"error\":\"file_repository is empty\"}
+    exit 1
+elif [ "$pkg_url" == "" ]; then
     echo {\"error\":\"pkg_url is empty\"}
     exit 1
 elif [ "$root" == ""  ]; then
@@ -27,7 +30,7 @@ else
     APP_ROOT=$root$node_name
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
-    PKG_FILE=$pkg_url
+    PKG_FILE=$file_repository$pkg_url
     PKG_LOCAL_FILE=${PKG_FILE##*/}
 
     create

@@ -88,6 +88,7 @@ resources :
 config :
 	@echo "----config $(ENV)----"
 	mkdir -p $(RELEASE_ROOT)/resources/config
+	cp -R resources/config/ $(RELEASE_ROOT)/resources/config
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)
 	cp -R profile/$(ENV)/ $(RELEASE_ROOT)/resources/config/nerv
 	@echo "----config complete----"

@@ -87,7 +87,7 @@ func TestNervCmd(t *testing.T) {
 	cmd = &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "stop", "-i", id},
+		Items:[]string{"nerv", "uninstall", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

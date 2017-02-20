@@ -4,20 +4,21 @@ function create() {
     if [ -f $APP_PID ]; then
         $APP stop  || return $?
     fi
-    curl -L -O $pkg_root/$pkg_url
+    echo "curl -L -O $PKG_FILE"
+    curl -L -O $PKG_FILE
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"curl -L -O $pkg_root/$pkg_url\"}
+        echo {\"error\":\"curl -L -O $PKG_FILE\"}
     fi
 
-    tar -xf $PKG_FILE -C $root
+    tar -xf $PKG_LOCAL_FILE -C $root
     if [ $? -ne "0" ]; then
-        echo {\"error\":\"tar -xf ${PKG_FILE}\"}
-        return 1
+        echo {\"error\":\"tar -xf $PKG_LOCAL_FILE -C $root\"}
     fi
+    chmod +x $APP
 
     local os=$(uname)
     local lib=filebeat-5.2.0-$os-x86_64.tar.gz
-    curl -L -O $pkg_root/$lib
+    curl -L -O $pkg_repository/$lib
     if [ $? -ne "0" ]; then
         echo {\"error\":\"curl -L -O $pkg_root/$lib\"}
     fi
@@ -28,8 +29,8 @@ function create() {
     fi
 }
 
-if [ "$pkg_root" == "" ]; then
-    echo {\"error\":\"pkg_root is empty\"}
+if [ "$file_repository" == "" ]; then
+    echo {\"error\":\"file_repository is empty\"}
     exit 1
 elif [ "$pkg_url" == "" ]; then
     echo {\"error\":\"pkg_url is empty\"}
@@ -38,11 +39,11 @@ elif [ "$root" == ""  ]; then
     echo {\"error\":\"root is empty\"}
     exit 1
 else
-    PKG=${pkg_url##*/}
-    APP_ROOT=$root${PKG%.*}
+    APP_ROOT=$root$node_name
     APP_PID=APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
-    PKG_FILE=$PKG
+    PKG_FILE=$file_repository$pkg_url
+    PKG_LOCAL_FILE=${PKG_FILE##*/}
 
     create
 fi
