@@ -9,6 +9,8 @@
     "/config": "../../resources/config"
   },
   "uploads": {
-    "/upload/templates": "../../resources/templates"
+    "/upload/templates": "../../resources/templates",
+    "/upload/scripts": "../../resources/scripts",
+    "/upload/pkg": "../../pkg"
   }
 }
