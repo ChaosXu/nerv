@@ -60,7 +60,7 @@ func (p *Agent) Execute(script *RemoteScript, reply *string) error {
 	}
 	res := string(out)
 	fmt.Println(res)
-	reply = &res
+	*reply = res
 	return nil
 }
 

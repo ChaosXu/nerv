@@ -4,7 +4,6 @@ import (
 	"testing"
 	"regexp"
 	"net/rpc"
-	"fmt"
 )
 
 type RemoteScript struct {
@@ -135,7 +134,6 @@ func testAgent(t *testing.T) {
 	if err != nil {
 		t.Log("Agent.Execute failed.", err)
 	}else{
-		fmt.Println(reply)
 		t.Log(reply)
 	}
 }
