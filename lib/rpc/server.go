@@ -5,9 +5,9 @@ import (
 	"net"
 	"net/rpc"
 	"log"
-	"net/rpc/jsonrpc"
 	"fmt"
 	"reflect"
+	"net/http"
 )
 
 var (
@@ -26,29 +26,19 @@ func Start(cfg *env.Properties) error {
 		return fmt.Errorf("rpc_port isn't setted")
 	}
 
-	listener, err := net.Listen("tcp", ":" + port)
-	if err != nil {
-		return err
-	} else {
-		log.Printf("Listen %s\n", port)
-	}
-	defer listener.Close()
-
-	srv := rpc.NewServer()
 	for _, rcvr := range receivers {
-		if err := srv.Register(rcvr); err != nil {
+		if err:=rpc.Register(rcvr);err!=nil{
 			return err
-		} else {
+		}else{
 			log.Printf("Register %s\n", reflect.TypeOf(rcvr).String())
 		}
 	}
-
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			log.Printf("Accept error. %s\n", err.Error())
-			continue
-		}
-		go srv.ServeCodec(jsonrpc.NewServerCodec(conn))
+	rpc.HandleHTTP()
+	l, e := net.Listen("tcp", ":"+port)
+	if e != nil {
+		return nil
 	}
+
+	go http.Serve(l, nil)
+	select{}
 }

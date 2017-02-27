@@ -1,4 +1,4 @@
-package deploy
+package service
 
 import (
 	"os"
@@ -42,22 +42,25 @@ func (p *Agent) Start() error {
 }
 
 //Execute a script in the host of the agent
-func (p *Agent) Execute(script *RemoteScript, response *string) error {
+func (p *Agent) Execute(script *RemoteScript, reply *string) error {
+	//Optimize: async
 	export := ""
 	for k, v := range script.Args {
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
-	export = export + " APP_ROOT=" + p.AppRoot
 
 	shell := "export " + export + " && " + script.Content
-	log.Println(shell)
+	fmt.Println(export)
 
 	out, err := exec.Command("/bin/bash", "-c", shell).Output()
 	if err != nil {
+		res := string(out)
+		fmt.Println("err:" + res)
 		return err
 	}
-	log.Println(string(out))
-
+	res := string(out)
+	fmt.Println(res)
+	reply = &res
 	return nil
 }
 

@@ -1,11 +1,9 @@
 package main
 
 import (
-	"log"
-	"github.com/ChaosXu/nerv/lib/env"
-_	"github.com/ChaosXu/nerv/cmd/agent/deploy"
-	//"github.com/ChaosXu/nerv/cmd/agent/monitor"
-	"github.com/ChaosXu/nerv/cmd/agent/deploy"
+	"fmt"
+	"os"
+	"github.com/ChaosXu/nerv/cmd/agent/cmd"
 )
 
 var (
@@ -13,18 +11,8 @@ var (
 )
 
 func main() {
-	log.Println("Version:" + Version)
-	env.Init()
-
-	//monitor := monitor.NewMonitor(env.Config())
-	//monitor.Start()
-
-	agent, err := deploy.NewAgent(env.Config())
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
-	if err := agent.Start(); err != nil {
-		log.Fatalln(err.Error())
+	if err := cmd.RootCmd.Execute(); err != nil {
+		fmt.Println(err)
+		os.Exit(-1)
 	}
 }
-
