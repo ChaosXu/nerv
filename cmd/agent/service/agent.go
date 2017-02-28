@@ -44,7 +44,7 @@ func (p *Agent) Execute(script *rpc.RemoteScript, reply *string) error {
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
 
-	shell := "export " + export + " && " + script.Content
+	shell := "export " + export + " && cd ~ && " + script.Content
 	fmt.Println(export)
 
 	out, err := exec.Command("/bin/bash", "-c", shell).Output()
