@@ -31,18 +31,13 @@ func NewAgent(cfg *env.Properties) (*Agent, error) {
 	return &Agent{AppRoot:appRoot, cfg:cfg}, nil
 }
 
-type RemoteScript struct {
-	Content string
-	Args    map[string]string
-}
-
 func (p *Agent) Start() error {
 	rpc.Register(p)
 	return rpc.Start(p.cfg)
 }
 
 //Execute a script in the host of the agent
-func (p *Agent) Execute(script *RemoteScript, reply *string) error {
+func (p *Agent) Execute(script *rpc.RemoteScript, reply *string) error {
 	//Optimize: async
 	export := ""
 	for k, v := range script.Args {

@@ -2,13 +2,13 @@ package operation
 
 import (
 	"fmt"
-	"bytes"
+	"net/rpc"
 	"strings"
-	"golang.org/x/crypto/ssh"
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/credential"
 	"github.com/ChaosXu/nerv/lib/resource/model"
 	"github.com/ChaosXu/nerv/lib/resource/repository"
+	crpc "github.com/ChaosXu/nerv/lib/rpc"
 )
 
 // RpcEnvironment where nerv add worker cluster.
@@ -19,7 +19,7 @@ type RpcEnvironment struct {
 func (p *RpcEnvironment) Exec(class *model.Class, operation *model.Operation, args map[string]string) error {
 	fmt.Printf("Rpc.Exec %s.%s %s\n", class.Name, operation.Name, operation.Implementor)
 
-	script, err := p.ScriptRepository.Get(operation.DefineClass,operation.Implementor)
+	script, err := p.ScriptRepository.Get(operation.DefineClass, operation.Implementor)
 	if err != nil {
 		return err;
 	}
@@ -45,26 +45,11 @@ func (p *RpcEnvironment) Exec(class *model.Class, operation *model.Operation, ar
 }
 
 func (p *RpcEnvironment) call(script *model.Script, args map[string]string, addr string, cre *credential.Credential) error {
-	config := &ssh.ClientConfig{
-		User:cre.User,
-		Auth:[]ssh.AuthMethod{
-			ssh.Password(cre.Password),
-		},
-	}
-	client, err := ssh.Dial("tcp", addr + ":22", config)
+	//TBD:auth,don't hard code agent port
+	client, err := rpc.DialHTTP("tcp", addr + ":3334")
 	if err != nil {
-		return err
+		return fmt.Errorf("connect host failed. %s", err.Error())
 	}
-
-	session, err := client.NewSession()
-	if err != nil {
-		return nil
-	}
-	defer session.Close()
-
-	var stdout, stderr bytes.Buffer
-	session.Stdout = &stdout
-	session.Stderr = &stderr
 
 	export := ""
 	for k, v := range args {
@@ -74,26 +59,15 @@ func (p *RpcEnvironment) call(script *model.Script, args map[string]string, addr
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
 	shell := "export " + export + " && " + script.Content
-	fmt.Println(export)
+	fmt.Println(shell)
 
-	stdoutContent := ""
-	stderrContent := ""
-	if err := session.Run(shell); err != nil {
-		stdoutContent = stdout.String()
-		if stdoutContent != "" {
-			fmt.Println("stdout\n" + stdoutContent)
-		}
-		stderrContent = stderr.String()
-		if stderrContent != "" {
-			fmt.Println("stderr\n" + stderrContent)
-			return fmt.Errorf("%s\n%s", err.Error(), stderrContent)
-		} else {
-			return err
-		}
-	}
-	stdoutContent = stdout.String()
-	if stdoutContent != "" {
-		fmt.Println(stdoutContent)
+	remoteScript := &crpc.RemoteScript{Content:shell, Args:map[string]string{}}
+	var reply string
+	err = client.Call("Agent.Execute", remoteScript, &reply)
+	if err != nil {
+		return fmt.Errorf("Agent.Execute failed. %s", err.Error())
+	} else {
+		fmt.Println(reply)
 	}
 
 	return nil

@@ -19,6 +19,7 @@ func NewDeployer() (*manager.Deployer, error) {
 	scriptRep := resrep.NewFileScriptRepository("../../resources/scripts")
 	standaloneEnv := operation.StandaloneEnvironment{ScriptRepository:scriptRep}
 	sshEnv := operation.SshEnvironment{ScriptRepository:scriptRep}
+	rpcEnv := operation.RpcEnvironment{ScriptRepository:scriptRep}
 	err := g.Provide(
 		&inject.Object{Value: &deployer},
 		&inject.Object{Value: &templateRep},
@@ -26,6 +27,7 @@ func NewDeployer() (*manager.Deployer, error) {
 		&inject.Object{Value: &executor},
 		&inject.Object{Value: &standaloneEnv, Name:"env_standalone"},
 		&inject.Object{Value: &sshEnv, Name:"env_ssh"},
+		&inject.Object{Value:&rpcEnv, Name:"env_rpc"},
 		&inject.Object{Value: classRep},
 	)
 	if err != nil {

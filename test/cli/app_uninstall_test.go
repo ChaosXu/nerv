@@ -5,13 +5,13 @@ import (
 )
 
 
-func TestNerStop(t *testing.T) {
+func TestAppUninstall(t *testing.T) {
 
 	//start
 	cmd := &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "start", "-i", "1"},
+		Items:[]string{"nerv", "uninstall", "-i", "3"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

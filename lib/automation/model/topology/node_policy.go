@@ -10,6 +10,7 @@ func newNodesByHostTemplate(nodeTemplate *NodeTemplate, ctx *Context) []*Node {
 	if addrs == nil {
 		return nodes
 	}
+	//BUG? if addr is constant that wiil return empty nodes
 	ipList, ok := addrs.([]interface{})
 	if !ok {
 		return nodes

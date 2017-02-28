@@ -16,6 +16,7 @@ type Executor interface {
 type ExecutorImpl struct {
 	Standalone Environment `inject:"env_standalone"`
 	Ssh        Environment `inject:"env_ssh"`
+	Rpc        Environment  `inject:"env_rpc"`
 	ClassRep   repository.ClassRepository `inject:""`
 }
 
@@ -41,6 +42,6 @@ func (p *ExecutorImpl)findEnvironment(envType string) (Environment, error) {
 	case "ssh":
 		return p.Ssh, nil
 	default:
-		return nil, fmt.Errorf("unsupported environment")
+		return p.Rpc, nil
 	}
 }

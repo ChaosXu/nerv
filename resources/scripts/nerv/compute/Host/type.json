@@ -1,0 +1,188 @@
+{
+  "name": "/nerv/compute/Host",
+  "operations": [
+    {
+      "name": "Create",
+      "type": "shell",
+      "implementor": "create.sh"
+    },
+    {
+      "name": "Delete",
+      "type": "shell",
+      "implementor": "delete.sh"
+    },
+    {
+      "name": "Setup",
+      "type": "shell",
+      "implementor": "setup.sh"
+    },
+    {
+      "name": "Start",
+      "type": "shell",
+      "implementor": "start.sh"
+    },
+    {
+      "name": "Stop",
+      "type": "shell",
+      "implementor": "stop.sh"
+    }
+  ],
+  "metrics": [
+    {
+      "name": "cpu",
+      "type": "struct",
+      "fields": [
+        {
+          "name": "user",
+          "sampleType": "gauge",
+          "dataType": "double",
+          "probe": {
+            "type": "shell",
+            "provider": "cpu.sh"
+          }
+        },
+        {
+          "name": "nice",
+          "sampleType": "gauge",
+          "dataType": "double",
+          "probe": {
+            "type": "shell",
+            "provider": "cpu.sh"
+          }
+        },
+        {
+          "name": "sys",
+          "sampleType": "gauge",
+          "dataType": "double",
+          "probe": {
+            "type": "shell",
+            "provider": "cpu.sh"
+          }
+        },
+        {
+          "name": "iowait",
+          "sampleType": "gauge",
+          "dataType": "double",
+          "probe": {
+            "type": "shell",
+            "provider": "cpu.sh"
+          }
+        },
+        {
+          "name": "steal",
+          "sampleType": "gauge",
+          "dataType": "double",
+          "probe": {
+            "type": "shell",
+            "provider": "cpu.sh"
+          }
+        },
+        {
+          "name": "idle",
+          "sampleType": "gauge",
+          "dataType": "double",
+          "probe": {
+            "type": "shell",
+            "provider": "cpu.sh"
+          }
+        }
+      ]
+    },
+    {
+      "name": "memory",
+      "type": "struct",
+      "fields": [
+        {
+          "name": "total",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "used",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "free",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "swapTotal",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "swapUsed",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "swapFree",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "usedRatio",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "freeRatio",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "swapUsedRatio",
+          "sampleType": "gauge",
+          "dataType": "long",
+          "probe": {
+            "type": "shell",
+            "provider": "memory.sh"
+          }
+        },
+        {
+          "name": "swapFreeRatio",
+          "sampleType": "gauge",
+          "dataType": "integer",
+          "probe": {
+            "type": "ssh",
+            "Script": "memory.sh"
+          }
+        }
+      ]
+    }
+  ]
+}

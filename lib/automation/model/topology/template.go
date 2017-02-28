@@ -100,8 +100,8 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 			//TBD: optimize
 			if nodeTemplate.Type == "/nerv/cluster/Host" {
 				targetNodes = newNodesByHostTemplate(nodeTemplate, ctx)
-				//} else if nodeTemplate.Type == "/nerv/ECHost" {
-				//	targetNodes = newNodesByECHostTemplate(nodeTemplate)
+			} else if nodeTemplate.Type == "/nerv/compute/Host" {
+				targetNodes = newNodesByHostTemplate(nodeTemplate, ctx)
 			} else {
 				targetNodes = append(targetNodes, newNodeByTemplate(nodeTemplate, ctx))
 			}
