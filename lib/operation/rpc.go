@@ -58,10 +58,10 @@ func (p *RpcEnvironment) call(script *model.Script, args map[string]string, addr
 		}
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
-	shell := "export " + export + " && " + script.Content
+	shell := "export " + export + " && cd ~ &&" + script.Content
 	fmt.Println(shell)
 
-	remoteScript := &crpc.RemoteScript{Content:shell, Args:map[string]string{}}
+	remoteScript := &crpc.RemoteScript{Content:shell}
 	var reply string
 	err = client.Call("Agent.Execute", remoteScript, &reply)
 	if err != nil {

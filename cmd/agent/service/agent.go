@@ -41,10 +41,9 @@ func (p *Agent) Execute(script *rpc.RemoteScript, reply *string) error {
 	fmt.Println("Agent.Execute")
 	//Optimize: async
 
-	shell := "cd ~ && " + script.Content
-	fmt.Println(shell)
+	fmt.Println(script.Content)
 
-	out, err := exec.Command("/bin/bash", "-c", shell).Output()
+	out, err := exec.Command("/bin/bash", "-c", script.Content).Output()
 	if err != nil {
 		res := string(out)
 		fmt.Println("err:" + res)
