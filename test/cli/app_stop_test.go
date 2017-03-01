@@ -11,7 +11,7 @@ func TestAppStop(t *testing.T) {
 	cmd := &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "stop", "-i", "3"},
+		Items:[]string{"topo", "stop", "-i", "4"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

@@ -4,12 +4,9 @@ function create() {
     if [ -f $APP_PID ]; then
         $APP stop  || return $?
     fi
-    echo "curl -L -O $PKG_FILE"
     curl -L -O $PKG_FILE
-    if [ $? -ne "0" ]; then
-        echo {\"error\":\"curl -L -O $PKG_FILE\"}
-    fi
-    tar -xf $PKG_LOCAL_FILE -C $root
+    mkdir $APP_ROOT
+    tar -xf $PKG_LOCAL_FILE -C $APP_ROOT --strip-components 1
     if [ $? -ne "0" ]; then
         echo {\"error\":\"tar -xf $PKG_LOCAL_FILE -C $root\"}
     fi
@@ -28,7 +25,7 @@ elif [ "$root" == ""  ]; then
     exit 1
 else
     APP_ROOT=$root$node_name
-    APP_PID=APP_ROOT/log/app.pid
+    APP_PID=$APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
     PKG_FILE=$file_repository$pkg_url
     PKG_LOCAL_FILE=${PKG_FILE##*/}

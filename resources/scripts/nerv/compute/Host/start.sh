@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-echo ok
+echo host start

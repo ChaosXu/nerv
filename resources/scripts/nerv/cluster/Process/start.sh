@@ -9,7 +9,7 @@ if [ "$root" == ""  ]; then
     exit 1
 else
     APP_ROOT=$root$node_name
-    APP_PID=APP_ROOT/log/app.pid
+    APP_PID=$APP_ROOT/log/app.pid
     APP=$APP_ROOT/bin/app
 
     start

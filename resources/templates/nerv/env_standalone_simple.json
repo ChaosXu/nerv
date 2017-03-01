@@ -1,0 +1,124 @@
+{
+  "name": "/nerv/env_standalone",
+  "version": 1,
+  "environment": "standalone",
+  "inputs": [
+    {
+      "name": "os",
+      "type": "string"
+    },
+    {
+      "name": "elk_version",
+      "type": "string",
+      "value": "5.2.1"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "agent",
+      "type": "/nerv/standalone/Agent",
+      "parameters": [
+        {
+          "name": "pkg_url",
+          "value": "../../pkg/agent-${os}.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "server",
+      "type": "/nerv/standalone/Server",
+      "parameters": [
+        {
+          "name": "pkg_url",
+          "value": "../../pkg/server-${os}.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        },
+        {
+          "name": "config_root",
+          "value": "../../resources/config/nerv"
+        },
+        {
+          "name": "config_url",
+          "value": "/server"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "file",
+      "type": "/nerv/standalone/File",
+      "parameters": [
+        {
+          "name": "pkg_url",
+          "value": "../../pkg/file-${os}.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        },
+        {
+          "name": "config_root",
+          "value": "../../resources/config/nerv"
+        },
+        {
+          "name": "config_url",
+          "value": "/file"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "webui",
+      "type": "/nerv/standalone/WebUI",
+      "parameters": [
+        {
+          "name": "pkg_url",
+          "value": "../../pkg/webui-${os}.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "host",
+      "type": "/nerv/standalone/Host",
+      "parameters": [
+        {
+          "name": "address",
+          "value": "127.0.0.1"
+        }
+      ]
+    }
+  ]
+}

@@ -12,7 +12,7 @@ func TestNerInstall(t *testing.T) {
 	cmd := &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/env_standalone.json", "-o", "nerv-test", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
+		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/env_standalone_simple.json", "-o", "nerv-test", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
 	}
 
 	var id string
