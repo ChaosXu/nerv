@@ -11,7 +11,7 @@ func TestAppUninstall(t *testing.T) {
 	cmd := &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "uninstall", "-i", "3"},
+		Items:[]string{"topo", "uninstall", "-i", "3"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
