@@ -67,20 +67,17 @@ nerv            nerv.tar.gz
 ```shell
 #Use the topolgoy to install system
 cd release/nerv/nerv-cli/bin
-bin$ ./nerv-cli topo create -t ../../resources/templates/nerv/env_standalone.json -o nerv-test
+bin$ ./nerv-cli nerv create -t ../../resources/templates/nerv/server_core.json -o nerv
 Create topology success. id=1
-#List all topologies that has been created
-bin$ ./nerv-cli topo list
-ID      Name    RunStatus       CreateAt        Template
-1       nerv-test       0       XXXXX           ../../resources/templates/nerv/env_standalone_test.json
+
 #Install softwares that used by the topology to the host
-bin$ ./nerv-cli topo install -i 1
+bin$ ./nerv-cli nerv install -i 1
 Install topology success. id=1
 #Setup configurations of nodes in the topology
-bin$ ./nerv-cli topo setup -i 1
+bin$ ./nerv-cli nerv setup -i 1
 Setup topology success. id=1
 #Start system by the topology
-bin$ ./nerv-cli topo start -i 1
+bin$ ./nerv-cli nerv start -i 1
 file: started, pid=30992
 agent: started, pid=30988
 server: started, pid=31038
@@ -97,7 +94,7 @@ Start topology success. id=1
 bin$ ./nerv-cli credential create -d Type=ssh,User=usr,Passworkd=pwd
 Create credential success. id=1
 #Add worker cluster
-bin$ ./nerv-cli topo create -t ../../resources/templates/nerv/nerv_cluster.json -o worker-cluster-1
+bin$ ./nerv-cli topo create -t ../../resources/templates/nerv/worker.json -o worker-cluster-1
 Create topology success. id=2
 #Install agents in hosts of cluster
 bin$ ./nerv-cli topo install -i 2
@@ -135,4 +132,3 @@ Start topology success. id=2
 ## 部署与配置
 
 TBD
-
