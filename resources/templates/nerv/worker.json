@@ -1,5 +1,5 @@
 {
-  "name": "/nerv/worker_cluster",
+  "name": "/nerv/worker",
   "version": 1,
   "environment": "ssh",
   "inputs": [

@@ -1,0 +1,56 @@
+{
+  "name": "/nerv/server_store_es",
+  "version": 1,
+  "environment": "standalone",
+  "inputs": [
+    {
+      "name": "os",
+      "type": "string"
+    },
+    {
+      "name": "elk_version",
+      "type": "string",
+      "value": "5.2.1"
+    }
+  ],
+  "nodes": [
+    {
+      "name": "store",
+      "type": "/nerv/standalone/Store",
+      "parameters": [
+        {
+          "name":"os",
+          "value":"${os}"
+        },
+        {
+          "name":"elk_version",
+          "value":"${elk_version}"
+        },
+        {
+          "name": "pkg_url",
+          "value": "../../pkg/store-${os}.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
+      "name": "host",
+      "type": "/nerv/standalone/Host",
+      "parameters": [
+        {
+          "name": "address",
+          "value": "127.0.0.1"
+        }
+      ]
+    }
+  ]
+}

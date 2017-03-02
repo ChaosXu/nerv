@@ -1,5 +1,5 @@
 {
-  "name": "/nerv/env_standalone",
+  "name": "/nerv/server_core",
   "version": 1,
   "environment": "standalone",
   "inputs": [
@@ -97,70 +97,6 @@
         {
           "name": "pkg_url",
           "value": "../../pkg/webui-${os}.tgz"
-        },
-        {
-          "name": "root",
-          "value": "../../"
-        }
-      ],
-      "dependencies": [
-        {
-          "type": "contained",
-          "target": "host"
-        }
-      ]
-    },
-    {
-      "name": "log",
-      "type": "/nerv/standalone/Log",
-      "parameters": [
-        {
-          "name":"os",
-          "value":"${os}"
-        },
-        {
-          "name":"elk_version",
-          "value":"${elk_version}"
-        },
-        {
-          "name": "pkg_url",
-          "value": "../../pkg/log-${os}.tgz"
-        },
-        {
-          "name": "root",
-          "value": "../../"
-        },
-        {
-          "name": "config_root",
-          "value": "../../resources/config/nerv"
-        },
-        {
-          "name": "config_url",
-          "value": "/log"
-        }
-      ],
-      "dependencies": [
-        {
-          "type": "contained",
-          "target": "host"
-        }
-      ]
-    },
-    {
-      "name": "store",
-      "type": "/nerv/standalone/Store",
-      "parameters": [
-        {
-          "name":"os",
-          "value":"${os}"
-        },
-        {
-          "name":"elk_version",
-          "value":"${elk_version}"
-        },
-        {
-          "name": "pkg_url",
-          "value": "../../pkg/store-${os}.tgz"
         },
         {
           "name": "root",

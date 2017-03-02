@@ -12,7 +12,7 @@ func TestWorkerInstall(t *testing.T) {
 	cmd := &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"topo", "create", "-t", "/nerv/worker_cluster.json", "-o", "worker-1", "-n ../../../../test/cli/worker_inputs.json"},
+		Items:[]string{"topo", "create", "-t", "/nerv/worker.json", "-o", "worker-1", "-n ../../../../test/cli/worker_inputs.json"},
 	}
 
 	var id string
