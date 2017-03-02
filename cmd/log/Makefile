@@ -8,7 +8,7 @@ BIN_DIR=$(RELEASE_DIR)/bin
 log : clean
 	mkdir $(RELEASE_DIR)
 	mkdir $(BIN_DIR)
-	cp -R bin/ $(BIN_DIR)
+	cp -R bin $(RELEASE_DIR)
 	chmod +x $(BIN_DIR)/*
 	rm -rf $(RELEASE_DIR).tgz
 	cd $(RELEASE_ROOT) && tar -zcvf $(PKG) $(MODULE)
