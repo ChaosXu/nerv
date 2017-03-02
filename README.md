@@ -67,7 +67,7 @@ nerv            nerv.tar.gz
 ```shell
 #Use the topolgoy to install system
 cd release/nerv/nerv-cli/bin
-bin$ ./nerv-cli nerv create -t ../../resources/templates/nerv/server_core.json -o nerv
+bin$ ./nerv-cli nerv create -t ../../resources/templates/nerv/server_core.json -o nerv -n nerv_inputs.json
 Create topology success. id=1
 
 #Install softwares that used by the topology to the host
@@ -85,23 +85,97 @@ webui: started, pid=33065
 Start topology success. id=1
 ```
 
+nerv_inputs.json为模板所需实参
+
+```json
+{
+  "name": "/nerv/server_core",
+  "version": 1,
+  "environment": "standalone",
+  "inputs": [
+    {
+      "name": "os",
+      "type": "string"
+    },
+    ...
+  ],
+  ...
+}
+```
+
+```json
+{
+  "os": "linux-x86_64" //darwin-x86_64 macOS
+}
+```
+
 ### 添加工作集群
 
 添加集群并在其中安装Agent，以便后续在集群中部署应用或服务。Nerv不负责部署、启动或者管理其中的主机，它们由基础设施管理平台管理。
 
 ```shell
 #Add credential for worker cluster
-bin$ ./nerv-cli credential create -d Type=ssh,User=usr,Passworkd=pwd
-Create credential success. id=1
+bin$ ./nerv-cli credential create -D worker_credential.json
+
 #Add worker cluster
-bin$ ./nerv-cli topo create -t ../../resources/templates/nerv/worker.json -o worker-cluster-1
-Create topology success. id=2
+bin$ ./nerv-cli topo create -t ../../resources/templates/nerv/worker.json -o worker-cluster-1 -n worker_inputs.json
+
 #Install agents in hosts of cluster
 bin$ ./nerv-cli topo install -i 2
-Install topology success. id=2
 #Start agents in hosts of cluster
 bin$ ./nerv-cli topo start -i 2
-Start topology success. id=2
+```
+
+work_credential.json为工作节点访问凭据，当前仅支持SSH密码登录
+
+```json
+{
+  "Type": "ssh",      //类型
+  "Name": "centos7",  //名称
+  "User": "XXXX",
+  "Password": "XXXX"
+}
+```
+
+worker.json工作节点模板
+
+```json
+{
+  "name": "/nerv/worker",
+  "version": 1,
+  "environment": "ssh",
+  "inputs": [
+    {
+      "name": "host_ip_list", //部署节点的主机列表
+      "type": "string[]"
+    },
+    {
+      "name": "host_credential",  //主机访问凭据
+      "type": "string"
+    },
+    {
+      "name": "os",             //主机系统类型
+      "type": "string"
+    },
+    ...
+  ],
+  ...
+}
+
+```
+
+worker_inputs.json
+
+```json
+{
+  "host_ip_list": [
+    "XXX"，
+    "XXX"，
+    ...
+  ],
+  "host_credential": "ssh,{凭据名称}",
+  "os":"linux-x86_64"
+}
 ```
 
 ### 部署应用
