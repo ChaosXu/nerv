@@ -26,8 +26,8 @@
 		},
 		{
 			"ImportPath": "github.com/go-sql-driver/mysql",
-			"Comment": "v1.2-198-g0b58b37",
-			"Rev": "0b58b37b664c21f3010e836f1b931e1d0b0b0685"
+			"Comment": "v1.2-212-g8f6c67f",
+			"Rev": "8f6c67f0228a4a6a962008d6c3d1e694e4532e71"
 		},
 		{
 			"ImportPath": "github.com/inconshreveable/mousetrap",
@@ -110,6 +110,10 @@
 		{
 			"ImportPath": "golang.org/x/net/publicsuffix",
 			"Rev": "f09c4662a0bd6bd8943ac7b4931e185df9471da4"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v2",
+			"Rev": "a5b47d31c556af34a302ce5d659e6fea44d90de0"
 		}
 	]
 }

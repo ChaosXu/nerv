@@ -69,7 +69,6 @@ func JSON(w http.ResponseWriter, r *http.Request, v interface{}) {
 
 	enc := json.NewEncoder(w)
 	enc.SetEscapeHTML(true)
-	enc.SetIndent("","  ")
 	if err := enc.Encode(v); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

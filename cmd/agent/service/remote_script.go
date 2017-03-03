@@ -10,13 +10,13 @@ import (
 	"github.com/ChaosXu/nerv/lib/rpc"
 )
 
-//Agent execute the method of app
-type Agent struct {
+//RemoteScriptService execute the method of app
+type RemoteScriptService struct {
 	AppRoot string //the root path of app
 	cfg     *env.Properties
 }
 
-func NewAgent(cfg *env.Properties) (*Agent, error) {
+func NewRemoteScriptService(cfg *env.Properties) (*RemoteScriptService, error) {
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err.Error())
@@ -28,16 +28,16 @@ func NewAgent(cfg *env.Properties) (*Agent, error) {
 		return nil, err
 	}
 
-	return &Agent{AppRoot:appRoot, cfg:cfg}, nil
+	return &RemoteScriptService{AppRoot:appRoot, cfg:cfg}, nil
 }
 
-func (p *Agent) Start() error {
+func (p *RemoteScriptService) Start() error {
 	rpc.Register(p)
 	return rpc.Start(p.cfg)
 }
 
 //Execute a script in the host of the agent
-func (p *Agent) Execute(script *rpc.RemoteScript, reply *string) error {
+func (p *RemoteScriptService) Execute(script *rpc.RemoteScript, reply *string) error {
 	fmt.Println("Agent.Execute")
 	//Optimize: async
 

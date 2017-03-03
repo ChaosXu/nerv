@@ -24,13 +24,14 @@ func init() {
 func agentStart(cmd *cobra.Command, args []string) error {
 	env.InitByConfig(flag_config)
 
-	agent, err := service.NewAgent(env.Config())
+	agent, err := service.NewRemoteScriptService(env.Config())
 	if err != nil {
 		return err
 	}
 	if err := agent.Start(); err != nil {
 		return err
 	}
+	select{}
 	return nil
 }
 

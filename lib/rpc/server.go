@@ -21,24 +21,28 @@ func Register(service interface{}) {
 
 //Start rpc server and register all rpc handlers from var Receivers.
 func Start(cfg *env.Properties) error {
-	port := cfg.GetMapString("rpc", "port","3334")
+	port := cfg.GetMapString("rpc", "port", "3334")
 	if port == "" {
 		return fmt.Errorf("rpc_port isn't setted")
 	}
 
 	for _, rcvr := range receivers {
-		if err:=rpc.Register(rcvr);err!=nil{
+		if err := rpc.Register(rcvr); err != nil {
 			return err
-		}else{
+		} else {
 			log.Printf("Register %s\n", reflect.TypeOf(rcvr).String())
 		}
 	}
 	rpc.HandleHTTP()
-	l, e := net.Listen("tcp", ":"+port)
+	l, e := net.Listen("tcp", ":" + port)
 	if e != nil {
 		return nil
 	}
 
-	go http.Serve(l, nil)
-	select{}
+	go func() {
+		if err := http.Serve(l, nil); err != nil {
+			fmt.Println(err.Error())
+		}
+	}()
+	return nil
 }

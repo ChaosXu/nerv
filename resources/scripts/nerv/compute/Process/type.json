@@ -1,0 +1,4 @@
+{
+  "name": "/nerv/compute/Process",
+  "base":"/nerv/cluster/Process"
+}
