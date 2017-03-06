@@ -11,6 +11,7 @@
   "uploads": {
     "/upload/templates": "../../resources/templates",
     "/upload/scripts": "../../resources/scripts",
+    "/upload/config": "../../resources/config",
     "/upload/pkg": "../../pkg"
   }
 }

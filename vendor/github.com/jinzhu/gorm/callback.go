@@ -115,7 +115,7 @@ func (cp *CallbackProcessor) Remove(callbackName string) {
 //		   scope.SetColumn("Updated", now)
 //     })
 func (cp *CallbackProcessor) Replace(callbackName string, callback func(scope *Scope)) {
-	fmt.Printf("[info] replacing callback `%v` from %v\n", callbackName, fileWithLineNum())
+	//fmt.Printf("[info] replacing callback `%v` from %v\n", callbackName, fileWithLineNum())
 	cp.name = callbackName
 	cp.processor = &callback
 	cp.replace = true

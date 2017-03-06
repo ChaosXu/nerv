@@ -21,8 +21,9 @@ func TestWorkerInstall(t *testing.T) {
 		t.Errorf("%s", err.Error())
 	} else {
 		res := string(out)
-		t.Log(res)
-		regex := regexp.MustCompile(`.*\s([0-9]+),.*`)
+		t.Log("----")
+		t.Log("r\n"+ res)
+		regex := regexp.MustCompile(`.*([0-9]+),.*`)
 		id = regex.FindStringSubmatch(res)[1]
 	}
 

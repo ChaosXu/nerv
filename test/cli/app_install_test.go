@@ -22,7 +22,7 @@ func TestAppInstall(t *testing.T) {
 	} else {
 		res := string(out)
 		t.Log(res)
-		regex := regexp.MustCompile(`.*\s([0-9]+),.*`)
+		regex := regexp.MustCompile(`.*([0-9]+),.*`)
 		id = regex.FindStringSubmatch(res)[1]
 	}
 

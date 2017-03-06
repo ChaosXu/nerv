@@ -184,12 +184,6 @@ worker_inputs.json
 
 * [Java应用示例](https://github.com/ChaosXu/nerv-demo-java)
 
-### 使用WebUI
-
-浏览器打开：http://localhost:3330
-缺省口令：admin
-![webui_login](/docs/img/webui_login.png)
-![topology_list](/docs/img/topology_list.png)
 
 ## 工作机制
 
