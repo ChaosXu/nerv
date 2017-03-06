@@ -1,0 +1,12 @@
+filebeat.prospectors:
+- input_type: log
+  paths:
+  - nerv/agent/log/*.log
+  - nerv/log/*.log
+- input_type: log
+  paths:
+  - log/log/*.log
+output.elasticsearch:
+  hosts:
+  - 10.211.55.2:9200
+  - 10.211.55.21:9200

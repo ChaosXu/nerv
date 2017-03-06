@@ -1,0 +1,6 @@
+filebeat.prospectors:
+- input_type: log
+  paths:
+    - log/log/*.log
+output.elasticsearch:
+  hosts: ["10.211.55.21:9200"]
