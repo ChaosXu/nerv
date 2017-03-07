@@ -267,8 +267,8 @@ func InvokeService(w http.ResponseWriter, req *http.Request) {
 	class := middleware.CurrentParams(req).PathParam("class")
 	methodName := middleware.CurrentParams(req).PathParam("id")
 
-	svc, err := service.Registry.Get(class)
-	if err != nil {
+	svc := service.Registry.Get(class)
+	if svc != nil {
 		render.Status(req, 404)
 		render.JSON(w, req, fmt.Sprintf("service %s isn't exists", class))
 		return

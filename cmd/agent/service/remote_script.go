@@ -25,11 +25,11 @@ func (p *RemoteScriptServiceFactory) Init() error {
 		return err
 	}
 	p.remoteScriptService = agent
-	return agent.Start()
+	return nil
 }
 
-func (p *RemoteScriptServiceFactory) Get() (interface{}, error) {
-	return p.remoteScriptService, nil
+func (p *RemoteScriptServiceFactory) Get() interface{} {
+	return p.remoteScriptService
 }
 
 //RemoteScriptService execute the method of app
@@ -53,7 +53,7 @@ func NewRemoteScriptService(cfg *env.Properties) (*RemoteScriptService, error) {
 	return &RemoteScriptService{AppRoot:appRoot, cfg:cfg}, nil
 }
 
-func (p *RemoteScriptService) Start() error {
+func (p *RemoteScriptService) Init() error {
 	rpc.Register(p)
 	return rpc.Start(p.cfg)
 }

@@ -1,9 +1,5 @@
 package service
 
-import (
-	"fmt"
-)
-
 var Registry *ServiceRegistry
 
 func init() {
@@ -15,11 +11,11 @@ type ServiceRegistry struct {
 	Services map[string]ServiceFactory
 }
 
-func (p *ServiceRegistry) Get(name string) (interface{}, error) {
+func (p *ServiceRegistry) Get(name string) interface{} {
 	if sf := p.Services[name]; sf != nil {
 		return sf.Get()
 	} else {
-		return nil, fmt.Errorf("%s isn't exists", name)
+		return nil
 	}
 }
 

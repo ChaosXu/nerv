@@ -6,5 +6,5 @@ type ServiceFactory interface {
 	Init() error
 
 	// Get return a service
-	Get() (interface{}, error)
+	Get() interface{}
 }

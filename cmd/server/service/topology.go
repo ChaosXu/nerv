@@ -8,7 +8,6 @@ import (
 	"github.com/ChaosXu/nerv/lib/db"
 	resrep "github.com/ChaosXu/nerv/lib/resource/repository"
 	"github.com/ChaosXu/nerv/lib/service"
-	"fmt"
 )
 
 func init() {
@@ -28,11 +27,8 @@ func (p *TopologyServiceFactory) Init() error {
 	return nil
 }
 
-func (p *TopologyServiceFactory) Get() (interface{}, error) {
-	if p.deployer == nil {
-		return nil, fmt.Errorf("%s is uninit", "deployService")
-	}
-	return p.deployer, nil
+func (p *TopologyServiceFactory) Get() interface{} {
+	return p.deployer
 }
 
 func (p *TopologyServiceFactory) newDeployer() (*manager.Deployer, error) {
