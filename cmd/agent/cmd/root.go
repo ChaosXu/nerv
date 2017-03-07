@@ -5,6 +5,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 	_ "github.com/ChaosXu/nerv/cmd/agent/service"
 	libsvc "github.com/ChaosXu/nerv/lib/service"
+	"log"
 )
 
 var RootCmd = &cobra.Command{Use: "agent"}
@@ -29,11 +30,13 @@ func serviceInit(cmd *cobra.Command, args []string) error {
 		if err := factory.Init(); err != nil {
 			return err
 		}
+		log.Printf("create: %v\n", factory)
 		svc := factory.Get()
 		if svc != nil {
 			initializer, ok := svc.(libsvc.Initializer)
 			if ok {
 				if err := initializer.Init(); err != nil {
+					log.Printf("init: %v\n", svc)
 					return err
 				}
 			}

@@ -17,6 +17,7 @@ import (
 	_ "github.com/ChaosXu/nerv/lib/user/model"
 	"github.com/ChaosXu/nerv/lib/service"
 	"encoding/json"
+	"log"
 )
 
 type User struct {
@@ -267,8 +268,9 @@ func InvokeService(w http.ResponseWriter, req *http.Request) {
 	class := middleware.CurrentParams(req).PathParam("class")
 	methodName := middleware.CurrentParams(req).PathParam("id")
 
+	log.Println("InvokeService")
 	svc := service.Registry.Get(class)
-	if svc != nil {
+	if svc == nil {
 		render.Status(req, 404)
 		render.JSON(w, req, fmt.Sprintf("service %s isn't exists", class))
 		return

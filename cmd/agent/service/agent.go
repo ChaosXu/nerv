@@ -16,7 +16,7 @@ func init() {
 }
 
 type RemoteScriptServiceFactory struct {
-	remoteScriptService *RemoteScriptService
+	remoteScriptService *Agent
 }
 
 func (p *RemoteScriptServiceFactory) Init() error {
@@ -33,12 +33,12 @@ func (p *RemoteScriptServiceFactory) Get() interface{} {
 }
 
 //RemoteScriptService execute the method of app
-type RemoteScriptService struct {
+type Agent struct {
 	AppRoot string //the root path of app
 	cfg     *env.Properties
 }
 
-func NewRemoteScriptService(cfg *env.Properties) (*RemoteScriptService, error) {
+func NewRemoteScriptService(cfg *env.Properties) (*Agent, error) {
 	dir, err := os.Getwd()
 	if err != nil {
 		log.Fatal(err.Error())
@@ -50,16 +50,19 @@ func NewRemoteScriptService(cfg *env.Properties) (*RemoteScriptService, error) {
 		return nil, err
 	}
 
-	return &RemoteScriptService{AppRoot:appRoot, cfg:cfg}, nil
+	return &Agent{AppRoot:appRoot, cfg:cfg}, nil
 }
 
-func (p *RemoteScriptService) Init() error {
+func (p *Agent) Init() error {
 	rpc.Register(p)
-	return rpc.Start(p.cfg)
+	go func() {
+		log.Fatal(rpc.Start(p.cfg))
+	}()
+	return nil
 }
 
 //Execute a script in the host of the agent
-func (p *RemoteScriptService) Execute(script *rpc.RemoteScript, reply *string) error {
+func (p *Agent) Execute(script *rpc.RemoteScript, reply *string) error {
 	fmt.Println("Agent.Execute")
 	//Optimize: async
 

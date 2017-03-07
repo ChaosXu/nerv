@@ -4,6 +4,8 @@ import (
 	"testing"
 	"regexp"
 	"net/rpc"
+	"github.com/go-resty/resty"
+	"github.com/stretchr/testify/assert"
 )
 
 type RemoteScript struct {
@@ -75,8 +77,11 @@ func TestNervCmd(t *testing.T) {
 		t.Log(string(out))
 	}
 
-	//agent test
-	testAgent(t);
+	//test agent remote script service
+	testRemoteScript(t);
+
+	//test agent http service
+	testHttp(t);
 
 	//stop
 	cmd = &Cmd{
@@ -93,36 +98,36 @@ func TestNervCmd(t *testing.T) {
 	}
 
 	//uninstall
-	cmd = &Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "uninstall", "-i", id},
-	}
-
-	if out, err := cmd.Run(t); err != nil {
-		t.Log(string(out))
-		t.Errorf("%s", err.Error())
-	} else {
-		t.Log(string(out))
-	}
+	//cmd = &Cmd{
+	//	Dir: "../../release/nerv/nerv-cli/bin",
+	//	Cli:"./nerv-cli",
+	//	Items:[]string{"nerv", "uninstall", "-i", id},
+	//}
+	//
+	//if out, err := cmd.Run(t); err != nil {
+	//	t.Log(string(out))
+	//	t.Errorf("%s", err.Error())
+	//} else {
+	//	t.Log(string(out))
+	//}
 
 
 	//delete
-	cmd = &Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "delete", "-i", id},
-	}
-
-	if out, err := cmd.Run(t); err != nil {
-		t.Log(string(out))
-		t.Errorf("%s", err.Error())
-	} else {
-		t.Log(string(out))
-	}
+	//cmd = &Cmd{
+	//	Dir: "../../release/nerv/nerv-cli/bin",
+	//	Cli:"./nerv-cli",
+	//	Items:[]string{"nerv", "delete", "-i", id},
+	//}
+	//
+	//if out, err := cmd.Run(t); err != nil {
+	//	t.Log(string(out))
+	//	t.Errorf("%s", err.Error())
+	//} else {
+	//	t.Log(string(out))
+	//}
 }
 
-func testAgent(t *testing.T) {
+func testRemoteScript(t *testing.T) {
 	client, err := rpc.DialHTTP("tcp", "localhost:3334")
 	if err != nil {
 		t.Log("DialHTTP:", err.Error())
@@ -133,7 +138,23 @@ func testAgent(t *testing.T) {
 	err = client.Call("Agent.Execute", script, &reply)
 	if err != nil {
 		t.Log("Agent.Execute failed.", err)
-	}else{
+	} else {
 		t.Log(reply)
+	}
+}
+
+func testHttp(t *testing.T) {
+	body := `[
+			 	"file1"
+			]`
+	res, err := resty.R().
+			SetHeader("Content-Type", "application/json").
+			SetBody(body).
+			Post("http://localhost:3335/api/objs/LogFile/Add")
+
+	if err != nil {
+		t.Error(err.Error())
+	}else{
+		assert.Equal(t, 200, res.StatusCode(),"")
 	}
 }

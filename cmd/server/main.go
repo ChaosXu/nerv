@@ -3,16 +3,16 @@ package main
 import (
 	"net/http"
 	"log"
+	"fmt"
+	"os"
 	chim "github.com/pressly/chi/middleware"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/pressly/chi"
+	"github.com/ChaosXu/nerv/lib/service"
 	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
 	"github.com/ChaosXu/nerv/lib/net/http/rest"
 	"github.com/ChaosXu/nerv/lib/db"
-	"fmt"
 	"github.com/ChaosXu/nerv/lib/env"
-	"os"
-	"github.com/ChaosXu/nerv/lib/service"
 	_ "github.com/ChaosXu/nerv/cmd/server/service"
 )
 
