@@ -5,7 +5,6 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 	_ "github.com/ChaosXu/nerv/cmd/agent/service"
 	libsvc "github.com/ChaosXu/nerv/lib/service"
-	"log"
 )
 
 var RootCmd = &cobra.Command{Use: "agent"}
