@@ -1,17 +1,19 @@
 package service
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
+	"github.com/ChaosXu/nerv/lib/service"
 	_ "github.com/ChaosXu/nerv/lib/service"
 	"github.com/pressly/chi"
-	"net/http"
-	"github.com/ChaosXu/nerv/lib/env"
-	"log"
-	"github.com/ChaosXu/nerv/lib/service"
+	chim "github.com/pressly/chi/middleware"
 	"github.com/pressly/chi/render"
-	"fmt"
-	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
+	"log"
+	"net/http"
 	"reflect"
-	"encoding/json"
+	"github.com/ChaosXu/nerv/lib/net/http/rest"
 )
 
 func init() {
@@ -40,20 +42,24 @@ type HttpService struct {
 
 func (p *HttpService) Init() error {
 	r := chi.NewRouter()
+	r.Use(chim.Logger)
+	r.Use(middleware.ParamsParser)
+
 	r.Route("/api/objs/:class", func(r chi.Router) {
-		//r.Get("/", rest.List)
-		//r.Post("/", rest.Create)
-		//r.Put("/", rest.Update)
+		//TBD:don't use server rest api
+		r.Get("/", rest.List)
+		r.Post("/", rest.Create)
+		r.Put("/", rest.Update)
 		r.Route("/:id", func(r chi.Router) {
-			//r.Get("/", rest.Get)
-			//r.Delete("/", rest.Remove)
-			r.Post("/", invokeService)
-			//r.Post("/:method", rest.InvokeObj)
+			r.Get("/", rest.Get)
+			r.Delete("/", rest.Remove)
+			r.Post("/", rest.InvokeService)
+			r.Post("/:method", rest.InvokeObj)
 		})
 	})
 	port := env.Config().GetMapString("http", "port", "3335")
 	go func() {
-		log.Fatal(http.ListenAndServe(":" + port, r))
+		log.Fatal(http.ListenAndServe(":"+port, r))
 	}()
 	return nil
 }

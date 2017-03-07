@@ -8,7 +8,6 @@ import (
 	"github.com/ChaosXu/nerv/lib/db"
 	resrep "github.com/ChaosXu/nerv/lib/resource/repository"
 	"github.com/ChaosXu/nerv/lib/service"
-	"log"
 )
 
 func init() {
