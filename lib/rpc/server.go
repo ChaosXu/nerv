@@ -39,10 +39,5 @@ func Start(cfg *env.Properties) error {
 		return nil
 	}
 
-	go func() {
-		if err := http.Serve(l, nil); err != nil {
-			fmt.Println(err.Error())
-		}
-	}()
-	return nil
+	return http.Serve(l, nil)
 }

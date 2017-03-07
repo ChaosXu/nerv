@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/ChaosXu/nerv/cmd/agent/service"
 	"github.com/ChaosXu/nerv/lib/env"
+	_ "github.com/ChaosXu/nerv/cmd/agent/service"
+	libsvc "github.com/ChaosXu/nerv/lib/service"
 )
 
 var RootCmd = &cobra.Command{Use: "agent"}
@@ -24,14 +25,12 @@ func init() {
 func agentStart(cmd *cobra.Command, args []string) error {
 	env.InitByConfig(flag_config)
 
-	agent, err := service.NewRemoteScriptService(env.Config())
-	if err != nil {
-		return err
+	for _, svc := range libsvc.Registry.Services {
+		if err := svc.Init(); err != nil {
+			return err
+		}
 	}
-	if err := agent.Start(); err != nil {
-		return err
-	}
-	select{}
+	select {}
 	return nil
 }
 

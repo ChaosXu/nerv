@@ -8,7 +8,29 @@ import (
 	"fmt"
 	"os/exec"
 	"github.com/ChaosXu/nerv/lib/rpc"
+	"github.com/ChaosXu/nerv/lib/service"
 )
+
+func init() {
+	service.Registry.Put("RemoteScript", &RemoteScriptServiceFactory{})
+}
+
+type RemoteScriptServiceFactory struct {
+	remoteScriptService *RemoteScriptService
+}
+
+func (p *RemoteScriptServiceFactory) Init() error {
+	agent, err := NewRemoteScriptService(env.Config())
+	if err != nil {
+		return err
+	}
+	p.remoteScriptService = agent
+	return agent.Start()
+}
+
+func (p *RemoteScriptServiceFactory) Get() (interface{}, error) {
+	return p.remoteScriptService, nil
+}
 
 //RemoteScriptService execute the method of app
 type RemoteScriptService struct {
