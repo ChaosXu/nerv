@@ -11,7 +11,7 @@ func TestAppStart(t *testing.T) {
 	cmd := &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"topo", "start", "-i", "4"},
+		Items:[]string{"topo", "start", "-i", "3"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

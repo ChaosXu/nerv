@@ -5,7 +5,7 @@ function create() {
         $APP stop  || return $?
     fi
     curl -L -O $PKG_FILE
-    mkdir $APP_ROOT
+    mkdir -p $APP_ROOT
     tar -xf $PKG_LOCAL_FILE -C $APP_ROOT --strip-components 1
     if [ $? -ne "0" ]; then
         echo {\"error\":\"tar -xf $PKG_LOCAL_FILE -C $root\"}

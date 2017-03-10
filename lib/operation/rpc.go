@@ -3,8 +3,6 @@ package operation
 import (
 	"fmt"
 	"net/rpc"
-	"strings"
-	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/credential"
 	"github.com/ChaosXu/nerv/lib/resource/model"
 	"github.com/ChaosXu/nerv/lib/resource/repository"
@@ -24,24 +22,11 @@ func (p *RpcEnvironment) Exec(class *model.Class, operation *model.Operation, ar
 		return err;
 	}
 
-	cres := args["credential"]
-	if cres == "" {
-		return fmt.Errorf("credential is empty")
-	}
-	pairs := strings.Split(cres, ",")
-	if len(pairs) < 2 {
-		return fmt.Errorf("error credential: %s", cres)
-	}
-	cre := &credential.Credential{}
-	if err := db.DB.Where("type=? and name=?", pairs[0], pairs[1]).First(cre).Error; err != nil {
-		return fmt.Errorf("credential %s not found", cres, err.Error())
-	}
-
 	addr := args["address"]
 	if addr == "" {
 		return fmt.Errorf("address is empty")
 	}
-	return p.call(script, args, addr, cre)
+	return p.call(script, args, addr, nil)
 }
 
 func (p *RpcEnvironment) call(script *model.Script, args map[string]string, addr string, cre *credential.Credential) error {
@@ -53,8 +38,11 @@ func (p *RpcEnvironment) call(script *model.Script, args map[string]string, addr
 
 	export := ""
 	for k, v := range args {
-		if k == "address" || k == "credential" {
+		if k == "address" {
 			continue
+		}
+		if k == "root" {
+			v = "nervapp/"	//The root dir of app is $HOME/nervapp
 		}
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
