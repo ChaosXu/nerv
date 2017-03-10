@@ -15,6 +15,42 @@
   ],
   "nodes": [
     {
+      "name": "log",
+      "type": "/nerv/standalone/Log",
+      "parameters": [
+        {
+          "name":"os",
+          "value":"${os}"
+        },
+        {
+          "name":"elk_version",
+          "value":"${elk_version}"
+        },
+        {
+          "name": "pkg_url",
+          "value": "../../pkg/log-${os}.tgz"
+        },
+        {
+          "name": "root",
+          "value": "../../"
+        },
+        {
+          "name": "config_root",
+          "value": "../../resources/config/nerv"
+        },
+        {
+          "name": "config_url",
+          "value": "/log"
+        }
+      ],
+      "dependencies": [
+        {
+          "type": "contained",
+          "target": "host"
+        }
+      ]
+    },
+    {
       "name": "agent",
       "type": "/nerv/standalone/Agent",
       "parameters": [

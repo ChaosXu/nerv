@@ -6,6 +6,8 @@ import (
 	"net/rpc"
 	"github.com/go-resty/resty"
 	"github.com/stretchr/testify/assert"
+	"os"
+	"k8s.io/kubernetes/pkg/util/json"
 )
 
 type RemoteScript struct {
@@ -143,18 +145,28 @@ func testRemoteScript(t *testing.T) {
 	}
 }
 
+// test merge log config
 func testHttp(t *testing.T) {
-	body := `[
-			 	"file1"
-			]`
+	dir, err := os.Getwd()
+	if err != nil {
+		t.Error(err.Error())
+		return
+	}
+	dir = dir + "/filebeat2.yml"
+	dirs := []string{dir}
+	body, err := json.Marshal(dirs)
+	if err != nil {
+		t.Error(err)
+		return
+	}
 	res, err := resty.R().
 			SetHeader("Content-Type", "application/json").
-			SetBody(body).
+			SetBody(string(body)).
 			Post("http://localhost:3335/api/objs/LogFile/Add")
 
 	if err != nil {
 		t.Error(err.Error())
-	}else{
-		assert.Equal(t, 200, res.StatusCode(),"")
+	} else {
+		assert.Equal(t, 200, res.StatusCode(), string(res.Body()))
 	}
 }
