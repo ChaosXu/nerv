@@ -2,10 +2,10 @@ package yml
 
 import (
 	"testing"
-	"k8s.io/kubernetes/staging/src/k8s.io/client-go/_vendor/gopkg.in/yaml.v2"
 	"io/ioutil"
 	"fmt"
 	"reflect"
+	"gopkg.in/yaml.v2"
 )
 
 func TestMerger(t *testing.T) {

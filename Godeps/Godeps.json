@@ -124,11 +124,6 @@
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
 			"Rev": "a5b47d31c556af34a302ce5d659e6fea44d90de0"
-		},
-		{
-			"ImportPath": "k8s.io/kubernetes/staging/src/k8s.io/client-go/_vendor/gopkg.in/yaml.v2",
-			"Comment": "v1.6.0-alpha.0-2417-g953488e",
-			"Rev": "953488e90954944f7f67a261fd0ba23dd0511422"
 		}
 	]
 }
