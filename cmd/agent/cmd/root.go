@@ -9,6 +9,7 @@ import (
 	_ "github.com/ChaosXu/nerv/cmd/agent/service"
 	"os"
 	"fmt"
+	"github.com/ChaosXu/nerv/lib/db"
 )
 
 var RootCmd = &cobra.Command{Use: "agent"}
@@ -33,11 +34,12 @@ func serviceInit(cmd *cobra.Command, args []string) error {
 			return fmt.Errorf("create dir ../data failed. %s", err.Error())
 		}
 	}
-	db, err := gorm.Open("sqlite3", "../data/agent.db")
+
+	err := initDB()
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer db.DB.Close()
 
 	for _, factory := range libsvc.Registry.Services {
 		if err := factory.Init(); err != nil {
@@ -55,6 +57,19 @@ func serviceInit(cmd *cobra.Command, args []string) error {
 		}
 	}
 	select {}
+	return nil
+}
+
+func initDB() error {
+	gdb, err := gorm.Open("sqlite3", "../data/agent.db")
+	if err != nil {
+		return err
+	}
+	db.DB = gdb
+	db.DB.LogMode(false)
+	for _, v := range db.Models {
+		db.DB.AutoMigrate(v.Type)
+	}
 	return nil
 }
 

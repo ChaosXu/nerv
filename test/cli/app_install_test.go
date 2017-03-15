@@ -3,13 +3,14 @@ package cli
 import (
 	"testing"
 	"regexp"
+	"github.com/ChaosXu/nerv/test/util"
 )
 
 
 func TestAppInstall(t *testing.T) {
 
 	//create
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "create", "-t", "/demo/java/nerv-app-springboot.json", "-o", "nerv-app-springboot-1", "-n ../../../../test/cli/topo_test_inputs.json"},
@@ -27,7 +28,7 @@ func TestAppInstall(t *testing.T) {
 	}
 
 	//list
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "list"},
@@ -41,7 +42,7 @@ func TestAppInstall(t *testing.T) {
 	}
 
 	//get
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "get", "-i", id},
@@ -55,7 +56,7 @@ func TestAppInstall(t *testing.T) {
 	}
 
 	//install
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "install", "-i", id},
@@ -69,7 +70,7 @@ func TestAppInstall(t *testing.T) {
 	}
 
 	//setup
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "setup", "-i", id},

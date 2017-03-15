@@ -2,12 +2,13 @@ package cli
 
 import (
 	"testing"
+	"github.com/ChaosXu/nerv/test/util"
 )
 
 
 func TestWorkerCredentialCreate(t *testing.T) {
 
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"credential", "create", "-D", "../../../../test/cli/worker_credential.json"},

@@ -3,13 +3,14 @@ package cli
 import (
 	"testing"
 	"regexp"
+	"github.com/ChaosXu/nerv/test/util"
 )
 
 
 func TestWorkerInstall(t *testing.T) {
 
 	//create
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "create", "-t", "/nerv/worker.json", "-o", "worker-1", "-n ../../../../test/cli/worker_inputs.json"},
@@ -28,7 +29,7 @@ func TestWorkerInstall(t *testing.T) {
 	}
 
 	//list
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "list"},
@@ -42,7 +43,7 @@ func TestWorkerInstall(t *testing.T) {
 	}
 
 	//get
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "get", "-i", id},
@@ -56,7 +57,7 @@ func TestWorkerInstall(t *testing.T) {
 	}
 
 	//install
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "install", "-i", id},
@@ -70,7 +71,7 @@ func TestWorkerInstall(t *testing.T) {
 	}
 
 	//setup
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "setup", "-i", id},

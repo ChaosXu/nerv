@@ -10,6 +10,7 @@ CONF_DIR=$(RELEASE_DIR)/config
 
 
 agent : clean
+	cd ../agent-cli && make -e PLATFORM=$(PLATFORM)
 	go build $(LDFLAGS) -o $(BIN_DIR)/$(MODULE)
 	cp bin/$(APP_SCRIPT) $(BIN_DIR)/$(APP_SCRIPT)
 	chmod +x $(BIN_DIR)/$(APP_SCRIPT)

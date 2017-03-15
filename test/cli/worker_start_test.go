@@ -2,13 +2,14 @@ package cli
 
 import (
 	"testing"
+	"github.com/ChaosXu/nerv/test/util"
 )
 
 
 func TestWorkerStart(t *testing.T) {
 
 	//start
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "start", "-i", "2"},

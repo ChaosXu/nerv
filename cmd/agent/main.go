@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"github.com/ChaosXu/nerv/cmd/agent/cmd"
+	_ "github.com/ChaosXu/nerv/cmd/agent/model"
 )
 
 var (
@@ -16,3 +17,4 @@ func main() {
 		os.Exit(-1)
 	}
 }
+

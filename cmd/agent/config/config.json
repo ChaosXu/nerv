@@ -2,6 +2,12 @@
   "rpc": {
     "port": "3334"
   },
+  "http": {
+    "port": "3335"
+  },
+  "apiServer": {
+    "url": "http://localhost:3335/api"
+  },
   "deploy": {
     "root": "../app"
   },

@@ -3,13 +3,14 @@ package cli
 import (
 	"testing"
 	"regexp"
+	"github.com/ChaosXu/nerv/test/util"
 )
 
 
 func TestNerInstall(t *testing.T) {
 
 	//create
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/server_core.json", "-o", "nerv-test", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
@@ -27,7 +28,7 @@ func TestNerInstall(t *testing.T) {
 	}
 
 	//install
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "install", "-i", id},
@@ -43,7 +44,7 @@ func TestNerInstall(t *testing.T) {
 
 
 	//setup
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "setup", "-i", id},

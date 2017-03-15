@@ -2,13 +2,14 @@ package cli
 
 import (
 	"testing"
+	"github.com/ChaosXu/nerv/test/util"
 )
 
 
 func TestAppStop(t *testing.T) {
 
 	//start
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "stop", "-i", "6"},

@@ -2,13 +2,14 @@ package cli
 
 import (
 	"testing"
+	"github.com/ChaosXu/nerv/test/util"
 )
 
 
 func TestAppUninstall(t *testing.T) {
 	id := "6"
 	//start
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "uninstall", "-i", id},
@@ -22,7 +23,7 @@ func TestAppUninstall(t *testing.T) {
 	}
 
 	//delete
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "delete", "-i", id},

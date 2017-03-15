@@ -1,13 +1,9 @@
-package cli
+package agent_cli
 
 import (
 	"testing"
 	"regexp"
 	"net/rpc"
-	"os"
-	"encoding/json"
-	"github.com/go-resty/resty"
-	"github.com/stretchr/testify/assert"
 	"github.com/ChaosXu/nerv/test/util"
 )
 
@@ -17,7 +13,7 @@ func TestNervCmd(t *testing.T) {
 	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/server_core.json", "-o", "nerv-test", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
+		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/server_core.json", "-o", "nerv-test", "-n", "../../../../test/agent-cli/nerv_standalone_inputs.json"},
 	}
 
 	var id string
@@ -75,11 +71,7 @@ func TestNervCmd(t *testing.T) {
 		t.Log(string(out))
 	}
 
-	//test agent remote script service
-	testRemoteScript(t);
-
-	//test agent http service
-	testHttp(t);
+	testAgent(t);
 
 	//stop
 	cmd = &util.Cmd{
@@ -96,7 +88,7 @@ func TestNervCmd(t *testing.T) {
 	}
 
 	//uninstall
-	//cmd = &util.util.Cmd{
+	//cmd = &util.Cmd{
 	//	Dir: "../../release/nerv/nerv-cli/bin",
 	//	Cli:"./nerv-cli",
 	//	Items:[]string{"nerv", "uninstall", "-i", id},
@@ -111,7 +103,7 @@ func TestNervCmd(t *testing.T) {
 
 
 	//delete
-	//cmd = &util.util.Cmd{
+	//cmd = &util.Cmd{
 	//	Dir: "../../release/nerv/nerv-cli/bin",
 	//	Cli:"./nerv-cli",
 	//	Items:[]string{"nerv", "delete", "-i", id},
@@ -125,7 +117,12 @@ func TestNervCmd(t *testing.T) {
 	//}
 }
 
-func testRemoteScript(t *testing.T) {
+func testAgent(t *testing.T) {
+	testHttp(t)
+	testAppCmd(t)
+}
+
+func testHttp(t *testing.T) {
 	client, err := rpc.DialHTTP("tcp", "localhost:3334")
 	if err != nil {
 		t.Log("DialHTTP:", err.Error())
@@ -141,28 +138,23 @@ func testRemoteScript(t *testing.T) {
 	}
 }
 
-// test merge log config
-func testHttp(t *testing.T) {
-	dir, err := os.Getwd()
-	if err != nil {
-		t.Error(err.Error())
-		return
-	}
-	dir = dir + "/filebeat2.yml"
-	dirs := []string{dir}
-	body, err := json.Marshal(dirs)
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	res, err := resty.R().
-			SetHeader("Content-Type", "application/json").
-			SetBody(string(body)).
-			Post("http://localhost:3335/api/objs/LogFile/Add")
+func testAppCmd(t *testing.T) {
+	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "create", "-D", "../../../../test/agent-cli/app.json"})
+	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "list"})
+}
 
-	if err != nil {
-		t.Error(err.Error())
+func runCmd(t *testing.T, dir string, cli string, args []string) {
+	cmd := &util.Cmd{
+		Dir: dir,
+		Cli:cli,
+		Items:args,
+	}
+
+	if out, err := cmd.Run(t); err != nil {
+		t.Log(string(out))
+		t.Errorf("%s", err.Error())
 	} else {
-		assert.Equal(t, 200, res.StatusCode(), string(res.Body()))
+		t.Log(string(out))
 	}
 }
+

@@ -3,6 +3,7 @@ package cli
 import (
 	"testing"
 	"regexp"
+	"github.com/ChaosXu/nerv/test/util"
 )
 
 func TestTopo(t *testing.T) {
@@ -10,7 +11,7 @@ func TestTopo(t *testing.T) {
 	defer clear(t, nerv,creID)
 
 	//create
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "create", "-t", "/nerv/worker_cluster.json", "-o", "topo-1", "-n ../../../../test/cli/topo_test_inputs.json"},
@@ -28,7 +29,7 @@ func TestTopo(t *testing.T) {
 	}
 
 	//list
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "list"},
@@ -42,7 +43,7 @@ func TestTopo(t *testing.T) {
 	}
 
 	//get
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "get", "-i", id},
@@ -56,7 +57,7 @@ func TestTopo(t *testing.T) {
 	}
 
 	//install
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "install", "-i", id},
@@ -70,7 +71,7 @@ func TestTopo(t *testing.T) {
 	}
 
 	//setup
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "setup", "-i", id},
@@ -84,7 +85,7 @@ func TestTopo(t *testing.T) {
 	}
 
 	//start
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "start", "-i", id},
@@ -98,7 +99,7 @@ func TestTopo(t *testing.T) {
 	}
 
 	//stop
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "stop", "-i", id},
@@ -112,7 +113,7 @@ func TestTopo(t *testing.T) {
 	}
 
 	//uninstall
-	//cmd = &Cmd{
+	//cmd = &util.Cmd{
 	//	Dir: "../../release/nerv/nerv-cli/bin",
 	//	Cli:"./nerv-cli",
 	//	Items:[]string{"topo", "uninstall", "-i", id},
@@ -126,7 +127,7 @@ func TestTopo(t *testing.T) {
 	//}
 
 	//delete
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"topo", "delete", "-i", id},
@@ -142,7 +143,7 @@ func TestTopo(t *testing.T) {
 
 func setup(t *testing.T) (string, string) {
 	//create
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/env_standalone.json", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
@@ -160,7 +161,7 @@ func setup(t *testing.T) (string, string) {
 	}
 
 	//install
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "install", "-i", nid},
@@ -176,7 +177,7 @@ func setup(t *testing.T) (string, string) {
 
 
 	//setup
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "setup", "-i", nid},
@@ -191,7 +192,7 @@ func setup(t *testing.T) (string, string) {
 
 
 	//start
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "start", "-i", nid},
@@ -206,7 +207,7 @@ func setup(t *testing.T) (string, string) {
 
 	//create credential
 	var cid string
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"credential", "create", "-D", "../../../../test/cli/topo_credential.json"},
@@ -227,7 +228,7 @@ func setup(t *testing.T) (string, string) {
 
 func clear(t *testing.T, nid string,cid string) {
 	//delete  credential
-	cmd := &Cmd{
+	cmd := &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"credential", "delete", "-i", cid},
@@ -241,7 +242,7 @@ func clear(t *testing.T, nid string,cid string) {
 	}
 
 	//stop
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "stop", "-i", nid},
@@ -255,7 +256,7 @@ func clear(t *testing.T, nid string,cid string) {
 	}
 
 	//uninstall
-	//cmd = &Cmd{
+	//cmd = &util.Cmd{
 	//	Dir: "../../release/nerv/nerv-cli/bin",
 	//	Cli:"./nerv-cli",
 	//	Items:[]string{"nerv", "uninstall", "-i", nid},
@@ -270,7 +271,7 @@ func clear(t *testing.T, nid string,cid string) {
 
 
 	//delete
-	cmd = &Cmd{
+	cmd = &util.Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
 		Items:[]string{"nerv", "delete", "-i", nid},
