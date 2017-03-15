@@ -2,9 +2,13 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/ChaosXu/nerv/lib/env"
-	_ "github.com/ChaosXu/nerv/cmd/agent/service"
 	libsvc "github.com/ChaosXu/nerv/lib/service"
+	_ "github.com/ChaosXu/nerv/cmd/agent/service"
+	"os"
+	"fmt"
 )
 
 var RootCmd = &cobra.Command{Use: "agent"}
@@ -24,6 +28,16 @@ func init() {
 
 func serviceInit(cmd *cobra.Command, args []string) error {
 	env.InitByConfig(flag_config)
+	if _, err := os.Stat("../data"); err != nil {
+		if err := os.MkdirAll("../data", os.ModeDir | os.ModePerm); err != nil {
+			return fmt.Errorf("create dir ../data failed. %s", err.Error())
+		}
+	}
+	db, err := gorm.Open("sqlite3", "../data/agent.db")
+	if err != nil {
+		return err
+	}
+	defer db.Close()
 
 	for _, factory := range libsvc.Registry.Services {
 		if err := factory.Init(); err != nil {

@@ -6,12 +6,12 @@ import (
 
 
 func TestAppUninstall(t *testing.T) {
-
+	id := "6"
 	//start
 	cmd := &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"topo", "uninstall", "-i", "3"},
+		Items:[]string{"topo", "uninstall", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -25,7 +25,7 @@ func TestAppUninstall(t *testing.T) {
 	cmd = &Cmd{
 		Dir: "../../release/nerv/nerv-cli/bin",
 		Cli:"./nerv-cli",
-		Items:[]string{"topo", "delete", "-i", "4"},
+		Items:[]string{"topo", "delete", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

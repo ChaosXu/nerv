@@ -6,15 +6,10 @@ import (
 	"strings"
 	"reflect"
 	"strconv"
-
 	"github.com/pressly/chi/render"
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
 	"github.com/ChaosXu/nerv/lib/db"
-	user "github.com/ChaosXu/nerv/lib/user/model"
-	_ "github.com/ChaosXu/nerv/lib/automation/model"
-	_ "github.com/ChaosXu/nerv/lib/monitor/model"
-	_ "github.com/ChaosXu/nerv/lib/user/model"
 	"github.com/ChaosXu/nerv/lib/service"
 	"encoding/json"
 	"log"
@@ -32,33 +27,7 @@ func handlePanic(w http.ResponseWriter, req *http.Request) {
 	//}
 }
 
-func Login(w http.ResponseWriter, req *http.Request) {
-	defer handlePanic(w, req)
 
-	account := &user.Account{}
-	if err := render.Bind(req.Body, account); err != nil {
-		render.Status(req, 400)
-		render.JSON(w, req, err.Error())
-		return
-	}
-
-	var ret user.Account
-	//TBD: using hash
-	db := db.DB.Where("name=? and password=?", account.Name, account.Password).First(&ret)
-	if err := db.Error; err != nil {
-		render.Status(req, 500)
-		render.JSON(w, req, err.Error())
-		return
-	}
-
-	if db.RecordNotFound() {
-		render.Status(req, 404)
-		render.JSON(w, req, map[string]string{"Name":account.Name})
-	} else {
-		render.Status(req, 200)
-		render.JSON(w, req, map[string]string{"Name":account.Name})
-	}
-}
 
 func List(w http.ResponseWriter, req *http.Request) {
 	defer handlePanic(w, req)
