@@ -44,8 +44,18 @@
 			"Rev": "5ec2f6ceb66dbb99077a2b48a5a963d073d5459d"
 		},
 		{
+			"ImportPath": "github.com/jinzhu/gorm/dialects/sqlite",
+			"Comment": "v1.0-73-g5ec2f6c",
+			"Rev": "5ec2f6ceb66dbb99077a2b48a5a963d073d5459d"
+		},
+		{
 			"ImportPath": "github.com/jinzhu/inflection",
 			"Rev": "74387dc39a75e970e7a3ae6a3386b5bd2e5c5cff"
+		},
+		{
+			"ImportPath": "github.com/mattn/go-sqlite3",
+			"Comment": "v1.2.0-2-gfba66eb",
+			"Rev": "fba66eb11643069e747022997e9be3b502b2c6fb"
 		},
 		{
 			"ImportPath": "github.com/pmezard/go-difflib/difflib",
@@ -114,6 +124,11 @@
 		{
 			"ImportPath": "gopkg.in/yaml.v2",
 			"Rev": "a5b47d31c556af34a302ce5d659e6fea44d90de0"
+		},
+		{
+			"ImportPath": "k8s.io/kubernetes/staging/src/k8s.io/client-go/_vendor/gopkg.in/yaml.v2",
+			"Comment": "v1.6.0-alpha.0-2417-g953488e",
+			"Rev": "953488e90954944f7f67a261fd0ba23dd0511422"
 		}
 	]
 }
