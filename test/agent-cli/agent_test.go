@@ -139,11 +139,17 @@ func testHttp(t *testing.T) {
 }
 
 func testAppCmd(t *testing.T) {
-	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "create", "-D", "../../../../test/agent-cli/app.json"})
+	id := runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "create", "-D", "../../../../test/agent-cli/app.json"})
+	t.Log(id)
 	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "list"})
+	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "get", "-i", id})
+	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "delete", "-i", id})
+	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "list"})
+	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "get", "-i", id})
 }
 
-func runCmd(t *testing.T, dir string, cli string, args []string) {
+func runCmd(t *testing.T, dir string, cli string, args []string) string {
+	r := "0"
 	cmd := &util.Cmd{
 		Dir: dir,
 		Cli:cli,
@@ -154,7 +160,16 @@ func runCmd(t *testing.T, dir string, cli string, args []string) {
 		t.Log(string(out))
 		t.Errorf("%s", err.Error())
 	} else {
-		t.Log(string(out))
+
+		res := string(out)
+		regex := regexp.MustCompile(`.*([0-9]+),.*`)
+		match := regex.FindStringSubmatch(res)
+		if len(match) > 0 {
+			r = match[1]
+			t.Log(r)
+		}
+		t.Log(res)
 	}
+	return r
 }
 
