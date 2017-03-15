@@ -1,14 +1,15 @@
-package cmd
+package cli
 
 import (
 	"fmt"
 	"errors"
+	"strings"
+	"encoding/json"
+
 	"github.com/spf13/cobra"
 	"github.com/go-resty/resty"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/toolkits/file"
-	"strings"
-	"encoding/json"
 	"github.com/ChaosXu/nerv/lib/cli/format"
 )
 
@@ -17,9 +18,9 @@ type ArgType struct {
 	Type string
 }
 
-func listObjsFunc(class string, format *format.Page) func(cmd *cobra.Command, args []string) error {
+func ListObjsFunc(class string, format *format.Page) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		env.InitByConfig(flag_config)
+		env.InitByConfig(Flag_config)
 		rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
 		class := class
 		url := fmt.Sprintf("%s/objs/%s", rootUrl, class)
@@ -45,26 +46,26 @@ func listObjsFunc(class string, format *format.Page) func(cmd *cobra.Command, ar
 	}
 }
 
-func getObjFunc(class string, assoc []string) func(cmd *cobra.Command, args []string) error {
+func GetObjFunc(class string, assoc []string) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		return getObj(class, cmd, assoc)
+		return GetObj(class, cmd, assoc)
 	}
 }
 
-func getObj(class string, cmd *cobra.Command, assoc []string) error {
-	if flag_id == 0 {
+func GetObj(class string, cmd *cobra.Command, assoc []string) error {
+	if Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
-	env.InitByConfig(flag_config)
+	env.InitByConfig(Flag_config)
 
 	rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
 
 	var url string
 	if len(assoc) > 0 {
 		ass := strings.Join(assoc, ",")
-		url = fmt.Sprintf("%s/objs/%s/%d?associations=%s", rootUrl, class, flag_id, ass)
+		url = fmt.Sprintf("%s/objs/%s/%d?associations=%s", rootUrl, class, Flag_id, ass)
 	} else {
-		url = fmt.Sprintf("%s/objs/%s/%d", rootUrl, class, flag_id)
+		url = fmt.Sprintf("%s/objs/%s/%d", rootUrl, class, Flag_id)
 	}
 
 	res, err := resty.R().
@@ -81,17 +82,17 @@ func getObj(class string, cmd *cobra.Command, assoc []string) error {
 	return nil
 }
 
-func createObjFunc(class string) func(cmd *cobra.Command, args []string) error {
+func CreateObjFunc(class string) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		if flag_data_path == "" {
+		if Flag_data_path == "" {
 			return errors.New("--Data -D is null")
 		}
 
-		env.InitByConfig(flag_config)
+		env.InitByConfig(Flag_config)
 
 		rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
 		url := fmt.Sprintf("%s/objs/%s", rootUrl, class)
-		body, err := file.ToTrimString(flag_data_path)
+		body, err := file.ToTrimString(Flag_data_path)
 		if err != nil {
 			return err
 		}
@@ -111,15 +112,15 @@ func createObjFunc(class string) func(cmd *cobra.Command, args []string) error {
 	}
 }
 
-func removeObjFunc(class string) func(cmd *cobra.Command, args []string) error {
+func RemoveObjFunc(class string) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		if flag_id == 0 {
+		if Flag_id == 0 {
 			return errors.New("--id -i is null")
 		}
-		env.InitByConfig(flag_config)
+		env.InitByConfig(Flag_config)
 
 		rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
-		url := fmt.Sprintf("%s/objs/%s/%d", rootUrl, class, flag_id)
+		url := fmt.Sprintf("%s/objs/%s/%d", rootUrl, class, Flag_id)
 
 		res, err := resty.R().
 				SetHeader("Content-Type", "application/json").
@@ -136,7 +137,7 @@ func removeObjFunc(class string) func(cmd *cobra.Command, args []string) error {
 	}
 }
 
-func invokeSvcFunc(class string, method string, argTypes []ArgType) func(cmd *cobra.Command, args []string) error {
+func InvokeSvcFunc(class string, method string, argTypes []ArgType) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		params := []interface{}{}
 		for _, argType := range argTypes {
@@ -172,11 +173,11 @@ func invokeSvcFunc(class string, method string, argTypes []ArgType) func(cmd *co
 				fmt.Errorf("unsupported arg type %s", argType.Type)
 			}
 		}
-		return invokeSvc(class, cmd, method, params)
+		return InvokeSvc(class, cmd, method, params)
 	}
 }
 
-func invokeObjFunc(class string, method string, argTypes []ArgType) func(cmd *cobra.Command, args []string) error {
+func InvokeObjFunc(class string, method string, argTypes []ArgType) func(cmd *cobra.Command, args []string) error {
 	return func(cmd *cobra.Command, args []string) error {
 		params := []interface{}{}
 		for _, argType := range argTypes {
@@ -198,15 +199,15 @@ func invokeObjFunc(class string, method string, argTypes []ArgType) func(cmd *co
 
 			}
 		}
-		return invokeObj(class, cmd, method, params)
+		return InvokeObj(class, cmd, method, params)
 	}
 }
 
-func invokeObj(class string, cmd *cobra.Command, method string, args []interface{}) error {
-	if flag_id == 0 {
+func InvokeObj(class string, cmd *cobra.Command, method string, args []interface{}) error {
+	if Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
-	env.InitByConfig(flag_config)
+	env.InitByConfig(Flag_config)
 
 	rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
 
@@ -220,7 +221,7 @@ func invokeObj(class string, cmd *cobra.Command, method string, args []interface
 	res, err := resty.R().
 			SetHeader("Content-Type", "application/json").
 			SetBody(body).
-			Post(fmt.Sprintf("%s/objs/%s/%d/%s", rootUrl, class, flag_id, method))
+			Post(fmt.Sprintf("%s/objs/%s/%d/%s", rootUrl, class, Flag_id, method))
 	if err != nil {
 		return err
 	}
@@ -232,8 +233,8 @@ func invokeObj(class string, cmd *cobra.Command, method string, args []interface
 	return nil
 }
 
-func invokeSvc(class string, cmd *cobra.Command, method string, args []interface{}) error {
-	env.InitByConfig(flag_config)
+func InvokeSvc(class string, cmd *cobra.Command, method string, args []interface{}) error {
+	env.InitByConfig(Flag_config)
 
 	rootUrl := env.Config().GetMapString("apiServer", "url", "http://localhost:3330/api")
 	b, err := json.Marshal(args)

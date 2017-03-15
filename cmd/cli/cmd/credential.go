@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/ChaosXu/nerv/lib/cli/format"
+	"github.com/ChaosXu/nerv/lib/cli"
 )
 
 func init() {
@@ -20,7 +21,7 @@ func init() {
 		Use:    "list",
 		Short:    "List all credentials",
 		Long:    "List all credentails",
-		RunE: listObjsFunc("Credential",
+		RunE: cli.ListObjsFunc("Credential",
 			&format.Page{List:"data", Columns:[]format.Column{
 				{Name:"ID", Format:"%v"},
 				{Name:"type", Label:"Name", Format:"%s"},
@@ -28,7 +29,7 @@ func init() {
 				{Name:"user", Format:"%s"},
 			}}),
 	}
-	list.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	list.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	credential.AddCommand(list)
 
 	//get
@@ -38,8 +39,8 @@ func init() {
 		Long:    "Get all credential",
 		RunE: getCredential,
 	}
-	get.Flags().UintVarP(&flag_id, "id", "i", 0, "Credential id")
-	get.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	get.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Credential id")
+	get.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	credential.AddCommand(get)
 
 
@@ -48,10 +49,10 @@ func init() {
 		Use:    "create",
 		Short:    "Create a credential",
 		Long:    "Create a credential",
-		RunE: createObjFunc("Credential"),
+		RunE: cli.CreateObjFunc("Credential"),
 	}
-	create.Flags().StringVarP(&flag_data_path, "Data", "D", "", "The path of json credential")
-	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	create.Flags().StringVarP(&cli.Flag_data_path, "Data", "D", "", "The path of json credential")
+	create.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	credential.AddCommand(create)
 
 
@@ -60,10 +61,10 @@ func init() {
 		Use:    "delete",
 		Short:    "Delete a credential",
 		Long:    "Delete a credential",
-		RunE: removeObjFunc("Credential"),
+		RunE: cli.RemoveObjFunc("Credential"),
 	}
-	delete.Flags().UintVarP(&flag_id, "id", "i", 0, "Credential id")
-	delete.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	delete.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Credential id")
+	delete.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	credential.AddCommand(delete)
 }
 

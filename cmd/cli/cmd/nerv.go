@@ -2,14 +2,15 @@ package cmd
 
 import (
 	"errors"
-
+	"fmt"
+	"encoding/json"
 	"github.com/spf13/cobra"
+	"github.com/toolkits/file"
+
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/cmd/cli/lib"
-	"fmt"
 	"github.com/ChaosXu/nerv/lib/automation/model/topology"
-	"encoding/json"
-	"github.com/toolkits/file"
+	"github.com/ChaosXu/nerv/lib/cli"
 )
 
 var NervCmd = &cobra.Command{
@@ -30,7 +31,7 @@ func init() {
 		Long:    "List all platforms",
 		RunE: listNerv,
 	}
-	list.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	list.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(list)
 
 	//get
@@ -40,8 +41,8 @@ func init() {
 		Long:    "Get all platform",
 		RunE: getNerv,
 	}
-	get.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	get.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	get.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	get.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(get)
 
 
@@ -52,10 +53,10 @@ func init() {
 		Long:    "Create a platform",
 		RunE: createNerv,
 	}
-	create.Flags().StringVarP(&flag_template, "template", "t", "../../resources/templates/nerv/env_standalone.json", "required. The path of template that used to install nerv")
-	create.Flags().StringVarP(&flag_topology_name, "topologoy", "o", "nerv-standalone", "required. Topology name")
-	create.Flags().StringVarP(&flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
-	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	create.Flags().StringVarP(&cli.Flag_template, "template", "t", "../../resources/templates/nerv/env_standalone.json", "required. The path of template that used to install nerv")
+	create.Flags().StringVarP(&cli.Flag_topology_name, "topologoy", "o", "nerv-standalone", "required. Topology name")
+	create.Flags().StringVarP(&cli.Flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
+	create.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(create)
 
 
@@ -66,8 +67,8 @@ func init() {
 		Long:    "Delete a platform",
 		RunE: removeNerv,
 	}
-	delete.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	delete.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	delete.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	delete.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(delete)
 
 	//install
@@ -77,8 +78,8 @@ func init() {
 		Long:    "Install a platform to an environment",
 		RunE: installNerv,
 	}
-	install.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	install.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	install.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	install.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(install)
 
 	//uninstall
@@ -88,8 +89,8 @@ func init() {
 		Long:    "Uninstall a platform from an environment",
 		RunE: uninstallNerv,
 	}
-	uninstall.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	uninstall.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	uninstall.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	uninstall.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(uninstall)
 
 	//start
@@ -99,8 +100,8 @@ func init() {
 		Long:    "Start a platform from an environment",
 		RunE: startNerv,
 	}
-	start.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	start.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	start.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	start.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(start)
 
 	//stop
@@ -110,8 +111,8 @@ func init() {
 		Long:    "Stop a platform from an environment",
 		RunE: stopNerv,
 	}
-	stop.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	stop.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	stop.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	stop.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(stop)
 
 	//restart
@@ -121,8 +122,8 @@ func init() {
 		Long:    "Restart a platform from an environment",
 		RunE: restartNerv,
 	}
-	restart.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	restart.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	restart.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	restart.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(restart)
 
 	//setup
@@ -132,8 +133,8 @@ func init() {
 		Long:    "Setup configuration of all nodes in platform",
 		RunE: setupNerv,
 	}
-	setup.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	setup.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	setup.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	setup.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(setup)
 }
 
@@ -143,7 +144,7 @@ func nervCmd(cmd *cobra.Command, args []string) error {
 
 func listNerv(cmd *cobra.Command, args []string) error {
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
@@ -161,11 +162,11 @@ func listNerv(cmd *cobra.Command, args []string) error {
 
 func getNerv(cmd *cobra.Command, args []string) error {
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	data := topology.Topology{}
 	if err := gdb.Preload("Nodes").Preload("Nodes.Links").Preload("Nodes.Properties").First(&data, id).Error; err != nil {
 		return err
@@ -181,8 +182,8 @@ func getNerv(cmd *cobra.Command, args []string) error {
 
 func createNerv(cmd *cobra.Command, args []string) error {
 	var inputs map[string]interface{}
-	if flag_input_path != "" {
-		buf, err := file.ToBytes(flag_input_path)
+	if cli.Flag_input_path != "" {
+		buf, err := file.ToBytes(cli.Flag_input_path)
 		if err != nil {
 			return err
 		}
@@ -191,7 +192,7 @@ func createNerv(cmd *cobra.Command, args []string) error {
 		}
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	db := lib.InitDB()
 	defer db.Close()
 
@@ -199,7 +200,7 @@ func createNerv(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		return err
 	}
-	id, err := deployer.Create(flag_topology_name, flag_template, inputs)
+	id, err := deployer.Create(cli.Flag_topology_name, cli.Flag_template, inputs)
 	if err != nil {
 		return err;
 	}
@@ -209,15 +210,15 @@ func createNerv(cmd *cobra.Command, args []string) error {
 }
 
 func removeNerv(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
+	if cli.Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	data := topology.Topology{}
 	if err := gdb.First(&data, id).Error; err != nil {
 		return err
@@ -233,15 +234,15 @@ func removeNerv(cmd *cobra.Command, args []string) error {
 }
 
 func installNerv(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
+	if cli.Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	nerv := &topology.Topology{}
 	if err := gdb.First(nerv, id).Error; err != nil {
 		return err
@@ -263,15 +264,15 @@ func installNerv(cmd *cobra.Command, args []string) error {
 }
 
 func uninstallNerv(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
+	if cli.Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	nerv := &topology.Topology{}
 	if err := gdb.First(nerv, id).Error; err != nil {
 		return err
@@ -293,15 +294,15 @@ func uninstallNerv(cmd *cobra.Command, args []string) error {
 }
 
 func startNerv(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
+	if cli.Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	nerv := &topology.Topology{}
 	if err := gdb.First(nerv, id).Error; err != nil {
 		return err
@@ -323,15 +324,15 @@ func startNerv(cmd *cobra.Command, args []string) error {
 }
 
 func stopNerv(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
+	if cli.Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	nerv := &topology.Topology{}
 	if err := gdb.First(nerv, id).Error; err != nil {
 		return err
@@ -353,15 +354,15 @@ func stopNerv(cmd *cobra.Command, args []string) error {
 }
 
 func restartNerv(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
+	if cli.Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	nerv := &topology.Topology{}
 	if err := gdb.First(nerv, id).Error; err != nil {
 		return err
@@ -383,15 +384,15 @@ func restartNerv(cmd *cobra.Command, args []string) error {
 }
 
 func setupNerv(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
+	if cli.Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	nerv := &topology.Topology{}
 	if err := gdb.First(nerv, id).Error; err != nil {
 		return err

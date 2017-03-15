@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/ChaosXu/nerv/lib/cli/format"
+	"github.com/ChaosXu/nerv/lib/cli"
 )
 
 func init() {
@@ -20,7 +21,7 @@ func init() {
 		Use:    "list",
 		Short:    "List all topologies",
 		Long:    "List all topologies",
-		RunE: listObjsFunc("Topology",
+		RunE: cli.ListObjsFunc("Topology",
 			&format.Page{List:"data", Columns:[]format.Column{
 				{Name:"ID", Format:"%v"},
 				{Name:"name", Label:"Name", Format:"%s"},
@@ -30,7 +31,7 @@ func init() {
 				{Name:"template", Label:"Template", Format:"%s"},
 			}}),
 	}
-	list.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	list.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(list)
 
 	//get
@@ -38,10 +39,10 @@ func init() {
 		Use:    "get",
 		Short:    "Get a topology",
 		Long:    "Get all topology",
-		RunE: getObjFunc("Topology", []string{"Nodes", "Nodes.Links", "Nodes.Properties"}),
+		RunE: cli.GetObjFunc("Topology", []string{"Nodes", "Nodes.Links", "Nodes.Properties"}),
 	}
-	get.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	get.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	get.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	get.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(get)
 
 
@@ -50,12 +51,12 @@ func init() {
 		Use:    "create",
 		Short:    "Create a topology",
 		Long:    "Create a topology",
-		RunE: invokeSvcFunc("Topology", "Create", []ArgType{{Flag:"topology", Type:"string"}, {Flag:"template", Type:"string"}, {Flag:"input", Type:"ref"}}),
+		RunE: cli.InvokeSvcFunc("Topology", "Create", []cli.ArgType{{Flag:"topology", Type:"string"}, {Flag:"template", Type:"string"}, {Flag:"input", Type:"ref"}}),
 	}
-	create.Flags().StringVarP(&flag_topology_name, "topology", "o", "", "required. Topology name")
-	create.Flags().StringVarP(&flag_template, "template", "t", "", "required. The path of template that used to install nerv")
-	create.Flags().StringVarP(&flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
-	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	create.Flags().StringVarP(&cli.Flag_topology_name, "topology", "o", "", "required. Topology name")
+	create.Flags().StringVarP(&cli.Flag_template, "template", "t", "", "required. The path of template that used to install nerv")
+	create.Flags().StringVarP(&cli.Flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
+	create.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(create)
 
 	//migrate
@@ -63,11 +64,11 @@ func init() {
 		Use:    "migrate",
 		Short:    "Migrate a topology",
 		Long:    "Migreate a topology for scaling out of scaling in a service",
-		RunE: invokeSvcFunc("Topology", "Migrate", []ArgType{{Flag:"id", Type:"uint"}, {Flag:"input", Type:"ref"}}),
+		RunE: cli.InvokeSvcFunc("Topology", "Migrate", []cli.ArgType{{Flag:"id", Type:"uint"}, {Flag:"input", Type:"ref"}}),
 	}
-	migrate.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	migrate.Flags().StringVarP(&flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
-	migrate.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	migrate.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	migrate.Flags().StringVarP(&cli.Flag_input_path, "input", "n", "", "required. The path of input that a template need it as input arguments")
+	migrate.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(migrate)
 
 
@@ -76,10 +77,10 @@ func init() {
 		Use:    "delete",
 		Short:    "Delete a topology",
 		Long:    "Delete a topology",
-		RunE: removeObjFunc("Topology"),
+		RunE: cli.RemoveObjFunc("Topology"),
 	}
-	delete.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	delete.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	delete.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	delete.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(delete)
 
 	//install
@@ -87,10 +88,10 @@ func init() {
 		Use:    "install",
 		Short:    "Install a topology to an environment",
 		Long:    "Install a topology to an environment",
-		RunE: invokeSvcFunc("Topology", "Install", []ArgType{{Flag:"id", Type:"uint"}}),
+		RunE: cli.InvokeSvcFunc("Topology", "Install", []cli.ArgType{{Flag:"id", Type:"uint"}}),
 	}
-	install.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	install.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	install.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	install.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(install)
 
 	//uninstall
@@ -98,10 +99,10 @@ func init() {
 		Use:    "uninstall",
 		Short:    "Uninstall a topology from an environment",
 		Long:    "Uninstall a topology from an environment",
-		RunE: invokeSvcFunc("Topology", "Uninstall", []ArgType{{Flag:"id", Type:"uint"}}),
+		RunE: cli.InvokeSvcFunc("Topology", "Uninstall", []cli.ArgType{{Flag:"id", Type:"uint"}}),
 	}
-	uninstall.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	uninstall.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	uninstall.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	uninstall.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(uninstall)
 
 	//reload
@@ -109,10 +110,10 @@ func init() {
 		Use:    "reload",
 		Short:    "Reload a topology that activate new config",
 		Long:    "Reload a topology that activate new config",
-		RunE: invokeSvcFunc("Topology", "Reload", []ArgType{{Flag:"id", Type:"uint"}}),
+		RunE: cli.InvokeSvcFunc("Topology", "Reload", []cli.ArgType{{Flag:"id", Type:"uint"}}),
 	}
-	start.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	start.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	start.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	start.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(start)
 
 	//stop
@@ -120,10 +121,10 @@ func init() {
 		Use:    "stop",
 		Short:    "Stop a topology from an environment",
 		Long:    "Stop a topology from an environment",
-		RunE: invokeSvcFunc("Topology", "Stop", []ArgType{{Flag:"id", Type:"uint"}}),
+		RunE: cli.InvokeSvcFunc("Topology", "Stop", []cli.ArgType{{Flag:"id", Type:"uint"}}),
 	}
-	stop.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	stop.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	stop.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	stop.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(stop)
 
 	//start
@@ -131,10 +132,10 @@ func init() {
 		Use:    "start",
 		Short:    "Start a topology from an environment",
 		Long:    "Start a topology from an environment",
-		RunE: invokeSvcFunc("Topology", "Start", []ArgType{{Flag:"id", Type:"uint"}}),
+		RunE: cli.InvokeSvcFunc("Topology", "Start", []cli.ArgType{{Flag:"id", Type:"uint"}}),
 	}
-	restart.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	restart.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	restart.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	restart.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(restart)
 
 	//setup
@@ -142,10 +143,10 @@ func init() {
 		Use:    "setup",
 		Short:    "Setup configuration",
 		Long:    "Setup configuration of all nodes in topology",
-		RunE: invokeSvcFunc("Topology", "Setup", []ArgType{{Flag:"id", Type:"uint"}}),
+		RunE: cli.InvokeSvcFunc("Topology", "Setup", []cli.ArgType{{Flag:"id", Type:"uint"}}),
 	}
-	setup.Flags().UintVarP(&flag_id, "id", "i", 0, "Topology id")
-	setup.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	setup.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
+	setup.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	topo.AddCommand(setup)
 }
 

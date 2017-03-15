@@ -8,6 +8,7 @@ import (
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/cmd/cli/lib"
 	"github.com/ChaosXu/nerv/lib/credential"
+	"github.com/ChaosXu/nerv/lib/cli"
 )
 
 func init() {
@@ -27,7 +28,7 @@ func init() {
 		Long:    "List all credentails",
 		RunE: listCredentials,
 	}
-	list.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	list.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	credential.AddCommand(list)
 
 	//get
@@ -37,8 +38,8 @@ func init() {
 		Long:    "Get all credential",
 		RunE: getCredential,
 	}
-	get.Flags().UintVarP(&flag_id, "id", "i", 0, "Credential id")
-	get.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	get.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Credential id")
+	get.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	credential.AddCommand(get)
 
 
@@ -49,8 +50,8 @@ func init() {
 		Long:    "Create a credential",
 		RunE: createCredential,
 	}
-	create.Flags().StringVarP(&flag_data, "data", "d", "", "JSON of credential")
-	create.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	create.Flags().StringVarP(&cli.Flag_data, "data", "d", "", "JSON of credential")
+	create.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	credential.AddCommand(create)
 
 
@@ -61,8 +62,8 @@ func init() {
 		Long:    "Delete a credential",
 		RunE: deleteCredential,
 	}
-	delete.Flags().UintVarP(&flag_id, "id", "i", 0, "Credential id")
-	delete.Flags().StringVarP(&flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	delete.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Credential id")
+	delete.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	credential.AddCommand(delete)
 }
 
@@ -72,7 +73,7 @@ func credentialFn(cmd *cobra.Command, args []string) error {
 
 func listCredentials(cmd *cobra.Command, args []string) error {
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
@@ -89,11 +90,11 @@ func listCredentials(cmd *cobra.Command, args []string) error {
 }
 
 func getCredential(cmd *cobra.Command, args []string) error {
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	data := credential.Credential{}
 	if err := gdb.First(&data, id).Error; err != nil {
 		return err
@@ -108,19 +109,19 @@ func getCredential(cmd *cobra.Command, args []string) error {
 }
 
 func createCredential(cmd *cobra.Command, args []string) error {
-	if flag_data == "" {
+	if cli.Flag_data == "" {
 		return errors.New("--data -d is null")
 	}
-	fmt.Println(flag_data)
+	fmt.Println(cli.Flag_data)
 
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	db := lib.InitDB()
 	defer db.Close()
 
 	data := &credential.Credential{}
 
-	err := json.Unmarshal([]byte(flag_data), data)
+	err := json.Unmarshal([]byte(cli.Flag_data), data)
 	if err != nil {
 		return err
 	}
@@ -134,15 +135,15 @@ func createCredential(cmd *cobra.Command, args []string) error {
 }
 
 func deleteCredential(cmd *cobra.Command, args []string) error {
-	if flag_id == 0 {
+	if cli.Flag_id == 0 {
 		return errors.New("--id -i is null")
 	}
 	//init
-	env.InitByConfig(flag_config)
+	env.InitByConfig(cli.Flag_config)
 	gdb := lib.InitDB()
 	defer gdb.Close()
 
-	id := flag_id
+	id := cli.Flag_id
 	data := credential.Credential{}
 	if err := gdb.First(&data, id).Error; err != nil {
 		return err
