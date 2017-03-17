@@ -7,4 +7,7 @@ type ServiceFactory interface {
 
 	// Get return a service
 	Get() interface{}
+
+	// Dependencies return all dependency service name
+	Dependencies() []string
 }

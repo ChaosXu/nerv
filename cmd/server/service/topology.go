@@ -31,6 +31,10 @@ func (p *TopologyServiceFactory) Get() interface{} {
 	return p.deployer
 }
 
+func (p *TopologyServiceFactory) Dependencies() []string {
+	return nil
+}
+
 func (p *TopologyServiceFactory) newDeployer() (*manager.Deployer, error) {
 	var g inject.Graph
 	var deployer manager.Deployer

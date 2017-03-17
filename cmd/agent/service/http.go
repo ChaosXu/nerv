@@ -35,6 +35,10 @@ func (p *HttpServiceFactory) Get() interface{} {
 	return p.httpService
 }
 
+func (p *HttpServiceFactory) Dependencies() []string {
+	return nil
+}
+
 func newHttpService() *HttpService {
 	return &HttpService{}
 }

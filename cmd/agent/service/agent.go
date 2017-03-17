@@ -32,6 +32,10 @@ func (p *RemoteScriptServiceFactory) Get() interface{} {
 	return p.remoteScriptService
 }
 
+func (p *RemoteScriptServiceFactory) Dependencies() []string {
+	return nil
+}
+
 //RemoteScriptService execute the method of app
 type Agent struct {
 	AppRoot string //the root path of app

@@ -32,6 +32,10 @@ func (p *LogConfigServiceFactory) Get() interface{} {
 	return p.logConfigService
 }
 
+func (p *LogConfigServiceFactory) Dependencies() []string {
+	return nil
+}
+
 // LogConfigService merge all filebeat's configs into one
 type LogConfigService struct {
 

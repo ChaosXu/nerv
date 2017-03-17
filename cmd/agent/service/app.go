@@ -25,6 +25,10 @@ func (p *AppServiceFactory) Get() interface{} {
 	return p.appService
 }
 
+func (p *AppServiceFactory) Dependencies() []string {
+	return nil
+}
+
 // AppService
 type AppService struct {
 
