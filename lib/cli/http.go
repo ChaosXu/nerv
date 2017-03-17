@@ -169,6 +169,17 @@ func InvokeSvcFunc(class string, method string, argTypes []ArgType) func(cmd *co
 						params = append(params, data)
 					}
 				}
+			case "array":
+				if v, err := cmd.Flags().GetString(argType.Flag); err != nil {
+					return err
+				} else {
+					data := []interface{}{}
+					if err := json.Unmarshal([]byte(v), &data); err != nil {
+						return err
+					} else {
+						params = append(params, data)
+					}
+				}
 			default:
 				fmt.Errorf("unsupported arg type %s", argType.Type)
 			}

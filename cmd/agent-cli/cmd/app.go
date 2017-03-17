@@ -67,8 +67,19 @@ func init() {
 	delete.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	app.AddCommand(delete)
 
-
-
+	//update
+	var update = &cobra.Command{
+		Use:    "update",
+		Short:  "Update app info",
+		Long:   "Update app info",
+		RunE: cli.InvokeSvcFunc("App", "Update", []cli.ArgType{{Flag:"name", Type:"string"}, {Flag:"attrs", Type:"array"}, {Flag:"values", Type:"array"}}),
+	}
+	name, attrs, values := "", "", ""
+	update.Flags().StringVarP(&name, "name", "n", "", "App name")
+	update.Flags().StringVarP(&attrs, "attrs", "a", "", "Attribute name to update")
+	update.Flags().StringVarP(&values, "values", "v", "", "Values to update")
+	update.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
+	app.AddCommand(update)
 
 }
 

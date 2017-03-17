@@ -146,6 +146,8 @@ func testAppCmd(t *testing.T) {
 	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "delete", "-i", id})
 	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "list"})
 	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "get", "-i", id})
+	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "update", "-n test_app",`-a [\"path\"]`,`-v [\"a\"]`})
+	runCmd(t, "../../release/nerv/agent/bin", "./agent-cli", []string{"app", "get", "-i", id})
 }
 
 func runCmd(t *testing.T, dir string, cli string, args []string) string {
