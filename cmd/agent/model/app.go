@@ -3,8 +3,6 @@ package model
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
-	"k8s.io/kubernetes/pkg/registry/core/service/portallocator"
-	"github.com/cloudinsight/cloudinsight-agent/common/log"
 )
 
 func init() {
