@@ -11,3 +11,10 @@ type ServiceFactory interface {
 	// Dependencies return all dependency service name
 	Dependencies() []string
 }
+
+// Factory create a service
+type Factory interface {
+
+	// New a service instance
+	New() interface{}
+}

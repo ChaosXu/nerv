@@ -1,80 +1,144 @@
 package service
 
+import (
+	"reflect"
+	"fmt"
+)
+
+type ObjectState uint32
+
+const (
+	Empty ObjectState = 0
+	New = 1
+	Init = 2
+)
+
+// ObjectRef store the information of a object instance
+type ObjectRef struct {
+	objType reflect.Type
+	key     string
+	factory Factory
+	state   ObjectState
+	obj     interface{}
+}
+
+func key(objType reflect.Type, name string) string {
+	key := name
+	if name == "" {
+		key = objType.Name()
+	}
+	return key
+}
+
+func newObjectRef(objType reflect.Type, name string, factory Factory) *ObjectRef {
+
+	return &ObjectRef{objType:objType, key:key(objType, name), factory:factory, state:Empty}
+}
+
+func (p *ObjectRef) Key() string {
+	return p.key
+}
+
+func (p *ObjectRef) Target() interface{} {
+	return p.obj
+}
+
+func (p *ObjectRef) Type() reflect.Type {
+	return p.objType
+}
+
+func (p *ObjectRef) new(obj interface{}) {
+	p.obj = obj
+	p.state = New
+}
+
+func (p *ObjectRef) init(obj interface{}) {
+	p.obj = obj
+	p.state = Init
+}
+
 // Container manage all services
 type Container struct {
-	factories map[string]ServiceFactory
-	inited    []string
+	objs map[string]*ObjectRef
 }
 
 func NewContainer() *Container {
-	return &Container{factories:map[string]ServiceFactory{}, inited:[]string{}}
+	return &Container{objs:map[string]*ObjectRef{}}
 }
 
-// Add factory
-func (p *Container) Add(name string, factory ServiceFactory) {
-	p.factories[name] = factory
+func (p *Container) Add(obj interface{}, name string, factory Factory) {
+	objType := reflect.TypeOf(obj)
+	if objType.Kind()==reflect.Ptr {
+		st := newObjectRef(objType, name, factory)
+		p.objs[st.Key()] = st
+	}else{
+		panic("obj must be a pointer")
+	}
+
 }
 
-// Start container
-func (p *Container) Start() {
-	if len(p.inited) > 0 {
-		return
+func (p *Container) GetByName(svcType reflect.Type, name string) interface{} {
+	key := key(svcType, name)
+	ref := p.objs[key]
+	if ref == nil {
+		return nil
 	}
 
-	fp := map[string]ServiceFactory{}
-	for n, f := range p.factories {
-		p.register(n, f, fp)
+	if ref.state == Init {
+		return ref.Target()
 	}
 
-	for i, n := range p.inited {
-		f := p.factories[n]
-		if err := f.Init(); err != nil {
-			p.dispose(i)
-			break
-		}
-		svc := f.Get()
-		if init, ok := svc.(Initializer); ok {
-			if err := init.Init(); err != nil {
-				p.dispose(i)
-				break
+	p.initObject(ref)
+
+	return ref.Target()
+}
+
+func (p *Container) GetByType(svcType reflect.Type) interface{} {
+	return p.GetByName(svcType, "")
+}
+
+func (p *Container) initObject(r *ObjectRef) {
+	factory := r.factory
+	var obj interface{}
+	if factory != nil {
+		obj = factory.New()
+	} else {
+		obj = reflect.New(r.Type().Elem()).Interface()
+	}
+
+	r.new(obj)
+	p.inject(r)
+	r.init(obj)
+}
+
+func (p *Container) inject(r *ObjectRef) {
+	t := r.Type().Elem()
+	count := t.NumField()
+	for i := 0; i < count; i++ {
+		f := t.Field(i)
+
+		injectObjName := f.Tag.Get("inject")
+
+		if injectObjName != "" {
+			injectR := p.objs[injectObjName]
+			if injectR == nil {
+				panic(fmt.Errorf("could not found object %s,defines in %s.%s", injectObjName, r.Type().Name(), f.Name))
 			}
+			switch injectR.state {
+			case New:
+				panic(fmt.Errorf("cycle dependency %s,defines in %s.%s", injectObjName, r.Type().Name(), f.Name))
+			case Empty:
+				p.initObject(injectR)
+			}
+
+			v := reflect.ValueOf(r.obj)
+			if v.Kind() == reflect.Ptr {
+				v = v.Elem()
+			}
+
+			fv := v.Field(i)
+			fv.Set(reflect.ValueOf(injectR.Target()))
 		}
 	}
 }
 
-// Stop container and release all service's resource
-func (p *Container) Stop() {
-
-}
-
-func (p *Container) register(name string, factory ServiceFactory, fp map[string]ServiceFactory) {
-	if fp[name] != nil {
-		return
-	}
-
-	deps := factory.Dependencies()
-	if deps == nil {
-		return
-	}
-
-	for _, dep := range deps {
-		depF := p.factories[dep]
-		if depF != nil {
-			p.register(dep, depF, fp)
-		}
-	}
-
-	p.inited = append(p.inited, name)
-	fp[name] = factory
-}
-
-func (p *Container) dispose(l int) {
-	for i := l - 1; i >= 0; i-- {
-		n := p.inited[i]
-		f := p.factories[n]
-		svc := f.Get()
-		if d, ok := svc.(Disposable); ok {
-			d.Dispose()
-		}
-	}
-}
