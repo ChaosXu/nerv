@@ -1,15 +1,16 @@
 package main
 
 import (
-
 	"log"
 	"fmt"
 	"os"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/env"
 	libsvc "github.com/ChaosXu/nerv/lib/service"
-	_ "github.com/ChaosXu/nerv/cmd/server/service"
+	"github.com/ChaosXu/nerv/cmd/server/service"
+	"github.com/ChaosXu/nerv/lib/automation/manager"
+	"github.com/ChaosXu/nerv/lib/net/http/rest"
+	"github.com/ChaosXu/nerv/lib/db"
 )
 
 var (
@@ -27,30 +28,16 @@ func main() {
 		log.Println("setup success")
 	} else {
 		log.Println("run")
-		initDB()
-		defer db.DB.Close()
 
-		initServices()
+		container := libsvc.NewContainer()
+		container.Add(&db.DBService{}, "DBService", nil)
+		container.Add(&service.HttpService{}, "HTTP", nil)
+		container.Add(&rest.RestController{}, "RestController", nil)
+		container.Add(&manager.Deployer{}, "Topology", &service.TopologyServiceFactory{})
+		container.Build()
+		defer container.Dispose()
+		select {}
 	}
-}
-
-func initServices() {
-	for _, factory := range libsvc.Registry.Services {
-		if err := factory.Init(); err != nil {
-			log.Fatalln(err.Error())
-		}
-
-		svc := factory.Get()
-		if svc != nil {
-			initializer, ok := svc.(libsvc.Initializer)
-			if ok {
-				if err := initializer.Init(); err != nil {
-					log.Fatalln(err.Error())
-				}
-			}
-		}
-	}
-	select {}
 }
 
 

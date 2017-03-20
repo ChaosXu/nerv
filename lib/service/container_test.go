@@ -10,6 +10,8 @@ func TestContainer (t *testing.T) {
 	container.Add(&A{},"a",nil)
 	container.Add(&B{},"b",nil)
 	container.Add(&C{},"c",nil)
+	container.Build()
+	defer container.Dispose()
 	obj := container.GetByName(reflect.TypeOf(&A{}),"a")
 	ai,_ := obj.(AI)
 	if "B"!=ai.Fai() {

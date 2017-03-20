@@ -59,22 +59,49 @@ func (p *ObjectRef) init(obj interface{}) {
 
 // Container manage all services
 type Container struct {
-	objs map[string]*ObjectRef
+	objs  map[string]*ObjectRef
+	inits []interface{}
 }
 
 func NewContainer() *Container {
-	return &Container{objs:map[string]*ObjectRef{}}
+	return &Container{objs:map[string]*ObjectRef{}, inits:[]interface{}{}}
 }
 
+// Add obj type in the container
 func (p *Container) Add(obj interface{}, name string, factory Factory) {
 	objType := reflect.TypeOf(obj)
-	if objType.Kind()==reflect.Ptr {
+	if objType.Kind() == reflect.Ptr {
 		st := newObjectRef(objType, name, factory)
 		p.objs[st.Key()] = st
-	}else{
+	} else {
 		panic("obj must be a pointer")
 	}
 
+}
+
+// Build all objs in the container
+func (p *Container) Build() {
+	for _, r := range p.objs {
+		switch r.state {
+		case Empty:
+			p.initObject(r)
+		case New:
+			panic(fmt.Errorf("the New state of the obj is invalid. %+v,%s", r.objType, r.Key()))
+		}
+	}
+
+	for index, o := range p.inits {
+		if i, ok := o.(Initializer); ok {
+			if err := i.Init(); err != nil {
+				p.disposeObjs(index)
+			}
+		}
+	}
+}
+
+// Build all objs in the container
+func (p *Container) Dispose() {
+	p.disposeObjs(len(p.inits))
 }
 
 func (p *Container) GetByName(svcType reflect.Type, name string) interface{} {
@@ -86,9 +113,9 @@ func (p *Container) GetByName(svcType reflect.Type, name string) interface{} {
 
 	if ref.state == Init {
 		return ref.Target()
+	} else {
+		panic(fmt.Errorf("uninit obj: %+v,%s", ref.objType, ref.Key()))
 	}
-
-	p.initObject(ref)
 
 	return ref.Target()
 }
@@ -109,6 +136,9 @@ func (p *Container) initObject(r *ObjectRef) {
 	r.new(obj)
 	p.inject(r)
 	r.init(obj)
+	if _, ok := obj.(Initializer); ok {
+		p.inits = append(p.inits, obj)
+	}
 }
 
 func (p *Container) inject(r *ObjectRef) {
@@ -138,6 +168,16 @@ func (p *Container) inject(r *ObjectRef) {
 
 			fv := v.Field(i)
 			fv.Set(reflect.ValueOf(injectR.Target()))
+		}
+	}
+}
+
+func (p *Container) disposeObjs(count int) {
+	for i := count - 1; i >= 0; i-- {
+		if d, ok := p.inits[i].(Disposable); ok {
+			if err := d.Dispose(); err != nil {
+				fmt.Println(err.Error())
+			}
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package lib
+package service
 
 import (
 	"github.com/ChaosXu/nerv/lib/automation/manager"
@@ -7,35 +7,18 @@ import (
 	"github.com/ChaosXu/nerv/lib/automation/repository"
 	"github.com/ChaosXu/nerv/lib/db"
 	resrep "github.com/ChaosXu/nerv/lib/resource/repository"
-	"github.com/ChaosXu/nerv/lib/service"
 )
 
-func init() {
-	service.Registry.Put("Topology", &TopologyServiceFactory{})
-}
-
+// TopologyServiceFactory
 type TopologyServiceFactory struct {
-	deployer *manager.Deployer
+
 }
 
-func (p *TopologyServiceFactory) Init() error {
-	deployer, err := p.newDeployer()
-	if err != nil {
-		return err
-	}
-	p.deployer = deployer
-	return nil
+func (p *TopologyServiceFactory) New() interface{} {
+	return p.newDeployer()
 }
 
-func (p *TopologyServiceFactory) Get() interface{} {
-	return p.deployer
-}
-
-func (p *TopologyServiceFactory) Dependencies() []string {
-	return nil
-}
-
-func (p *TopologyServiceFactory) newDeployer() (*manager.Deployer, error) {
+func (p *TopologyServiceFactory) newDeployer() *manager.Deployer {
 	var g inject.Graph
 	var deployer manager.Deployer
 	var templateRep repository.HttpTemplateRepository
@@ -57,12 +40,12 @@ func (p *TopologyServiceFactory) newDeployer() (*manager.Deployer, error) {
 		&inject.Object{Value: classRep},
 	)
 	if err != nil {
-		return nil, err
+		panic(err.Error())
 	}
 
 	err = g.Populate()
 	if err != nil {
-		return nil, err
+		panic(err.Error())
 	}
-	return &deployer, nil
+	return &deployer
 }
