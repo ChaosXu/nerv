@@ -12,12 +12,18 @@ import (
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/service"
 	"encoding/json"
-	"log"
 )
 
 // RestController
 type RestController struct {
+	container *service.Container
+}
 
+func (p *RestController) SetContainer(c *service.Container) {
+	fmt.Printf("SetContainer:%+v\n", c)
+	p.container = c
+
+	fmt.Printf("SetContainer:%+v\n", p.container)
 }
 
 func (p *RestController) handlePanic(w http.ResponseWriter, req *http.Request) {
@@ -29,7 +35,7 @@ func (p *RestController) handlePanic(w http.ResponseWriter, req *http.Request) {
 }
 
 func (p *RestController) List(w http.ResponseWriter, req *http.Request) {
-	defer handlePanic(w, req)
+	defer p.handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
 
@@ -113,7 +119,7 @@ func (p *RestController) List(w http.ResponseWriter, req *http.Request) {
 
 // get one obj. query params: assocations=a,b...
 func (p *RestController) Get(w http.ResponseWriter, req *http.Request) {
-	defer handlePanic(w, req)
+	defer p.handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
 	id := middleware.CurrentParams(req).PathParam("id")
@@ -146,7 +152,7 @@ func (p *RestController) Get(w http.ResponseWriter, req *http.Request) {
 }
 
 func (p *RestController) Create(w http.ResponseWriter, req *http.Request) {
-	defer handlePanic(w, req)
+	defer p.handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
 	md := db.Models[class]
@@ -174,7 +180,7 @@ func (p *RestController) Create(w http.ResponseWriter, req *http.Request) {
 }
 
 func (p *RestController) Remove(w http.ResponseWriter, req *http.Request) {
-	defer handlePanic(w, req)
+	defer p.handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
 	id := middleware.CurrentParams(req).PathParam("id")
@@ -203,7 +209,7 @@ func (p *RestController) Remove(w http.ResponseWriter, req *http.Request) {
 }
 
 func (p *RestController) Update(w http.ResponseWriter, req *http.Request) {
-	defer handlePanic(w, req)
+	defer p.handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
 	md := db.Models[class]
@@ -230,14 +236,19 @@ func (p *RestController) Update(w http.ResponseWriter, req *http.Request) {
 	render.JSON(w, req, data)
 }
 
-func (p *RestController) InvokeService(w http.ResponseWriter, req *http.Request) {
-	defer handlePanic(w, req)
+func (p *RestController) InvokeServiceFunc() func(w http.ResponseWriter, req *http.Request) {
+	return func(c *service.Container) func(w http.ResponseWriter, req *http.Request) {
+		return func(w http.ResponseWriter, req *http.Request) {
+			invokeService(c, w, req)
+		}
+	}(p.container)
+}
 
+func invokeService(c *service.Container, w http.ResponseWriter, req *http.Request) {
 	class := middleware.CurrentParams(req).PathParam("class")
 	methodName := middleware.CurrentParams(req).PathParam("id")
 
-	log.Println("InvokeService")
-	svc := service.Registry.Get(class)
+	svc := c.GetByName(class)
 	if svc == nil {
 		render.Status(req, 404)
 		render.JSON(w, req, fmt.Sprintf("service %s isn't exists", class))
@@ -292,7 +303,7 @@ func (p *RestController) InvokeService(w http.ResponseWriter, req *http.Request)
 }
 
 func (p *RestController) InvokeObj(w http.ResponseWriter, req *http.Request) {
-	defer handlePanic(w, req)
+	defer p.handlePanic(w, req)
 
 	class := middleware.CurrentParams(req).PathParam("class")
 	id := middleware.CurrentParams(req).PathParam("id")

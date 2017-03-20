@@ -3,7 +3,6 @@ package service
 import (
 	"fmt"
 	"io/ioutil"
-	"github.com/ChaosXu/nerv/lib/service"
 	"encoding/json"
 	"os"
 	"github.com/ChaosXu/nerv/lib/yml"
@@ -15,9 +14,6 @@ const (
 	FileBeatConfig = "../../log/config/filebeat.yml"
 )
 
-func init() {
-	service.Registry.Put("LogFile", &LogConfigServiceFactory{})
-}
 
 type LogConfigServiceFactory struct {
 	logConfigService *LogConfigService

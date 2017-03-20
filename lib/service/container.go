@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// ObjectState
 type ObjectState uint32
 
 const (
@@ -57,6 +58,12 @@ func (p *ObjectRef) init(obj interface{}) {
 	p.state = Init
 }
 
+// ContainerAware provide the container to the service
+type ContainerAware interface {
+	// SetContainer set the container to the service
+	SetContainer(c *Container)
+}
+
 // Container manage all services
 type Container struct {
 	objs  map[string]*ObjectRef
@@ -104,8 +111,8 @@ func (p *Container) Dispose() {
 	p.disposeObjs(len(p.inits))
 }
 
-func (p *Container) GetByName(svcType reflect.Type, name string) interface{} {
-	key := key(svcType, name)
+func (p *Container) GetByName(name string) interface{} {
+	key := key(nil, name)
 	ref := p.objs[key]
 	if ref == nil {
 		return nil
@@ -121,7 +128,7 @@ func (p *Container) GetByName(svcType reflect.Type, name string) interface{} {
 }
 
 func (p *Container) GetByType(svcType reflect.Type) interface{} {
-	return p.GetByName(svcType, "")
+	return p.GetByName(svcType.Name())
 }
 
 func (p *Container) initObject(r *ObjectRef) {
@@ -136,6 +143,9 @@ func (p *Container) initObject(r *ObjectRef) {
 	r.new(obj)
 	p.inject(r)
 	r.init(obj)
+	if c, ok := obj.(ContainerAware); ok {
+		c.SetContainer(p)
+	}
 	if _, ok := obj.(Initializer); ok {
 		p.inits = append(p.inits, obj)
 	}

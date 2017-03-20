@@ -1,49 +1,17 @@
 package service
 
 import (
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	"reflect"
-
 	"github.com/pressly/chi"
-	"github.com/pressly/chi/render"
 	chim "github.com/pressly/chi/middleware"
-
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/net/http/rest"
 	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
-	"github.com/ChaosXu/nerv/lib/service"
-	_ "github.com/ChaosXu/nerv/lib/service"
 )
 
-func init() {
-	service.Registry.Put("http", &HttpServiceFactory{})
-}
-
-type HttpServiceFactory struct {
-	httpService *HttpService
-}
-
-func (p *HttpServiceFactory) Init() error {
-	p.httpService = newHttpService()
-	return nil
-}
-
-func (p *HttpServiceFactory) Get() interface{} {
-	return p.httpService
-}
-
-func (p *HttpServiceFactory) Dependencies() []string {
-	return nil
-}
-
-func newHttpService() *HttpService {
-	return &HttpService{}
-}
-
 type HttpService struct {
+	Controller *rest.RestController `inject:"RestController"`
 }
 
 func (p *HttpService) Init() error {
@@ -53,78 +21,20 @@ func (p *HttpService) Init() error {
 
 	r.Route("/api/objs/:class", func(r chi.Router) {
 		//TBD:don't use server rest api
-		r.Get("/", rest.List)
-		r.Post("/", rest.Create)
-		r.Put("/", rest.Update)
+		r.Get("/", p.Controller.List)
+		r.Post("/", p.Controller.Create)
+		r.Put("/", p.Controller.Update)
 		r.Route("/:id", func(r chi.Router) {
-			r.Get("/", rest.Get)
-			r.Delete("/", rest.Remove)
-			r.Post("/", rest.InvokeService)
-			r.Post("/:method", rest.InvokeObj)
+			r.Get("/", p.Controller.Get)
+			r.Delete("/", p.Controller.Remove)
+			r.Post("/", p.Controller.InvokeServiceFunc())
+			r.Post("/:method", p.Controller.InvokeObj)
 		})
 	})
 	port := env.Config().GetMapString("http", "port", "3335")
 	go func() {
-		log.Fatal(http.ListenAndServe(":"+port, r))
+		log.Fatal(http.ListenAndServe(":" + port, r))
 	}()
 	return nil
 }
 
-func invokeService(w http.ResponseWriter, req *http.Request) {
-
-	class := middleware.CurrentParams(req).PathParam("class")
-	methodName := middleware.CurrentParams(req).PathParam("id")
-
-	svc := service.Registry.Get(class)
-	if svc != nil {
-		render.Status(req, 404)
-		render.JSON(w, req, fmt.Sprintf("service %s isn't exists", class))
-		return
-	}
-
-	t := reflect.TypeOf(svc)
-	if m, b := t.MethodByName(methodName); b != true {
-		render.Status(req, 404)
-		render.JSON(w, req, fmt.Sprintf("method %s.%s isn't exists.from %v", class, methodName, t))
-		return
-
-	} else {
-		args := []json.RawMessage{}
-		if err := render.Bind(req.Body, &args); err != nil {
-			render.Status(req, 400)
-			render.JSON(w, req, err.Error())
-			return
-		}
-
-		in := []reflect.Value{reflect.ValueOf(svc)}
-		funcType := m.Func.Type()
-
-		for i, arg := range args {
-			argType := funcType.In(i + 1)
-			argValue := reflect.New(argType)
-			if err := json.Unmarshal(arg, argValue.Interface()); err == nil {
-				in = append(in, argValue.Elem())
-			} else {
-				render.Status(req, 500)
-				render.JSON(w, req, err.Error())
-				return
-			}
-		}
-
-		values := m.Func.Call(in)
-		ret := []interface{}{}
-		httpCode := 200
-		for _, value := range values {
-			rawValue := value.Interface()
-			if e, ok := rawValue.(error); ok {
-				httpCode = 500
-				ret = append(ret, e.Error())
-			} else {
-				ret = append(ret, rawValue)
-			}
-
-		}
-		render.Status(req, httpCode)
-		render.JSON(w, req, ret)
-	}
-}

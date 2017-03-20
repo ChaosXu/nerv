@@ -18,7 +18,7 @@ import (
 
 // HttpService
 type HttpService struct {
-	Controller *rest.RestController `inject:RestController`
+	Controller *rest.RestController `inject:"RestController"`
 }
 
 func (p *HttpService) Init() error {
@@ -38,7 +38,7 @@ func (p *HttpService) Init() error {
 		r.Route("/:id", func(r chi.Router) {
 			r.Get("/", p.Controller.Get)
 			r.Delete("/", p.Controller.Remove)
-			r.Post("/", p.Controller.InvokeService)
+			r.Post("/", p.Controller.InvokeServiceFunc())
 			r.Post("/:method", p.Controller.InvokeObj)
 		})
 	})

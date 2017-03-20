@@ -2,14 +2,10 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/ChaosXu/nerv/lib/env"
 	libsvc "github.com/ChaosXu/nerv/lib/service"
-	_ "github.com/ChaosXu/nerv/cmd/agent/service"
-	"os"
-	"fmt"
-	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/cmd/agent/service"
+	"github.com/ChaosXu/nerv/lib/net/http/rest"
 )
 
 var RootCmd = &cobra.Command{Use: "agent"}
@@ -29,49 +25,19 @@ func init() {
 
 func serviceInit(cmd *cobra.Command, args []string) error {
 	env.InitByConfig(flag_config)
-	if _, err := os.Stat("../data"); err != nil {
-		if err := os.MkdirAll("../data", os.ModeDir | os.ModePerm); err != nil {
-			return fmt.Errorf("create dir ../data failed. %s", err.Error())
-		}
-	}
 
-	err := initDB()
-	if err != nil {
-		return err
-	}
-	defer db.DB.Close()
-
-	for _, factory := range libsvc.Registry.Services {
-		if err := factory.Init(); err != nil {
-			return err
-		}
-
-		svc := factory.Get()
-		if svc != nil {
-			initializer, ok := svc.(libsvc.Initializer)
-			if ok {
-				if err := initializer.Init(); err != nil {
-					return err
-				}
-			}
-		}
-	}
+	container := libsvc.NewContainer()
+	container.Add(&service.DBService{},"DB",nil)
+	container.Add(&service.Agent{}, "Agent", &service.RemoteScriptServiceFactory{})
+	container.Add(&service.AppService{}, "App", nil)
+	container.Add(&service.HttpService{}, "HTTP", nil)
+	container.Add(&rest.RestController{}, "RestController", nil)
+	container.Build()
+	defer container.Dispose()
 	select {}
 	return nil
 }
 
-func initDB() error {
-	gdb, err := gorm.Open("sqlite3", "../data/agent.db")
-	if err != nil {
-		return err
-	}
-	db.DB = gdb
-	db.DB.LogMode(false)
-	for _, v := range db.Models {
-		db.DB.AutoMigrate(v.Type)
-	}
-	return nil
-}
 
 
 

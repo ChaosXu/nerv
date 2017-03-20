@@ -1,33 +1,10 @@
 package service
 
 import (
-	"github.com/ChaosXu/nerv/lib/service"
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/cmd/agent/model"
 	"github.com/ChaosXu/nerv/lib/util"
 )
-
-func init() {
-	service.Registry.Put("App", &AppServiceFactory{})
-}
-
-// AppServiceFactory
-type AppServiceFactory struct {
-	appService *AppService
-}
-
-func (p *AppServiceFactory) Init() error {
-	p.appService = &AppService{}
-	return nil
-}
-
-func (p *AppServiceFactory) Get() interface{} {
-	return p.appService
-}
-
-func (p *AppServiceFactory) Dependencies() []string {
-	return nil
-}
 
 // AppService
 type AppService struct {
