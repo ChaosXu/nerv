@@ -142,13 +142,13 @@ func (p *Container) initObject(r *ObjectRef) {
 
 	r.new(obj)
 	p.inject(r)
-	r.init(obj)
 	if c, ok := obj.(ContainerAware); ok {
 		c.SetContainer(p)
 	}
 	if _, ok := obj.(Initializer); ok {
 		p.inits = append(p.inits, obj)
 	}
+	r.init(obj)
 }
 
 func (p *Container) inject(r *ObjectRef) {

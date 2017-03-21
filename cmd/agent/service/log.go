@@ -14,25 +14,18 @@ const (
 	FileBeatConfig   = "../../log/config/filebeat.yml"
 )
 
-type LogConfigServiceFactory struct {
-	logConfigService *LogConfigService
-}
-
-func (p *LogConfigServiceFactory) Init() error {
-	p.logConfigService = &LogConfigService{}
-	return nil
-}
-
-func (p *LogConfigServiceFactory) Get() interface{} {
-	return p.logConfigService
-}
-
-func (p *LogConfigServiceFactory) Dependencies() []string {
-	return nil
-}
-
 // LogConfigService merge all filebeat's configs into one
 type LogConfigService struct {
+	AppService *AppService `inject:"App"`
+}
+
+func (p *LogConfigService) Init() error {
+	p.AppService.On("Update", p)
+	return nil
+}
+
+func (p *LogConfigService) Handle(event string, data interface{}) {
+	fmt.Printf("%s:%+v\n", event, data)
 }
 
 // Add a filebeat config of app

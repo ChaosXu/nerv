@@ -32,6 +32,7 @@ func serviceInit(cmd *cobra.Command, args []string) error {
 	container.Add(&service.AppService{}, "App", nil)
 	container.Add(&service.HttpService{}, "HTTP", nil)
 	container.Add(&rest.RestController{}, "RestController", nil)
+	container.Add(&service.LogConfigService{}, "LogConfigService", nil)
 	container.Build()
 	defer container.Dispose()
 	select {}
