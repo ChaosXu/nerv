@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"github.com/ChaosXu/nerv/cmd/server/service"
 	"github.com/ChaosXu/nerv/lib/automation/manager"
+	"github.com/ChaosXu/nerv/lib/brick"
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/net/http/rest"
-	libsvc "github.com/ChaosXu/nerv/lib/service"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
 	"os"
@@ -29,7 +29,7 @@ func main() {
 	} else {
 		log.Println("run")
 
-		container := libsvc.NewContainer()
+		container := brick.NewContainer()
 		container.Add(&db.DBService{}, "DBService", nil)
 		container.Add(&service.HttpService{}, "HTTP", nil)
 		container.Add(&rest.RestController{}, "RestController", nil)

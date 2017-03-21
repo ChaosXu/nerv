@@ -3,9 +3,9 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ChaosXu/nerv/lib/brick"
 	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
-	"github.com/ChaosXu/nerv/lib/service"
 	"github.com/jinzhu/gorm"
 	"github.com/pressly/chi/render"
 	"net/http"
@@ -16,10 +16,10 @@ import (
 
 // RestController
 type RestController struct {
-	container *service.Container
+	container *brick.Container
 }
 
-func (p *RestController) SetContainer(c *service.Container) {
+func (p *RestController) SetContainer(c *brick.Container) {
 	fmt.Printf("SetContainer:%+v\n", c)
 	p.container = c
 
@@ -236,14 +236,14 @@ func (p *RestController) Update(w http.ResponseWriter, req *http.Request) {
 }
 
 func (p *RestController) InvokeServiceFunc() func(w http.ResponseWriter, req *http.Request) {
-	return func(c *service.Container) func(w http.ResponseWriter, req *http.Request) {
+	return func(c *brick.Container) func(w http.ResponseWriter, req *http.Request) {
 		return func(w http.ResponseWriter, req *http.Request) {
 			invokeService(c, w, req)
 		}
 	}(p.container)
 }
 
-func invokeService(c *service.Container, w http.ResponseWriter, req *http.Request) {
+func invokeService(c *brick.Container, w http.ResponseWriter, req *http.Request) {
 	class := middleware.CurrentParams(req).PathParam("class")
 	methodName := middleware.CurrentParams(req).PathParam("id")
 

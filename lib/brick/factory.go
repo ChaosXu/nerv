@@ -1,4 +1,4 @@
-package service
+package brick
 
 // Factory create a service
 type Factory interface {

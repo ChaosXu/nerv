@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"github.com/ChaosXu/nerv/cmd/agent/service"
+	"github.com/ChaosXu/nerv/lib/brick"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/net/http/rest"
-	libsvc "github.com/ChaosXu/nerv/lib/service"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ func init() {
 func serviceInit(cmd *cobra.Command, args []string) error {
 	env.InitByConfig(flag_config)
 
-	container := libsvc.NewContainer()
+	container := brick.NewContainer()
 	container.Add(&service.DBService{}, "DB", nil)
 	container.Add(&service.Agent{}, "Agent", &service.RemoteScriptServiceFactory{})
 	container.Add(&service.AppService{}, "App", nil)

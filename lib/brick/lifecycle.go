@@ -1,4 +1,4 @@
-package service
+package brick
 
 // Initializer init a service
 type Initializer interface {
