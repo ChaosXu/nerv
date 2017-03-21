@@ -1,8 +1,8 @@
 package service
 
 import (
-	"reflect"
 	"fmt"
+	"reflect"
 )
 
 // ObjectState
@@ -10,8 +10,8 @@ type ObjectState uint32
 
 const (
 	Empty ObjectState = 0
-	New = 1
-	Init = 2
+	New               = 1
+	Init              = 2
 )
 
 // ObjectRef store the information of a object instance
@@ -33,7 +33,7 @@ func key(objType reflect.Type, name string) string {
 
 func newObjectRef(objType reflect.Type, name string, factory Factory) *ObjectRef {
 
-	return &ObjectRef{objType:objType, key:key(objType, name), factory:factory, state:Empty}
+	return &ObjectRef{objType: objType, key: key(objType, name), factory: factory, state: Empty}
 }
 
 func (p *ObjectRef) Key() string {
@@ -71,7 +71,7 @@ type Container struct {
 }
 
 func NewContainer() *Container {
-	return &Container{objs:map[string]*ObjectRef{}, inits:[]interface{}{}}
+	return &Container{objs: map[string]*ObjectRef{}, inits: []interface{}{}}
 }
 
 // Add obj type in the container
@@ -191,4 +191,3 @@ func (p *Container) disposeObjs(count int) {
 		}
 	}
 }
-

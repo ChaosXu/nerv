@@ -1,10 +1,10 @@
 package util
 
 import (
-	"strings"
-	"os/exec"
-	"testing"
 	"os"
+	"os/exec"
+	"strings"
+	"testing"
 )
 
 type Cmd struct {

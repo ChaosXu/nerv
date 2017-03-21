@@ -1,16 +1,16 @@
 package cli
 
 import (
-	"fmt"
-	"errors"
-	"strings"
 	"encoding/json"
+	"errors"
+	"fmt"
+	"strings"
 
-	"github.com/spf13/cobra"
-	"github.com/go-resty/resty"
-	"github.com/ChaosXu/nerv/lib/env"
-	"github.com/toolkits/file"
 	"github.com/ChaosXu/nerv/lib/cli/format"
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/go-resty/resty"
+	"github.com/spf13/cobra"
+	"github.com/toolkits/file"
 )
 
 type ArgType struct {
@@ -26,8 +26,8 @@ func ListObjsFunc(class string, format *format.Page) func(cmd *cobra.Command, ar
 		url := fmt.Sprintf("%s/objs/%s", rootUrl, class)
 
 		res, err := resty.R().
-				SetHeader("Content-Type", "application/json").
-				Get(url)
+			SetHeader("Content-Type", "application/json").
+			Get(url)
 		if err != nil {
 			return err
 		}
@@ -69,8 +69,8 @@ func GetObj(class string, cmd *cobra.Command, assoc []string) error {
 	}
 
 	res, err := resty.R().
-			SetHeader("Content-Type", "application/json").
-			Get(url)
+		SetHeader("Content-Type", "application/json").
+		Get(url)
 	if err != nil {
 		return err
 	}
@@ -97,9 +97,9 @@ func CreateObjFunc(class string) func(cmd *cobra.Command, args []string) error {
 			return err
 		}
 		res, err := resty.R().
-				SetHeader("Content-Type", "application/json").
-				SetBody(body).
-				Post(url)
+			SetHeader("Content-Type", "application/json").
+			SetBody(body).
+			Post(url)
 		if err != nil {
 			return err
 		}
@@ -123,8 +123,8 @@ func RemoveObjFunc(class string) func(cmd *cobra.Command, args []string) error {
 		url := fmt.Sprintf("%s/objs/%s/%d", rootUrl, class, Flag_id)
 
 		res, err := resty.R().
-				SetHeader("Content-Type", "application/json").
-				Delete(url)
+			SetHeader("Content-Type", "application/json").
+			Delete(url)
 		if err != nil {
 			return err
 		}
@@ -230,9 +230,9 @@ func InvokeObj(class string, cmd *cobra.Command, method string, args []interface
 	fmt.Println(body)
 
 	res, err := resty.R().
-			SetHeader("Content-Type", "application/json").
-			SetBody(body).
-			Post(fmt.Sprintf("%s/objs/%s/%d/%s", rootUrl, class, Flag_id, method))
+		SetHeader("Content-Type", "application/json").
+		SetBody(body).
+		Post(fmt.Sprintf("%s/objs/%s/%d/%s", rootUrl, class, Flag_id, method))
 	if err != nil {
 		return err
 	}
@@ -258,9 +258,9 @@ func InvokeSvc(class string, cmd *cobra.Command, method string, args []interface
 	fmt.Println(url)
 	fmt.Println(body)
 	res, err := resty.R().
-			SetHeader("Content-Type", "application/json").
-			SetBody(body).
-			Post(url)
+		SetHeader("Content-Type", "application/json").
+		SetBody(body).
+		Post(url)
 	if err != nil {
 		return err
 	}
@@ -271,8 +271,3 @@ func InvokeSvc(class string, cmd *cobra.Command, method string, args []interface
 	fmt.Println(string(resBody))
 	return nil
 }
-
-
-
-
-

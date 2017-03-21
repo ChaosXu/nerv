@@ -1,19 +1,19 @@
 package agent_cli
 
 import (
-	"testing"
-	"regexp"
-	"net/rpc"
 	"github.com/ChaosXu/nerv/test/util"
+	"net/rpc"
+	"regexp"
+	"testing"
 )
 
 func TestNervCmd(t *testing.T) {
 
 	//create
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/server_core.json", "-o", "nerv-test", "-n", "../../../../test/agent-cli/nerv_standalone_inputs.json"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "create", "-t", "../../resources/templates/nerv/server_core.json", "-o", "nerv-test", "-n", "../../../../test/agent-cli/nerv_standalone_inputs.json"},
 	}
 
 	var id string
@@ -29,9 +29,9 @@ func TestNervCmd(t *testing.T) {
 
 	//install
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "install", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "install", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -42,12 +42,11 @@ func TestNervCmd(t *testing.T) {
 		t.Log(res)
 	}
 
-
 	//setup
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "setup", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "setup", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -59,9 +58,9 @@ func TestNervCmd(t *testing.T) {
 
 	//start
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "start", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "start", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -71,13 +70,13 @@ func TestNervCmd(t *testing.T) {
 		t.Log(string(out))
 	}
 
-	testAgent(t);
+	testAgent(t)
 
 	//stop
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "stop", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "stop", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -100,7 +99,6 @@ func TestNervCmd(t *testing.T) {
 	//} else {
 	//	t.Log(string(out))
 	//}
-
 
 	//delete
 	//cmd = &util.Cmd{
@@ -128,7 +126,7 @@ func testHttp(t *testing.T) {
 		t.Log("DialHTTP:", err.Error())
 	}
 
-	script := &util.RemoteScript{Content:"echo agnet ok", Args:map[string]string{}}
+	script := &util.RemoteScript{Content: "echo agnet ok", Args: map[string]string{}}
 	var reply string
 	err = client.Call("Agent.Execute", script, &reply)
 	if err != nil {
@@ -153,9 +151,9 @@ func testAppCmd(t *testing.T) {
 func runCmd(t *testing.T, dir string, cli string, args []string) string {
 	r := "0"
 	cmd := &util.Cmd{
-		Dir: dir,
-		Cli:cli,
-		Items:args,
+		Dir:   dir,
+		Cli:   cli,
+		Items: args,
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -174,4 +172,3 @@ func runCmd(t *testing.T, dir string, cli string, args []string) string {
 	}
 	return r
 }
-

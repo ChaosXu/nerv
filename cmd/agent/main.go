@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"github.com/ChaosXu/nerv/cmd/agent/cmd"
 	_ "github.com/ChaosXu/nerv/cmd/agent/model"
+	"os"
 )
 
 var (
@@ -17,4 +17,3 @@ func main() {
 		os.Exit(-1)
 	}
 }
-

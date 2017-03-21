@@ -1,19 +1,18 @@
 package service
 
 import (
-	"fmt"
-	"io/ioutil"
 	"encoding/json"
-	"os"
+	"fmt"
 	"github.com/ChaosXu/nerv/lib/yml"
+	"io/ioutil"
+	"os"
 )
 
 const (
 	FileBeatIndexDir = "../../data/filebeat"
-	FileBeatIndex = "../../data/filebeat/config_index.json"
-	FileBeatConfig = "../../log/config/filebeat.yml"
+	FileBeatIndex    = "../../data/filebeat/config_index.json"
+	FileBeatConfig   = "../../log/config/filebeat.yml"
 )
-
 
 type LogConfigServiceFactory struct {
 	logConfigService *LogConfigService
@@ -34,7 +33,6 @@ func (p *LogConfigServiceFactory) Dependencies() []string {
 
 // LogConfigService merge all filebeat's configs into one
 type LogConfigService struct {
-
 }
 
 // Add a filebeat config of app
@@ -61,7 +59,7 @@ func (p *LogConfigService) Add(file string) error {
 	if err != nil {
 		return err
 	}
-	if err := os.MkdirAll(FileBeatIndexDir, os.ModeDir | os.ModePerm); err != nil {
+	if err := os.MkdirAll(FileBeatIndexDir, os.ModeDir|os.ModePerm); err != nil {
 		fmt.Printf("write log config failed when add. file: %s\n", err.Error())
 		return err
 	}
@@ -91,8 +89,8 @@ func (p *LogConfigService) Remove(file string) error {
 	json.Unmarshal(buf, &configs)
 	for i, v := range configs {
 		if v == file {
-			configs = append(configs[:i], configs[i + 1:]...)
-			break;
+			configs = append(configs[:i], configs[i+1:]...)
+			break
 		}
 	}
 
@@ -100,7 +98,7 @@ func (p *LogConfigService) Remove(file string) error {
 	if err != nil {
 		return err
 	}
-	if err := os.MkdirAll(FileBeatIndexDir, os.ModeDir | os.ModePerm); err != nil {
+	if err := os.MkdirAll(FileBeatIndexDir, os.ModeDir|os.ModePerm); err != nil {
 		fmt.Printf("write log config failed when remove. file: %s\n", err.Error())
 		return err
 	}

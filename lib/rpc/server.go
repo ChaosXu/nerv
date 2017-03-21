@@ -1,13 +1,13 @@
 package rpc
 
 import (
-	"github.com/ChaosXu/nerv/lib/env"
-	"net"
-	"net/rpc"
-	"log"
 	"fmt"
-	"reflect"
+	"github.com/ChaosXu/nerv/lib/env"
+	"log"
+	"net"
 	"net/http"
+	"net/rpc"
+	"reflect"
 )
 
 var (
@@ -34,7 +34,7 @@ func Start(cfg *env.Properties) error {
 		}
 	}
 	rpc.HandleHTTP()
-	l, e := net.Listen("tcp", ":" + port)
+	l, e := net.Listen("tcp", ":"+port)
 	if e != nil {
 		return nil
 	}

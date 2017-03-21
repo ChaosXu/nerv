@@ -1,10 +1,9 @@
 package db
 
-
 var Models = map[string]*ModelDescriptor{}
 
 type ModelDescriptor struct {
-	Type interface{}
-	New  func() interface{}
-	NewSlice  func() interface{}
+	Type     interface{}
+	New      func() interface{}
+	NewSlice func() interface{}
 }

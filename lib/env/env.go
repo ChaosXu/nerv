@@ -1,15 +1,15 @@
 package env
 
 import (
-	"os"
 	"flag"
 	"log"
+	"os"
 )
 
 var (
 	config *Properties
-	Debug *bool
-	Setup *bool
+	Debug  *bool
+	Setup  *bool
 )
 
 func SetConfig(c *Properties) {

@@ -1,10 +1,10 @@
 package main
 
 import (
+	httpf "github.com/ChaosXu/nerv/lib/net/http/file"
 	"github.com/pressly/chi"
 	"net/http"
 	"strings"
-	httpf "github.com/ChaosXu/nerv/lib/net/http/file"
 )
 
 func FileServer(mx *chi.Mux, path string, root httpf.FileSystem) {

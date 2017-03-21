@@ -62,4 +62,3 @@ func (p *Page) Print(page map[string]interface{}) {
 		fmt.Println("")
 	}
 }
-

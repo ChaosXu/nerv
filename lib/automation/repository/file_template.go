@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"github.com/ChaosXu/nerv/lib/automation/model/topology"
-	"github.com/toolkits/file"
 	"encoding/json"
 	"fmt"
+	"github.com/ChaosXu/nerv/lib/automation/model/topology"
+	"github.com/toolkits/file"
 )
 
 // FileTemplateRepository load template from local file system.

@@ -12,9 +12,9 @@ type Sample struct {
 
 func NewSample(metric string, values map[string]interface{}, resourceType string) *Sample {
 	tags := map[string]string{
-		"resourceType":resourceType,
+		"resourceType": resourceType,
 	}
-	return &Sample{Metric:metric, Values:values, Tags:tags, Timestamp:time.Now().Unix()}
+	return &Sample{Metric: metric, Values: values, Tags: tags, Timestamp: time.Now().Unix()}
 }
 
 func (p *Sample) Merge(other *Sample) {

@@ -1,17 +1,17 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/jinzhu/gorm"
 )
 
 // Account is a principal of the user
 type Account struct {
 	gorm.Model
-	Name string	`gorm:"not null;unique"`
-	Nick string `gorm:"not null;unique"`
-	Mail string	`gorm:"not null;unique"`
-	Phone int64 `gorm:"not null;unique"`
+	Name     string `gorm:"not null;unique"`
+	Nick     string `gorm:"not null;unique"`
+	Mail     string `gorm:"not null;unique"`
+	Phone    int64  `gorm:"not null;unique"`
 	Password string `gorm:"not null"`
 }
 
@@ -25,7 +25,7 @@ func accountDesc() *db.ModelDescriptor {
 		New: func() interface{} {
 			return &Account{}
 		},
-		NewSlice:func() interface{} {
+		NewSlice: func() interface{} {
 			return &[]Account{}
 		},
 	}

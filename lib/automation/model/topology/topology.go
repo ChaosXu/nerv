@@ -1,8 +1,8 @@
 package topology
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/jinzhu/gorm"
 )
 
 func init() {
@@ -15,7 +15,7 @@ func topologyDesc() *db.ModelDescriptor {
 		New: func() interface{} {
 			return &Topology{}
 		},
-		NewSlice:func() interface{} {
+		NewSlice: func() interface{} {
 			return &[]Topology{}
 		},
 	}
@@ -27,12 +27,11 @@ type traverseCallback func(node *Node, template *ServiceTemplate) (<-chan error,
 type Topology struct {
 	gorm.Model
 	Status
-	Name     string    `json:"name"`     //topology name
-	Template string    `json:"template"` //service template name
-	Version  int    `json:"version"`   //service template version
-	Nodes    []*Node    `json:"nodes"`
+	Name     string  `json:"name"`     //topology name
+	Template string  `json:"template"` //service template name
+	Version  int     `json:"version"`  //service template version
+	Nodes    []*Node `json:"nodes"`
 }
-
 
 //Only used to add host node
 func (p *Topology) AddNode(node *Node) {

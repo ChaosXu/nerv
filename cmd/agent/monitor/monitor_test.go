@@ -1,11 +1,11 @@
 package monitor_test
 
 import (
-	"testing"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor"
 	"github.com/ChaosXu/nerv/lib/env"
-	"log"
 	"github.com/ChaosXu/nerv/lib/rpc"
+	"log"
+	"testing"
 	"time"
 )
 
@@ -17,9 +17,9 @@ type MonitorMock struct {
 
 func newMonitorMock() *MonitorMock {
 	return &MonitorMock{
-		ch:make(chan map[string]interface{}, 100),
-		resources:map[string]string{},
-		metrics:map[string]string{},
+		ch:        make(chan map[string]interface{}, 100),
+		resources: map[string]string{},
+		metrics:   map[string]string{},
 	}
 }
 
@@ -120,25 +120,25 @@ func (p *MonitorPublisher) Publish(v map[string]interface{}, reply *string) erro
 
 func TestStartStop(t *testing.T) {
 	cfg := env.NewProperties(map[string]interface{}{
-		"rpc":map[string]interface{}{
-			"port":"4333",
+		"rpc": map[string]interface{}{
+			"port": "4333",
 		},
-		"shipper":map[string]interface{}{
-			"type":"rpc",
-			"server":"localhost:4333",
+		"shipper": map[string]interface{}{
+			"type":   "rpc",
+			"server": "localhost:4333",
 		},
-		"discovery":map[string]interface{}{
-			"period":"30",
-			"path":"../../../resources/discovery",
+		"discovery": map[string]interface{}{
+			"period": "30",
+			"path":   "../../../resources/discovery",
 		},
-		"monitor":map[string]interface{}{
-			"path":"../../../resources/monitor",
+		"monitor": map[string]interface{}{
+			"path": "../../../resources/monitor",
 		},
-		"metrics":map[string]interface{}{
-			"path":"../../../resources/metrics",
+		"metrics": map[string]interface{}{
+			"path": "../../../resources/metrics",
 		},
-		"scripts":map[string]interface{}{
-			"path":"../../../resources/scripts",
+		"scripts": map[string]interface{}{
+			"path": "../../../resources/scripts",
 		},
 	})
 

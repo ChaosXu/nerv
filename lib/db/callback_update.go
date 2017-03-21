@@ -2,10 +2,10 @@ package db
 
 import (
 	"fmt"
-	"strings"
 	"github.com/jinzhu/gorm"
 	"reflect"
 	"sort"
+	"strings"
 	//"github.com/ChaosXu/nerv/lib/log"
 )
 
@@ -183,12 +183,12 @@ func saveAfterAssociationsCallback(scope *gorm.Scope) {
 					olds = reflect.ValueOf(updated).Elem()
 					hasOlds = true
 				default:
-				//TBD
+					//TBD
 				}
 			}
 
 			if relationship := field.Relationship; relationship != nil &&
-					(relationship.Kind == "has_one" || relationship.Kind == "has_many" || relationship.Kind == "many_to_many") {
+				(relationship.Kind == "has_one" || relationship.Kind == "has_many" || relationship.Kind == "many_to_many") {
 				value := field.Field
 				switch value.Kind() {
 				case reflect.Slice:

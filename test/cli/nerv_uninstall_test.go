@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"testing"
 	"github.com/ChaosXu/nerv/test/util"
+	"testing"
 )
 
 func TestNervUninstall(t *testing.T) {
@@ -10,9 +10,9 @@ func TestNervUninstall(t *testing.T) {
 
 	//uninstall
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "uninstall", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "uninstall", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -22,12 +22,11 @@ func TestNervUninstall(t *testing.T) {
 		t.Log(string(out))
 	}
 
-
 	//delete
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "delete", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "delete", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -37,5 +36,3 @@ func TestNervUninstall(t *testing.T) {
 		t.Log(string(out))
 	}
 }
-
-

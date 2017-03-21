@@ -2,15 +2,14 @@ package topology
 
 import "strings"
 
-
 // ServiceTemplate is a prototype of service.
 type ServiceTemplate struct {
 	Path        string
-	Name        string             `json:"name"`
-	Version     int32              `json:"version"`
-	Environment string             `json:"environment"` //standalone|distributed
-	Inputs      []Input            `json:"inputs"`
-	Nodes       []NodeTemplate     `json:"nodes"`
+	Name        string         `json:"name"`
+	Version     int32          `json:"version"`
+	Environment string         `json:"environment"` //standalone|distributed
+	Inputs      []Input        `json:"inputs"`
+	Nodes       []NodeTemplate `json:"nodes"`
 }
 
 // Input define arguments that used by nodes
@@ -22,9 +21,9 @@ type Input struct {
 
 // NodeTemplate is a prototype of service node.
 type NodeTemplate struct {
-	Name         string        `json:"name"`        //Node name
-	Type         string        `json:"type"`        //The name of NodeType
-	Parameters   []Parameter `json:parameters`      //parameters of NodeTemplate
+	Name         string       `json:"name"`         //Node name
+	Type         string       `json:"type"`         //The name of NodeType
+	Parameters   []Parameter  `json:parameters`     //parameters of NodeTemplate
 	Dependencies []Dependency `json:"dependencies"` //The dependencies of node
 }
 
@@ -63,31 +62,30 @@ func (p *NodeTemplate) isVar(pv string) bool {
 
 // Dependency is relationship  between two node
 type Dependency struct {
-											 //	gorm.Model
-	NodeTemplateID int                       //`gorm:"index"`  //Foreign key of the node template
-	Type           string    `json:"type"`   //The type of dependency: connect;contained
-	Target         string    `json:"target"` //The name of target node
+	//	gorm.Model
+	NodeTemplateID int    //`gorm:"index"`  //Foreign key of the node template
+	Type           string `json:"type"`   //The type of dependency: connect;contained
+	Target         string `json:"target"` //The name of target node
 }
 
 // Parameter is used to generate the node of template
 type Parameter struct {
-					   //	gorm.Model
-	NodeTemplateID int //`gorm:"index"` //Foreign key of the node template
-	Name           string    `json:"name"`
-	Value          string    `json:"value"`
+	//	gorm.Model
+	NodeTemplateID int    //`gorm:"index"` //Foreign key of the node template
+	Name           string `json:"name"`
+	Value          string `json:"value"`
 }
-
 
 // CreateTopology create a topology by the service template.
 func (p *ServiceTemplate) NewTopology(name string, version int, ctx *Context) *Topology {
 
-	topology := &Topology{Name:name, Template:p.Path, Version:version, Nodes:[]*Node{}}
+	topology := &Topology{Name: name, Template: p.Path, Version: version, Nodes: []*Node{}}
 
 	for _, template := range p.Nodes {
 		p.createNode(&template, topology, ctx)
 	}
 
-	return topology;
+	return topology
 }
 
 func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topology, ctx *Context) []*Node {
@@ -119,14 +117,14 @@ func (p *ServiceTemplate) createNode(nodeTemplate *NodeTemplate, topology *Topol
 			targetNodes = p.createNode(targetTemplate, topology, ctx)
 			for _, targetNode := range targetNodes {
 				sourceNode := &Node{
-					Name:nodeTemplate.Name,
-					Template:nodeTemplate.Name,
-					Class:nodeTemplate.Type,
-					Address:targetNode.Address,
-					Credential:targetNode.Credential,
-					Links:[]*Link{},
-					Properties:newConfigs(nodeTemplate, ctx),
-					Status:Status{RunStatus:RunStatusNone},
+					Name:       nodeTemplate.Name,
+					Template:   nodeTemplate.Name,
+					Class:      nodeTemplate.Type,
+					Address:    targetNode.Address,
+					Credential: targetNode.Credential,
+					Links:      []*Link{},
+					Properties: newConfigs(nodeTemplate, ctx),
+					Status:     Status{RunStatus: RunStatusNone},
 				}
 				sourceNode.Link(dep.Type, targetNode.Name)
 				sourceNodes = append(sourceNodes, sourceNode)

@@ -2,11 +2,11 @@ package operation
 
 import (
 	"fmt"
-	"net/rpc"
 	"github.com/ChaosXu/nerv/lib/credential"
 	"github.com/ChaosXu/nerv/lib/resource/model"
 	"github.com/ChaosXu/nerv/lib/resource/repository"
 	crpc "github.com/ChaosXu/nerv/lib/rpc"
+	"net/rpc"
 )
 
 // RpcEnvironment where nerv add worker cluster.
@@ -19,7 +19,7 @@ func (p *RpcEnvironment) Exec(class *model.Class, operation *model.Operation, ar
 
 	script, err := p.ScriptRepository.Get(operation.DefineClass, operation.Implementor)
 	if err != nil {
-		return err;
+		return err
 	}
 
 	addr := args["address"]
@@ -31,7 +31,7 @@ func (p *RpcEnvironment) Exec(class *model.Class, operation *model.Operation, ar
 
 func (p *RpcEnvironment) call(script *model.Script, args map[string]string, addr string, cre *credential.Credential) error {
 	//TBD:auth,don't hard code agent port
-	client, err := rpc.DialHTTP("tcp", addr + ":3334")
+	client, err := rpc.DialHTTP("tcp", addr+":3334")
 	if err != nil {
 		return fmt.Errorf("connect host failed. %s", err.Error())
 	}
@@ -42,14 +42,14 @@ func (p *RpcEnvironment) call(script *model.Script, args map[string]string, addr
 			continue
 		}
 		if k == "root" {
-			v = "nervapp/"	//The root dir of app is $HOME/nervapp
+			v = "nervapp/" //The root dir of app is $HOME/nervapp
 		}
 		export = export + fmt.Sprintf(" %s=%s", k, v)
 	}
 	shell := "export " + export + " && cd ~ &&" + script.Content
 	fmt.Println(shell)
 
-	remoteScript := &crpc.RemoteScript{Content:shell}
+	remoteScript := &crpc.RemoteScript{Content: shell}
 	var reply string
 	err = client.Call("Agent.Execute", remoteScript, &reply)
 	if err != nil {

@@ -2,11 +2,15 @@
 package file
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/pressly/chi/render"
 	"io"
+	"io/ioutil"
 	"mime"
 	"mime/multipart"
+	"net/http"
 	"net/textproto"
 	"net/url"
 	"os"
@@ -16,10 +20,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"net/http"
-	"github.com/pressly/chi/render"
-	"encoding/json"
-	"io/ioutil"
 )
 
 const sniffLen = 512
@@ -35,15 +35,15 @@ var htmlReplacer = strings.NewReplacer(
 )
 
 type PutRequest struct {
-	Cmd  string `json:"cmd"`
-	Data *json.RawMessage    `json:"data"`
+	Cmd  string           `json:"cmd"`
+	Data *json.RawMessage `json:"data"`
 }
 
 type File struct {
-	Url     string        `json:"url"`
-	Name    string        `json:"name"`
-	Type    string        `json:"type"`
-	Content string        `json:"content"`
+	Url     string `json:"url"`
+	Name    string `json:"name"`
+	Type    string `json:"type"`
+	Content string `json:"content"`
 }
 
 type FileSystem interface {
@@ -67,14 +67,14 @@ type Dir string
 
 func (d Dir) Open(name string) (http.File, error) {
 	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
-			strings.Contains(name, "\x00") {
+		strings.Contains(name, "\x00") {
 		return nil, errors.New("http: invalid character in file path")
 	}
 	dir := string(d)
 	if dir == "" {
 		dir = "."
 	}
-	f, err := os.Open(filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name))))
+	f, err := os.Open(filepath.Join(dir, filepath.FromSlash(path.Clean("/"+name))))
 	if err != nil {
 		return nil, err
 	}
@@ -83,14 +83,14 @@ func (d Dir) Open(name string) (http.File, error) {
 
 func (d Dir) Mkdir(name string) (http.File, error) {
 	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
-			strings.Contains(name, "\x00") {
+		strings.Contains(name, "\x00") {
 		return nil, errors.New("http: invalid character in file path")
 	}
 	dir := string(d)
 	if dir == "" {
 		dir = "."
 	}
-	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
+	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/"+name)))
 	err := os.Mkdir(path, os.ModePerm)
 	if err != nil {
 		return nil, err
@@ -101,15 +101,15 @@ func (d Dir) Mkdir(name string) (http.File, error) {
 
 func (d Dir) Create(name string) (http.File, error) {
 	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
-			strings.Contains(name, "\x00") {
+		strings.Contains(name, "\x00") {
 		return nil, errors.New("http: invalid character in file path")
 	}
 	dir := string(d)
 	if dir == "" {
 		dir = "."
 	}
-	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
-	f, err := os.OpenFile(path, os.O_RDWR | os.O_CREATE | os.O_EXCL, 0666)
+	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/"+name)))
+	f, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0666)
 	if err != nil {
 		return nil, err
 	}
@@ -118,14 +118,14 @@ func (d Dir) Create(name string) (http.File, error) {
 
 func (d Dir) Delete(name string) error {
 	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
-			strings.Contains(name, "\x00") {
+		strings.Contains(name, "\x00") {
 		return errors.New("http: invalid character in file path")
 	}
 	dir := string(d)
 	if dir == "" {
 		dir = "."
 	}
-	err := os.RemoveAll(filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name))))
+	err := os.RemoveAll(filepath.Join(dir, filepath.FromSlash(path.Clean("/"+name))))
 	if err != nil {
 		return err
 	}
@@ -134,15 +134,15 @@ func (d Dir) Delete(name string) error {
 
 func (d Dir) Rename(name string, new string) error {
 	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
-			strings.Contains(name, "\x00") {
+		strings.Contains(name, "\x00") {
 		return errors.New("http: invalid character in file path")
 	}
 	dir := string(d)
 	if dir == "" {
 		dir = "."
 	}
-	oldPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
-	newPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + new)))
+	oldPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/"+name)))
+	newPath := filepath.Join(dir, filepath.FromSlash(path.Clean("/"+new)))
 	//log.Println(oldPath)
 	//log.Println(newPath)
 	err := os.Rename(oldPath, newPath)
@@ -154,16 +154,16 @@ func (d Dir) Rename(name string, new string) error {
 
 func (d Dir) Update(name string, content string) error {
 	if filepath.Separator != '/' && strings.ContainsRune(name, filepath.Separator) ||
-			strings.Contains(name, "\x00") {
+		strings.Contains(name, "\x00") {
 		return errors.New("http: invalid character in file path")
 	}
 	dir := string(d)
 	if dir == "" {
 		dir = "."
 	}
-	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/" + name)))
+	path := filepath.Join(dir, filepath.FromSlash(path.Clean("/"+name)))
 	if err := ioutil.WriteFile(path, []byte(content), os.ModePerm); err != nil {
-		return err;
+		return err
 	}
 	return nil
 }
@@ -206,12 +206,11 @@ func dirList(f http.File, path string) ([]File, error) {
 		}
 
 		url := url.URL{Path: path + name}
-		file := File{Url:url.String(), Name:name, Type: ftype}
+		file := File{Url: url.String(), Name: name, Type: ftype}
 		files = append(files, file)
 	}
 	return files, nil
 }
-
 
 // if name is empty, filename is unknown. (used for mime type, before sniffing)
 // if modtime.IsZero(), modtime is unknown.
@@ -233,23 +232,23 @@ func serveContent(w http.ResponseWriter, r *http.Request, name string, modtime t
 	//ctypes, haveType := w.Header()["Content-Type"]
 	var ctype string
 	//if !haveType {
-		//log.Println(haveType)
-		ctype = mime.TypeByExtension(filepath.Ext(name))
-		if ctype == "" {
-			// read a chunk to decide between utf-8 text and binary
-			var buf [sniffLen]byte
-			n, _ := io.ReadFull(content, buf[:])
-			ctype = http.DetectContentType(buf[:n])
-			_, err := content.Seek(0, io.SeekStart) // rewind to output whole file
-			if err != nil {
-				http.Error(w, "seeker can't seek", http.StatusInternalServerError)
-				return
-			}
+	//log.Println(haveType)
+	ctype = mime.TypeByExtension(filepath.Ext(name))
+	if ctype == "" {
+		// read a chunk to decide between utf-8 text and binary
+		var buf [sniffLen]byte
+		n, _ := io.ReadFull(content, buf[:])
+		ctype = http.DetectContentType(buf[:n])
+		_, err := content.Seek(0, io.SeekStart) // rewind to output whole file
+		if err != nil {
+			http.Error(w, "seeker can't seek", http.StatusInternalServerError)
+			return
 		}
-		if strings.Index(ctype, "json") >= 0 {
-			ctype = "text"
-		}
-		w.Header().Set("Content-Type", ctype)
+	}
+	if strings.Index(ctype, "json") >= 0 {
+		ctype = "text"
+	}
+	w.Header().Set("Content-Type", ctype)
 	//} else if len(ctypes) > 0 {
 	//	ctype = ctypes[0]
 	//}
@@ -303,7 +302,7 @@ func serveContent(w http.ResponseWriter, r *http.Request, name string, modtime t
 
 			pr, pw := io.Pipe()
 			mw := multipart.NewWriter(pw)
-			w.Header().Set("Content-Type", "multipart/byteranges; boundary=" + mw.Boundary())
+			w.Header().Set("Content-Type", "multipart/byteranges; boundary="+mw.Boundary())
 			sendContent = pr
 			defer pr.Close() // cause writing goroutine to fail and exit if CopyN doesn't finish.
 			go func() {
@@ -354,7 +353,7 @@ func checkLastModified(w http.ResponseWriter, r *http.Request, modtime time.Time
 
 	// The Date-Modified header truncates sub-second precision, so
 	// use mtime < t+1s instead of mtime <= t to check for unmodified.
-	if t, err := time.Parse(http.TimeFormat, r.Header.Get("If-Modified-Since")); err == nil && modtime.Before(t.Add(1 * time.Second)) {
+	if t, err := time.Parse(http.TimeFormat, r.Header.Get("If-Modified-Since")); err == nil && modtime.Before(t.Add(1*time.Second)) {
 		h := w.Header()
 		delete(h, "Content-Type")
 		delete(h, "Content-Length")
@@ -480,7 +479,7 @@ func serveFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name strin
 
 func createFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name string) {
 	index := strings.LastIndex(name, "/")
-	fname := name[index + 1:]
+	fname := name[index+1:]
 	path := name
 	if path != "/" {
 		path = path + "/"
@@ -496,7 +495,7 @@ func createFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name stri
 		}
 		defer f.Close()
 
-		file := File{Url:name, Name:fname, Type: "file"}
+		file := File{Url: name, Name: fname, Type: "file"}
 
 		w.Header().Set("Content-Type", "text/json; charset=utf-8")
 		buf, err := json.Marshal(file)
@@ -519,7 +518,7 @@ func createFile(w http.ResponseWriter, r *http.Request, fs FileSystem, name stri
 		}
 		defer f.Close()
 
-		file := File{Url:name, Name:fname, Type: "dir"}
+		file := File{Url: name, Name: fname, Type: "dir"}
 
 		w.Header().Set("Content-Type", "text/json; charset=utf-8")
 		buf, err := json.Marshal(file)
@@ -660,7 +659,7 @@ type httpRange struct {
 }
 
 func (r httpRange) contentRange(size int64) string {
-	return fmt.Sprintf("bytes %d-%d/%d", r.start, r.start + r.length - 1, size)
+	return fmt.Sprintf("bytes %d-%d/%d", r.start, r.start+r.length-1, size)
 }
 
 func (r httpRange) mimeHeader(contentType string, size int64) textproto.MIMEHeader {
@@ -689,7 +688,7 @@ func parseRange(s string, size int64) ([]httpRange, error) {
 		if i < 0 {
 			return nil, errors.New("invalid range")
 		}
-		start, end := strings.TrimSpace(ra[:i]), strings.TrimSpace(ra[i + 1:])
+		start, end := strings.TrimSpace(ra[:i]), strings.TrimSpace(ra[i+1:])
 		var r httpRange
 		if start == "" {
 			// If no start is specified, end specifies the

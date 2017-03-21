@@ -1,19 +1,18 @@
 package cli
 
 import (
-	"testing"
-	"regexp"
 	"github.com/ChaosXu/nerv/test/util"
+	"regexp"
+	"testing"
 )
-
 
 func TestAppInstall(t *testing.T) {
 
 	//create
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "create", "-t", "/demo/java/nerv-app-springboot.json", "-o", "nerv-app-springboot-1", "-n ../../../../test/cli/topo_test_inputs.json"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "create", "-t", "/demo/java/nerv-app-springboot.json", "-o", "nerv-app-springboot-1", "-n ../../../../test/cli/topo_test_inputs.json"},
 	}
 
 	var id string
@@ -29,9 +28,9 @@ func TestAppInstall(t *testing.T) {
 
 	//list
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "list"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "list"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -43,9 +42,9 @@ func TestAppInstall(t *testing.T) {
 
 	//get
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "get", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "get", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -57,9 +56,9 @@ func TestAppInstall(t *testing.T) {
 
 	//install
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "install", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "install", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -71,9 +70,9 @@ func TestAppInstall(t *testing.T) {
 
 	//setup
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "setup", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "setup", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

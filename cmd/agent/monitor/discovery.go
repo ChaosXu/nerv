@@ -1,12 +1,12 @@
 package monitor
 
 import (
-	"github.com/ChaosXu/nerv/lib/monitor/model"
-	"log"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
 	"github.com/ChaosXu/nerv/lib/debug"
-	"time"
 	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/monitor/model"
+	"log"
+	"time"
 )
 
 //Discovery search localhost to find resource
@@ -21,11 +21,11 @@ type Discovery struct {
 
 func NewDiscovery(cfg *env.Properties, p probe.Probe) *Discovery {
 	return &Discovery{
-		cfg:cfg,
-		services:map[string]*model.DiscoveryTemplate{},
-		probe:p,
-		C: make(chan *model.Resource, 1000),
-		stopDiscover:make(chan bool, 1),
+		cfg:          cfg,
+		services:     map[string]*model.DiscoveryTemplate{},
+		probe:        p,
+		C:            make(chan *model.Resource, 1000),
+		stopDiscover: make(chan bool, 1),
 	}
 }
 
@@ -137,6 +137,3 @@ func (p *Discovery) discoverService(service *model.Resource, resourceType string
 func (p *Discovery) newLocalHost() *model.Resource {
 	return model.NewResource("/host/Linux")
 }
-
-
-

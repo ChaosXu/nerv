@@ -2,24 +2,24 @@ package model
 
 import (
 	"fmt"
-	"github.com/toolkits/net"
 	"github.com/ChaosXu/nerv/lib/debug"
+	"github.com/toolkits/net"
 )
 
 //Resource is the object discovered
 type Resource struct {
-	Type       string          //resource type
-	Address    string          //resource ip
+	Type       string    //resource type
+	Address    string    //resource ip
 	components []*Sample //resource components
 	chSamples  chan *Sample
 }
 
 func NewResourceFromSample(sample *Sample) *Resource {
 	r := &Resource{
-		Type:sample.Tags["resourceType"],
-		Address: getLocalAddress(),
-		components:[]*Sample{},
-		chSamples:make(chan *Sample, 10),
+		Type:       sample.Tags["resourceType"],
+		Address:    getLocalAddress(),
+		components: []*Sample{},
+		chSamples:  make(chan *Sample, 10),
 	}
 	go r.watchChSamples()
 	return r
@@ -27,11 +27,10 @@ func NewResourceFromSample(sample *Sample) *Resource {
 func NewResource(resType string) *Resource {
 	//NOTE: Now all resource is discovered in local host,so address is local
 	r := &Resource{
-		Type:resType,
-		Address: getLocalAddress(),
-		components:[]*Sample{},
-		chSamples:make(chan *Sample, 10),
-
+		Type:       resType,
+		Address:    getLocalAddress(),
+		components: []*Sample{},
+		chSamples:  make(chan *Sample, 10),
 	}
 	go r.watchChSamples()
 	return r
@@ -59,5 +58,3 @@ func (p *Resource) watchChSamples() {
 func (p *Resource) Key() string {
 	return p.Type + "/" + p.Address
 }
-
-

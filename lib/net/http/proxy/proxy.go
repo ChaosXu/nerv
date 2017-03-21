@@ -1,9 +1,9 @@
 package proxy
 
 import (
-"net/url"
-"net/http"
-"net/http/httputil"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
 )
 
 // Proxy config
@@ -16,11 +16,9 @@ func NewProxy(remoteUrl string) (*Proxy, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Proxy{rp:httputil.NewSingleHostReverseProxy(url)}, nil
+	return &Proxy{rp: httputil.NewSingleHostReverseProxy(url)}, nil
 }
 
-func (p *Proxy)Handle(w http.ResponseWriter, r *http.Request) {
+func (p *Proxy) Handle(w http.ResponseWriter, r *http.Request) {
 	p.rp.ServeHTTP(w, r)
 }
-
-

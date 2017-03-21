@@ -1,9 +1,9 @@
 package topology
 
 import (
+	"encoding/json"
 	"fmt"
 	"regexp"
-	"encoding/json"
 )
 
 type Context struct {
@@ -18,13 +18,13 @@ func NewContext(def []Input, inputs map[string]interface{}) *Context {
 			fmt.Println(string(buf))
 		}
 	}
-	return &Context{inputsDef:def, inputs:inputs}
+	return &Context{inputsDef: def, inputs: inputs}
 }
 
 func (p *Context) FormatValue(value string) interface{} {
 	reg := regexp.MustCompile(`\$\{(.+)\}`)
 	return reg.ReplaceAllStringFunc(value, func(name string) string {
-		key := name[2:len(name) - 1]
+		key := name[2 : len(name)-1]
 		v := p.inputs[key]
 		if v == nil {
 			return p.GetDefaultValue(key)

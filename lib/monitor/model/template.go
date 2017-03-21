@@ -1,12 +1,12 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
-	"path/filepath"
-	"os"
-	"github.com/toolkits/file"
 	"github.com/ChaosXu/nerv/lib/json"
+	"github.com/jinzhu/gorm"
+	"github.com/toolkits/file"
 	"log"
+	"os"
+	"path/filepath"
 )
 
 //func init() {
@@ -67,35 +67,34 @@ import (
 //DiscoveryTemplate controls how to discovery resource on the host of the agent
 type DiscoveryTemplate struct {
 	gorm.Model
-	ResourceType string                 `json:"resourceType"`
-	Name         string                 `json:"name"`
-	Host         bool                   `json:"host"`
-	Period 		 int64 					`json:"period"`
-	Items        []DiscoveryItem        `json:"items"`
+	ResourceType string          `json:"resourceType"`
+	Name         string          `json:"name"`
+	Host         bool            `json:"host"`
+	Period       int64           `json:"period"`
+	Items        []DiscoveryItem `json:"items"`
 }
 
 //DiscoveryItem controls how to discovery all configs of the resource
 type DiscoveryItem struct {
 	gorm.Model
-	Metric  string      `json:"metric"`
-	Service string      `json:"service`
+	Metric  string `json:"metric"`
+	Service string `json:"service`
 }
 
 //MonitorTemplate controls how to monitor metrics
 type MonitorTemplate struct {
 	gorm.Model
-	ResourceType string                   `json:"resourceType"`
-	Name         string                   `json:"name"`
-	Items        []MonitorItem            `json:"items"`
+	ResourceType string        `json:"resourceType"`
+	Name         string        `json:"name"`
+	Items        []MonitorItem `json:"items"`
 }
 
 //MonitorItem controls how to collect a metric and process alert
 type MonitorItem struct {
 	gorm.Model
-	Metric string   `json:"metric"`
-	Period int64    `json:"period"`
+	Metric string `json:"metric"`
+	Period int64  `json:"period"`
 }
-
 
 func LoadMonitorTemplates(path string) ([]*MonitorTemplate, error) {
 	templates := []*MonitorTemplate{}

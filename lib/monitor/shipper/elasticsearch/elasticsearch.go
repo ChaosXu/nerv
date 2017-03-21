@@ -1,13 +1,13 @@
 package elasticsearch
 
 import (
-	"log"
-	"fmt"
 	"encoding/json"
+	"fmt"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/monitor/model"
 	"github.com/ChaosXu/nerv/lib/monitor/shipper"
 	"github.com/go-resty/resty"
+	"log"
 	"time"
 )
 
@@ -18,7 +18,7 @@ type ElasticsearchShipper struct {
 
 func NewShipper(cfg *env.Properties) shipper.Shipper {
 	address := cfg.GetMapString("shipper", "server", "3334")
-	return &ElasticsearchShipper{server:address, cfg:cfg}
+	return &ElasticsearchShipper{server: address, cfg: cfg}
 }
 
 func (p *ElasticsearchShipper) Init() error {
@@ -35,7 +35,7 @@ func (p *ElasticsearchShipper) Send(v interface{}) {
 	}
 }
 
-func (p *ElasticsearchShipper)sendSample(sample *model.Sample) {
+func (p *ElasticsearchShipper) sendSample(sample *model.Sample) {
 	body, err := json.Marshal(sample)
 	if err != nil {
 		log.Printf("send sample error. %s\n", err.Error())
@@ -46,9 +46,9 @@ func (p *ElasticsearchShipper)sendSample(sample *model.Sample) {
 	templateName := getTemplateName(resType, metric)
 
 	res, err := resty.R().
-			SetHeader("Content-Type", "application/json").
-			SetBody(string(body)).
-			Post(fmt.Sprintf("http://%s/%s/%s?pretty=true", p.server, p.index(templateName), templateName))
+		SetHeader("Content-Type", "application/json").
+		SetBody(string(body)).
+		Post(fmt.Sprintf("http://%s/%s/%s?pretty=true", p.server, p.index(templateName), templateName))
 	if err != nil {
 		log.Printf("create schema error. %s %s \n%s", resType, metric, err.Error())
 	} else if res.StatusCode() >= 200 && res.StatusCode() < 300 {
@@ -58,8 +58,7 @@ func (p *ElasticsearchShipper)sendSample(sample *model.Sample) {
 	}
 }
 
-func (p *ElasticsearchShipper)index(template string) string {
+func (p *ElasticsearchShipper) index(template string) string {
 	year, month, day := time.Now().Date()
 	return fmt.Sprintf("%s_%d_%d_%d", template, year, month, day)
 }
-

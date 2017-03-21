@@ -1,19 +1,19 @@
 package service
 
 import (
+	_ "github.com/ChaosXu/nerv/lib/automation/model"
+	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/env"
+	_ "github.com/ChaosXu/nerv/lib/monitor/model"
+	"github.com/ChaosXu/nerv/lib/net/http/rest"
+	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
+	_ "github.com/ChaosXu/nerv/lib/user/model"
+	user "github.com/ChaosXu/nerv/lib/user/model"
+	"github.com/pressly/chi"
+	chim "github.com/pressly/chi/middleware"
+	"github.com/pressly/chi/render"
 	"log"
 	"net/http"
-	"github.com/pressly/chi/render"
-	"github.com/pressly/chi"
-	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
-	"github.com/ChaosXu/nerv/lib/net/http/rest"
-	"github.com/ChaosXu/nerv/lib/env"
-	"github.com/ChaosXu/nerv/lib/db"
-	chim "github.com/pressly/chi/middleware"
-	user "github.com/ChaosXu/nerv/lib/user/model"
-	_ "github.com/ChaosXu/nerv/lib/automation/model"
-	_ "github.com/ChaosXu/nerv/lib/monitor/model"
-	_ "github.com/ChaosXu/nerv/lib/user/model"
 )
 
 // HttpService
@@ -44,7 +44,7 @@ func (p *HttpService) Init() error {
 	})
 	port := env.Config().GetMapString("http", "port", "3333")
 	go func() {
-		log.Fatal(http.ListenAndServe(":" + port, r))
+		log.Fatal(http.ListenAndServe(":"+port, r))
 	}()
 	return nil
 }
@@ -78,12 +78,9 @@ func login(w http.ResponseWriter, req *http.Request) {
 
 	if db.RecordNotFound() {
 		render.Status(req, 404)
-		render.JSON(w, req, map[string]string{"Name":account.Name})
+		render.JSON(w, req, map[string]string{"Name": account.Name})
 	} else {
 		render.Status(req, 200)
-		render.JSON(w, req, map[string]string{"Name":account.Name})
+		render.JSON(w, req, map[string]string{"Name": account.Name})
 	}
 }
-
-
-

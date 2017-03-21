@@ -1,9 +1,9 @@
 package operation
 
 import (
-	"os/exec"
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/resource/model"
+	"os/exec"
 
 	"github.com/ChaosXu/nerv/lib/resource/repository"
 )
@@ -18,7 +18,7 @@ func (p *StandaloneEnvironment) Exec(class *model.Class, operation *model.Operat
 
 	script, err := p.ScriptRepository.Get(operation.DefineClass, operation.Implementor)
 	if err != nil {
-		return err;
+		return err
 	}
 	return p.call(script, args)
 }

@@ -1,8 +1,8 @@
 package service
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestContainer(t *testing.T) {
@@ -38,8 +38,8 @@ type BI interface {
 	Fbi() string
 }
 type B struct {
-
 }
+
 func (p *B) SetContainer(c *Container) {
 	fmt.Printf("B.SetContainer: %+v", c)
 }
@@ -54,7 +54,6 @@ type CI interface {
 	Fci() string
 }
 type C struct {
-
 }
 
 func (p *C) Fci() string {

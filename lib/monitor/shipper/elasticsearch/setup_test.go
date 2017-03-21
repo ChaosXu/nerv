@@ -1,9 +1,9 @@
 package elasticsearch_test
 
 import (
-	"testing"
 	"github.com/ChaosXu/nerv/lib/monitor/model"
 	"github.com/ChaosXu/nerv/lib/monitor/shipper/elasticsearch"
+	"testing"
 )
 
 func TestCreateSchemas(t *testing.T) {

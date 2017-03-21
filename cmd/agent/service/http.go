@@ -1,13 +1,13 @@
 package service
 
 import (
-	"log"
-	"net/http"
-	"github.com/pressly/chi"
-	chim "github.com/pressly/chi/middleware"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/net/http/rest"
 	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
+	"github.com/pressly/chi"
+	chim "github.com/pressly/chi/middleware"
+	"log"
+	"net/http"
 )
 
 type HttpService struct {
@@ -33,8 +33,7 @@ func (p *HttpService) Init() error {
 	})
 	port := env.Config().GetMapString("http", "port", "3335")
 	go func() {
-		log.Fatal(http.ListenAndServe(":" + port, r))
+		log.Fatal(http.ListenAndServe(":"+port, r))
 	}()
 	return nil
 }
-

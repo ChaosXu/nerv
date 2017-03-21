@@ -1,14 +1,14 @@
 package operation
 
 import (
-	"fmt"
 	"bytes"
-	"strings"
-	"golang.org/x/crypto/ssh"
-	"github.com/ChaosXu/nerv/lib/db"
+	"fmt"
 	"github.com/ChaosXu/nerv/lib/credential"
+	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/resource/model"
 	"github.com/ChaosXu/nerv/lib/resource/repository"
+	"golang.org/x/crypto/ssh"
+	"strings"
 )
 
 // SshEnvironment where nerv add worker cluster.
@@ -19,9 +19,9 @@ type SshEnvironment struct {
 func (p *SshEnvironment) Exec(class *model.Class, operation *model.Operation, args map[string]string) error {
 	fmt.Printf("SSH.Exec %s.%s %s\n", class.Name, operation.Name, operation.Implementor)
 
-	script, err := p.ScriptRepository.Get(operation.DefineClass,operation.Implementor)
+	script, err := p.ScriptRepository.Get(operation.DefineClass, operation.Implementor)
 	if err != nil {
-		return err;
+		return err
 	}
 
 	cres := args["credential"]
@@ -46,12 +46,12 @@ func (p *SshEnvironment) Exec(class *model.Class, operation *model.Operation, ar
 
 func (p *SshEnvironment) call(script *model.Script, args map[string]string, addr string, cre *credential.Credential) error {
 	config := &ssh.ClientConfig{
-		User:cre.User,
-		Auth:[]ssh.AuthMethod{
+		User: cre.User,
+		Auth: []ssh.AuthMethod{
 			ssh.Password(cre.Password),
 		},
 	}
-	client, err := ssh.Dial("tcp", addr + ":22", config)
+	client, err := ssh.Dial("tcp", addr+":22", config)
 	if err != nil {
 		return err
 	}

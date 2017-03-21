@@ -1,6 +1,5 @@
 package model
 
-
 // Class is the metadata of the node
 type Class struct {
 	Name       string      //The name of NodeType
@@ -26,4 +25,3 @@ type Operation struct {
 	Type        string //Operation type.eg.shell
 	Implementor string //Function implement the operation
 }
-

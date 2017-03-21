@@ -1,18 +1,18 @@
 package elasticsearch
 
 import (
-	"log"
-	"fmt"
 	"encoding/json"
-	"github.com/go-resty/resty"
+	"fmt"
 	"github.com/ChaosXu/nerv/lib/monitor/model"
+	"github.com/go-resty/resty"
+	"log"
 )
 
 //CreateSchema generate schemas for all metrics in es
 func CreateSchemas(server string, metrics []*model.Metric) {
 
 	for _, metric := range metrics {
-		templateName := getTemplateName(metric.ResourceType,metric.Name)
+		templateName := getTemplateName(metric.ResourceType, metric.Name)
 		template := metricToTemplate(metric, templateName)
 
 		body, err := json.Marshal(template)
@@ -24,9 +24,9 @@ func CreateSchemas(server string, metrics []*model.Metric) {
 		}
 
 		res, err := resty.R().
-				SetHeader("Content-Type", "application/json").
-				SetBody(string(body)).
-				Put(fmt.Sprintf("http://%s/_template/%s?pretty=true", server, templateName))
+			SetHeader("Content-Type", "application/json").
+			SetBody(string(body)).
+			Put(fmt.Sprintf("http://%s/_template/%s?pretty=true", server, templateName))
 		if err != nil {
 			log.Printf("create schema error. %s %s \n%s", metric.ResourceType, metric.Name, err.Error())
 		} else if res.StatusCode() != 200 {
@@ -38,20 +38,20 @@ func CreateSchemas(server string, metrics []*model.Metric) {
 	}
 }
 
-func getTemplateName(resType string,metric string) string {
+func getTemplateName(resType string, metric string) string {
 	//return strings.Replace(strings.ToLower(resType), "/", ".", -1)[1:] + "." + metric
 	return "metrics"
 }
 
 func metricToTemplate(metric *model.Metric, templateName string) map[string]interface{} {
 	template := map[string]interface{}{
-		"template":templateName + "_*",
-		"order":0,
-		"settings":map[string]string{
+		"template": templateName + "_*",
+		"order":    0,
+		"settings": map[string]string{
 			"index.refresh_interval": "5s",
 		},
-		"mappings":map[string]interface{}{
-			templateName:metricToMapping(metric),
+		"mappings": map[string]interface{}{
+			templateName: metricToMapping(metric),
 		},
 	}
 
@@ -61,15 +61,15 @@ func metricToTemplate(metric *model.Metric, templateName string) map[string]inte
 func metricToMapping(metric *model.Metric) map[string]interface{} {
 	properties := map[string]interface{}{}
 	mapping := map[string]interface{}{
-		"_source":map[string]interface{}{"enabled":false},
-		"_all":map[string]interface{}{"enabled":false},
-		"properties":properties,
+		"_source":    map[string]interface{}{"enabled": false},
+		"_all":       map[string]interface{}{"enabled": false},
+		"properties": properties,
 	}
 	for _, field := range metric.Fields {
 		item := map[string]interface{}{
-			"type":getDataType(field.DataType),
-			"doc_values":true,
-			"index":"no",
+			"type":       getDataType(field.DataType),
+			"doc_values": true,
+			"index":      "no",
 		}
 		properties[field.Name] = item
 	}

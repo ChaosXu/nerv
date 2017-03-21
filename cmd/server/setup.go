@@ -1,35 +1,35 @@
 package main
 
 import (
-	"github.com/ChaosXu/nerv/lib/db"
-	user "github.com/ChaosXu/nerv/lib/user/model"
-	"log"
 	"fmt"
-	"github.com/jinzhu/gorm"
+	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/env"
+	user "github.com/ChaosXu/nerv/lib/user/model"
+	"github.com/jinzhu/gorm"
+	"log"
 )
 
 func setup() {
-	initDB();
-	createAdmin();
-	db.DB.Close();
+	initDB()
+	createAdmin()
+	db.DB.Close()
 }
 
 func createAdmin() {
 	admin := &user.Account{
-		Name:"admin",
-		Nick:"admin",
-		Mail: "admin@nerv.com",
-		Phone: 11111111111,
-		Password:"admin",
+		Name:     "admin",
+		Nick:     "admin",
+		Mail:     "admin@nerv.com",
+		Phone:    11111111111,
+		Password: "admin",
 	}
 	var count int64
 	if err := db.DB.Model(&user.Account{}).Where("Name=?", "admin").Count(&count).Error; err != nil {
-		log.Fatal(err.Error());
+		log.Fatal(err.Error())
 	}
 	if count == 0 {
 		if err := db.DB.Create(admin).Error; err != nil {
-			log.Fatal(err.Error());
+			log.Fatal(err.Error())
 		}
 	}
 }

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/ChaosXu/nerv/lib/env"
+	chttp "github.com/ChaosXu/nerv/lib/net/http/file"
+	"github.com/pressly/chi"
 	"log"
 	"net/http"
 	"os"
-	"github.com/pressly/chi"
-	"github.com/ChaosXu/nerv/lib/env"
-	chttp "github.com/ChaosXu/nerv/lib/net/http/file"
 )
 
 var (
@@ -26,7 +26,7 @@ func main() {
 	r := chi.NewRouter()
 	routing(r)
 
-	log.Fatalln(http.ListenAndServe(":" + port, r))
+	log.Fatalln(http.ListenAndServe(":"+port, r))
 }
 
 func routing(r *chi.Mux) {

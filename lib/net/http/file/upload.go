@@ -1,15 +1,15 @@
 package file
 
 import (
+	"github.com/pressly/chi/render"
+	"io"
 	"net/http"
 	"os"
-	"io"
-	"github.com/pressly/chi/render"
 
 	"github.com/pressly/chi"
-	"strings"
-	"path/filepath"
 	"path"
+	"path/filepath"
+	"strings"
 )
 
 func UploadServer(mx *chi.Mux, path string, fileRoot string) {
@@ -49,7 +49,7 @@ func (p Upload) Post(w http.ResponseWriter, req *http.Request) {
 	}
 	defer file.Close()
 	//fmt.Println(handler.Filename)
-	path := filepath.Join(string(p), filepath.FromSlash(path.Clean("/" + req.URL.Path)))
+	path := filepath.Join(string(p), filepath.FromSlash(path.Clean("/"+req.URL.Path)))
 	err = os.MkdirAll(path, 0777)
 	if err != nil {
 		render.Status(req, 500)
@@ -57,7 +57,7 @@ func (p Upload) Post(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	f, err := os.OpenFile(path + "/" + handler.Filename, os.O_WRONLY | os.O_CREATE, 0666)
+	f, err := os.OpenFile(path+"/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		render.Status(req, 500)
 		render.JSON(w, req, err)

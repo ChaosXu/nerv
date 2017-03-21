@@ -1,19 +1,18 @@
 package cli
 
 import (
-	"testing"
-	"regexp"
 	"github.com/ChaosXu/nerv/test/util"
+	"regexp"
+	"testing"
 )
-
 
 func TestNerInstall(t *testing.T) {
 
 	//create
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/server_core.json", "-o", "nerv-test", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "create", "-t", "../../resources/templates/nerv/server_core.json", "-o", "nerv-test", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
 	}
 
 	var id string
@@ -29,9 +28,9 @@ func TestNerInstall(t *testing.T) {
 
 	//install
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "install", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "install", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -42,12 +41,11 @@ func TestNerInstall(t *testing.T) {
 		t.Log(res)
 	}
 
-
 	//setup
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "setup", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "setup", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

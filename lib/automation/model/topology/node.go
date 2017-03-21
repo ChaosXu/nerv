@@ -1,26 +1,25 @@
 package topology
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/jinzhu/gorm"
 )
-
 
 //Node is element of topology
 type Node struct {
 	gorm.Model
 	Status
-	TopologyID int        	`gorm:"index"` //Foreign key of the topology
-	Name       string                    //node name
-	Template   string                    //template name
-	Class      string                    //the name of resource class
-	Address    string                    //address of node.
-	Credential string                    //credential key
-	Links      []*Link                   //dependencies of node
-	Properties []*Property               //the configuration of a node
+	TopologyID int         `gorm:"index"` //Foreign key of the topology
+	Name       string      //node name
+	Template   string      //template name
+	Class      string      //the name of resource class
+	Address    string      //address of node.
+	Credential string      //credential key
+	Links      []*Link     //dependencies of node
+	Properties []*Property //the configuration of a node
 
-	Done       chan error 	`gorm:"-" json:"-"`
-	Timeout    chan bool    `gorm:"-" json:"-"`
+	Done    chan error `gorm:"-" json:"-"`
+	Timeout chan bool  `gorm:"-" json:"-"`
 }
 
 func init() {
@@ -33,7 +32,7 @@ func nodeDesc() *db.ModelDescriptor {
 		New: func() interface{} {
 			return &Node{}
 		},
-		NewSlice:func() interface{} {
+		NewSlice: func() interface{} {
 			return &[]Node{}
 		},
 	}
@@ -44,7 +43,7 @@ func (p *Node) Link(depType string, target string) {
 	if p.Links == nil {
 		p.Links = []*Link{}
 	}
-	p.Links = append(p.Links, &Link{Type:depType, Source:p.Name, Target:target})
+	p.Links = append(p.Links, &Link{Type: depType, Source: p.Name, Target: target})
 }
 
 // findLinksByType return all links of depType

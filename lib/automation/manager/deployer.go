@@ -1,16 +1,16 @@
 package manager
 
 import (
-	"fmt"
-	"github.com/ChaosXu/nerv/lib/log"
-	"github.com/ChaosXu/nerv/lib/lock"
-	"github.com/ChaosXu/nerv/lib/automation/model/topology"
-	"time"
-	"github.com/ChaosXu/nerv/lib/db"
-	templaterep "github.com/ChaosXu/nerv/lib/automation/repository"
-	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
-	"github.com/ChaosXu/nerv/lib/operation"
 	"encoding/json"
+	"fmt"
+	"github.com/ChaosXu/nerv/lib/automation/model/topology"
+	templaterep "github.com/ChaosXu/nerv/lib/automation/repository"
+	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/lock"
+	"github.com/ChaosXu/nerv/lib/log"
+	"github.com/ChaosXu/nerv/lib/operation"
+	classrep "github.com/ChaosXu/nerv/lib/resource/repository"
+	"time"
 )
 
 // PerformStatus trace the status of node executing
@@ -22,10 +22,10 @@ type PerformStatus struct {
 
 // Deployer execute the deployment task.
 type Deployer struct {
-	DBService   *db.DBService `inject:""`
+	DBService   *db.DBService                  `inject:""`
 	TemplateRep templaterep.TemplateRepository `inject:""`
-	ClassRep    classrep.ClassRepository `inject:""`
-	Executor    operation.Executor `inject:""`
+	ClassRep    classrep.ClassRepository       `inject:""`
+	Executor    operation.Executor             `inject:""`
 }
 
 // Create a topology in db
@@ -158,7 +158,7 @@ func (p *Deployer) Migrate(topoId uint, inputs map[string]interface{}) (uint, er
 	}
 	defer lock.Unlock()
 
-	return p.create(topo.Name, topo.Template, inputs, topo.Version + 1)
+	return p.create(topo.Name, topo.Template, inputs, topo.Version+1)
 }
 
 func (p *Deployer) create(topoName string, templatePath string, inputs map[string]interface{}, version int) (uint, error) {
@@ -196,7 +196,7 @@ func (p *Deployer) preTraverse(topo *topology.Topology, depType string, operatio
 	status := []PerformStatus{}
 	for _, node := range topo.Nodes {
 		done, timeout := p.preTraverseNode(topo, depType, node, template, operation)
-		status = append(status, PerformStatus{Node:node, Done:done, Timeout:timeout})
+		status = append(status, PerformStatus{Node: node, Done: done, Timeout: timeout})
 	}
 
 	for _, item := range status {
@@ -234,7 +234,7 @@ func (p *Deployer) postTraverse(topo *topology.Topology, depType string, operati
 	status := []PerformStatus{}
 	for _, node := range topo.Nodes {
 		done, timeout := p.postTraverseNode(topo, depType, node, template, operation)
-		status = append(status, PerformStatus{Node:node, Done:done, Timeout:timeout})
+		status = append(status, PerformStatus{Node: node, Done: done, Timeout: timeout})
 	}
 
 	for _, item := range status {
@@ -279,7 +279,7 @@ func (p *Deployer) preTraverseNode(topo *topology.Topology, depType string, pare
 		for _, link := range links {
 			node := topo.GetNode(link.Target)
 			done, timeout := p.preTraverseNode(topo, depType, node, template, operation)
-			status = append(status, PerformStatus{Node:node, Done:done, Timeout:timeout})
+			status = append(status, PerformStatus{Node: node, Done: done, Timeout: timeout})
 		}
 
 		for _, item := range status {
@@ -317,7 +317,7 @@ func (p *Deployer) postTraverseNode(topo *topology.Topology, depType string, par
 		for _, link := range links {
 			node := topo.GetNode(link.Target)
 			done, timeout := p.postTraverseNode(topo, depType, node, template, operation)
-			status = append(status, PerformStatus{Node:node, Done:done, Timeout:timeout})
+			status = append(status, PerformStatus{Node: node, Done: done, Timeout: timeout})
 		}
 
 		var err error = nil
@@ -424,4 +424,3 @@ func (p *Deployer) invoke(node *topology.Node, operation string, template *topol
 	}
 	return err
 }
-

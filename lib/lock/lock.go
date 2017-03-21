@@ -14,7 +14,7 @@ func lockDesc() *db.ModelDescriptor {
 		New: func() interface{} {
 			return &Lock{}
 		},
-		NewSlice:func() interface{} {
+		NewSlice: func() interface{} {
 			return &[]Lock{}
 		},
 	}
@@ -22,13 +22,13 @@ func lockDesc() *db.ModelDescriptor {
 
 //Lock for mutex
 type Lock struct {
-	Type   string    `gorm:"unique_index:idx_lock_tol"`   //object type
-	ObjID  uint        `gorm:"unique_index:idx_lock_tol"` //object id
-	LockID uint        `gorm:"unique_index:idx_lock_tol"` //lock id
+	Type   string `gorm:"unique_index:idx_lock_tol"` //object type
+	ObjID  uint   `gorm:"unique_index:idx_lock_tol"` //object id
+	LockID uint   `gorm:"unique_index:idx_lock_tol"` //lock id
 }
 
 func GetLock(objType string, objID uint) *Lock {
-	return &Lock{Type:objType, ObjID:objID, LockID:1}
+	return &Lock{Type: objType, ObjID: objID, LockID: 1}
 }
 
 //TryLock return true if the lock has been acquired
@@ -44,5 +44,3 @@ func (p *Lock) TryLock() bool {
 func (p *Lock) Unlock() {
 	db.DB.Where("type=? and obj_id=? and lock_id=?", p.Type, p.ObjID, p.LockID).Delete(p)
 }
-
-

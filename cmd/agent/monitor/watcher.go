@@ -1,17 +1,17 @@
 package monitor
 
 import (
-	"github.com/ChaosXu/nerv/lib/monitor/model"
-	"time"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
-	"log"
 	"github.com/ChaosXu/nerv/lib/debug"
 	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/monitor/model"
+	"log"
+	"time"
 )
 
 //Watcher collect sample of the metric
 type Watcher struct {
-	cfg *env.Properties
+	cfg          *env.Properties
 	resourceType string
 	period       int64
 	probe        probe.Probe
@@ -21,13 +21,13 @@ type Watcher struct {
 }
 
 //NewWatcher create a watcher
-func NewWatcher(resType string, period int64, probe probe.Probe,cfg *env.Properties) *Watcher {
+func NewWatcher(resType string, period int64, probe probe.Probe, cfg *env.Properties) *Watcher {
 	return &Watcher{
-		cfg:cfg,
-		resourceType:resType,
-		period:period,
-		probe:probe,
-		resources:map[string]*model.Resource{},
+		cfg:          cfg,
+		resourceType: resType,
+		period:       period,
+		probe:        probe,
+		resources:    map[string]*model.Resource{},
 	}
 }
 
@@ -47,7 +47,7 @@ func (p *Watcher) AddResource(res *model.Resource) {
 }
 
 //Start watcher to collect items periodically
-func (p *Watcher) Start(out chan <- *model.Sample) {
+func (p *Watcher) Start(out chan<- *model.Sample) {
 	log.Printf("Watcher.Start %s %d\n", p.resourceType, p.period)
 	p.cancel = make(chan struct{})
 
@@ -73,17 +73,17 @@ func (p *Watcher) Stop() {
 	}
 }
 
-func (p *Watcher) read(out chan <-*model.Sample) {
+func (p *Watcher) read(out chan<- *model.Sample) {
 	log.Printf("Watcher.read %s %d %d %d\n", p.resourceType, p.period, len(p.resources), len(p.items))
 	for _, res := range p.resources {
 		p.readItem(res, out)
 	}
 }
 
-func (p *Watcher) readItem(res *model.Resource, out chan <-*model.Sample) {
+func (p *Watcher) readItem(res *model.Resource, out chan<- *model.Sample) {
 	for _, item := range p.items {
 		log.Printf("Watcher.readItem. %s %s %s \n", p.resourceType, item.Metric, debug.CodeLine())
-		if metric, err := model.LoadMetric(p.cfg,p.resourceType, item.Metric); err != nil {
+		if metric, err := model.LoadMetric(p.cfg, p.resourceType, item.Metric); err != nil {
 			log.Printf("Watcher.readerItem error. %s %s %s %s\n", p.resourceType, item.Metric, err.Error(), debug.CodeLine())
 		} else {
 			switch metric.Type {

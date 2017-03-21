@@ -1,11 +1,11 @@
 package dbtest
 
 import (
-	"testing"
 	"fmt"
-	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"testing"
 )
 
 var models []interface{} = []interface{}{
@@ -32,11 +32,11 @@ func TestDB(t *testing.T) {
 	defer db.DB.Close()
 
 	host := Host{
-		Name:"host1",
-		Description:"host1-desc",
-		Address:&[]Address{
-			{IP:"1.1.1.1"},
-			{IP:"1.1.1.2"},
+		Name:        "host1",
+		Description: "host1-desc",
+		Address: &[]Address{
+			{IP: "1.1.1.1"},
+			{IP: "1.1.1.2"},
 		},
 	}
 	if err := db.DB.Create(&host).Error; err != nil {
@@ -48,8 +48,8 @@ func TestDB(t *testing.T) {
 	}
 
 	host3 := Host{
-		Model: gorm.Model{ID:host2.ID},
-		Description:"update",
+		Model:       gorm.Model{ID: host2.ID},
+		Description: "update",
 	}
 
 	if err := db.DB.Save(host3).Error; err != nil {

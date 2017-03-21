@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"github.com/ChaosXu/nerv/cmd/agent-cli/cmd"
+	"os"
 )
 
 var (

@@ -1,23 +1,23 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
-	"encoding/json"
 	"github.com/spf13/cobra"
 	"github.com/toolkits/file"
 
-	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/cmd/cli/lib"
 	"github.com/ChaosXu/nerv/lib/automation/model/topology"
 	"github.com/ChaosXu/nerv/lib/cli"
+	"github.com/ChaosXu/nerv/lib/env"
 )
 
 var NervCmd = &cobra.Command{
-	Use:    "nerv [command] [flags]",
-	Short:    "Manage the platform",
-	Long:    "Manage the platform",
-	RunE: nervCmd,
+	Use:   "nerv [command] [flags]",
+	Short: "Manage the platform",
+	Long:  "Manage the platform",
+	RunE:  nervCmd,
 }
 
 func init() {
@@ -26,32 +26,31 @@ func init() {
 
 	//list
 	var list = &cobra.Command{
-		Use:    "list",
-		Short:    "List all platforms",
-		Long:    "List all platforms",
-		RunE: listNerv,
+		Use:   "list",
+		Short: "List all platforms",
+		Long:  "List all platforms",
+		RunE:  listNerv,
 	}
 	list.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(list)
 
 	//get
 	var get = &cobra.Command{
-		Use:    "get",
-		Short:    "Get a platform",
-		Long:    "Get all platform",
-		RunE: getNerv,
+		Use:   "get",
+		Short: "Get a platform",
+		Long:  "Get all platform",
+		RunE:  getNerv,
 	}
 	get.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
 	get.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(get)
 
-
 	//create
 	var create = &cobra.Command{
-		Use:    "create",
-		Short:    "Create a platform",
-		Long:    "Create a platform",
-		RunE: createNerv,
+		Use:   "create",
+		Short: "Create a platform",
+		Long:  "Create a platform",
+		RunE:  createNerv,
 	}
 	create.Flags().StringVarP(&cli.Flag_template, "template", "t", "../../resources/templates/nerv/env_standalone.json", "required. The path of template that used to install nerv")
 	create.Flags().StringVarP(&cli.Flag_topology_name, "topologoy", "o", "nerv-standalone", "required. Topology name")
@@ -59,13 +58,12 @@ func init() {
 	create.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
 	NervCmd.AddCommand(create)
 
-
 	//delete
 	var delete = &cobra.Command{
-		Use:    "delete",
-		Short:    "Delete a platform",
-		Long:    "Delete a platform",
-		RunE: removeNerv,
+		Use:   "delete",
+		Short: "Delete a platform",
+		Long:  "Delete a platform",
+		RunE:  removeNerv,
 	}
 	delete.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
 	delete.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -73,10 +71,10 @@ func init() {
 
 	//install
 	var install = &cobra.Command{
-		Use:    "install",
-		Short:    "Install a platform to an environment",
-		Long:    "Install a platform to an environment",
-		RunE: installNerv,
+		Use:   "install",
+		Short: "Install a platform to an environment",
+		Long:  "Install a platform to an environment",
+		RunE:  installNerv,
 	}
 	install.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
 	install.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -84,10 +82,10 @@ func init() {
 
 	//uninstall
 	var uninstall = &cobra.Command{
-		Use:    "uninstall",
-		Short:    "Uninstall a platform from an environment",
-		Long:    "Uninstall a platform from an environment",
-		RunE: uninstallNerv,
+		Use:   "uninstall",
+		Short: "Uninstall a platform from an environment",
+		Long:  "Uninstall a platform from an environment",
+		RunE:  uninstallNerv,
 	}
 	uninstall.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
 	uninstall.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -95,10 +93,10 @@ func init() {
 
 	//start
 	var start = &cobra.Command{
-		Use:    "start",
-		Short:    "Start a platform from an environment",
-		Long:    "Start a platform from an environment",
-		RunE: startNerv,
+		Use:   "start",
+		Short: "Start a platform from an environment",
+		Long:  "Start a platform from an environment",
+		RunE:  startNerv,
 	}
 	start.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
 	start.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -106,10 +104,10 @@ func init() {
 
 	//stop
 	var stop = &cobra.Command{
-		Use:    "stop",
-		Short:    "Stop a platform from an environment",
-		Long:    "Stop a platform from an environment",
-		RunE: stopNerv,
+		Use:   "stop",
+		Short: "Stop a platform from an environment",
+		Long:  "Stop a platform from an environment",
+		RunE:  stopNerv,
 	}
 	stop.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
 	stop.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -117,10 +115,10 @@ func init() {
 
 	//restart
 	var restart = &cobra.Command{
-		Use:    "restart",
-		Short:    "Restart a platform from an environment",
-		Long:    "Restart a platform from an environment",
-		RunE: restartNerv,
+		Use:   "restart",
+		Short: "Restart a platform from an environment",
+		Long:  "Restart a platform from an environment",
+		RunE:  restartNerv,
 	}
 	restart.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
 	restart.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -128,10 +126,10 @@ func init() {
 
 	//setup
 	var setup = &cobra.Command{
-		Use:    "setup",
-		Short:    "Setup configuration",
-		Long:    "Setup configuration of all nodes in platform",
-		RunE: setupNerv,
+		Use:   "setup",
+		Short: "Setup configuration",
+		Long:  "Setup configuration of all nodes in platform",
+		RunE:  setupNerv,
 	}
 	setup.Flags().UintVarP(&cli.Flag_id, "id", "i", 0, "Topology id")
 	setup.Flags().StringVarP(&cli.Flag_config, "config", "c", "../config/config.json", "The path of config.json. Default is ../config/config.json ")
@@ -202,7 +200,7 @@ func createNerv(cmd *cobra.Command, args []string) error {
 	}
 	id, err := deployer.Create(cli.Flag_topology_name, cli.Flag_template, inputs)
 	if err != nil {
-		return err;
+		return err
 	}
 
 	fmt.Printf("Create platform success. id=%d\n", id)
@@ -412,7 +410,3 @@ func setupNerv(cmd *cobra.Command, args []string) error {
 
 	return nil
 }
-
-
-
-

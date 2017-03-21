@@ -1,8 +1,8 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/jinzhu/gorm"
 )
 
 func init() {
@@ -15,12 +15,11 @@ func appDesc() *db.ModelDescriptor {
 		New: func() interface{} {
 			return &App{}
 		},
-		NewSlice:func() interface{} {
+		NewSlice: func() interface{} {
 			return &[]App{}
 		},
 	}
 }
-
 
 // App managed by agent
 type App struct {
@@ -35,13 +34,12 @@ type App struct {
 // Service provide by an app
 type Service struct {
 	gorm.Model
-	Name string    `json:"name" gorm:"not null;unique"` //service name
-	Type string    `json:"type" gorm:"not null"`        //service type:e.g. http | https
-	Port int32     `json:"port" gorm:"not null"`        //service port
-	Uri  string    `json:"uri" gorm:"not null;unique"`  //service uri
+	Name string `json:"name" gorm:"not null;unique"` //service name
+	Type string `json:"type" gorm:"not null"`        //service type:e.g. http | https
+	Port int32  `json:"port" gorm:"not null"`        //service port
+	Uri  string `json:"uri" gorm:"not null;unique"`  //service uri
 }
 
 // Log config the information of app
 type Log struct {
-
 }

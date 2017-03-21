@@ -1,18 +1,17 @@
 package cli
 
 import (
-	"testing"
 	"github.com/ChaosXu/nerv/test/util"
+	"testing"
 )
-
 
 func TestWorkerStop(t *testing.T) {
 
 	//start
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "stop", "-i", "2"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "stop", "-i", "2"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

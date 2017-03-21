@@ -23,14 +23,14 @@ func newNodesByHostTemplate(nodeTemplate *NodeTemplate, ctx *Context) []*Node {
 		ip, ok := addr.(string)
 		if ok {
 			node := &Node{
-				Name:nodeTemplate.Name,
-				Template:nodeTemplate.Name,
-				Class:nodeTemplate.Type,
-				Address:ip,
+				Name:       nodeTemplate.Name,
+				Template:   nodeTemplate.Name,
+				Class:      nodeTemplate.Type,
+				Address:    ip,
 				Credential: cre,
-				Links:[]*Link{},
-				Properties:configs,
-				Status:Status{RunStatus:RunStatusNone},
+				Links:      []*Link{},
+				Properties: configs,
+				Status:     Status{RunStatus: RunStatusNone},
 			}
 			nodes = append(nodes, node)
 		}
@@ -60,7 +60,7 @@ func newNodesByHostTemplate(nodeTemplate *NodeTemplate, ctx *Context) []*Node {
 
 func newNodeByTemplate(nodeTemplate *NodeTemplate, ctx *Context) *Node {
 	configs := newConfigs(nodeTemplate, ctx)
-	return &Node{Name:nodeTemplate.Name, Template:nodeTemplate.Name, Class:nodeTemplate.Type, Links:[]*Link{}, Properties:configs, Status:Status{RunStatus:RunStatusNone}}
+	return &Node{Name: nodeTemplate.Name, Template: nodeTemplate.Name, Class: nodeTemplate.Type, Links: []*Link{}, Properties: configs, Status: Status{RunStatus: RunStatusNone}}
 }
 
 func newConfigs(nodeTempalte *NodeTemplate, ctx *Context) []*Property {
@@ -71,18 +71,18 @@ func newConfigs(nodeTempalte *NodeTemplate, ctx *Context) []*Property {
 
 	for _, param := range nodeTempalte.Parameters {
 		//TBD: don't hard code
-		if param.Name=="address" {
+		if param.Name == "address" {
 			continue
 		}
 		v := nodeTempalte.formatParameterValue(param.Name, ctx)
 		if v != nil {
 			value, ok := v.(string)
 			if ok {
-				config := &Property{Key:param.Name, Value:value}
+				config := &Property{Key: param.Name, Value: value}
 				configs = append(configs, config)
 			}
 		}
 	}
 
-	return configs;
+	return configs
 }

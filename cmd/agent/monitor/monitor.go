@@ -1,13 +1,13 @@
 package monitor
 
 import (
-	"github.com/ChaosXu/nerv/lib/env"
-	"log"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/monitor/model"
 	"github.com/ChaosXu/nerv/lib/monitor/shipper"
 	"github.com/ChaosXu/nerv/lib/monitor/shipper/elasticsearch"
 	"github.com/ChaosXu/nerv/lib/monitor/shipper/rpc"
-	"github.com/ChaosXu/nerv/lib/monitor/model"
+	"log"
 )
 
 //Monitor
@@ -24,10 +24,10 @@ func NewMonitor(cfg *env.Properties) *Monitor {
 	collector := NewCollector(cfg, probe)
 	shipper := newShipper(cfg)
 	return &Monitor{
-		discovery:discovery,
-		collector:collector,
-		shipper:shipper,
-		cfg:cfg,
+		discovery: discovery,
+		collector: collector,
+		shipper:   shipper,
+		cfg:       cfg,
 	}
 }
 func newShipper(cfg *env.Properties) shipper.Shipper {

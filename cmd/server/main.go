@@ -1,16 +1,16 @@
 package main
 
 import (
-	"log"
 	"fmt"
-	"os"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/ChaosXu/nerv/lib/env"
-	libsvc "github.com/ChaosXu/nerv/lib/service"
 	"github.com/ChaosXu/nerv/cmd/server/service"
 	"github.com/ChaosXu/nerv/lib/automation/manager"
-	"github.com/ChaosXu/nerv/lib/net/http/rest"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/net/http/rest"
+	libsvc "github.com/ChaosXu/nerv/lib/service"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"log"
+	"os"
 )
 
 var (
@@ -39,8 +39,3 @@ func main() {
 		select {}
 	}
 }
-
-
-
-
-

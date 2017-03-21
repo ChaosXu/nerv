@@ -1,10 +1,10 @@
 package repository
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/resource/model"
 	"github.com/toolkits/file"
-	"encoding/json"
 )
 
 type HttpClassRepository struct {
@@ -12,7 +12,7 @@ type HttpClassRepository struct {
 }
 
 func NewHttpClassRepository(rootPath string) *HttpClassRepository {
-	return &HttpClassRepository{root:rootPath}
+	return &HttpClassRepository{root: rootPath}
 }
 
 func (p *HttpClassRepository) Get(path string) (*model.Class, error) {

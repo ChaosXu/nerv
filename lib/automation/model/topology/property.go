@@ -1,14 +1,14 @@
 package topology
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/jinzhu/gorm"
 )
 
 //Link two nodes
 type Property struct {
 	gorm.Model
-	NodeID int        `gorm:"index"` //Foreign key of the node
+	NodeID int `gorm:"index"` //Foreign key of the node
 	Key    string
 	Value  string
 }
@@ -23,7 +23,7 @@ func propertyDesc() *db.ModelDescriptor {
 		New: func() interface{} {
 			return &Property{}
 		},
-		NewSlice:func() interface{} {
+		NewSlice: func() interface{} {
 			return &[]Property{}
 		},
 	}

@@ -1,12 +1,12 @@
 package main
 
 import (
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/net/http/proxy"
+	"github.com/pressly/chi"
 	"log"
 	"net/http"
 	"os"
-	"github.com/ChaosXu/nerv/lib/env"
-	"github.com/pressly/chi"
-	"github.com/ChaosXu/nerv/lib/net/http/proxy"
 )
 
 var (
@@ -54,6 +54,5 @@ func main() {
 		r.FileServer(url, http.Dir(file.(string)))
 	}
 
-	log.Fatalln(http.ListenAndServe(":" + port, r))
+	log.Fatalln(http.ListenAndServe(":"+port, r))
 }
-

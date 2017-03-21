@@ -1,9 +1,9 @@
 package operation
 
 import (
+	"fmt"
 	"github.com/ChaosXu/nerv/lib/resource/model"
 	"github.com/ChaosXu/nerv/lib/resource/repository"
-	"fmt"
 )
 
 // Executor perform an operation of class.
@@ -14,9 +14,9 @@ type Executor interface {
 
 // ExecutorImpl select the environment by class and invoke it
 type ExecutorImpl struct {
-	Standalone Environment `inject:"env_standalone"`
-	Ssh        Environment `inject:"env_ssh"`
-	Rpc        Environment  `inject:"env_rpc"`
+	Standalone Environment                `inject:"env_standalone"`
+	Ssh        Environment                `inject:"env_ssh"`
+	Rpc        Environment                `inject:"env_rpc"`
 	ClassRep   repository.ClassRepository `inject:""`
 }
 
@@ -35,7 +35,7 @@ func (p *ExecutorImpl) Perform(envType string, class *model.Class, operation str
 	return env.Exec(class, op, args)
 }
 
-func (p *ExecutorImpl)findEnvironment(envType string) (Environment, error) {
+func (p *ExecutorImpl) findEnvironment(envType string) (Environment, error) {
 	switch envType {
 	case "standalone":
 		return p.Standalone, nil

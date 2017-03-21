@@ -1,10 +1,10 @@
 package rpc
 
 import (
-	"log"
-	"net/rpc/jsonrpc"
 	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/monitor/shipper"
+	"log"
+	"net/rpc/jsonrpc"
 )
 
 type RpcShipper struct {
@@ -14,7 +14,7 @@ type RpcShipper struct {
 
 func NewShipper(cfg *env.Properties) shipper.Shipper {
 	address := cfg.GetMapString("shipper", "server", "3334")
-	return &RpcShipper{server:address, cfg:cfg}
+	return &RpcShipper{server: address, cfg: cfg}
 }
 
 func (p *RpcShipper) Init() error {
@@ -35,4 +35,3 @@ func (p *RpcShipper) Send(v interface{}) {
 		log.Printf("publish error. %s", err.Error())
 	}
 }
-

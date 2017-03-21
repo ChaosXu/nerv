@@ -1,8 +1,8 @@
 package golang
 
 import (
-	"testing"
 	"fmt"
+	"testing"
 )
 
 func TestChan(t *testing.T) {
@@ -47,5 +47,3 @@ func TestChan(t *testing.T) {
 	case <-c:
 	}
 }
-
-

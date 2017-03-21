@@ -1,16 +1,16 @@
 package db
 
 import (
-"bytes"
-"database/sql/driver"
-"fmt"
-"reflect"
-"regexp"
-"runtime"
-"strings"
-"sync"
-"time"
+	"bytes"
+	"database/sql/driver"
+	"fmt"
 	"github.com/jinzhu/gorm"
+	"reflect"
+	"regexp"
+	"runtime"
+	"strings"
+	"sync"
+	"time"
 )
 
 // NowFunc returns current time, this function is exported in order to be able
@@ -76,19 +76,19 @@ func ToDBName(name string) string {
 	}
 
 	var (
-		value = commonInitialismsReplacer.Replace(name)
-		buf = bytes.NewBufferString("")
+		value                        = commonInitialismsReplacer.Replace(name)
+		buf                          = bytes.NewBufferString("")
 		lastCase, currCase, nextCase strCase
 	)
 
-	for i, v := range value[:len(value) - 1] {
-		nextCase = strCase(value[i + 1] >= 'A' && value[i + 1] <= 'Z')
+	for i, v := range value[:len(value)-1] {
+		nextCase = strCase(value[i+1] >= 'A' && value[i+1] <= 'Z')
 		if i > 0 {
 			if currCase == upper {
 				if lastCase == upper && nextCase == upper {
 					buf.WriteRune(v)
 				} else {
-					if value[i - 1] != '_' && value[i + 1] != '_' {
+					if value[i-1] != '_' && value[i+1] != '_' {
 						buf.WriteRune('_')
 					}
 					buf.WriteRune(v)
@@ -104,7 +104,7 @@ func ToDBName(name string) string {
 		currCase = nextCase
 	}
 
-	buf.WriteByte(value[len(value) - 1])
+	buf.WriteByte(value[len(value)-1])
 
 	s := strings.ToLower(buf.String())
 	smap.Set(name, s)
@@ -263,4 +263,3 @@ func addExtraSpaceIfExist(str string) string {
 	}
 	return ""
 }
-

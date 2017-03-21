@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"net/http"
-	"golang.org/x/net/context"
 	"github.com/pressly/chi"
-	"strings"
+	"golang.org/x/net/context"
+	"net/http"
 	"net/url"
+	"strings"
 )
 
 const (
@@ -16,7 +16,7 @@ const (
 func ParamsParser(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		ctx := context.WithValue(r.Context(), RequestParams, &Params{req:r})
+		ctx := context.WithValue(r.Context(), RequestParams, &Params{req: r})
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
@@ -42,12 +42,12 @@ func (p *Params) QueryParam(key string) string {
 
 		if rq != "" {
 			for _, pair := range strings.Split(rq, "&") {
-				index := strings.Index(pair, "=");
-				if index <= 0 || index == len(pair) - 1 {
+				index := strings.Index(pair, "=")
+				if index <= 0 || index == len(pair)-1 {
 					continue
 				}
 				kv := pair[0:index]
-				if uv, err := url.QueryUnescape(pair[index + 1:]); err != nil {
+				if uv, err := url.QueryUnescape(pair[index+1:]); err != nil {
 					panic(err)
 				} else {
 					p.queryParams[kv] = uv
@@ -57,4 +57,3 @@ func (p *Params) QueryParam(key string) string {
 	}
 	return p.queryParams[key]
 }
-

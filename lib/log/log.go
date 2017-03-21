@@ -1,8 +1,8 @@
 package log
 
 import (
-	"runtime"
 	glog "log"
+	"runtime"
 )
 
 func LogCodeLine() {
@@ -10,4 +10,3 @@ func LogCodeLine() {
 		glog.Printf("%s:%d\n", file, line)
 	}
 }
-

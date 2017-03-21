@@ -2,7 +2,7 @@ package db
 
 import "github.com/jinzhu/gorm"
 
-func  shouldSaveAssociations(scope *gorm.Scope) bool {
+func shouldSaveAssociations(scope *gorm.Scope) bool {
 	if saveAssociations, ok := scope.Get("gorm:save_associations"); ok && !saveAssociations.(bool) {
 		return false
 	}

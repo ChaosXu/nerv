@@ -1,9 +1,9 @@
 package db
 
 import (
-	"github.com/jinzhu/gorm"
 	"fmt"
 	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/jinzhu/gorm"
 )
 
 var (
@@ -39,4 +39,3 @@ func (p *DBService) Init() error {
 func (p *DBService) Dispose() error {
 	return DB.Close()
 }
-

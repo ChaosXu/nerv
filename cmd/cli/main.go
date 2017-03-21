@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"github.com/ChaosXu/nerv/cmd/cli/cmd"
+	"os"
 )
 
 func main() {

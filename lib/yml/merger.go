@@ -1,12 +1,11 @@
 package yml
 
 import (
+	"fmt"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"fmt"
 	"os"
 )
-
 
 // Merger merge multi yml file in one
 type Merger struct {
@@ -15,7 +14,7 @@ type Merger struct {
 }
 
 func NewMerger(target string) *Merger {
-	return &Merger{target:target, files:[]string{}}
+	return &Merger{target: target, files: []string{}}
 }
 
 // Add a file to merge
@@ -29,7 +28,7 @@ func (p *Merger) Remove(file string) string {
 	for i, f := range p.files {
 		if f == file {
 			removed := p.files[i]
-			p.files = append(p.files[:i], p.files[i + 1:]...)
+			p.files = append(p.files[:i], p.files[i+1:]...)
 			return removed
 		}
 	}
@@ -144,4 +143,3 @@ func (p *Merger) appendUpdate(target map[interface{}]interface{}, source map[int
 //	}
 //	return nil
 //}
-

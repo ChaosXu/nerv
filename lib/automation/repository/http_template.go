@@ -1,11 +1,11 @@
 package repository
 
 import (
-	"github.com/ChaosXu/nerv/lib/automation/model/topology"
-	"fmt"
-	"github.com/go-resty/resty"
-	"github.com/ChaosXu/nerv/lib/env"
 	"encoding/json"
+	"fmt"
+	"github.com/ChaosXu/nerv/lib/automation/model/topology"
+	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/go-resty/resty"
 )
 
 // HttpTemplateRepository load template from remote server
@@ -15,8 +15,8 @@ func (p *HttpTemplateRepository) GetTemplate(path string) (*topology.ServiceTemp
 	baseUrl := env.Config().GetMapString("templates", "repository", "http://localhost:3332/api/templates")
 	url := fmt.Sprintf("%s%s", baseUrl, path)
 	res, err := resty.R().
-			SetHeader("Content-Type", "application/json").
-			Get(url)
+		SetHeader("Content-Type", "application/json").
+		Get(url)
 	if err != nil {
 		return nil, err
 	}

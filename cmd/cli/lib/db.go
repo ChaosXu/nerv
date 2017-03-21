@@ -2,10 +2,10 @@ package lib
 
 import (
 	"fmt"
+	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/ChaosXu/nerv/lib/env"
-	"github.com/ChaosXu/nerv/lib/db"
 )
 
 func InitDB() *gorm.DB {

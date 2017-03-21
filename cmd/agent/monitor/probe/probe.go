@@ -1,10 +1,10 @@
 package probe
 
 import (
-	"github.com/ChaosXu/nerv/lib/monitor/model"
-	"log"
 	"github.com/ChaosXu/nerv/lib/debug"
 	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/monitor/model"
+	"log"
 )
 
 //Probe collects the data of metrics
@@ -21,7 +21,7 @@ func NewProbe(cfg *env.Properties) Probe {
 	probes := map[model.ProbeType]Probe{
 		model.ProbeTypeShell: NewShellProbe(cfg),
 	}
-	return &DefaultProbe{probes:probes}
+	return &DefaultProbe{probes: probes}
 }
 
 //Table return table data
@@ -31,7 +31,7 @@ func (p *DefaultProbe) Table(metric *model.Metric, args map[string]string) ([]*m
 	for _, probe := range p.probes {
 		ch := make(chan []*model.Sample, 1)
 		chSamples = append(chSamples, ch)
-		go func(probe Probe, ch chan <- []*model.Sample) {
+		go func(probe Probe, ch chan<- []*model.Sample) {
 			samples, err := probe.Table(metric, args)
 			if err != nil {
 				log.Printf("Probe.Table error. %s", err.Error())
@@ -74,7 +74,7 @@ func (p *DefaultProbe) Row(metric *model.Metric, args map[string]string) (*model
 	for _, probe := range p.probes {
 		ch := make(chan *model.Sample, 1)
 		chSamples = append(chSamples, ch)
-		go func(probe Probe, ch chan <- *model.Sample) {
+		go func(probe Probe, ch chan<- *model.Sample) {
 			sample, err := probe.Row(metric, args)
 			if err != nil {
 				log.Printf("Probe.Row error. %s", err.Error())

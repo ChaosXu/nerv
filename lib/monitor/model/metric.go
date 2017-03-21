@@ -2,13 +2,13 @@ package model
 
 import (
 	"github.com/ChaosXu/nerv/lib/env"
-	"strings"
 	"github.com/ChaosXu/nerv/lib/json"
-	"path"
-	"path/filepath"
-	"os"
 	"github.com/toolkits/file"
 	"log"
+	"os"
+	"path"
+	"path/filepath"
+	"strings"
 )
 
 //func init() {
@@ -58,7 +58,7 @@ type MetricType string
 
 const (
 	MetricTypeStruct MetricType = "struct"
-	MetricTypeTable MetricType = "table"
+	MetricTypeTable  MetricType = "table"
 )
 
 //MetricDataType define the type of metric field's data
@@ -67,16 +67,16 @@ type MetricDataType string
 const (
 	MetricDataTypeString MetricDataType = "string"
 	MetricDataTypeDouble MetricDataType = "double"
-	MetricDataTypeLong MetricDataType = "long"
-	MetricDataTypeBool MetricDataType = "bool"
+	MetricDataTypeLong   MetricDataType = "long"
+	MetricDataTypeBool   MetricDataType = "bool"
 )
 
 //MetricSampleType define the type fo metric's sample
 type MetricSampleType string
 
 const (
-	MetricSampleTypeGauge MetricSampleType = "gauge"        //raw data
-	MetricSampleTypeCounter MetricSampleType = "counter"    //V2>=V1 ? (V2-V1)/(T2-T1) : (MAX-V1+V2)/(T2-T1)
+	MetricSampleTypeGauge   MetricSampleType = "gauge"   //raw data
+	MetricSampleTypeCounter MetricSampleType = "counter" //V2>=V1 ? (V2-V1)/(T2-T1) : (MAX-V1+V2)/(T2-T1)
 )
 
 //ProbeType define the sampling method
@@ -89,11 +89,11 @@ const (
 //Metric define the KPI of resource
 type Metric struct {
 	//gorm.Model
-	ResourceType string                `json:"resourceType"`
-	Type         MetricType            `json:"type"`
-	Name         string                `json:"name"`
-	IsService    bool                  `json:"isService`
-	Fields       []MetricField         `json:"fields"`
+	ResourceType string        `json:"resourceType"`
+	Type         MetricType    `json:"type"`
+	Name         string        `json:"name"`
+	IsService    bool          `json:"isService`
+	Fields       []MetricField `json:"fields"`
 }
 
 func (p *Metric) Key() string {
@@ -117,8 +117,8 @@ type MetricField struct {
 
 //Probe define the sampling info
 type Probe struct {
-	Type     ProbeType    `json:"type"`
-	Provider string       `json:"provider"`
+	Type     ProbeType `json:"type"`
+	Provider string    `json:"provider"`
 }
 
 func LoadMetric(cfg *env.Properties, resourceType string, metricName string) (*Metric, error) {
@@ -154,4 +154,3 @@ func LoadMetrics(path string) ([]*Metric, error) {
 	})
 	return metrics, err
 }
-

@@ -1,19 +1,18 @@
 package cli
 
 import (
-	"testing"
-	"regexp"
 	"github.com/ChaosXu/nerv/test/util"
+	"regexp"
+	"testing"
 )
-
 
 func TestWorkerInstall(t *testing.T) {
 
 	//create
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "create", "-t", "/nerv/worker.json", "-o", "worker-1", "-n ../../../../test/cli/worker_inputs.json"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "create", "-t", "/nerv/worker.json", "-o", "worker-1", "-n ../../../../test/cli/worker_inputs.json"},
 	}
 
 	var id string
@@ -23,16 +22,16 @@ func TestWorkerInstall(t *testing.T) {
 	} else {
 		res := string(out)
 		t.Log("----")
-		t.Log("r\n"+ res)
+		t.Log("r\n" + res)
 		regex := regexp.MustCompile(`.*([0-9]+),.*`)
 		id = regex.FindStringSubmatch(res)[1]
 	}
 
 	//list
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "list"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "list"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -44,9 +43,9 @@ func TestWorkerInstall(t *testing.T) {
 
 	//get
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "get", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "get", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -58,9 +57,9 @@ func TestWorkerInstall(t *testing.T) {
 
 	//install
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "install", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "install", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -72,9 +71,9 @@ func TestWorkerInstall(t *testing.T) {
 
 	//setup
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "setup", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "setup", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

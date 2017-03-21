@@ -1,10 +1,10 @@
 package monitor
 
 import (
-	"log"
-	"github.com/ChaosXu/nerv/lib/monitor/model"
 	"github.com/ChaosXu/nerv/cmd/agent/monitor/probe"
 	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/monitor/model"
+	"log"
 )
 
 //Collector collect all resources's metrics on localhost
@@ -17,9 +17,9 @@ type Collector struct {
 
 func NewCollector(cfg *env.Properties, probe probe.Probe) *Collector {
 	return &Collector{
-		cfg:cfg,
-		watchers:map[string]map[int64]*Watcher{},
-		probe:probe,
+		cfg:      cfg,
+		watchers: map[string]map[int64]*Watcher{},
+		probe:    probe,
 	}
 }
 
@@ -74,4 +74,3 @@ func (p *Collector) Collect(resource *model.Resource) {
 		watcher.AddResource(resource)
 	}
 }
-

@@ -1,20 +1,20 @@
 package cli
 
 import (
-	"testing"
-	"regexp"
 	"github.com/ChaosXu/nerv/test/util"
+	"regexp"
+	"testing"
 )
 
 func TestTopo(t *testing.T) {
-	nerv,creID := setup(t)
-	defer clear(t, nerv,creID)
+	nerv, creID := setup(t)
+	defer clear(t, nerv, creID)
 
 	//create
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "create", "-t", "/nerv/worker_cluster.json", "-o", "topo-1", "-n ../../../../test/cli/topo_test_inputs.json"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "create", "-t", "/nerv/worker_cluster.json", "-o", "topo-1", "-n ../../../../test/cli/topo_test_inputs.json"},
 	}
 
 	var id string
@@ -30,9 +30,9 @@ func TestTopo(t *testing.T) {
 
 	//list
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "list"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "list"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -44,9 +44,9 @@ func TestTopo(t *testing.T) {
 
 	//get
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "get", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "get", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -58,9 +58,9 @@ func TestTopo(t *testing.T) {
 
 	//install
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "install", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "install", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -72,9 +72,9 @@ func TestTopo(t *testing.T) {
 
 	//setup
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "setup", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "setup", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -86,9 +86,9 @@ func TestTopo(t *testing.T) {
 
 	//start
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "start", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "start", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -100,9 +100,9 @@ func TestTopo(t *testing.T) {
 
 	//stop
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "stop", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "stop", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -128,9 +128,9 @@ func TestTopo(t *testing.T) {
 
 	//delete
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"topo", "delete", "-i", id},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"topo", "delete", "-i", id},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -144,9 +144,9 @@ func TestTopo(t *testing.T) {
 func setup(t *testing.T) (string, string) {
 	//create
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "create", "-t", "../../resources/templates/nerv/env_standalone.json", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "create", "-t", "../../resources/templates/nerv/env_standalone.json", "-n", "../../../../test/cli/nerv_standalone_inputs.json"},
 	}
 
 	var nid string
@@ -162,9 +162,9 @@ func setup(t *testing.T) (string, string) {
 
 	//install
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "install", "-i", nid},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "install", "-i", nid},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -175,12 +175,11 @@ func setup(t *testing.T) (string, string) {
 		t.Log(res)
 	}
 
-
 	//setup
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "setup", "-i", nid},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "setup", "-i", nid},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -190,12 +189,11 @@ func setup(t *testing.T) (string, string) {
 		t.Log(string(out))
 	}
 
-
 	//start
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "start", "-i", nid},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "start", "-i", nid},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -208,9 +206,9 @@ func setup(t *testing.T) (string, string) {
 	//create credential
 	var cid string
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"credential", "create", "-D", "../../../../test/cli/topo_credential.json"},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"credential", "create", "-D", "../../../../test/cli/topo_credential.json"},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -226,12 +224,12 @@ func setup(t *testing.T) (string, string) {
 	return nid, cid
 }
 
-func clear(t *testing.T, nid string,cid string) {
+func clear(t *testing.T, nid string, cid string) {
 	//delete  credential
 	cmd := &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"credential", "delete", "-i", cid},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"credential", "delete", "-i", cid},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -243,9 +241,9 @@ func clear(t *testing.T, nid string,cid string) {
 
 	//stop
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "stop", "-i", nid},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "stop", "-i", nid},
 	}
 
 	if out, err := cmd.Run(t); err != nil {
@@ -269,12 +267,11 @@ func clear(t *testing.T, nid string,cid string) {
 	//	t.Log(string(out))
 	//}
 
-
 	//delete
 	cmd = &util.Cmd{
-		Dir: "../../release/nerv/nerv-cli/bin",
-		Cli:"./nerv-cli",
-		Items:[]string{"nerv", "delete", "-i", nid},
+		Dir:   "../../release/nerv/nerv-cli/bin",
+		Cli:   "./nerv-cli",
+		Items: []string{"nerv", "delete", "-i", nid},
 	}
 
 	if out, err := cmd.Run(t); err != nil {

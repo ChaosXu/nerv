@@ -1,14 +1,13 @@
 package service
 
 import (
-	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/cmd/agent/model"
+	"github.com/ChaosXu/nerv/lib/db"
 	"github.com/ChaosXu/nerv/lib/util"
 )
 
 // AppService
 type AppService struct {
-
 }
 
 func (p *AppService) Update(name string, attrs []string, values []interface{}) error {
@@ -21,7 +20,7 @@ func (p *AppService) Update(name string, attrs []string, values []interface{}) e
 	if err != nil {
 		return err
 	}
-	if err := db.DB.Save(app).Error; err!=nil {
+	if err := db.DB.Save(app).Error; err != nil {
 		return err
 	} else {
 		return nil

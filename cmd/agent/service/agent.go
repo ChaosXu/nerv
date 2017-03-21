@@ -1,18 +1,17 @@
 package service
 
 import (
-	"os"
-	"log"
-	"path/filepath"
-	"github.com/ChaosXu/nerv/lib/env"
 	"fmt"
-	"os/exec"
+	"github.com/ChaosXu/nerv/lib/env"
 	"github.com/ChaosXu/nerv/lib/rpc"
+	"log"
+	"os"
+	"os/exec"
+	"path/filepath"
 )
 
 // RemoteScriptServiceFactory
 type RemoteScriptServiceFactory struct {
-
 }
 
 func (p *RemoteScriptServiceFactory) New() interface{} {
@@ -22,7 +21,6 @@ func (p *RemoteScriptServiceFactory) New() interface{} {
 	}
 	return agent
 }
-
 
 //RemoteScriptService execute the method of app
 type Agent struct {
@@ -38,11 +36,11 @@ func NewRemoteScriptService(cfg *env.Properties) (*Agent, error) {
 
 	appRoot := cfg.GetMapString("app", "root", "../app")
 	appRoot = filepath.Join(dir, appRoot)
-	if err := os.MkdirAll(appRoot, os.ModeDir | os.ModePerm); err != nil {
+	if err := os.MkdirAll(appRoot, os.ModeDir|os.ModePerm); err != nil {
 		return nil, err
 	}
 
-	return &Agent{AppRoot:appRoot, cfg:cfg}, nil
+	return &Agent{AppRoot: appRoot, cfg: cfg}, nil
 }
 
 func (p *Agent) Init() error {
@@ -71,6 +69,3 @@ func (p *Agent) Execute(script *rpc.RemoteScript, reply *string) error {
 	*reply = res
 	return nil
 }
-
-
-

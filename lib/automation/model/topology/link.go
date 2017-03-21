@@ -1,17 +1,17 @@
 package topology
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/jinzhu/gorm"
 )
 
 //Link two nodes
 type Link struct {
 	gorm.Model
-	NodeID int        `gorm:"index"` //Foreign key of the node
-	Type   string                    //link type
-	Source string                    //source node name
-	Target string                    //target node name
+	NodeID int    `gorm:"index"` //Foreign key of the node
+	Type   string //link type
+	Source string //source node name
+	Target string //target node name
 }
 
 func init() {
@@ -24,7 +24,7 @@ func linkDesc() *db.ModelDescriptor {
 		New: func() interface{} {
 			return &Link{}
 		},
-		NewSlice:func() interface{} {
+		NewSlice: func() interface{} {
 			return &[]Link{}
 		},
 	}

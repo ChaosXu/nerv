@@ -1,8 +1,8 @@
 package util
 
 import (
-	"reflect"
 	"fmt"
+	"reflect"
 )
 
 func SetValue(o interface{}, attrs []string, values []interface{}) error {

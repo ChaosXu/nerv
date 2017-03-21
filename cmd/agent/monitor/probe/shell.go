@@ -1,13 +1,13 @@
 package probe
 
 import (
-	"log"
-	"github.com/ChaosXu/nerv/lib/debug"
-	"github.com/ChaosXu/nerv/lib/monitor/model"
-	"fmt"
-	"os/exec"
 	"encoding/json"
+	"fmt"
+	"github.com/ChaosXu/nerv/lib/debug"
 	"github.com/ChaosXu/nerv/lib/env"
+	"github.com/ChaosXu/nerv/lib/monitor/model"
+	"log"
+	"os/exec"
 )
 
 type ShellProbe struct {
@@ -15,7 +15,7 @@ type ShellProbe struct {
 }
 
 func NewShellProbe(cfg *env.Properties) Probe {
-	return &ShellProbe{cfg:cfg}
+	return &ShellProbe{cfg: cfg}
 }
 
 func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*model.Sample, error) {
@@ -38,7 +38,7 @@ func (p *ShellProbe) Table(metric *model.Metric, args map[string]string) ([]*mod
 				} else {
 					log.Printf("ShellProbe.Table %s %s %s %s %s", res, metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
 
-					switch metric.Type{
+					switch metric.Type {
 
 					case model.MetricTypeTable:
 						v := []map[string]interface{}{}
@@ -89,7 +89,7 @@ func (p *ShellProbe) Row(metric *model.Metric, args map[string]string) (*model.S
 				} else {
 					log.Printf("ShellProbe.Row %s %s %s %s %s", res, metric.ResourceType, metric.Name, field.Probe.Provider, debug.CodeLine())
 
-					switch metric.Type{
+					switch metric.Type {
 					case model.MetricTypeStruct:
 						v := map[string]interface{}{}
 						if err := json.Unmarshal([]byte(res), &v); err != nil {

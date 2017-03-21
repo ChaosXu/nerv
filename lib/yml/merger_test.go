@@ -1,11 +1,11 @@
 package yml
 
 import (
-	"testing"
-	"io/ioutil"
 	"fmt"
-	"reflect"
 	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"reflect"
+	"testing"
 )
 
 func TestMerger(t *testing.T) {

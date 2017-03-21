@@ -1,12 +1,12 @@
 package lock_test
 
 import (
-	"testing"
-	"github.com/stretchr/testify/assert"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/lock"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/ChaosXu/nerv/lib/lock"
+	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestLock_TryLock(t *testing.T) {
@@ -21,7 +21,7 @@ func TestLock_TryLock(t *testing.T) {
 	ok1 := lock1.TryLock()
 	assert.Equal(t, ok1, true)
 
-	ok2 :=lock2.TryLock()
+	ok2 := lock2.TryLock()
 	assert.Equal(t, ok2, false)
 }
 

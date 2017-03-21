@@ -1,17 +1,17 @@
 package rest
 
 import (
-	"net/http"
+	"encoding/json"
 	"fmt"
-	"strings"
+	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
+	"github.com/ChaosXu/nerv/lib/service"
+	"github.com/jinzhu/gorm"
+	"github.com/pressly/chi/render"
+	"net/http"
 	"reflect"
 	"strconv"
-	"github.com/pressly/chi/render"
-	"github.com/jinzhu/gorm"
-	"github.com/ChaosXu/nerv/lib/net/http/rest/middleware"
-	"github.com/ChaosXu/nerv/lib/db"
-	"github.com/ChaosXu/nerv/lib/service"
-	"encoding/json"
+	"strings"
 )
 
 // RestController
@@ -58,7 +58,7 @@ func (p *RestController) List(w http.ResponseWriter, req *http.Request) {
 	}
 
 	//count
-	d := db.DB.Model(md.NewSlice());
+	d := db.DB.Model(md.NewSlice())
 	var count int64
 	if where != "" {
 		d = d.Where(where, args)
@@ -68,7 +68,6 @@ func (p *RestController) List(w http.ResponseWriter, req *http.Request) {
 		render.JSON(w, req, err.Error())
 		return
 	}
-
 
 	//order page
 	var page, pageCount, limit int64
@@ -84,7 +83,7 @@ func (p *RestController) List(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 	pageCount = count / limit
-	if count % limit >= 0 {
+	if count%limit >= 0 {
 		pageCount += 1
 	}
 
@@ -104,7 +103,7 @@ func (p *RestController) List(w http.ResponseWriter, req *http.Request) {
 
 	order := middleware.CurrentParams(req).QueryParam("order")
 	if order != "" {
-		d = d.Order(order);
+		d = d.Order(order)
 	}
 	data := md.NewSlice()
 	if d.Offset(page * limit).Limit(limit).Find(data).RecordNotFound() {
@@ -114,7 +113,7 @@ func (p *RestController) List(w http.ResponseWriter, req *http.Request) {
 	}
 
 	render.Status(req, 200)
-	render.JSON(w, req, map[string]interface{}{"data":data, "page":page, "pageSize":limit, "pageCount":pageCount})
+	render.JSON(w, req, map[string]interface{}{"data": data, "page": page, "pageSize": limit, "pageCount": pageCount})
 }
 
 // get one obj. query params: assocations=a,b...
@@ -358,6 +357,3 @@ func (p *RestController) InvokeObj(w http.ResponseWriter, req *http.Request) {
 		render.JSON(w, req, ret)
 	}
 }
-
-
-

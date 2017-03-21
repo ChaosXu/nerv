@@ -2,19 +2,18 @@ package service
 
 import (
 	"fmt"
-	"os"
-	"github.com/jinzhu/gorm"
 	"github.com/ChaosXu/nerv/lib/db"
+	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
+	"os"
 )
 
 type DBService struct {
-
 }
 
 func (p *DBService) Init() error {
 	if _, err := os.Stat("../data"); err != nil {
-		if err := os.MkdirAll("../data", os.ModeDir | os.ModePerm); err != nil {
+		if err := os.MkdirAll("../data", os.ModeDir|os.ModePerm); err != nil {
 			return fmt.Errorf("create dir ../data failed. %s", err.Error())
 		}
 	}
@@ -34,6 +33,3 @@ func (p *DBService) Init() error {
 func (p *DBService) Dispose() error {
 	return db.DB.Close()
 }
-
-
-
