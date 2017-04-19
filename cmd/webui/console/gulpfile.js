@@ -92,6 +92,11 @@ gulp.task('connect', function () {
                     target: 'http://localhost:3332',
                     changeOrigin: true,
                     ws: true
+                }),
+                proxy('/api/blueprint', {
+                    target: 'http://localhost:3332',
+                    changeOrigin: true,
+                    ws: true
                 })
             ];
         }

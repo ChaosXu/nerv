@@ -150,19 +150,7 @@ export class OrchestrationModule {
                         name: "资源模型",
                         url: "/orchestration/scripts"
                     }
-                ],
-                // ServiceTemplate: {
-                //     list: {
-                //         title: '模板列表', columns: [
-                //             { label: '名称', name: 'name' },
-                //             { label: '版本', name: 'version' },
-                //             { label: '操作' }
-                //         ]
-                //     },
-                //     add: { title: '添加模板', form: 'orchestration.st.add' },
-                //     edit: { title: '编辑模板', form: 'orchestration.st.edit' },
-                //     detail: { title: '查看模板', form: 'orchestration.st.detail' }
-                // },
+                ],               
                 Topology: {
                     list: {
                         title: '拓扑列表', columns: [
@@ -175,29 +163,7 @@ export class OrchestrationModule {
                     add: { title: '添加拓扑', form: 'orchestration.topo.add' },
                     edit: { title: '编辑拓扑', form: 'orchestration.topo.edit' },
                     detail: { title: '查看拓扑', form: 'orchestration.topo.detail' }
-                },
-                // ResourceType: {
-                //     list: {
-                //         title: '资源类列表', columns: [
-                //             { label: '名称', name: 'name' },
-                //             { label: '操作' }
-                //         ]
-                //     },
-                //     add: { title: '添加资源类', form: 'orchestration.rt.add' },
-                //     edit: { title: '编辑资源类', form: 'orchestration.rt.edit' },
-                //     detail: { title: '查看资源类', form: 'orchestration.rt.detail' }
-                // },                
-                // Script: {
-                //     list: {
-                //         title: '脚本列表', columns: [
-                //             { label: '名称', name: 'name' },
-                //             { label: '操作' }
-                //         ]
-                //     },
-                //     add: { title: '添加脚本', form: 'orchestration.script.add' },
-                //     edit: { title: '编辑脚本', form: 'orchestration.script.edit' },
-                //     detail: { title: '查看删除', form: 'orchestration.script.detail' }
-                // }
+                }
             });
     }
 }

@@ -5,10 +5,10 @@
         </div>
         <div class="explorer__tree">
             <Tree [nodes]="nodes" (onActivate)="onNodeSelected($event)" [options]="options">
-                <template #treeNodeTemplate let-node>
+                <ng-template #treeNodeTemplate let-node>
                     <span>{{node.data.name}}</span><span *ngIf="node.data.dirty">*</span>
-                </template>
-                <template #loadingTemplate>Loading....</template>
+                </ng-template>
+                <ng-template #loadingTemplate>Loading....</ng-template>
             </Tree>
         </div>
     </div>

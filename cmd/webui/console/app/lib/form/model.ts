@@ -10,7 +10,7 @@ export class Field {
     type: string;           //data type
     validators?: {};
     display?: {};           //display setting 
-    condition?: string      //condition for select table
+    condition?: string;      //condition for select table
     forms?: {
         add: string,
         edit: string,

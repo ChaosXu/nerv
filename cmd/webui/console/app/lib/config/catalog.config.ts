@@ -15,9 +15,13 @@ export interface CatalogItem {
 const Catalogs = [{
     name: '管理',
     items: [{
-        name: '资源编排',
+        name: '服务编排',
         icon: 'icon__ucdn',
         url: '/orchestration/Topology'
+    }, {
+        name: '部署流水线',
+        icon: 'icon__umon',
+        url: '/pipeline/Project'
     }, {
         name: '监控',
         icon: 'icon__umon',

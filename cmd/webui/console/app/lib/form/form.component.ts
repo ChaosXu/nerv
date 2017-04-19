@@ -14,7 +14,8 @@ export class FormComponent implements OnInit {
     @Input('data') set setData(value: {}) {
         this.data = value;
         if (this.formGroup) {
-            this.formGroup.reset(this.data);
+            // BUGFIX: https://github.com/angular/angular/issues/6005#issuecomment-165911194
+            setTimeout(_ => this.formGroup.reset(this.data));
         }
     }
     data: {};
@@ -26,7 +27,7 @@ export class FormComponent implements OnInit {
     { }
 
     get valid(): boolean {
-        return this.formGroup ? this.formGroup.valid : false;
+        return this.formGroup ? !this.formGroup.pristine && this.formGroup.dirty && this.formGroup.valid : false;
     }
 
 
@@ -34,13 +35,14 @@ export class FormComponent implements OnInit {
         this.buildForm();
     }
 
+
     private buildForm(): void {
         let group: any = {};
 
         this.meta.fields.forEach(field => {
-            //if (field.control != 'table') {
+            if (field.validators) {
                 group[field.name] = new FormControl('', this.getValidators(field.validators));
-            //}
+            }
         });
 
         this.formGroup = new FormGroup(group);

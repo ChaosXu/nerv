@@ -11,7 +11,7 @@ export const routes: Routes = [
         path: '', component: ListApp,
         children: [
             {
-                path: 'templates',
+                path: 'blueprint',
                 children: [
                     { path: '', component: ExplorerComponent }
                 ]
