@@ -53,6 +53,34 @@ const appForm: Form = {
     ]
 };
 
+const logForm: Form = {
+    name: "log_form",
+    fields: [
+        {
+            name: "name", label: "标识", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
+        },
+        {
+            name: "displayName", label: "名称", control: "text", type: "string", validators: { 'required': { message: '不能为空' } }
+        },
+        {
+            name: "logs", label: "部署日志", control: "table", type: "Log",
+            display: {
+                columns: [
+                    { label: '流水线', name: 'pipeline' },
+                    { label: '阶段', name: 'stage' },
+                    { label: '作业', name: 'step' },
+                    { label: '状态', name: 'status' },
+                    { label: '时间', name: 'UpdatedAt' },                                                        
+                ]
+            },
+            forms: {                                
+                detail: 'pipeline.log.detail'
+            },
+            condition: 'project_id = ?'
+        }
+    ]
+};
+
 const scriptForm: Form = {
     name: "script_form",
     fields: [
@@ -93,7 +121,7 @@ export class PipelineModule {
 
         formRegistry.put('pipeline.project.add', projectForm);
         formRegistry.put('pipeline.project.edit', projectForm);
-        formRegistry.put('pipeline.project.detail', projectForm);
+        formRegistry.put('pipeline.project.detail', logForm);
         formRegistry.put('pipeline.app.add', appForm);
         formRegistry.put('pipeline.app.edit', appForm);
         formRegistry.put('pipeline.app.detail', appForm);

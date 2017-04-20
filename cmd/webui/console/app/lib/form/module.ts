@@ -10,6 +10,7 @@ import { FormModal } from './form.modal';
 import { InputField } from './fields/input.field';
 import { TableField } from './fields/table.field';
 import { SelectField } from './fields/select.field';
+import { PipelineField } from './fields/pipeline.field';
 import { FormRegistry } from './form.registry';
 import { ValidatorRegistry } from './validators/validator.registry';
 import { AceDirective } from './ace/ace.directive';
@@ -30,7 +31,8 @@ import { AceDirective } from './ace/ace.directive';
         PaginationComponent,
         InputField,
         TableField,
-        SelectField
+        SelectField,
+        PipelineField
     ],
     exports: [
         CommonModule,
@@ -42,7 +44,8 @@ import { AceDirective } from './ace/ace.directive';
         PaginationComponent,
         InputField,
         TableField,
-        SelectField
+        SelectField,
+        PipelineField
     ],
     providers: [
         FormRegistry,

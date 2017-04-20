@@ -3,6 +3,7 @@
         <div *ngFor="let field of meta.fields" [ngSwitch]="field.control">
             <nerv-table-field *ngSwitchCase="'table'" [field]="field" [data]="data" [readonly]="enableReadonly"></nerv-table-field>
             <nerv-select-field *ngSwitchCase="'select'" [field]="field" [data]="data" [readonly]="enableReadonly"></nerv-select-field>
+            <nerv-pipeline-field *ngSwitchCase="'pipeline'"  [field]="field" [data]="data" [readonly]="enableReadonly"></nerv-pipeline-field>
             <nerv-input-field *ngSwitchDefault [formGroup]="formGroup" [field]="field" [data]="data" [readonly]="enableReadonly"></nerv-input-field>
         </div>
     </form>

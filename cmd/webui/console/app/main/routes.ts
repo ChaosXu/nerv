@@ -8,6 +8,7 @@ export const rootRoutes: Routes = [
   { path: 'monitor', loadChildren: 'app/monitor/module#MonitorModule', canActivate: [AuthGuard] },
   { path: 'orchestration', loadChildren: 'app/orchestration/module#OrchestrationModule', canActivate: [AuthGuard] },
   { path: 'pipeline', loadChildren: 'app/pipeline/module#PipelineModule', canActivate: [AuthGuard] },
+  { path: 'credential', loadChildren: 'app/credential/module#CredentialModule', canActivate: [AuthGuard] },
   { path: 'user', loadChildren: 'app/user/module#UserModule', canActivate: [AuthGuard] },
   { path: 'infrastructure', loadChildren: 'app/infrastructure/module#InfrastructureModule', canActivate: [AuthGuard] } 
 ];

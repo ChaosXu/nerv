@@ -78,6 +78,10 @@ const Catalogs = [{
         name: '用户',
         icon: 'icon__company',
         url: '/user/Account'
+    },{
+        name: '访问凭据',
+        icon: 'icon__company',
+        url: '/credential/Credential'
     }]
 }];
 
